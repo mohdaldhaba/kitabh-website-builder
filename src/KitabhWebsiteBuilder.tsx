@@ -160,7 +160,7 @@ const COMPONENT_META: Record<ComponentType, { label: string; hasSettings: boolea
   podcast: { label: "البودكاست", hasSettings: true },
   courses: { label: "الدورات", hasSettings: true },
   topics: { label: "المواضيع", hasSettings: true },
-  brands_ticker: { label: "شريط العلامات", hasSettings: false },
+  brands_ticker: { label: "شريط العلامات", hasSettings: true },
   article_view: { label: "عرض المقال", hasSettings: false },
   text_block: { label: "نص", hasSettings: true },
   image_block: { label: "صورة", hasSettings: true },
@@ -404,6 +404,7 @@ export default function KitabhWebsiteBuilder(props: any) {
       case "image_block": return { imageUrl: "", caption: "" };
       case "subscribe_form": return { title: "اشترك في نشرتنا", buttonText: "اشتراك" };
       case "contact_form": return { title: "تواصل معنا", buttonText: "إرسال", fields: ["الاسم", "البريد الإلكتروني", "الرسالة"] };
+      case "brands_ticker": return { speed: 30, items: [] };
       case "divider": return {};
       case "rich_text": return { html: "<h2>عنوان القسم</h2>\n<p>هذا نص تجريبي يمكنك تعديله. يدعم <strong>النص العريض</strong> و<em>المائل</em> والعناوين والقوائم.</p>\n<ul>\n<li>العنصر الأول</li>\n<li>العنصر الثاني</li>\n</ul>" };
       case "testimonials": return { sectionTitle: "آراء العملاء", layout: "grid", items: [
@@ -517,6 +518,11 @@ export default function KitabhWebsiteBuilder(props: any) {
         updatedAt: new Date().toISOString(),
       };
     }));
+    setExpandedComponent(comp.id);
+    setTimeout(() => {
+      const el = document.querySelector(`[data-comp-id="${comp.id}"]`);
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+    }, 100);
   };
 
   // ─── Move component up/down ────────
@@ -1113,7 +1119,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                     case "header":
                       const logoLayout = activeSite.branding.logoLayout || "text_only";
                       return (
-                        <div key={comp.id} className="kwb-p-header">
+                        <div key={comp.id} data-comp-id={comp.id} className="kwb-p-header">
                           <div className="kwb-p-header-inner">
                             <div className="kwb-p-logo-wrap">
                               {(logoLayout === "logo_only" || logoLayout === "logo_and_text") && activeSite.branding.logoUrl && (
@@ -1145,7 +1151,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                       const mainArticle = heroArticles[0];
                       const sideArticles = heroArticles.slice(1, 5);
                       return (
-                        <div key={comp.id} className="kwb-p-hero-news">
+                        <div key={comp.id} data-comp-id={comp.id} className="kwb-p-hero-news">
                           {/* Right side articles */}
                           <div className="kwb-p-hero-side kwb-p-hero-side-r">
                             {sideArticles.slice(0, 2).map(a => (
@@ -1194,7 +1200,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
 
                     case "hero_subscribe":
                       return (
-                        <div key={comp.id} className="kwb-p-hero-sub">
+                        <div key={comp.id} data-comp-id={comp.id} className="kwb-p-hero-sub">
                           <h2>{comp.settings.title || "انضم لنشرتنا البريدية"}</h2>
                           <p>{comp.settings.subtitle || "محتوى حصري يصلك كل أسبوع"}</p>
                           <div className="kwb-p-hero-sub-form">
@@ -1206,24 +1212,47 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                         </div>
                       );
 
-                    case "brands_ticker":
+                    case "brands_ticker": {
+                      const tickerSpeed = comp.settings.speed || 30;
+                      const brandItems = comp.settings.items || [];
+                      const hasLogos = brandItems.some((b: any) => b.imageUrl);
                       return (
-                        <div key={comp.id} className="kwb-p-ticker">
-                          <div className="kwb-p-ticker-inner">
-                            <span>{activeSite.branding.siteName}</span>
-                            <span className="kwb-p-ticker-dot">&#x2022;</span>
-                            <span>مدونة {activeSite.branding.siteName}</span>
-                            <span className="kwb-p-ticker-dot">&#x2022;</span>
-                            <span>{activeSite.branding.siteName}</span>
-                            <span className="kwb-p-ticker-dot">&#x2022;</span>
-                            <span>مدونة {activeSite.branding.siteName}</span>
+                        <div key={comp.id} data-comp-id={comp.id} className="kwb-p-ticker">
+                          <div className="kwb-p-ticker-inner" style={{ animationDuration: `${tickerSpeed}s` }}>
+                            {hasLogos ? (
+                              <>
+                                {brandItems.map((b: any, i: number) => (
+                                  <span key={i} className="kwb-p-ticker-brand">
+                                    {b.imageUrl && <img src={b.imageUrl} alt="" className="kwb-p-ticker-logo" />}
+                                    {b.name && <span>{b.name}</span>}
+                                  </span>
+                                ))}
+                                {brandItems.map((b: any, i: number) => (
+                                  <span key={`d-${i}`} className="kwb-p-ticker-brand">
+                                    {b.imageUrl && <img src={b.imageUrl} alt="" className="kwb-p-ticker-logo" />}
+                                    {b.name && <span>{b.name}</span>}
+                                  </span>
+                                ))}
+                              </>
+                            ) : (
+                              <>
+                                <span>{activeSite.branding.siteName}</span>
+                                <span className="kwb-p-ticker-dot">&#x2022;</span>
+                                <span>مدونة {activeSite.branding.siteName}</span>
+                                <span className="kwb-p-ticker-dot">&#x2022;</span>
+                                <span>{activeSite.branding.siteName}</span>
+                                <span className="kwb-p-ticker-dot">&#x2022;</span>
+                                <span>مدونة {activeSite.branding.siteName}</span>
+                              </>
+                            )}
                           </div>
                         </div>
                       );
+                    }
 
                     case "cta_newsletter":
                       return (
-                        <div key={comp.id} className="kwb-p-cta">
+                        <div key={comp.id} data-comp-id={comp.id} className="kwb-p-cta">
                           <div className="kwb-p-cta-inner">
                             <div className="kwb-p-cta-text">
                               <div className="kwb-p-cta-logo">{activeSite.branding.siteName.charAt(0)}</div>
@@ -1245,7 +1274,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                     case "article_collection":
                       const collArticles = (comp.settings.articles || []).map((id: string) => MOCK_ARTICLES.find(a => a.id === id)).filter(Boolean) as Article[];
                       return (
-                        <div key={comp.id} className="kwb-p-articles">
+                        <div key={comp.id} data-comp-id={comp.id} className="kwb-p-articles">
                           <div className="kwb-p-articles-grid">
                             {collArticles.map(a => (
                               <div key={a.id} className="kwb-p-article-card">
@@ -1272,7 +1301,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
 
                     case "banner":
                       return (
-                        <div key={comp.id} className="kwb-p-banners">
+                        <div key={comp.id} data-comp-id={comp.id} className="kwb-p-banners">
                           <div className="kwb-p-banner-grid">
                             <div className="kwb-p-banner-card" style={{ background: activeSite.branding.buttonColor || "#E82222" }}>
                               <span>تصفح أرشيف {activeSite.branding.siteName}</span>
@@ -1294,7 +1323,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                         typeof link === "string" ? { id: String(Math.random()), label: link, linkType: "page" as const, target: "", visible: true } : link
                       );
                       return (
-                        <div key={comp.id} className="kwb-p-footer">
+                        <div key={comp.id} data-comp-id={comp.id} className="kwb-p-footer">
                           <div className="kwb-p-footer-inner">
                             <div className="kwb-p-footer-logo-col">
                               {(footerLogoLayout === "logo_only" || footerLogoLayout === "logo_and_text") && activeSite.branding.logoUrl && (
@@ -1326,7 +1355,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                     case "article_view":
                       const sampleArticle = MOCK_ARTICLES[0];
                       return (
-                        <div key={comp.id} className="kwb-p-article-view">
+                        <div key={comp.id} data-comp-id={comp.id} className="kwb-p-article-view">
                           <div className="kwb-p-av-header">
                             <span className="kwb-p-av-category">مقالات</span>
                             <h1 className="kwb-p-av-title">{sampleArticle.title}</h1>
@@ -1372,21 +1401,21 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
 
                     case "text_block":
                       return (
-                        <div key={comp.id} className="kwb-p-text-block">
+                        <div key={comp.id} data-comp-id={comp.id} className="kwb-p-text-block">
                           <p>{comp.settings.content || "أضف نصك هنا..."}</p>
                         </div>
                       );
 
                     case "rich_text":
                       return (
-                        <div key={comp.id} className="kwb-p-rich-text">
+                        <div key={comp.id} data-comp-id={comp.id} className="kwb-p-rich-text">
                           <div className="kwb-p-rich-text-content" dangerouslySetInnerHTML={{ __html: comp.settings.html || "<p>أضف محتواك المنسق هنا...</p>" }} />
                         </div>
                       );
 
                     case "image_block":
                       return (
-                        <div key={comp.id} className="kwb-p-image-block">
+                        <div key={comp.id} data-comp-id={comp.id} className="kwb-p-image-block">
                           {comp.settings.imageUrl ? (
                             <img src={comp.settings.imageUrl} alt="" className="kwb-p-image-full" />
                           ) : (
@@ -1398,7 +1427,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
 
                     case "subscribe_form":
                       return (
-                        <div key={comp.id} className="kwb-p-subscribe-form">
+                        <div key={comp.id} data-comp-id={comp.id} className="kwb-p-subscribe-form">
                           <h3>{comp.settings.title || "اشترك في نشرتنا"}</h3>
                           <div className="kwb-p-sf-row">
                             <input type="email" name="email" autoComplete="email" placeholder="أدخل بريدك الإلكتروني" className="kwb-p-email-input" />
@@ -1411,7 +1440,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
 
                     case "contact_form":
                       return (
-                        <div key={comp.id} className="kwb-p-contact-form">
+                        <div key={comp.id} data-comp-id={comp.id} className="kwb-p-contact-form">
                           <h3>{comp.settings.title || "تواصل معنا"}</h3>
                           <div className="kwb-p-cf-fields">
                             <input placeholder="الاسم" className="kwb-p-cf-input" />
@@ -1431,7 +1460,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                       const items = comp.settings.items || [];
                       const isGrid = (comp.settings.layout || "grid") === "grid";
                       return (
-                        <div key={comp.id} className="kwb-p-section">
+                        <div key={comp.id} data-comp-id={comp.id} className="kwb-p-section">
                           <h3 className="kwb-p-section-title">{comp.settings.sectionTitle || "آراء العملاء"}</h3>
                           <div className={isGrid ? "kwb-p-testi-grid" : "kwb-p-testi-list"}>
                             {items.map((item: any, i: number) => (
@@ -1455,7 +1484,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                       const items = comp.settings.items || [];
                       const isGrid = (comp.settings.layout || "grid") === "grid";
                       return (
-                        <div key={comp.id} className="kwb-p-section">
+                        <div key={comp.id} data-comp-id={comp.id} className="kwb-p-section">
                           <h3 className="kwb-p-section-title">{comp.settings.sectionTitle || "المنتجات"}</h3>
                           <div className={isGrid ? "kwb-p-products-grid" : "kwb-p-products-list"}>
                             {items.map((item: any, i: number) => (
@@ -1474,19 +1503,20 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
 
                     case "podcast": {
                       const programs = comp.settings.programs || [];
+                      const podIsGrid = (comp.settings.layout || "list") === "grid";
                       return (
-                        <div key={comp.id} className="kwb-p-section">
+                        <div key={comp.id} data-comp-id={comp.id} className="kwb-p-section">
                           <h3 className="kwb-p-section-title">{comp.settings.sectionTitle || "البودكاست"}</h3>
                           {programs.map((prog: any, pi: number) => (
                             <div key={pi} style={{ marginBottom: pi < programs.length - 1 ? 20 : 0 }}>
                               <div className="kwb-p-podcast-program">
-                                <div className="kwb-p-podcast-prog-img">{Icons.image}</div>
+                                {prog.imageUrl ? <img src={prog.imageUrl} alt="" className="kwb-p-podcast-prog-img" style={{ objectFit: "cover" }} /> : <div className="kwb-p-podcast-prog-img">{Icons.image}</div>}
                                 <div>
                                   <h4 className="kwb-p-podcast-prog-name">{prog.name}</h4>
                                   <p className="kwb-p-podcast-prog-desc">{prog.description}</p>
                                 </div>
                               </div>
-                              <div className="kwb-p-podcast-list">
+                              <div className={podIsGrid ? "kwb-p-podcast-grid" : "kwb-p-podcast-list"}>
                                 {(prog.episodes || []).map((ep: any, ei: number) => (
                                   <div key={ei} className="kwb-p-podcast-card">
                                     <div className="kwb-p-podcast-ep-num">{ei + 1}</div>
@@ -1508,7 +1538,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                       const items = comp.settings.items || [];
                       const isGrid = (comp.settings.layout || "grid") === "grid";
                       return (
-                        <div key={comp.id} className="kwb-p-section">
+                        <div key={comp.id} data-comp-id={comp.id} className="kwb-p-section">
                           <h3 className="kwb-p-section-title">{comp.settings.sectionTitle || "الدورات"}</h3>
                           <div className={isGrid ? "kwb-p-courses-grid" : "kwb-p-courses-list"}>
                             {items.map((item: any, i: number) => (
@@ -1529,7 +1559,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                       const items = comp.settings.items || [];
                       const isGrid = (comp.settings.layout || "grid") === "grid";
                       return (
-                        <div key={comp.id} className="kwb-p-section">
+                        <div key={comp.id} data-comp-id={comp.id} className="kwb-p-section">
                           <h3 className="kwb-p-section-title">{comp.settings.sectionTitle || "المواضيع"}</h3>
                           <div className={isGrid ? "kwb-p-topics-grid" : "kwb-p-topics-list"}>
                             {items.map((item: any, i: number) => (
@@ -1544,7 +1574,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
 
                     default:
                       return (
-                        <div key={comp.id} className="kwb-p-placeholder">
+                        <div key={comp.id} data-comp-id={comp.id} className="kwb-p-placeholder">
                           <span>{COMPONENT_META[comp.type]?.label || comp.type}</span>
                         </div>
                       );
@@ -1611,18 +1641,22 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                   <input className="kwb-input" value={activeSite.branding.siteName} onChange={e => updateSite(activeSite.id, { branding: { ...activeSite.branding, siteName: e.target.value } })} />
 
                   <label className="kwb-label" style={{ marginTop: 16 }}>الخط</label>
-                  <select className="kwb-input" value={activeSite.branding.fontFamily} onChange={e => updateSite(activeSite.id, { branding: { ...activeSite.branding, fontFamily: e.target.value } })} style={{ cursor: "pointer" }}>
-                    <option value="IBM Plex Sans Arabic">IBM Plex Sans Arabic</option>
-                    <option value="Noto Sans Arabic">Noto Sans Arabic</option>
-                    <option value="Cairo">Cairo</option>
-                    <option value="Tajawal">Tajawal</option>
-                    <option value="Almarai">Almarai</option>
-                    <option value="Changa">Changa</option>
-                    <option value="El Messiri">El Messiri</option>
-                    <option value="Readex Pro">Readex Pro</option>
-                    <option value="Rubik">Rubik</option>
-                    <option value="Amiri">Amiri</option>
-                  </select>
+                  <div className="kwb-font-picker">
+                    {[
+                      "IBM Plex Sans Arabic", "Noto Sans Arabic", "Cairo", "Tajawal", "Almarai",
+                      "Changa", "El Messiri", "Readex Pro", "Rubik", "Amiri",
+                      "Alyamama", "Playpen Sans Arabic",
+                    ].map(font => (
+                      <button
+                        key={font}
+                        className={`kwb-font-option ${activeSite.branding.fontFamily === font ? "kwb-font-option-active" : ""}`}
+                        onClick={() => updateSite(activeSite.id, { branding: { ...activeSite.branding, fontFamily: font } })}
+                      >
+                        <span className="kwb-font-preview" style={{ fontFamily: `'${font}', sans-serif` }}>موقع منصة كتابة</span>
+                        <span className="kwb-font-name">{font}</span>
+                      </button>
+                    ))}
+                  </div>
 
                   <label className="kwb-label" style={{ marginTop: 16 }}>سمة الألوان</label>
                   <div className="kwb-theme-grid">
@@ -1749,7 +1783,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                     const isExpanded = expandedComponent === comp.id;
 
                     return (
-                      <div key={comp.id} className={`kwb-comp-row ${!comp.enabled ? "kwb-comp-row-disabled" : ""}`}>
+                      <div key={comp.id} className={`kwb-comp-row ${!comp.enabled ? "kwb-comp-row-disabled" : ""} ${isExpanded ? "kwb-comp-row-active" : ""}`}>
                         <div className="kwb-comp-header">
                           <span className="kwb-grip">
                             <button className="kwb-grip-btn" onClick={() => moveComponent(comp.id, "up")} title="تحريك لأعلى">{Icons.gripVertical}</button>
@@ -1757,10 +1791,10 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                           <button className="kwb-vis-btn" onClick={() => toggleComponent(comp.id)} title={comp.enabled ? "إخفاء" : "إظهار"}>
                             {comp.enabled ? Icons.eye : Icons.eyeOff}
                           </button>
-                          <span className="kwb-comp-name" onClick={() => meta.hasSettings && setExpandedComponent(isExpanded ? null : comp.id)} style={meta.hasSettings ? { cursor: "pointer" } : {}}>{meta.label}</span>
+                          <span className="kwb-comp-name" onClick={() => { if (!meta.hasSettings) return; const next = isExpanded ? null : comp.id; setExpandedComponent(next); if (next) setTimeout(() => { const el = document.querySelector(`[data-comp-id="${comp.id}"]`); if (el) el.scrollIntoView({ behavior: "smooth", block: "center" }); }, 100); }} style={meta.hasSettings ? { cursor: "pointer" } : {}}>{meta.label}</span>
                           <div className="kwb-comp-actions">
                             {meta.hasSettings && (
-                              <button className="kwb-icon-btn-sm" onClick={() => setExpandedComponent(isExpanded ? null : comp.id)} title="إعدادات">
+                              <button className="kwb-icon-btn-sm" onClick={() => { const next = isExpanded ? null : comp.id; setExpandedComponent(next); if (next) setTimeout(() => { const el = document.querySelector(`[data-comp-id="${comp.id}"]`); if (el) el.scrollIntoView({ behavior: "smooth", block: "center" }); }, 100); }} title="إعدادات">
                                 {Icons.edit}
                               </button>
                             )}
@@ -1868,6 +1902,33 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                                   <div className="kwb-upload-area-sm">{Icons.image}<span>لم يتم اختيار صورة</span></div>
                                 )}
                                 <button className="kwb-btn-outline kwb-btn-full" onClick={() => triggerUpload({ type: "comp_banner", compId: comp.id })}>رفع صورة</button>
+                              </>
+                            )}
+
+                            {comp.type === "brands_ticker" && (
+                              <>
+                                <label className="kwb-label">سرعة الشريط</label>
+                                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                                  <span style={{ fontSize: 11, color: "#999" }}>سريع</span>
+                                  <input type="range" min="10" max="60" value={comp.settings.speed || 30} onChange={e => updateComponentSettings(comp.id, { speed: parseInt(e.target.value) })} style={{ flex: 1, accentColor: activeSite.branding.buttonColor || "#E82222" }} />
+                                  <span style={{ fontSize: 11, color: "#999" }}>بطيء</span>
+                                </div>
+                                <label className="kwb-label" style={{ marginTop: 12 }}>العلامات التجارية</label>
+                                {(comp.settings.items || []).map((item: any, i: number) => (
+                                  <div key={i} style={{ borderTop: "1px solid #f0f0f0", paddingTop: 8, marginTop: 8 }}>
+                                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                                      <span style={{ fontSize: 12, fontWeight: 600, color: "#888" }}>علامة {i + 1}</span>
+                                      <button className="kwb-comp-delete-btn" onClick={() => { const items = [...(comp.settings.items || [])]; items.splice(i, 1); updateComponentSettings(comp.id, { items }); }}>{Icons.x}</button>
+                                    </div>
+                                    <input className="kwb-input" placeholder="اسم العلامة" value={item.name || ""} onChange={e => { const items = [...(comp.settings.items || [])]; items[i] = { ...items[i], name: e.target.value }; updateComponentSettings(comp.id, { items }); }} style={{ marginTop: 4 }} />
+                                    {item.imageUrl ? (
+                                      <div className="kwb-upload-preview" style={{ marginTop: 4 }}><img src={item.imageUrl} alt="" /><button className="kwb-upload-remove" onClick={() => { const items = [...(comp.settings.items || [])]; items[i] = { ...items[i], imageUrl: "" }; updateComponentSettings(comp.id, { items }); }}>{Icons.x}</button></div>
+                                    ) : (
+                                      <button className="kwb-btn-outline kwb-btn-full" style={{ marginTop: 4, fontSize: 11 }} onClick={() => triggerUpload({ type: "testi_img", compId: comp.id, itemIndex: i })}>{Icons.image} رفع شعار</button>
+                                    )}
+                                  </div>
+                                ))}
+                                <button className="kwb-btn-outline kwb-btn-full" style={{ marginTop: 8 }} onClick={() => { const items = [...(comp.settings.items || []), { name: "", imageUrl: "" }]; updateComponentSettings(comp.id, { items }); }}>{Icons.plus} إضافة علامة</button>
                               </>
                             )}
 
@@ -2341,7 +2402,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
 // ═══════════════════════════════════════════════════════
 const CSS_STYLES = `
 /* Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Noto+Sans+Arabic:wght@400;500;600;700&family=Cairo:wght@400;500;600;700&family=Tajawal:wght@400;500;700&family=Almarai:wght@400;700;800&family=Changa:wght@400;500;600;700&family=El+Messiri:wght@400;500;600;700&family=Readex+Pro:wght@400;500;600;700&family=Rubik:wght@400;500;600;700&family=Amiri:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Noto+Sans+Arabic:wght@400;500;600;700&family=Cairo:wght@400;500;600;700&family=Tajawal:wght@400;500;700&family=Almarai:wght@400;700;800&family=Changa:wght@400;500;600;700&family=El+Messiri:wght@400;500;600;700&family=Readex+Pro:wght@400;500;600;700&family=Rubik:wght@400;500;600;700&family=Amiri:wght@400;700&family=Alyamama:wght@400;500;600;700&family=Playpen+Sans+Arabic:wght@400;500;600;700&display=swap');
 
 /* Base */
 .kwb,.kwb-builder{font-family:'IBM Plex Sans Arabic',system-ui,sans-serif;direction:rtl;text-align:right;color:#371D12;line-height:1.6;box-sizing:border-box;}
@@ -2475,7 +2536,9 @@ const CSS_STYLES = `
 
 /* Brands Ticker */
 .kwb-p-ticker{overflow:hidden;border-top:2px solid var(--kwb-headline-color,#1a1a1a);border-bottom:2px solid var(--kwb-headline-color,#1a1a1a);padding:20px 0;}
-.kwb-p-ticker-inner{display:flex;gap:24px;white-space:nowrap;font-size:48px;font-weight:900;color:var(--kwb-headline-color,#1a1a1a);animation:kwbTickerScroll 15s linear infinite;}
+.kwb-p-ticker-inner{display:flex;gap:24px;white-space:nowrap;font-size:48px;font-weight:900;color:var(--kwb-headline-color,#1a1a1a);animation:kwbTickerScroll 30s linear infinite;align-items:center;}
+.kwb-p-ticker-brand{display:flex;align-items:center;gap:12px;}
+.kwb-p-ticker-logo{height:40px;width:auto;object-fit:contain;}
 @keyframes kwbTickerScroll{from{transform:translateX(100%)}to{transform:translateX(-100%)}}
 .kwb-p-ticker-dot{color:var(--kwb-text-color,#ccc);opacity:0.5;}
 
@@ -2650,6 +2713,8 @@ const CSS_STYLES = `
 
 /* Podcast */
 .kwb-p-podcast-list{display:flex;flex-direction:column;gap:1px;background:rgba(128,128,128,0.2);}
+.kwb-p-podcast-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.kwb-p-podcast-grid .kwb-p-podcast-card{border:1px solid rgba(128,128,128,0.2);border-radius:8px;flex-direction:column;}
 .kwb-p-podcast-card{display:flex;gap:12px;padding:12px;background:var(--kwb-card-bg,#fff);}
 .kwb-p-podcast-img{width:60px;height:60px;background:rgba(128,128,128,0.15);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:var(--kwb-text-color,#ccc);opacity:0.4;}
 .kwb-p-podcast-info{flex:1;display:flex;flex-direction:column;gap:2px;}
@@ -2756,6 +2821,7 @@ const CSS_STYLES = `
 .kwb-comp-row{border:1.5px solid #F0F0F0;border-radius:10px;overflow:hidden;margin-bottom:4px;transition:all .15s;}
 .kwb-comp-row:hover{border-color:#E0E0E0;}
 .kwb-comp-row-disabled{opacity:0.45;}
+.kwb-comp-row-active{border-color:#0000FF;background:#F5F5FF;box-shadow:0 0 0 1px rgba(0,0,255,0.1);}
 .kwb-comp-header{display:flex;align-items:center;gap:6px;padding:8px 10px;}
 .kwb-comp-name{flex:1;font-size:13px;font-weight:600;color:#371D12;text-align:right;}
 .kwb-comp-edit-btn{width:28px;height:28px;border:none;background:none;color:#BBB;cursor:pointer;border-radius:6px;display:flex;align-items:center;justify-content:center;padding:0;}
@@ -2915,6 +2981,15 @@ const CSS_STYLES = `
 .kwb-input{width:100%;height:42px;padding:0 14px;border:1.5px solid #E8E8E8;border-radius:10px;font-family:inherit;font-size:14px;color:#371D12;outline:none;background:#F8F8F8;transition:border .15s;}
 .kwb-input:focus{border-color:#0000FF;background:#fff;}
 .kwb-input::placeholder{color:#CCC;}
+
+/* Font picker */
+.kwb-font-picker{display:flex;flex-direction:column;gap:4px;max-height:280px;overflow-y:auto;border:1.5px solid #E8E8E8;border-radius:10px;padding:4px;background:#F8F8F8;}
+.kwb-font-option{display:flex;flex-direction:column;gap:2px;padding:10px 12px;border:none;border-radius:8px;background:transparent;cursor:pointer;text-align:right;transition:all .15s;font-family:inherit;}
+.kwb-font-option:hover{background:#fff;}
+.kwb-font-option-active{background:#fff;box-shadow:0 0 0 2px #0000FF;position:relative;}
+.kwb-font-option-active::after{content:'\u2713';position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#0000FF;font-weight:700;font-size:14px;}
+.kwb-font-preview{font-size:18px;font-weight:600;color:#371D12;line-height:1.4;}
+.kwb-font-name{font-size:11px;color:#999;font-weight:500;font-family:'IBM Plex Sans Arabic',sans-serif;}
 
 /* ─── RESPONSIVE ─── */
 @media(max-width:900px){
