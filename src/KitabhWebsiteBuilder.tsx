@@ -576,7 +576,7 @@ export default function KitabhWebsiteBuilder(props: any) {
 
   // ─── File upload (local preview via FileReader) ────────
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [uploadTarget, setUploadTarget] = useState<{ type: "branding_logo" | "comp_logo" | "comp_banner" | "testi_img"; compId?: string; itemIndex?: number } | null>(null);
+  const [uploadTarget, setUploadTarget] = useState<{ type: "branding_logo" | "comp_logo" | "comp_banner" | "testi_img" | "ticker_img"; compId?: string; itemIndex?: number } | null>(null);
 
   const triggerUpload = (target: typeof uploadTarget) => {
     setUploadTarget(target);
@@ -590,12 +590,13 @@ export default function KitabhWebsiteBuilder(props: any) {
     reader.onload = () => {
       const dataUrl = reader.result as string;
       if (uploadTarget.type === "branding_logo") {
-        updateSite(activeSiteId, { branding: { ...activeSite!.branding, logoUrl: dataUrl } });
+        const newLayout = activeSite!.branding.logoLayout === "text_only" ? "logo_and_text" : activeSite!.branding.logoLayout;
+        updateSite(activeSiteId, { branding: { ...activeSite!.branding, logoUrl: dataUrl, logoLayout: newLayout } });
       } else if (uploadTarget.type === "comp_logo" && uploadTarget.compId) {
         updateComponentSettings(uploadTarget.compId, { logoUrl: dataUrl });
       } else if (uploadTarget.type === "comp_banner" && uploadTarget.compId) {
         updateComponentSettings(uploadTarget.compId, { imageUrl: dataUrl });
-      } else if (uploadTarget.type === "testi_img" && uploadTarget.compId && uploadTarget.itemIndex !== undefined) {
+      } else if ((uploadTarget.type === "testi_img" || uploadTarget.type === "ticker_img") && uploadTarget.compId && uploadTarget.itemIndex !== undefined) {
         const comp = activeSite!.pages.flatMap(p => p.components).find(c => c.id === uploadTarget.compId);
         if (comp) {
           const items = [...(comp.settings.items || [])];
@@ -1215,7 +1216,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                           <p>{comp.settings.subtitle || "محتوى حصري يصلك كل أسبوع"}</p>
                           <div className="kwb-p-hero-sub-form">
                             <input type="email" name="email" autoComplete="email" placeholder="أدخل بريدك الإلكتروني" className="kwb-p-email-input" />
-                            <button className="kwb-p-subscribe-btn" style={{ background: comp.settings.buttonColor || activeSite.branding.buttonColor }}>
+                            <button className="kwb-p-subscribe-btn" style={{ background: comp.settings.buttonColor || activeSite.branding.buttonColor }} onClick={() => setShowSubscribePopup(true)}>
                               {comp.settings.buttonText || "اشتراك"}
                             </button>
                           </div>
@@ -1226,36 +1227,49 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                       const tickerSpeed = comp.settings.speed || 30;
                       const brandItems = comp.settings.items || [];
                       const hasLogos = brandItems.some((b: any) => b.imageUrl);
+                      const renderBrands = () => brandItems.map((b: any, i: number) => (
+                        <span key={i} className="kwb-p-ticker-brand">
+                          {b.imageUrl ? <img src={b.imageUrl} alt={b.name || ""} className="kwb-p-ticker-logo" /> : null}
+                          {b.name && !b.imageUrl ? <span>{b.name}</span> : null}
+                        </span>
+                      ));
+                      const renderText = () => (
+                        <>
+                          <span>{activeSite.branding.siteName}</span>
+                          <span className="kwb-p-ticker-dot">&#x2022;</span>
+                          <span>مدونة {activeSite.branding.siteName}</span>
+                          <span className="kwb-p-ticker-dot">&#x2022;</span>
+                          <span>{activeSite.branding.siteName}</span>
+                          <span className="kwb-p-ticker-dot">&#x2022;</span>
+                          <span>مدونة {activeSite.branding.siteName}</span>
+                        </>
+                      );
                       return (
                         <div key={comp.id} data-comp-id={comp.id} className="kwb-p-ticker">
-                          <div className="kwb-p-ticker-inner" style={{ animationDuration: `${tickerSpeed}s` }}>
-                            {hasLogos ? (
-                              <>
-                                {brandItems.map((b: any, i: number) => (
-                                  <span key={i} className="kwb-p-ticker-brand">
-                                    {b.imageUrl && <img src={b.imageUrl} alt="" className="kwb-p-ticker-logo" />}
-                                    {b.name && <span>{b.name}</span>}
-                                  </span>
-                                ))}
-                                {brandItems.map((b: any, i: number) => (
-                                  <span key={`d-${i}`} className="kwb-p-ticker-brand">
-                                    {b.imageUrl && <img src={b.imageUrl} alt="" className="kwb-p-ticker-logo" />}
-                                    {b.name && <span>{b.name}</span>}
-                                  </span>
-                                ))}
-                              </>
-                            ) : (
-                              <>
-                                <span>{activeSite.branding.siteName}</span>
-                                <span className="kwb-p-ticker-dot">&#x2022;</span>
-                                <span>مدونة {activeSite.branding.siteName}</span>
-                                <span className="kwb-p-ticker-dot">&#x2022;</span>
-                                <span>{activeSite.branding.siteName}</span>
-                                <span className="kwb-p-ticker-dot">&#x2022;</span>
-                                <span>مدونة {activeSite.branding.siteName}</span>
-                              </>
-                            )}
-                          </div>
+                          {hasLogos ? (
+                            <div className="kwb-p-ticker-logos" style={{ animationDuration: `${tickerSpeed}s` }}>
+                              {renderBrands()}
+                            </div>
+                          ) : brandItems.length > 0 && !hasLogos ? (
+                            <div className="kwb-p-ticker-inner" style={{ animationDuration: `${tickerSpeed}s` }}>
+                              {brandItems.map((b: any, i: number) => (
+                                <React.Fragment key={i}>
+                                  <span>{b.name}</span>
+                                  <span className="kwb-p-ticker-dot">&#x2022;</span>
+                                </React.Fragment>
+                              ))}
+                              {brandItems.map((b: any, i: number) => (
+                                <React.Fragment key={`d-${i}`}>
+                                  <span>{b.name}</span>
+                                  <span className="kwb-p-ticker-dot">&#x2022;</span>
+                                </React.Fragment>
+                              ))}
+                            </div>
+                          ) : (
+                            <div className="kwb-p-ticker-inner" style={{ animationDuration: `${tickerSpeed}s` }}>
+                              {renderText()}
+                            </div>
+                          )}
                         </div>
                       );
                     }
@@ -1273,7 +1287,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                             </div>
                             <div className="kwb-p-cta-form">
                               <input type="email" name="email" autoComplete="email" placeholder="أدخل بريدك الإلكتروني" className="kwb-p-email-input" />
-                              <button className="kwb-p-subscribe-btn" style={{ background: comp.settings.buttonColor || activeSite.branding.buttonColor }}>
+                              <button className="kwb-p-subscribe-btn" style={{ background: comp.settings.buttonColor || activeSite.branding.buttonColor }} onClick={() => setShowSubscribePopup(true)}>
                                 {comp.settings.buttonText || "اشتراك"}
                               </button>
                             </div>
@@ -1347,7 +1361,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                               <p className="kwb-p-footer-tagline">محتوى حصري يصلك مباشرة إلى بريدك</p>
                               <div className="kwb-p-footer-form">
                                 <input type="email" name="email" autoComplete="email" placeholder="أدخل بريدك الإلكتروني" className="kwb-p-footer-email" />
-                                <button className="kwb-p-subscribe-btn" style={{ background: comp.settings.buttonColor || activeSite.branding.buttonColor }}>
+                                <button className="kwb-p-subscribe-btn" style={{ background: comp.settings.buttonColor || activeSite.branding.buttonColor }} onClick={() => setShowSubscribePopup(true)}>
                                   {comp.settings.buttonText || "اشتراك"}
                                 </button>
                               </div>
@@ -1441,7 +1455,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                           <h3>{comp.settings.title || "اشترك في نشرتنا"}</h3>
                           <div className="kwb-p-sf-row">
                             <input type="email" name="email" autoComplete="email" placeholder="أدخل بريدك الإلكتروني" className="kwb-p-email-input" />
-                            <button className="kwb-p-subscribe-btn" style={{ background: comp.settings.buttonColor || activeSite.branding.buttonColor }}>
+                            <button className="kwb-p-subscribe-btn" style={{ background: comp.settings.buttonColor || activeSite.branding.buttonColor }} onClick={() => setShowSubscribePopup(true)}>
                               {comp.settings.buttonText || "اشتراك"}
                             </button>
                           </div>
@@ -1934,7 +1948,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                                     {item.imageUrl ? (
                                       <div className="kwb-upload-preview" style={{ marginTop: 4 }}><img src={item.imageUrl} alt="" /><button className="kwb-upload-remove" onClick={() => { const items = [...(comp.settings.items || [])]; items[i] = { ...items[i], imageUrl: "" }; updateComponentSettings(comp.id, { items }); }}>{Icons.x}</button></div>
                                     ) : (
-                                      <button className="kwb-btn-outline kwb-btn-full" style={{ marginTop: 4, fontSize: 11 }} onClick={() => triggerUpload({ type: "testi_img", compId: comp.id, itemIndex: i })}>{Icons.image} رفع شعار</button>
+                                      <button className="kwb-btn-outline kwb-btn-full" style={{ marginTop: 4, fontSize: 11 }} onClick={() => triggerUpload({ type: "ticker_img", compId: comp.id, itemIndex: i })}>{Icons.image} رفع شعار</button>
                                     )}
                                   </div>
                                 ))}
@@ -2385,24 +2399,24 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
           </div>
         )}
 
-        {/* ─── Subscribe Popup ─── */}
-        {showSubscribePopup && activeSite && (
-          <div className="kwb-overlay" onClick={() => setShowSubscribePopup(false)}>
-            <div className="kwb-subscribe-popup" onClick={e => e.stopPropagation()}>
-              <button className="kwb-subscribe-popup-close" onClick={() => setShowSubscribePopup(false)}>{Icons.x}</button>
-              <div className="kwb-subscribe-popup-icon" style={{ background: activeSite.branding.buttonColor || "#E82222" }}>
-                {activeSite.branding.siteName?.charAt(0) || "ك"}
-              </div>
-              <h3 className="kwb-subscribe-popup-title">اشترك في {activeSite.branding.siteName || "نشرتنا"}</h3>
-              <p className="kwb-subscribe-popup-desc">احصل على أحدث المقالات والمحتوى الحصري مباشرة إلى بريدك الإلكتروني</p>
-              <div className="kwb-subscribe-popup-form">
-                <input type="email" className="kwb-subscribe-popup-email" placeholder="أدخل بريدك الإلكتروني" dir="rtl" />
-                <button className="kwb-subscribe-popup-btn" style={{ background: activeSite.branding.buttonColor || "#E82222" }}>اشتراك</button>
-              </div>
+      </div>
+      {/* ─── Subscribe Popup (portal-style, fixed overlay) ─── */}
+      {showSubscribePopup && activeSite && (
+        <div className="kwb-subscribe-overlay" onClick={() => setShowSubscribePopup(false)}>
+          <div className="kwb-subscribe-popup" onClick={e => e.stopPropagation()}>
+            <button className="kwb-subscribe-popup-close" onClick={() => setShowSubscribePopup(false)}>{Icons.x}</button>
+            <div className="kwb-subscribe-popup-icon" style={{ background: activeSite.branding.buttonColor || "#E82222" }}>
+              {activeSite.branding.siteName?.charAt(0) || "ك"}
+            </div>
+            <h3 className="kwb-subscribe-popup-title">اشترك في {activeSite.branding.siteName || "نشرتنا"}</h3>
+            <p className="kwb-subscribe-popup-desc">احصل على أحدث المقالات والمحتوى الحصري مباشرة إلى بريدك الإلكتروني</p>
+            <div className="kwb-subscribe-popup-form">
+              <input type="email" className="kwb-subscribe-popup-email" placeholder="أدخل بريدك الإلكتروني" dir="rtl" />
+              <button className="kwb-subscribe-popup-btn" style={{ background: activeSite.branding.buttonColor || "#E82222" }}>اشتراك</button>
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -2547,8 +2561,9 @@ const CSS_STYLES = `
 /* Brands Ticker */
 .kwb-p-ticker{overflow:hidden;border-top:2px solid var(--kwb-headline-color,#1a1a1a);border-bottom:2px solid var(--kwb-headline-color,#1a1a1a);padding:20px 0;}
 .kwb-p-ticker-inner{display:flex;gap:24px;white-space:nowrap;font-size:48px;font-weight:900;color:var(--kwb-headline-color,#1a1a1a);animation:kwbTickerScroll 30s linear infinite;align-items:center;}
+.kwb-p-ticker-logos{display:flex;align-items:center;justify-content:center;gap:40px;padding:0 20px;flex-wrap:wrap;}
 .kwb-p-ticker-brand{display:flex;align-items:center;gap:12px;}
-.kwb-p-ticker-logo{height:40px;width:auto;object-fit:contain;}
+.kwb-p-ticker-logo{height:40px;width:auto;max-width:120px;object-fit:contain;}
 @keyframes kwbTickerScroll{from{transform:translateX(100%)}to{transform:translateX(-100%)}}
 .kwb-p-ticker-dot{color:var(--kwb-text-color,#ccc);opacity:0.5;}
 
@@ -2679,6 +2694,7 @@ const CSS_STYLES = `
 .kwb-p-testi-img{width:48px;height:48px;border-radius:50%;object-fit:cover;}
 
 /* Subscribe Popup */
+.kwb-subscribe-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;}
 .kwb-subscribe-popup{position:relative;background:#fff;border-radius:16px;padding:40px 32px;max-width:400px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.3);animation:kwbPopupIn .2s ease-out;}
 @keyframes kwbPopupIn{from{opacity:0;transform:scale(0.95)}to{opacity:1;transform:scale(1)}}
 .kwb-subscribe-popup-close{position:absolute;top:12px;left:12px;width:32px;height:32px;border:none;background:#f0f0f0;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#888;}
