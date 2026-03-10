@@ -1234,8 +1234,8 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                       const hasLogos = brandItems.some((b: any) => b.imageUrl);
                       const renderBrands = () => brandItems.map((b: any, i: number) => (
                         <span key={i} className="kwb-p-ticker-brand">
-                          {b.imageUrl ? <img src={b.imageUrl} alt={b.name || ""} className="kwb-p-ticker-logo" /> : null}
-                          {b.name && !b.imageUrl ? <span>{b.name}</span> : null}
+                          {b.imageUrl && <img src={b.imageUrl} alt={b.name || ""} className="kwb-p-ticker-logo" />}
+                          {b.name && <span>{b.name}</span>}
                         </span>
                       ));
                       const renderText = () => (
@@ -1251,30 +1251,14 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                       );
                       return (
                         <div key={comp.id} data-comp-id={comp.id} className="kwb-p-ticker">
-                          {hasLogos ? (
-                            <div className="kwb-p-ticker-logos" style={{ animationDuration: `${tickerSpeed}s` }}>
-                              {renderBrands()}
-                            </div>
-                          ) : brandItems.length > 0 && !hasLogos ? (
-                            <div className="kwb-p-ticker-inner" style={{ animationDuration: `${tickerSpeed}s` }}>
-                              {brandItems.map((b: any, i: number) => (
-                                <React.Fragment key={i}>
-                                  <span>{b.name}</span>
-                                  <span className="kwb-p-ticker-dot">&#x2022;</span>
-                                </React.Fragment>
-                              ))}
-                              {brandItems.map((b: any, i: number) => (
-                                <React.Fragment key={`d-${i}`}>
-                                  <span>{b.name}</span>
-                                  <span className="kwb-p-ticker-dot">&#x2022;</span>
-                                </React.Fragment>
-                              ))}
-                            </div>
-                          ) : (
-                            <div className="kwb-p-ticker-inner" style={{ animationDuration: `${tickerSpeed}s` }}>
-                              {renderText()}
-                            </div>
-                          )}
+                          <div className="kwb-p-ticker-inner" style={{ animationDuration: `${tickerSpeed}s` }}>
+                            {brandItems.length > 0 ? (
+                              <>
+                                {renderBrands()}
+                                {renderBrands()}
+                              </>
+                            ) : renderText()}
+                          </div>
                         </div>
                       );
                     }
@@ -2566,8 +2550,7 @@ const CSS_STYLES = `
 /* Brands Ticker */
 .kwb-p-ticker{overflow:hidden;border-top:2px solid var(--kwb-headline-color,#1a1a1a);border-bottom:2px solid var(--kwb-headline-color,#1a1a1a);padding:20px 0;}
 .kwb-p-ticker-inner{display:flex;gap:24px;white-space:nowrap;font-size:48px;font-weight:900;color:var(--kwb-headline-color,#1a1a1a);animation:kwbTickerScroll 30s linear infinite;align-items:center;}
-.kwb-p-ticker-logos{display:flex;align-items:center;justify-content:center;gap:40px;padding:0 20px;flex-wrap:wrap;}
-.kwb-p-ticker-brand{display:flex;align-items:center;gap:12px;}
+.kwb-p-ticker-brand{display:flex;align-items:center;gap:12px;flex-shrink:0;}
 .kwb-p-ticker-logo{height:40px;width:auto;max-width:120px;object-fit:contain;}
 @keyframes kwbTickerScroll{from{transform:translateX(100%)}to{transform:translateX(-100%)}}
 .kwb-p-ticker-dot{color:var(--kwb-text-color,#ccc);opacity:0.5;}
