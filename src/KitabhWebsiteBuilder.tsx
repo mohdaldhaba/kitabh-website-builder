@@ -1231,9 +1231,9 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                     case "brands_ticker": {
                       const tickerSpeed = comp.settings.speed || 30;
                       const brandItems = comp.settings.items || [];
-                      const hasLogos = brandItems.some((b: any) => b.imageUrl);
-                      const renderBrands = () => brandItems.map((b: any, i: number) => (
-                        <span key={i} className="kwb-p-ticker-brand">
+                      const repeatCount = comp.settings.repeat ?? (brandItems.length <= 1 ? 2 : 1);
+                      const renderBrands = (keyPrefix: string) => brandItems.map((b: any, i: number) => (
+                        <span key={`${keyPrefix}-${i}`} className="kwb-p-ticker-brand">
                           {b.imageUrl && <img src={b.imageUrl} alt={b.name || ""} className="kwb-p-ticker-logo" />}
                           {b.name && <span>{b.name}</span>}
                         </span>
@@ -1255,8 +1255,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                           <div className="kwb-p-ticker-inner" style={{ animationDuration: `${tickerSpeed}s` }}>
                             {brandItems.length > 0 ? (
                               <>
-                                {renderBrands()}
-                                {renderBrands()}
+                                {Array.from({ length: repeatCount }, (_, r) => renderBrands(`r${r}`))}
                               </>
                             ) : renderText()}
                           </div>
@@ -1928,6 +1927,13 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                                   <span style={{ fontSize: 11, color: "#999" }}>سريع</span>
                                   <input type="range" min="10" max="60" value={comp.settings.speed || 30} onChange={e => updateComponentSettings(comp.id, { speed: parseInt(e.target.value) })} style={{ flex: 1, accentColor: activeSite.branding.buttonColor || "#E82222" }} />
                                   <span style={{ fontSize: 11, color: "#999" }}>بطيء</span>
+                                </div>
+                                <label className="kwb-label" style={{ marginTop: 12 }}>تكرار العناصر</label>
+                                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                                  <button className="kwb-icon-btn-sm" onClick={() => { const cur = comp.settings.repeat ?? ((comp.settings.items || []).length <= 1 ? 2 : 1); if (cur > 1) updateComponentSettings(comp.id, { repeat: cur - 1 }); }}>−</button>
+                                  <span style={{ fontSize: 14, fontWeight: 700, color: "#371D12", minWidth: 24, textAlign: "center" }}>{comp.settings.repeat ?? ((comp.settings.items || []).length <= 1 ? 2 : 1)}×</span>
+                                  <button className="kwb-icon-btn-sm" onClick={() => { const cur = comp.settings.repeat ?? ((comp.settings.items || []).length <= 1 ? 2 : 1); if (cur < 10) updateComponentSettings(comp.id, { repeat: cur + 1 }); }}>+</button>
+                                  <span style={{ fontSize: 11, color: "#999", marginRight: 4 }}>مرّة</span>
                                 </div>
                                 <label className="kwb-label" style={{ marginTop: 12 }}>العلامات التجارية</label>
                                 {(comp.settings.items || []).map((item: any, i: number) => (
