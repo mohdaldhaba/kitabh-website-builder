@@ -69,6 +69,8 @@ interface SiteBranding {
   headlineColor: string;
   textColor: string;
   linkColor: string;
+  bgColor: string;
+  cardBg: string;
   fontFamily: string;
   layoutWidth: "compact" | "full";
   darkMode: boolean;
@@ -175,19 +177,21 @@ interface ColorTheme {
   headlineColor: string;
   textColor: string;
   linkColor: string;
+  bgColor: string;
+  cardBg: string;
 }
 
 const COLOR_THEMES: ColorTheme[] = [
-  { id: "classic_red", name: "كلاسيكي", buttonColor: "#E82222", headlineColor: "#1a1a1a", textColor: "#555555", linkColor: "#E82222" },
-  { id: "ocean_blue", name: "محيطي", buttonColor: "#2563EB", headlineColor: "#0f172a", textColor: "#475569", linkColor: "#2563EB" },
-  { id: "forest_green", name: "طبيعي", buttonColor: "#16a34a", headlineColor: "#14532d", textColor: "#4b5563", linkColor: "#16a34a" },
-  { id: "royal_purple", name: "ملكي", buttonColor: "#7C3AED", headlineColor: "#1e1b4b", textColor: "#6b7280", linkColor: "#7C3AED" },
-  { id: "warm_amber", name: "دافئ", buttonColor: "#d97706", headlineColor: "#451a03", textColor: "#78716c", linkColor: "#b45309" },
-  { id: "vintage_beige", name: "عتيق", buttonColor: "#92400e", headlineColor: "#44403c", textColor: "#78716c", linkColor: "#92400e" },
-  { id: "dark_mono", name: "داكن", buttonColor: "#f5f5f5", headlineColor: "#fafafa", textColor: "#a3a3a3", linkColor: "#e5e5e5" },
-  { id: "rose_pink", name: "وردي", buttonColor: "#e11d48", headlineColor: "#1a1a2e", textColor: "#6b7280", linkColor: "#e11d48" },
-  { id: "teal_modern", name: "عصري", buttonColor: "#0891b2", headlineColor: "#0c4a6e", textColor: "#64748b", linkColor: "#0891b2" },
-  { id: "bold_contrast", name: "جريء", buttonColor: "#000000", headlineColor: "#000000", textColor: "#374151", linkColor: "#000000" },
+  { id: "clean_light", name: "نظيف", buttonColor: "#E82222", headlineColor: "#1a1a1a", textColor: "#555555", linkColor: "#E82222", bgColor: "#ffffff", cardBg: "#ffffff" },
+  { id: "midnight", name: "ليلي", buttonColor: "#6366f1", headlineColor: "#f1f5f9", textColor: "#94a3b8", linkColor: "#818cf8", bgColor: "#0f172a", cardBg: "#1e293b" },
+  { id: "charcoal", name: "فحمي", buttonColor: "#f97316", headlineColor: "#fafafa", textColor: "#a1a1aa", linkColor: "#fb923c", bgColor: "#18181b", cardBg: "#27272a" },
+  { id: "vintage_paper", name: "ورقي", buttonColor: "#92400e", headlineColor: "#44403c", textColor: "#78716c", linkColor: "#a16207", bgColor: "#fef3c7", cardBg: "#fffbeb" },
+  { id: "warm_brown", name: "بُني", buttonColor: "#dc2626", headlineColor: "#fef2f2", textColor: "#d6d3d1", linkColor: "#f87171", bgColor: "#292524", cardBg: "#3f3732" },
+  { id: "ocean_deep", name: "بحري", buttonColor: "#06b6d4", headlineColor: "#f0f9ff", textColor: "#7dd3fc", linkColor: "#22d3ee", bgColor: "#0c4a6e", cardBg: "#164e63" },
+  { id: "forest", name: "غابة", buttonColor: "#facc15", headlineColor: "#f0fdf4", textColor: "#86efac", linkColor: "#fde047", bgColor: "#14532d", cardBg: "#166534" },
+  { id: "rose_cream", name: "وردي", buttonColor: "#e11d48", headlineColor: "#1f1f1f", textColor: "#6b7280", linkColor: "#e11d48", bgColor: "#fff1f2", cardBg: "#ffffff" },
+  { id: "royal_purple", name: "ملكي", buttonColor: "#a78bfa", headlineColor: "#f5f3ff", textColor: "#c4b5fd", linkColor: "#c084fc", bgColor: "#1e1b4b", cardBg: "#312e81" },
+  { id: "sand_gold", name: "ذهبي", buttonColor: "#b45309", headlineColor: "#1c1917", textColor: "#78716c", linkColor: "#d97706", bgColor: "#f5f0e8", cardBg: "#faf7f2" },
 ];
 
 // ─── SVG Icons ──────────────────────────────────────────
@@ -349,7 +353,7 @@ export default function KitabhWebsiteBuilder(props: any) {
       customDomain: "",
       status: "draft",
       templateId,
-      branding: { logoUrl: "", logoLayout: "text_only" as LogoLayout, siteName: "شعار المؤسسة", accentColor: "#E82222", buttonColor: "#E82222", headlineColor: "#1a1a1a", textColor: "#666666", linkColor: "#E82222", fontFamily: "IBM Plex Sans Arabic", layoutWidth: "compact" as "compact" | "full", darkMode: false },
+      branding: { logoUrl: "", logoLayout: "text_only" as LogoLayout, siteName: "شعار المؤسسة", accentColor: "#E82222", buttonColor: "#E82222", headlineColor: "#1a1a1a", textColor: "#666666", linkColor: "#E82222", bgColor: "#ffffff", cardBg: "#ffffff", fontFamily: "IBM Plex Sans Arabic", layoutWidth: "compact" as "compact" | "full", darkMode: false },
       pages,
       hasNewsletter: true,
       visits: 0,
@@ -1106,7 +1110,7 @@ html.dark .pv-darkmode-btn:hover{background:#333;}
           {/* ─── PREVIEW ─── */}
           <div className="kwb-preview-area">
             <div className={`kwb-preview-frame ${previewDevice === "mobile" ? "kwb-preview-mobile" : ""}`}>
-              <div className="kwb-preview-content" style={{ fontFamily: `'${activeSite.branding.fontFamily}', system-ui, sans-serif`, '--kwb-btn-color': activeSite.branding.buttonColor || '#E82222', '--kwb-headline-color': activeSite.branding.headlineColor || '#1a1a1a', '--kwb-text-color': activeSite.branding.textColor || '#666666', '--kwb-link-color': activeSite.branding.linkColor || '#E82222' } as any}>
+              <div className="kwb-preview-content" style={{ fontFamily: `'${activeSite.branding.fontFamily}', system-ui, sans-serif`, '--kwb-btn-color': activeSite.branding.buttonColor || '#E82222', '--kwb-headline-color': activeSite.branding.headlineColor || '#1a1a1a', '--kwb-text-color': activeSite.branding.textColor || '#666666', '--kwb-link-color': activeSite.branding.linkColor || '#E82222', '--kwb-bg': activeSite.branding.bgColor || '#ffffff', '--kwb-card-bg': activeSite.branding.cardBg || '#ffffff' } as any}>
                 {/* Render each enabled component */}
                 {activePage.components.filter(c => c.enabled).map(comp => {
                   switch (comp.type) {
@@ -1614,26 +1618,26 @@ html.dark .pv-darkmode-btn:hover{background:#333;}
                   <label className="kwb-label" style={{ marginTop: 16 }}>سمة الألوان</label>
                   <div className="kwb-theme-grid">
                     {COLOR_THEMES.map(theme => {
-                      const isActive = activeSite.branding.buttonColor === theme.buttonColor && activeSite.branding.headlineColor === theme.headlineColor && activeSite.branding.textColor === theme.textColor && activeSite.branding.linkColor === theme.linkColor;
+                      const isActive = activeSite.branding.buttonColor === theme.buttonColor && activeSite.branding.bgColor === theme.bgColor && activeSite.branding.headlineColor === theme.headlineColor;
                       return (
-                        <button key={theme.id} className={`kwb-theme-card ${isActive ? "kwb-theme-active" : ""}`} onClick={() => updateSite(activeSite.id, { branding: { ...activeSite.branding, buttonColor: theme.buttonColor, accentColor: theme.buttonColor, headlineColor: theme.headlineColor, textColor: theme.textColor, linkColor: theme.linkColor } })}>
-                          <div className="kwb-theme-preview" style={{ background: theme.id === "dark_mono" ? "#18181b" : "#fff" }}>
-                            <div className="kwb-theme-p-header">
+                        <button key={theme.id} className={`kwb-theme-card ${isActive ? "kwb-theme-active" : ""}`} onClick={() => updateSite(activeSite.id, { branding: { ...activeSite.branding, buttonColor: theme.buttonColor, accentColor: theme.buttonColor, headlineColor: theme.headlineColor, textColor: theme.textColor, linkColor: theme.linkColor, bgColor: theme.bgColor, cardBg: theme.cardBg } })}>
+                          <div className="kwb-theme-preview" style={{ background: theme.bgColor }}>
+                            <div className="kwb-theme-p-header" style={{ borderColor: theme.cardBg !== theme.bgColor ? theme.cardBg : "rgba(128,128,128,0.15)" }}>
                               <div className="kwb-theme-p-bar" style={{ background: theme.headlineColor, width: 18, height: 4 }} />
                               <div className="kwb-theme-p-btn" style={{ background: theme.buttonColor, width: 14, height: 5 }} />
                             </div>
                             <div className="kwb-theme-p-body">
                               <div className="kwb-theme-p-bar" style={{ background: theme.headlineColor, width: 28, height: 4, opacity: 0.8 }} />
-                              <div className="kwb-theme-p-bar" style={{ background: theme.textColor, width: 36, height: 3, opacity: 0.6 }} />
+                              <div className="kwb-theme-p-bar" style={{ background: theme.textColor, width: 36, height: 3 }} />
                               <div className="kwb-theme-p-btn" style={{ background: theme.buttonColor, width: 22, height: 5 }} />
                             </div>
                             <div className="kwb-theme-p-cards">
-                              <div className="kwb-theme-p-card" style={{ borderColor: theme.id === "dark_mono" ? "#333" : "#e8e8e8" }}>
-                                <div style={{ width: "100%", height: 8, background: theme.id === "dark_mono" ? "#333" : "#f0f0f0", borderRadius: 1 }} />
+                              <div className="kwb-theme-p-card" style={{ background: theme.cardBg, borderColor: "rgba(128,128,128,0.15)" }}>
+                                <div style={{ width: "100%", height: 8, background: "rgba(128,128,128,0.12)", borderRadius: 1 }} />
                                 <div className="kwb-theme-p-bar" style={{ background: theme.headlineColor, width: "60%", height: 2.5, opacity: 0.7 }} />
                               </div>
-                              <div className="kwb-theme-p-card" style={{ borderColor: theme.id === "dark_mono" ? "#333" : "#e8e8e8" }}>
-                                <div style={{ width: "100%", height: 8, background: theme.id === "dark_mono" ? "#333" : "#f0f0f0", borderRadius: 1 }} />
+                              <div className="kwb-theme-p-card" style={{ background: theme.cardBg, borderColor: "rgba(128,128,128,0.15)" }}>
+                                <div style={{ width: "100%", height: 8, background: "rgba(128,128,128,0.12)", borderRadius: 1 }} />
                                 <div className="kwb-theme-p-bar" style={{ background: theme.headlineColor, width: "50%", height: 2.5, opacity: 0.7 }} />
                               </div>
                             </div>
@@ -1678,6 +1682,20 @@ html.dark .pv-darkmode-btn:hover{background:#333;}
                         <div className="kwb-color-row-controls">
                           <input type="color" className="kwb-color-input" value={activeSite.branding.linkColor || "#E82222"} onChange={e => updateSite(activeSite.id, { branding: { ...activeSite.branding, linkColor: e.target.value } })} />
                           <span className="kwb-color-hex">{activeSite.branding.linkColor || "#E82222"}</span>
+                        </div>
+                      </div>
+                      <div className="kwb-color-row">
+                        <span className="kwb-color-row-label">الخلفية</span>
+                        <div className="kwb-color-row-controls">
+                          <input type="color" className="kwb-color-input" value={activeSite.branding.bgColor || "#ffffff"} onChange={e => updateSite(activeSite.id, { branding: { ...activeSite.branding, bgColor: e.target.value } })} />
+                          <span className="kwb-color-hex">{activeSite.branding.bgColor || "#ffffff"}</span>
+                        </div>
+                      </div>
+                      <div className="kwb-color-row">
+                        <span className="kwb-color-row-label">البطاقات</span>
+                        <div className="kwb-color-row-controls">
+                          <input type="color" className="kwb-color-input" value={activeSite.branding.cardBg || "#ffffff"} onChange={e => updateSite(activeSite.id, { branding: { ...activeSite.branding, cardBg: e.target.value } })} />
+                          <span className="kwb-color-hex">{activeSite.branding.cardBg || "#ffffff"}</span>
                         </div>
                       </div>
                     </div>
@@ -2353,7 +2371,7 @@ const CSS_STYLES = `
 
 /* Preview */
 .kwb-preview-area{flex:1;overflow-y:auto;display:flex;justify-content:center;padding:0 20px 40px;}
-.kwb-preview-frame{width:100%;max-width:700px;background:#fff;border:1px solid #E0E0E0;overflow:visible;transition:max-width .3s;}
+.kwb-preview-frame{width:100%;max-width:960px;background:var(--kwb-bg,#fff);border:1px solid #E0E0E0;overflow:visible;transition:max-width .3s;}
 .kwb-preview-mobile{max-width:375px;}
 .kwb-preview-mobile .kwb-p-hero-news{grid-template-columns:1fr;}
 .kwb-preview-mobile .kwb-p-hero-main{order:-1;}
@@ -2378,11 +2396,11 @@ const CSS_STYLES = `
 .kwb-preview-mobile .kwb-p-hero-sub-form{flex-direction:column;}
 .kwb-preview-mobile .kwb-p-hero-sub-form .kwb-p-email-input{border-right:1px solid #ddd;width:100%;}
 .kwb-preview-mobile .kwb-p-hero-sub-form .kwb-p-subscribe-btn{width:100%;}
-.kwb-preview-content{direction:rtl;text-align:right;font-family:'IBM Plex Sans Arabic',system-ui,sans-serif;color:#1a1a1a;line-height:1.6;}
+.kwb-preview-content{direction:rtl;text-align:right;font-family:'IBM Plex Sans Arabic',system-ui,sans-serif;color:var(--kwb-text-color,#1a1a1a);line-height:1.6;background:var(--kwb-bg,#fff);}
 
 /* ─── PREVIEW COMPONENTS ─── */
 /* Header */
-.kwb-p-header{border-bottom:1px solid #e0e0e0;padding:0;}
+.kwb-p-header{border-bottom:1px solid rgba(128,128,128,0.2);padding:0;background:var(--kwb-card-bg,#fff);}
 .kwb-p-header-inner{display:flex;flex-direction:row;align-items:center;gap:20px;direction:rtl;justify-content:space-between;padding:12px 16px;max-width:100%;}
 .kwb-p-logo-wrap{display:flex;align-items:center;gap:8px;flex-shrink:0;}
 .kwb-p-logo-img{height:28px;width:auto;object-fit:contain;display:block;}
@@ -2394,13 +2412,13 @@ const CSS_STYLES = `
 .kwb-p-darkmode-btn{width:28px;height:28px;border:1px solid #e0e0e0;background:transparent;font-size:14px;cursor:default;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#666;}
 
 /* Hero News Grid */
-.kwb-p-hero-news{display:grid;grid-template-columns:3fr 5fr 3fr;gap:1px;background:#e0e0e0;}
-.kwb-p-hero-side{display:flex;flex-direction:column;gap:1px;background:#e0e0e0;}
-.kwb-p-hero-side-card{background:#fff;padding:14px;display:flex;flex-direction:column;gap:6px;flex:1;}
+.kwb-p-hero-news{display:grid;grid-template-columns:3fr 5fr 3fr;gap:1px;background:rgba(128,128,128,0.2);}
+.kwb-p-hero-side{display:flex;flex-direction:column;gap:1px;background:rgba(128,128,128,0.2);}
+.kwb-p-hero-side-card{background:var(--kwb-card-bg,#fff);padding:14px;display:flex;flex-direction:column;gap:6px;flex:1;}
 .kwb-p-hero-side-img{width:100%;height:220px;background:#e5e5e5;}
 .kwb-p-hero-side-card h4{font-size:11px;font-weight:700;margin:0;line-height:1.5;color:var(--kwb-headline-color,#1a1a1a);}
 .kwb-p-hero-date{font-size:10px;color:#999;}
-.kwb-p-hero-main{background:#fff;padding:16px;display:flex;flex-direction:column;gap:8px;}
+.kwb-p-hero-main{background:var(--kwb-card-bg,#fff);padding:16px;display:flex;flex-direction:column;gap:8px;}
 .kwb-p-hero-main-img{width:100%;height:100%;min-height:200px;background:#e5e5e5;}
 .kwb-p-hero-main-title{font-size:16px;font-weight:800;margin:0;line-height:1.5;color:var(--kwb-headline-color,#1a1a1a);}
 .kwb-p-hero-main-excerpt{font-size:12px;color:var(--kwb-text-color,#666);margin:0;line-height:1.7;}
@@ -2415,7 +2433,7 @@ const CSS_STYLES = `
 .kwb-p-ticker-dot{color:#ccc;}
 
 /* CTA Newsletter */
-.kwb-p-cta{padding:20px 16px;background:#f8f8f8;border-top:1px solid #e0e0e0;border-bottom:1px solid #e0e0e0;}
+.kwb-p-cta{padding:20px 16px;background:var(--kwb-card-bg,#f8f8f8);border-top:1px solid rgba(128,128,128,0.2);border-bottom:1px solid rgba(128,128,128,0.2);}
 .kwb-p-cta-inner{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;}
 .kwb-p-cta-text{display:flex;align-items:center;gap:12px;}
 .kwb-p-cta-logo{width:40px;height:40px;border-radius:50%;background:#1a1a1a;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;flex-shrink:0;}
@@ -2426,13 +2444,13 @@ const CSS_STYLES = `
 .kwb-p-email-input::placeholder{color:#bbb;}
 
 /* Hero Subscribe */
-.kwb-p-hero-sub{padding:56px 16px;text-align:center;background:#f5f5f5;}
+.kwb-p-hero-sub{padding:56px 16px;text-align:center;background:var(--kwb-card-bg,#f5f5f5);}
 .kwb-p-hero-sub h2{font-size:22px;font-weight:800;margin:0 0 8px;color:#1a1a1a;}
 .kwb-p-hero-sub p{font-size:14px;color:#666;margin:0 0 24px;}
 .kwb-p-hero-sub-form{display:flex;gap:0;max-width:400px;margin:0 auto;}
 
 /* Article Collection */
-.kwb-p-articles{padding:24px 16px;}
+.kwb-p-articles{padding:24px 16px;background:var(--kwb-bg,#fff);}
 .kwb-p-articles-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
 .kwb-p-article-card{display:flex;flex-direction:column;gap:6px;}
 .kwb-p-article-img{width:100%;height:240px;background:#e5e5e5;}
@@ -2672,39 +2690,50 @@ const CSS_STYLES = `
 .kwb-add-comp-card:hover{border-color:#371D12;box-shadow:0 2px 8px rgba(0,0,0,0.06);}
 .kwb-add-comp-mini{height:48px;background:#fafafa;display:flex;align-items:center;justify-content:center;padding:6px 8px;overflow:hidden;border-bottom:1px solid #f0f0f0;}
 .kwb-add-comp-label-row{display:flex;align-items:center;gap:6px;padding:7px 10px;direction:rtl;}
-.kwb-add-comp-icon{color:#999;flex-shrink:0;display:flex;}
-.kwb-add-comp-card:hover .kwb-add-comp-icon{color:#371D12;}
 .kwb-add-comp-name{font-family:inherit;font-size:11.5px;font-weight:600;color:#555;}
 .kwb-add-comp-card:hover .kwb-add-comp-name{color:#371D12;}
 
-/* Mini layout skeletons inside add-component cards */
-.kwb-mc-box{background:#ddd;border-radius:2px;min-height:10px;}
-.kwb-mc-lg{min-height:100%;}
-.kwb-mc-stack{display:flex;flex-direction:column;gap:2px;}
-.kwb-mc-line{height:3px;background:#ddd;border-radius:2px;}
-.kwb-mc-w100{width:100%;}.kwb-mc-w80{width:80%;}.kwb-mc-w70{width:70%;}.kwb-mc-w60{width:60%;}.kwb-mc-w50{width:50%;}.kwb-mc-w40{width:40%;}
-.kwb-mc-input{height:8px;background:#eee;border-radius:2px;border:1px solid #ddd;flex:1;}
-.kwb-mc-input-row{display:flex;gap:3px;width:100%;direction:rtl;}
-.kwb-mc-btn-sm{height:8px;width:24px;background:#E82222;border-radius:2px;flex-shrink:0;}
-
-/* CSS-only mini previews */
-.kwb-mc-auto{width:100%;height:100%;border-radius:2px;}
-.kwb-mc-hero-news{background:linear-gradient(90deg,#e8e8e8 30%,#e0e0e0 30% 65%,#e8e8e8 65%);}
-.kwb-mc-hero-subscribe{background:#f0f0f0;position:relative;}.kwb-mc-hero-subscribe::after{content:'';position:absolute;bottom:6px;left:50%;transform:translateX(-50%);width:40%;height:6px;background:#E82222;border-radius:2px;}
-.kwb-mc-banner{background:linear-gradient(135deg,#e8e8e8,#f0f0f0);}
-.kwb-mc-cta-newsletter{background:#f8f8f8;position:relative;}.kwb-mc-cta-newsletter::after{content:'';position:absolute;bottom:6px;left:50%;transform:translateX(-50%);width:35%;height:6px;background:#E82222;border-radius:2px;}
-.kwb-mc-article-collection{background:repeating-conic-gradient(#e8e8e8 0% 25%,#f2f2f2 0% 50%) 0 0/50% 50%;border-radius:2px;}
-.kwb-mc-brands-ticker{background:repeating-linear-gradient(90deg,#e0e0e0 0 20px,#f0f0f0 20px 30px);opacity:.6;}
-.kwb-mc-testimonials{background:linear-gradient(90deg,#f0f0f0 48%,transparent 48% 52%,#f0f0f0 52%);position:relative;}.kwb-mc-testimonials::before,.kwb-mc-testimonials::after{content:'';position:absolute;top:4px;width:2px;height:calc(100% - 8px);background:#ddd;}.kwb-mc-testimonials::before{right:48%;}.kwb-mc-testimonials::after{right:4px;}
-.kwb-mc-products{background:linear-gradient(90deg,#e8e8e8 31%,transparent 31% 34.5%,#e8e8e8 34.5% 65.5%,transparent 65.5% 69%,#e8e8e8 69%);}
-.kwb-mc-podcast{background:#f0f0f0;position:relative;}.kwb-mc-podcast::before{content:'';position:absolute;right:6px;top:50%;transform:translateY(-50%);width:20px;height:20px;background:#e0e0e0;border-radius:4px;}
-.kwb-mc-courses{background:linear-gradient(90deg,#e8e8e8 31%,transparent 31% 34.5%,#e8e8e8 34.5% 65.5%,transparent 65.5% 69%,#e8e8e8 69%);}
-.kwb-mc-topics{background:#f8f8f8;position:relative;}.kwb-mc-topics::after{content:'';position:absolute;inset:8px;background:repeating-linear-gradient(90deg,#e8e8e8 0 16px,transparent 16px 20px);border-radius:8px;}
-.kwb-mc-text-block{background:#f8f8f8;position:relative;}.kwb-mc-text-block::after{content:'';position:absolute;right:8px;top:8px;width:60%;height:3px;background:#ddd;border-radius:2px;box-shadow:0 7px 0 #e0e0e0,0 14px 0 #e8e8e8;}
-.kwb-mc-image-block{background:#e8e8e8;position:relative;}.kwb-mc-image-block::after{content:'';position:absolute;left:8px;bottom:6px;border-left:8px solid transparent;border-right:8px solid transparent;border-bottom:10px solid rgba(0,0,0,.08);}
-.kwb-mc-subscribe-form{background:#f8f8f8;position:relative;}.kwb-mc-subscribe-form::after{content:'';position:absolute;bottom:6px;left:50%;transform:translateX(-50%);width:50%;height:6px;background:#E82222;border-radius:2px;}
-.kwb-mc-contact-form{background:#f8f8f8;position:relative;}.kwb-mc-contact-form::after{content:'';position:absolute;bottom:6px;left:50%;transform:translateX(-50%);width:40%;height:6px;background:#E82222;border-radius:2px;box-shadow:0 -10px 0 #eee,0 -20px 0 #eee;}
-.kwb-mc-divider{background:transparent;position:relative;}.kwb-mc-divider::after{content:'';position:absolute;top:50%;left:10%;width:80%;height:1px;background:#ccc;}
+/* CSS-only mini layout previews */
+.kwb-mc-auto{width:100%;height:100%;position:relative;}
+.kwb-mc-hero-news{background:linear-gradient(to left,#e0e0e0 60%,transparent 60%);border-radius:2px;}
+.kwb-mc-hero-news::before,.kwb-mc-hero-news::after{content:'';position:absolute;right:0;width:35%;background:#e8e8e8;border-radius:2px;}
+.kwb-mc-hero-news::before{top:0;height:45%;}
+.kwb-mc-hero-news::after{bottom:0;height:45%;}
+.kwb-mc-hero-subscribe{background:#fafafa;border-radius:2px;}
+.kwb-mc-hero-subscribe::before{content:'';position:absolute;top:25%;left:25%;width:50%;height:3px;background:#ddd;border-radius:2px;}
+.kwb-mc-hero-subscribe::after{content:'';position:absolute;bottom:20%;left:20%;width:60%;height:8px;background:#E82222;border-radius:2px;opacity:.5;}
+.kwb-mc-banner{background:linear-gradient(135deg,#e8e8e8,#f0f0f0);border-radius:2px;}
+.kwb-mc-cta-newsletter{background:#fafafa;border-radius:2px;}
+.kwb-mc-cta-newsletter::before{content:'';position:absolute;top:20%;left:20%;width:60%;height:3px;background:#ddd;border-radius:2px;}
+.kwb-mc-cta-newsletter::after{content:'';position:absolute;bottom:20%;left:15%;width:70%;height:8px;background:#E82222;border-radius:2px;opacity:.4;}
+.kwb-mc-article-collection{display:grid;grid-template-columns:1fr 1fr;gap:3px;padding:2px;}
+.kwb-mc-article-collection::before,.kwb-mc-article-collection::after{content:'';background:#e8e8e8;border-radius:2px;height:16px;}
+.kwb-mc-brands-ticker{background:#f0f0f0;border-radius:2px;}
+.kwb-mc-brands-ticker::after{content:'';position:absolute;top:40%;left:10%;width:80%;height:4px;background:#ccc;border-radius:2px;}
+.kwb-mc-testimonials{display:flex;gap:4px;padding:2px;}
+.kwb-mc-testimonials::before,.kwb-mc-testimonials::after{content:'';flex:1;height:28px;background:#f0f0f0;border-radius:3px;border-right:2px solid #ddd;}
+.kwb-mc-products{display:flex;gap:3px;padding:2px;}
+.kwb-mc-products::before,.kwb-mc-products::after{content:'';flex:1;height:28px;background:#e8e8e8;border-radius:3px;}
+.kwb-mc-podcast{display:flex;gap:5px;direction:rtl;align-items:center;padding:4px;}
+.kwb-mc-podcast::before{content:'';width:24px;height:24px;background:#e0e0e0;border-radius:4px;flex-shrink:0;}
+.kwb-mc-podcast::after{content:'';flex:1;height:3px;background:#ddd;border-radius:2px;}
+.kwb-mc-courses{display:flex;gap:3px;padding:2px;}
+.kwb-mc-courses::before,.kwb-mc-courses::after{content:'';flex:1;height:28px;background:#e8e8e8;border-radius:3px;}
+.kwb-mc-topics{display:flex;flex-wrap:wrap;gap:2px;justify-content:center;padding:4px;}
+.kwb-mc-topics::before{content:'';width:20px;height:10px;background:#e8e8e8;border-radius:8px;}
+.kwb-mc-topics::after{content:'';width:20px;height:10px;background:#e8e8e8;border-radius:8px;}
+.kwb-mc-text-block{display:flex;flex-direction:column;gap:3px;direction:rtl;padding:4px;}
+.kwb-mc-text-block::before{content:'';width:100%;height:3px;background:#ddd;border-radius:2px;}
+.kwb-mc-text-block::after{content:'';width:70%;height:3px;background:#ddd;border-radius:2px;}
+.kwb-mc-image-block{background:#e8e8e8;border-radius:2px;}
+.kwb-mc-subscribe-form{background:#fafafa;border-radius:2px;}
+.kwb-mc-subscribe-form::before{content:'';position:absolute;top:30%;left:15%;width:70%;height:6px;background:#eee;border:1px solid #ddd;border-radius:2px;}
+.kwb-mc-subscribe-form::after{content:'';position:absolute;bottom:20%;left:25%;width:50%;height:8px;background:#E82222;border-radius:2px;opacity:.5;}
+.kwb-mc-contact-form{background:#fafafa;border-radius:2px;}
+.kwb-mc-contact-form::before{content:'';position:absolute;top:20%;left:15%;width:70%;height:6px;background:#eee;border:1px solid #ddd;border-radius:2px;}
+.kwb-mc-contact-form::after{content:'';position:absolute;bottom:25%;left:25%;width:50%;height:8px;background:#E82222;border-radius:2px;opacity:.5;}
+.kwb-mc-divider{display:flex;align-items:center;}
+.kwb-mc-divider::after{content:'';width:100%;height:1px;background:#ccc;}
 
 /* Toggle */
 .kwb-toggle{position:relative;display:inline-block;width:44px;height:24px;flex-shrink:0;}
