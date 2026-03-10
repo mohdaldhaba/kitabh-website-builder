@@ -353,7 +353,7 @@ export default function KitabhWebsiteBuilder(props: any) {
       case "عرض المقال":
         return [header, { id: genId(), type: "article_view", enabled: true, settings: {} }, { id: genId(), type: "cta_newsletter", enabled: true, settings: getDefaultSettings("cta_newsletter") }, footer];
       default:
-        return [header, { id: genId(), type: "hero_subscribe", enabled: true, settings: { title: pageName, subtitle: "", buttonText: "اشتراك", buttonColor: "#E82222" } }, footer];
+        return [header, { id: genId(), type: "hero_subscribe", enabled: true, settings: { title: pageName, subtitle: `جميع المقالات عن ${pageName}`, buttonText: "اشتراك" } }, { id: genId(), type: "article_collection", enabled: true, settings: { articles: MOCK_ARTICLES.map(a => a.id), title: `مقالات ${pageName}` } }, { id: genId(), type: "cta_newsletter", enabled: true, settings: getDefaultSettings("cta_newsletter") }, footer];
     }
   }
 
@@ -492,14 +492,32 @@ export default function KitabhWebsiteBuilder(props: any) {
     }));
   };
 
-  const addPage = () => {
-    if (!activeSiteId || !draftPageName.trim()) return;
-    const slug = draftPageSlug.trim() ? draftPageSlug.trim().toLowerCase().replace(/[^a-z0-9-]/g, "-").replace(/-+/g, "-") : slugify(draftPageName);
+  const addPage = (presetName?: string) => {
+    if (!activeSiteId) return;
+    const pageName = (presetName || draftPageName).trim();
+    if (!pageName) return;
+    const slug = !presetName && draftPageSlug.trim() ? draftPageSlug.trim().toLowerCase().replace(/[^a-z0-9-]/g, "-").replace(/-+/g, "-") : slugify(pageName);
     const newPage: SitePage = {
-      id: genId(), name: draftPageName.trim(), slug,
-      components: getPageDefaultComponents(draftPageName.trim()),
+      id: genId(), name: pageName, slug,
+      components: getPageDefaultComponents(pageName),
     };
-    updateSite(activeSiteId, { pages: [...(activeSite?.pages || []), newPage] });
+    const updatedPages = [...(activeSite?.pages || []), newPage];
+    // Auto-add nav link to all header components
+    const pagesWithNav = updatedPages.map(p => ({
+      ...p,
+      components: p.components.map(c => {
+        if (c.type !== "header") return c;
+        const navLinks = (c.settings.navLinks || []).map((l: any) =>
+          typeof l === "string" ? { id: genId(), label: l, linkType: "page", target: "", visible: true } : l
+        );
+        const alreadyLinked = navLinks.some((l: any) => l.target === slug);
+        if (alreadyLinked) return c;
+        return { ...c, settings: { ...c.settings, navLinks: [...navLinks, { id: genId(), label: pageName, linkType: "page", target: slug, visible: true }] } };
+      }),
+    }));
+    updateSite(activeSiteId, { pages: pagesWithNav });
+    setActivePageId(newPage.id);
+    setSidebarTab("components");
     setDraftPageName("");
     setDraftPageSlug("");
     setAddPageModal(false);
@@ -1146,9 +1164,13 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                               )}
                             </div>
                             <nav className="kwb-p-nav">
-                              {(comp.settings.navLinks || []).filter((link: any) => typeof link === "string" ? true : link.visible).map((link: any, i: number) => (
-                                <a key={typeof link === "string" ? i : link.id} className="kwb-p-nav-link">{typeof link === "string" ? link : link.label}</a>
-                              ))}
+                              {(comp.settings.navLinks || []).filter((link: any) => typeof link === "string" ? true : link.visible).map((link: any, i: number) => {
+                                const isNavLink = typeof link !== "string" && link.linkType === "page" && link.target;
+                                const targetPage = isNavLink ? activeSite.pages.find(p => p.slug === link.target) : null;
+                                return (
+                                  <a key={typeof link === "string" ? i : link.id} className={`kwb-p-nav-link ${targetPage && activePageId === targetPage.id ? "kwb-p-nav-link-active" : ""}`} onClick={targetPage ? () => { setActivePageId(targetPage.id); setExpandedComponent(null); } : undefined} style={targetPage ? { cursor: "pointer" } : {}}>{typeof link === "string" ? link : link.label}</a>
+                                );
+                              })}
                             </nav>
                             <div className="kwb-p-header-actions">
                               <button className="kwb-p-subscribe-btn" style={{ background: comp.settings.buttonColor || activeSite.branding.buttonColor }} onClick={() => setShowSubscribePopup(true)}>
@@ -2319,23 +2341,35 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
         {/* ─── Add Page Modal ─── */}
         {addPageModal && (
           <div className="kwb-overlay" onClick={() => setAddPageModal(false)}>
-            <div className="kwb-modal kwb-modal-sm" onClick={e => e.stopPropagation()}>
+            <div className="kwb-modal" onClick={e => e.stopPropagation()}>
               <div className="kwb-modal-header">
                 <h2>إضافة صفحة جديدة</h2>
                 <button className="kwb-btn-icon" onClick={() => setAddPageModal(false)}>{Icons.x}</button>
               </div>
               <div className="kwb-modal-body">
+                <p style={{ fontSize: 13, color: "#888", margin: "0 0 12px" }}>اختر تصنيفاً جاهزاً أو أنشئ صفحة مخصصة</p>
+                <div className="kwb-page-presets">
+                  {["فن", "تقنية", "أعمال", "رياضة", "صحة", "سفر", "تعليم", "ثقافة", "مجتمع", "ترفيه", "طبخ", "أدب"].map(cat => {
+                    const exists = activeSite.pages.some(p => p.name === cat);
+                    return (
+                      <button key={cat} className={`kwb-page-preset-btn ${exists ? "kwb-page-preset-disabled" : ""}`} disabled={exists} onClick={() => addPage(cat)}>
+                        {cat}
+                        {exists && <span className="kwb-page-preset-check">{Icons.check}</span>}
+                      </button>
+                    );
+                  })}
+                </div>
+                <div className="kwb-page-divider"><span>أو أنشئ صفحة مخصصة</span></div>
                 <label className="kwb-label">اسم الصفحة</label>
-                <input className="kwb-input" placeholder="أدخل اسم الصفحة" value={draftPageName} onChange={e => setDraftPageName(e.target.value)} autoFocus />
+                <input className="kwb-input" placeholder="مثال: تصميم، تسويق، بودكاست..." value={draftPageName} onChange={e => setDraftPageName(e.target.value)} />
                 <label className="kwb-label" style={{ marginTop: 12 }}>الرابط (Slug)</label>
                 <div style={{ display: "flex", alignItems: "center", gap: 6, direction: "ltr" }}>
                   <span style={{ fontSize: 12, color: "#999", whiteSpace: "nowrap" }}>yoursite.kitabh.com/</span>
                   <input className="kwb-input" placeholder={draftPageName ? slugify(draftPageName) : "page-slug"} value={draftPageSlug} onChange={e => setDraftPageSlug(e.target.value)} dir="ltr" style={{ flex: 1 }} />
                 </div>
-                <p className="kwb-hint">اتركه فارغاً لإنشائه تلقائياً من الاسم</p>
               </div>
               <div className="kwb-modal-footer">
-                <button className="kwb-btn-primary kwb-btn-full" onClick={addPage}>إضافة</button>
+                <button className="kwb-btn-primary kwb-btn-full" onClick={() => addPage()} disabled={!draftPageName.trim()}>إضافة صفحة</button>
               </div>
             </div>
           </div>
@@ -2538,6 +2572,7 @@ const CSS_STYLES = `
 .kwb-p-nav{display:flex;gap:20px;flex:1;justify-content:flex-start;}
 .kwb-p-nav-link{font-size:13px;color:var(--kwb-text-color,#666);cursor:pointer;white-space:nowrap;font-weight:500;}
 .kwb-p-nav-link:hover{color:var(--kwb-headline-color,#1a1a1a);}
+.kwb-p-nav-link-active{color:var(--kwb-headline-color,#1a1a1a)!important;font-weight:700;}
 .kwb-p-subscribe-btn{padding:0 24px;height:46px;border:none;border-radius:0;color:#fff;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;}
 .kwb-p-darkmode-btn{width:28px;height:28px;border:1px solid rgba(128,128,128,0.2);background:transparent;font-size:14px;cursor:default;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--kwb-text-color,#666);}
 
@@ -2959,6 +2994,16 @@ const CSS_STYLES = `
 .kwb-page-row-slug{font-size:10px;font-weight:400;color:#BBB;flex-shrink:0;}
 .kwb-page-row-actions{display:flex;gap:2px;align-items:center;flex-shrink:0;}
 .kwb-page-edit-fields{padding:8px 12px 10px;display:flex;flex-direction:column;gap:6px;border-top:1px solid #F0F0F0;background:#FAFAFF;}
+
+/* Page presets */
+.kwb-page-presets{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;}
+.kwb-page-preset-btn{position:relative;padding:8px 18px;border:1.5px solid #E8E8E8;border-radius:20px;background:#fff;font-family:inherit;font-size:13px;font-weight:600;color:#371D12;cursor:pointer;transition:all .15s;}
+.kwb-page-preset-btn:hover:not(:disabled){border-color:#0000FF;background:#F0F0FF;color:#0000FF;}
+.kwb-page-preset-disabled{opacity:0.45;cursor:not-allowed!important;background:#f8f8f8;}
+.kwb-page-preset-check{margin-right:4px;color:#10b981;}
+.kwb-page-divider{display:flex;align-items:center;gap:12px;margin:8px 0 16px;font-size:12px;color:#BBB;}
+.kwb-page-divider::before,.kwb-page-divider::after{content:'';flex:1;height:1px;background:#E8E8E8;}
+.kwb-page-divider span{white-space:nowrap;}
 
 /* ─── MODALS ─── */
 .kwb-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.5);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;}
