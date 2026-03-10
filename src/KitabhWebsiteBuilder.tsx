@@ -1251,6 +1251,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                       );
                       return (
                         <div key={comp.id} data-comp-id={comp.id} className="kwb-p-ticker">
+                          {comp.settings.headline && <h3 className="kwb-p-ticker-headline">{comp.settings.headline}</h3>}
                           <div className="kwb-p-ticker-inner" style={{ animationDuration: `${tickerSpeed}s` }}>
                             {brandItems.length > 0 ? (
                               <>
@@ -1920,7 +1921,9 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
 
                             {comp.type === "brands_ticker" && (
                               <>
-                                <label className="kwb-label">سرعة الشريط</label>
+                                <label className="kwb-label">العنوان</label>
+                                <input className="kwb-input" value={comp.settings.headline || ""} onChange={e => updateComponentSettings(comp.id, { headline: e.target.value })} placeholder="مثال: عملاؤنا" />
+                                <label className="kwb-label" style={{ marginTop: 12 }}>سرعة الشريط</label>
                                 <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                                   <span style={{ fontSize: 11, color: "#999" }}>سريع</span>
                                   <input type="range" min="10" max="60" value={comp.settings.speed || 30} onChange={e => updateComponentSettings(comp.id, { speed: parseInt(e.target.value) })} style={{ flex: 1, accentColor: activeSite.branding.buttonColor || "#E82222" }} />
@@ -2550,6 +2553,7 @@ const CSS_STYLES = `
 /* Brands Ticker */
 .kwb-p-ticker{overflow:hidden;border-top:2px solid var(--kwb-headline-color,#1a1a1a);border-bottom:2px solid var(--kwb-headline-color,#1a1a1a);padding:20px 0;}
 .kwb-p-ticker-inner{display:flex;gap:24px;white-space:nowrap;font-size:48px;font-weight:900;color:var(--kwb-headline-color,#1a1a1a);animation:kwbTickerScroll 30s linear infinite;align-items:center;}
+.kwb-p-ticker-headline{text-align:center;font-size:16px;font-weight:700;color:var(--kwb-headline-color,#1a1a1a);margin:0 0 12px;padding:0 16px;}
 .kwb-p-ticker-brand{display:flex;align-items:center;gap:12px;flex-shrink:0;}
 .kwb-p-ticker-logo{height:40px;width:auto;max-width:120px;object-fit:contain;}
 @keyframes kwbTickerScroll{from{transform:translateX(100%)}to{transform:translateX(-100%)}}
