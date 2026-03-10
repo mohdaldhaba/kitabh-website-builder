@@ -227,6 +227,7 @@ export default function KitabhWebsiteBuilder(props: any) {
   const [sidebarTab, setSidebarTab] = useState<SidebarTab>("components");
   const [previewDevice, setPreviewDevice] = useState<PreviewDevice>("desktop");
   const [expandedComponent, setExpandedComponent] = useState<string | null>(null);
+  const [showAddComponent, setShowAddComponent] = useState(false);
   const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved">("idle");
 
   // Modals
@@ -641,6 +642,11 @@ export default function KitabhWebsiteBuilder(props: any) {
     const lu = activeSite.branding.logoUrl || "";
     const lw = activeSite.branding.layoutWidth || "compact";
     const dm = activeSite.branding.darkMode || false;
+    const bgc = activeSite.branding.bgColor || "#ffffff";
+    const cbg = activeSite.branding.cardBg || "#ffffff";
+    const hlc = activeSite.branding.headlineColor || "#1a1a1a";
+    const txc = activeSite.branding.textColor || "#666666";
+    const lkc = activeSite.branding.linkColor || bc;
 
     const allPages = activeSite.pages;
     // Get nav links from header component settings
@@ -671,9 +677,9 @@ export default function KitabhWebsiteBuilder(props: any) {
           case "hero_news":
             const ha = (s.articles || []).map((id: string) => MOCK_ARTICLES.find(a => a.id === id)).filter(Boolean);
             const ma = ha[0]; const sa = ha.slice(1, 5);
-            const sideR = sa.slice(0, 2).map((a: any) => `<div class="pv-hero-side-card"><div class="pv-img" style="height:200px"></div><h4>${a.title.slice(0, 60)}...</h4><div class="pv-author-row"><div class="pv-avatar">${a.author.charAt(0)}</div><span class="pv-author-name">${a.author}</span></div><div class="pv-meta-row"><span class="pv-date">${a.date}</span><span class="pv-eng"><span style="color:#E82222">❤ ${a.likes}</span><span>💬 ${a.comments}</span></span></div></div>`).join("");
-            const sideL = sa.slice(2, 4).map((a: any) => `<div class="pv-hero-side-card"><div class="pv-img" style="height:200px"></div><h4>${a.title.slice(0, 60)}...</h4><div class="pv-author-row"><div class="pv-avatar">${a.author.charAt(0)}</div><span class="pv-author-name">${a.author}</span></div><div class="pv-meta-row"><span class="pv-date">${a.date}</span><span class="pv-eng"><span style="color:#E82222">❤ ${a.likes}</span><span>💬 ${a.comments}</span></span></div></div>`).join("");
-            const mainH = ma ? `<div class="pv-hero-main"><div class="pv-img" style="height:260px;min-height:260px"></div><h2>${ma.title}</h2><p class="pv-excerpt">${ma.excerpt}</p><div class="pv-meta-row"><div class="pv-author-row"><div class="pv-avatar">${ma.author.charAt(0)}</div><span class="pv-author-name">${ma.author}</span><span class="pv-date" style="margin-inline-start:8px">${ma.date}</span></div><span class="pv-eng">💬 ${ma.comments} <span style="color:#E82222">❤ ${ma.likes}</span></span></div></div>` : "";
+            const sideR = sa.slice(0, 2).map((a: any) => `<div class="pv-hero-side-card"><div class="pv-img" style="height:200px"></div><h4>${a.title.slice(0, 60)}...</h4><div class="pv-author-row"><div class="pv-avatar">${a.author.charAt(0)}</div><span class="pv-author-name">${a.author}</span></div><div class="pv-meta-row"><span class="pv-date">${a.date}</span><span class="pv-eng"><span style="color:var(--pv-btn)">❤ ${a.likes}</span><span>💬 ${a.comments}</span></span></div></div>`).join("");
+            const sideL = sa.slice(2, 4).map((a: any) => `<div class="pv-hero-side-card"><div class="pv-img" style="height:200px"></div><h4>${a.title.slice(0, 60)}...</h4><div class="pv-author-row"><div class="pv-avatar">${a.author.charAt(0)}</div><span class="pv-author-name">${a.author}</span></div><div class="pv-meta-row"><span class="pv-date">${a.date}</span><span class="pv-eng"><span style="color:var(--pv-btn)">❤ ${a.likes}</span><span>💬 ${a.comments}</span></span></div></div>`).join("");
+            const mainH = ma ? `<div class="pv-hero-main"><div class="pv-img" style="height:260px;min-height:260px"></div><h2>${ma.title}</h2><p class="pv-excerpt">${ma.excerpt}</p><div class="pv-meta-row"><div class="pv-author-row"><div class="pv-avatar">${ma.author.charAt(0)}</div><span class="pv-author-name">${ma.author}</span><span class="pv-date" style="margin-inline-start:8px">${ma.date}</span></div><span class="pv-eng">💬 ${ma.comments} <span style="color:var(--pv-btn)">❤ ${ma.likes}</span></span></div></div>` : "";
             pc += `<div class="pv-hero-grid"><div class="pv-hero-side pv-hero-side-r">${sideR}</div>${mainH}<div class="pv-hero-side pv-hero-side-l">${sideL}</div></div>`;
             break;
           case "hero_subscribe":
@@ -687,11 +693,11 @@ export default function KitabhWebsiteBuilder(props: any) {
             break;
           case "article_collection":
             const ac = (s.articles || []).map((id: string) => MOCK_ARTICLES.find(a => a.id === id)).filter(Boolean);
-            const acH = ac.map((a: any) => `<div class="pv-art-card"><div class="pv-img" style="height:260px;min-height:260px"></div><h4>${a.title}</h4><p class="pv-excerpt-sm">${a.excerpt.slice(0, 80)}...</p><div class="pv-author-row"><div class="pv-avatar">${a.author.charAt(0)}</div><span class="pv-author-name">${a.author}</span></div><div class="pv-meta-row"><span>${a.date}</span><span class="pv-eng"><span style="color:#E82222">❤ ${a.likes}</span><span>💬 ${a.comments}</span></span></div></div>`).join("");
+            const acH = ac.map((a: any) => `<div class="pv-art-card"><div class="pv-img" style="height:260px;min-height:260px"></div><h4>${a.title}</h4><p class="pv-excerpt-sm">${a.excerpt.slice(0, 80)}...</p><div class="pv-author-row"><div class="pv-avatar">${a.author.charAt(0)}</div><span class="pv-author-name">${a.author}</span></div><div class="pv-meta-row"><span>${a.date}</span><span class="pv-eng"><span style="color:var(--pv-btn)">❤ ${a.likes}</span><span>💬 ${a.comments}</span></span></div></div>`).join("");
             pc += `<div class="pv-articles"><div class="pv-articles-grid">${acH}</div><a class="pv-all-link">جميع المقالات &#x2197;</a></div>`;
             break;
           case "banner":
-            pc += `<div class="pv-banners"><div class="pv-banner-grid"><div class="pv-banner-card" style="background:#E82222"><span>تصفح أرشيف ${sn}</span><a>جميع المقالات &#x2197;</a></div><div class="pv-banner-card" style="background:#371D12"><span>قصتنا</span><a>اقرأ المزيد &#x2197;</a></div></div></div>`;
+            pc += `<div class="pv-banners"><div class="pv-banner-grid"><div class="pv-banner-card" style="background:var(--pv-btn)"><span>تصفح أرشيف ${sn}</span><a>جميع المقالات &#x2197;</a></div><div class="pv-banner-card" style="background:var(--pv-headline)"><span>قصتنا</span><a>اقرأ المزيد &#x2197;</a></div></div></div>`;
             break;
           case "footer":
             let fl = "";
@@ -727,11 +733,11 @@ export default function KitabhWebsiteBuilder(props: any) {
 <link href="https://fonts.googleapis.com/css2?family=${encodeURIComponent(ff)}:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
-:root{--pv-btn:${bc};--pv-headline:${activeSite.branding.headlineColor || '#1a1a1a'};--pv-text:${activeSite.branding.textColor || '#666666'};--pv-link:${activeSite.branding.linkColor || bc};}
-body{font-family:'${ff}',system-ui,sans-serif;direction:rtl;text-align:right;color:var(--pv-text);line-height:1.6;background:#fff;transition:background .3s,color .3s;}
+:root{--pv-btn:${bc};--pv-headline:${hlc};--pv-text:${txc};--pv-link:${lkc};--pv-bg:${bgc};--pv-card-bg:${cbg};}
+body{font-family:'${ff}',system-ui,sans-serif;direction:rtl;text-align:right;color:var(--pv-text);line-height:1.6;background:var(--pv-bg);transition:background .3s,color .3s;}
 a{text-decoration:none;color:inherit;}
 input::placeholder{color:#bbb;}
-.pv-site-wrapper{${lw === "compact" ? "max-width:1160px;margin:0 auto;" : ""}background:#fff;transition:background .3s;}
+.pv-site-wrapper{${lw === "compact" ? "max-width:1160px;margin:0 auto;" : ""}background:var(--pv-bg);transition:background .3s;}
 /* Dark mode */
 html.dark body{background:#121212;color:#e0e0e0;}
 html.dark .pv-site-wrapper{background:#121212;}
@@ -770,7 +776,7 @@ html.dark .pv-page-sep{border-color:#333;}
 html.dark .pv-darkmode-btn{border-color:#444;color:#e0e0e0;}
 html.dark .pv-darkmode-btn:hover{background:#333;}
 /* Header */
-.pv-header{border-bottom:1px solid #e0e0e0;padding:0;position:sticky;top:0;background:#fff;z-index:10;}
+.pv-header{border-bottom:1px solid rgba(128,128,128,0.2);padding:0;position:sticky;top:0;background:var(--pv-card-bg);z-index:10;}
 .pv-header-inner{display:flex;align-items:center;gap:24px;padding:14px 24px;}
 .pv-logo-wrap{display:flex;align-items:center;gap:8px;flex-shrink:0;}
 .pv-logo-img{height:32px;width:auto;object-fit:contain;}
@@ -780,11 +786,11 @@ html.dark .pv-darkmode-btn:hover{background:#333;}
 .pv-nav-link:hover{color:#1a1a1a;}
 .pv-btn{padding:0 28px;height:48px;border:none;color:#fff;font-family:inherit;font-size:15px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;}
 /* Hero News */
-.pv-hero-grid{display:grid;grid-template-columns:3fr 5fr 3fr;gap:1px;background:#e0e0e0;}
-.pv-hero-side{display:flex;flex-direction:column;gap:1px;background:#e0e0e0;}
-.pv-hero-side-card{background:#fff;padding:16px;display:flex;flex-direction:column;gap:8px;flex:1;}
+.pv-hero-grid{display:grid;grid-template-columns:3fr 5fr 3fr;gap:1px;background:rgba(128,128,128,0.2);}
+.pv-hero-side{display:flex;flex-direction:column;gap:1px;background:rgba(128,128,128,0.2);}
+.pv-hero-side-card{background:var(--pv-card-bg);padding:16px;display:flex;flex-direction:column;gap:8px;flex:1;}
 .pv-hero-side-card h4{font-size:14px;font-weight:700;margin:0;line-height:1.5;color:var(--pv-headline);}
-.pv-hero-main{background:#fff;padding:20px;display:flex;flex-direction:column;gap:10px;}
+.pv-hero-main{background:var(--pv-card-bg);padding:20px;display:flex;flex-direction:column;gap:10px;}
 .pv-hero-main h2{font-size:22px;font-weight:800;margin:0;line-height:1.5;}
 .pv-img{width:100%;background:#e5e5e5;}
 .pv-date{font-size:11px;color:#999;}
@@ -793,19 +799,19 @@ html.dark .pv-darkmode-btn:hover{background:#333;}
 .pv-meta-row{display:flex;justify-content:space-between;font-size:11px;color:#999;align-items:center;margin-top:auto;}
 .pv-eng{display:flex;gap:8px;align-items:center;}
 /* Hero Subscribe */
-.pv-hero-sub{padding:72px 24px;text-align:center;background:#f5f5f5;}
+.pv-hero-sub{padding:72px 24px;text-align:center;background:var(--pv-card-bg);}
 .pv-hero-sub h2{font-size:32px;font-weight:800;margin:0 0 12px;}
 .pv-hero-sub p{font-size:16px;color:#666;margin:0 0 28px;}
 /* Forms */
 .pv-form-row{display:flex;gap:0;}
 .pv-form-center{max-width:440px;margin:0 auto;}
-.pv-email{flex:1;height:48px;padding:0 16px;border:1px solid #ddd;border-right:none;font-family:inherit;font-size:15px;outline:none;background:#fff;direction:rtl;min-width:0;}
+.pv-email{flex:1;height:48px;padding:0 16px;border:1px solid rgba(128,128,128,0.3);border-right:none;font-family:inherit;font-size:15px;outline:none;background:var(--pv-card-bg);color:var(--pv-text);direction:rtl;min-width:0;}
 /* Ticker */
 .pv-ticker{overflow:hidden;border-top:2px solid #1a1a1a;border-bottom:2px solid #1a1a1a;padding:24px 0;}
 .pv-ticker-inner{display:flex;gap:24px;white-space:nowrap;font-size:56px;font-weight:900;color:#1a1a1a;animation:tickerScroll 15s linear infinite;}
 @keyframes tickerScroll{from{transform:translateX(100%)}to{transform:translateX(-100%)}}
 /* CTA */
-.pv-cta{padding:28px 24px;background:#f8f8f8;border-top:1px solid #e0e0e0;border-bottom:1px solid #e0e0e0;}
+.pv-cta{padding:28px 24px;background:var(--pv-card-bg);border-top:1px solid rgba(128,128,128,0.2);border-bottom:1px solid rgba(128,128,128,0.2);}
 .pv-cta-inner{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;}
 .pv-cta-text{display:flex;align-items:center;gap:14px;}
 .pv-cta-icon{width:44px;height:44px;border-radius:50%;background:#1a1a1a;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:20px;flex-shrink:0;}
@@ -823,7 +829,7 @@ html.dark .pv-darkmode-btn:hover{background:#333;}
 .pv-all-link{display:block;margin-top:20px;font-size:14px;font-weight:600;color:var(--pv-link);}
 /* Banners */
 .pv-banners{padding:0;}
-.pv-banner-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#e0e0e0;}
+.pv-banner-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(128,128,128,0.2);}
 .pv-banner-card{padding:32px 24px;color:#fff;display:flex;flex-direction:column;gap:10px;min-height:160px;justify-content:flex-end;}
 .pv-banner-card span{font-size:18px;font-weight:700;}
 .pv-banner-card a{font-size:13px;color:rgba(255,255,255,0.8);text-decoration:underline;cursor:pointer;}
@@ -843,7 +849,7 @@ html.dark .pv-darkmode-btn:hover{background:#333;}
 /* Article View */
 .pv-av{max-width:800px;margin:0 auto;}
 .pv-av-head{padding:36px 24px 24px;}
-.pv-av-cat{font-size:12px;font-weight:700;color:#E82222;}
+.pv-av-cat{font-size:12px;font-weight:700;color:var(--pv-btn);}
 .pv-av h1{font-size:28px;font-weight:900;line-height:1.4;margin:10px 0 20px;}
 .pv-av-meta{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
 .pv-av-author{display:flex;align-items:center;gap:10px;}
@@ -853,7 +859,7 @@ html.dark .pv-darkmode-btn:hover{background:#333;}
 .pv-av-body{padding:28px 24px;max-width:640px;margin:0 auto;}
 .pv-av-body p{font-size:16px;line-height:2;color:#333;margin:0 0 18px;}
 .pv-av-body h3{font-size:20px;font-weight:800;margin:28px 0 14px;}
-.pv-av-body blockquote{border-right:3px solid #E82222;padding:14px 20px;margin:24px 0;background:#fafafa;font-size:16px;font-style:italic;color:#555;line-height:1.8;}
+.pv-av-body blockquote{border-right:3px solid var(--pv-btn);padding:14px 20px;margin:24px 0;background:var(--pv-card-bg);font-size:16px;font-style:italic;color:var(--pv-text);line-height:1.8;}
 .pv-av-tags{padding:20px 24px 36px;display:flex;gap:8px;flex-wrap:wrap;}
 .pv-av-tags span{font-size:12px;padding:6px 14px;border:1px solid #e0e0e0;color:#555;background:#f8f8f8;}
 /* Page separator */
@@ -874,7 +880,7 @@ html.dark .pv-darkmode-btn:hover{background:#333;}
   .pv-footer-inner{flex-direction:column;gap:20px;}
   .pv-footer-logo{font-size:36px;}
   .pv-form-row{flex-direction:column;}
-  .pv-form-row .pv-email{border-right:1px solid #ddd;border-left:1px solid #ddd;width:100%;}
+  .pv-form-row .pv-email{border-right:1px solid rgba(128,128,128,0.3);border-left:1px solid rgba(128,128,128,0.3);width:100%;}
   .pv-form-row .pv-btn{width:100%;}
   .pv-form-row .pv-footer-email{width:100%;}
   .pv-hero-sub h2{font-size:22px;}
@@ -1276,11 +1282,11 @@ html.dark .pv-darkmode-btn:hover{background:#333;}
                       return (
                         <div key={comp.id} className="kwb-p-banners">
                           <div className="kwb-p-banner-grid">
-                            <div className="kwb-p-banner-card" style={{ background: "#E82222" }}>
+                            <div className="kwb-p-banner-card" style={{ background: activeSite.branding.buttonColor || "#E82222" }}>
                               <span>تصفح أرشيف {activeSite.branding.siteName}</span>
                               <a>جميع المقالات &#x2197;</a>
                             </div>
-                            <div className="kwb-p-banner-card" style={{ background: "#371D12" }}>
+                            <div className="kwb-p-banner-card" style={{ background: activeSite.branding.headlineColor || "#371D12" }}>
                               <span>قصتنا</span>
                               <a>اقرأ المزيد &#x2197;</a>
                             </div>
@@ -2109,36 +2115,6 @@ html.dark .pv-darkmode-btn:hover{background:#333;}
                     );
                   })}
 
-                  {/* Add component */}
-                  <div className="kwb-add-comp-section">
-                    <label className="kwb-label">إضافة مكون</label>
-                    <div className="kwb-add-comp-cards">
-                      {(["hero_news","hero_subscribe","banner","cta_newsletter","article_collection","brands_ticker","testimonials","products","podcast","courses","topics","text_block","image_block","subscribe_form","contact_form","divider"] as ComponentType[]).map(type => (
-                        <button key={type} className="kwb-add-comp-card" onClick={() => addComponentToPage(type)}>
-                          <div className="kwb-add-comp-mini">
-                            <div className={`kwb-mc-auto kwb-mc-${type.replace(/_/g,"-")}`} />
-                          </div>
-                          <div className="kwb-add-comp-label-row">
-                            <span className="kwb-add-comp-name">{COMPONENT_META[type].label}</span>
-                          </div>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Newsletter toggle + Save */}
-                  <div className="kwb-sb-bottom">
-                    <div className="kwb-newsletter-toggle">
-                      <label className="kwb-toggle">
-                        <input type="checkbox" checked={activeSite.hasNewsletter} onChange={e => updateSite(activeSite.id, { hasNewsletter: e.target.checked })} />
-                        <span className="kwb-toggle-track"><span className="kwb-toggle-thumb" /></span>
-                      </label>
-                      <span>نشرة بريدية لهذا الموقع؟</span>
-                    </div>
-                    <button className="kwb-btn-primary kwb-btn-full" onClick={handleSave} style={saveStatus === "saved" ? { background: "#10B981" } : saveStatus === "saving" ? { opacity: 0.7 } : {}}>
-                      {saveStatus === "saving" ? "جاري الحفظ..." : saveStatus === "saved" ? "تم الحفظ" : "حفظ الموقع"}
-                    </button>
-                  </div>
                 </div>
               )}
 
@@ -2203,6 +2179,31 @@ html.dark .pv-darkmode-btn:hover{background:#333;}
                 </div>
               )}
             </div>
+
+            {/* Sticky footer: Add component (components tab only) */}
+            {sidebarTab === "components" && (
+              <div className="kwb-comp-sticky-footer">
+                <button className="kwb-btn-primary kwb-btn-full" onClick={() => setShowAddComponent(!showAddComponent)}>
+                  {showAddComponent ? "إغلاق" : "+ إضافة مكون"}
+                </button>
+                {showAddComponent && (
+                  <div className="kwb-add-comp-dropdown">
+                    <div className="kwb-add-comp-cards">
+                      {(["hero_news","hero_subscribe","banner","cta_newsletter","article_collection","brands_ticker","testimonials","products","podcast","courses","topics","text_block","image_block","subscribe_form","contact_form","divider"] as ComponentType[]).map(type => (
+                        <button key={type} className="kwb-add-comp-card" onClick={() => { addComponentToPage(type); setShowAddComponent(false); }}>
+                          <div className="kwb-add-comp-mini">
+                            <div className={`kwb-mc-auto kwb-mc-${type.replace(/_/g,"-")}`} />
+                          </div>
+                          <div className="kwb-add-comp-label-row">
+                            <span className="kwb-add-comp-name">{COMPONENT_META[type].label}</span>
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
 
@@ -2371,7 +2372,7 @@ const CSS_STYLES = `
 
 /* Preview */
 .kwb-preview-area{flex:1;overflow-y:auto;display:flex;justify-content:center;padding:0 20px 40px;}
-.kwb-preview-frame{width:100%;max-width:960px;background:var(--kwb-bg,#fff);border:1px solid #E0E0E0;overflow:visible;transition:max-width .3s;}
+.kwb-preview-frame{width:100%;max-width:1200px;background:var(--kwb-bg,#fff);border:1px solid #E0E0E0;overflow:visible;transition:max-width .3s;}
 .kwb-preview-mobile{max-width:375px;}
 .kwb-preview-mobile .kwb-p-hero-news{grid-template-columns:1fr;}
 .kwb-preview-mobile .kwb-p-hero-main{order:-1;}
@@ -2468,7 +2469,7 @@ const CSS_STYLES = `
 
 /* Banners */
 .kwb-p-banners{padding:0;}
-.kwb-p-banner-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:#e0e0e0;}
+.kwb-p-banner-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(128,128,128,0.2);}
 .kwb-p-banner-card{padding:28px 20px;color:#fff;display:flex;flex-direction:column;gap:8px;min-height:140px;justify-content:flex-end;}
 .kwb-p-banner-card span{font-size:15px;font-weight:700;}
 .kwb-p-banner-card a{font-size:12px;color:rgba(255,255,255,0.8);text-decoration:underline;cursor:pointer;}
@@ -2492,7 +2493,7 @@ const CSS_STYLES = `
 /* Article View */
 .kwb-p-article-view{padding:0;}
 .kwb-p-av-header{padding:28px 16px 16px;}
-.kwb-p-av-category{font-size:12px;font-weight:700;color:#E82222;text-transform:uppercase;letter-spacing:0.5px;}
+.kwb-p-av-category{font-size:12px;font-weight:700;color:var(--kwb-btn-color,#E82222);text-transform:uppercase;letter-spacing:0.5px;}
 .kwb-p-av-title{font-size:22px;font-weight:900;line-height:1.4;margin:8px 0 16px;color:#1a1a1a;}
 .kwb-p-av-meta{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
 .kwb-p-av-author{display:flex;align-items:center;gap:10px;}
@@ -2506,7 +2507,7 @@ const CSS_STYLES = `
 .kwb-p-av-body{padding:24px 16px;max-width:600px;margin:0 auto;}
 .kwb-p-av-body p{font-size:14px;line-height:1.9;color:#333;margin:0 0 16px;}
 .kwb-p-av-body h3{font-size:17px;font-weight:800;color:#1a1a1a;margin:24px 0 12px;}
-.kwb-p-av-quote{border-right:3px solid #E82222;padding:12px 16px;margin:20px 0;background:#fafafa;font-size:14px;font-style:italic;color:#555;line-height:1.8;}
+.kwb-p-av-quote{border-right:3px solid var(--kwb-btn-color,#E82222);padding:12px 16px;margin:20px 0;background:var(--kwb-card-bg,#fafafa);font-size:14px;font-style:italic;color:var(--kwb-text-color,#555);line-height:1.8;}
 .kwb-p-av-footer-actions{padding:16px 16px 24px;border-top:1px solid #eee;}
 .kwb-p-av-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
 .kwb-p-av-tag{font-size:11px;padding:4px 12px;border:1px solid #e0e0e0;color:#555;background:#f8f8f8;}
@@ -2558,7 +2559,7 @@ const CSS_STYLES = `
 .kwb-p-product-price{font-size:14px;font-weight:800;color:#1a1a1a;}
 
 /* Podcast */
-.kwb-p-podcast-list{display:flex;flex-direction:column;gap:1px;background:#e0e0e0;}
+.kwb-p-podcast-list{display:flex;flex-direction:column;gap:1px;background:rgba(128,128,128,0.2);}
 .kwb-p-podcast-card{display:flex;gap:12px;padding:12px;background:#fff;}
 .kwb-p-podcast-img{width:60px;height:60px;background:#e5e5e5;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#ccc;}
 .kwb-p-podcast-info{flex:1;display:flex;flex-direction:column;gap:2px;}
@@ -2685,6 +2686,8 @@ const CSS_STYLES = `
 
 /* Add component */
 .kwb-add-comp-section{margin-top:16px;padding-top:16px;border-top:1px solid #F0F0F0;}
+.kwb-comp-sticky-footer{position:relative;background:#fff;padding:10px 16px;border-top:1px solid #E8E8E8;flex-shrink:0;}
+.kwb-add-comp-dropdown{position:absolute;bottom:100%;left:0;right:0;background:#fff;border:1px solid #E8E8E8;border-bottom:none;border-radius:12px 12px 0 0;box-shadow:0 -4px 20px rgba(0,0,0,0.1);padding:12px;max-height:50vh;overflow-y:auto;z-index:10;}
 .kwb-add-comp-cards{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;}
 .kwb-add-comp-card{display:flex;flex-direction:column;border:1.5px solid #E8E8E8;border-radius:10px;background:#fff;cursor:pointer;transition:all .15s;overflow:hidden;text-align:right;}
 .kwb-add-comp-card:hover{border-color:#371D12;box-shadow:0 2px 8px rgba(0,0,0,0.06);}
