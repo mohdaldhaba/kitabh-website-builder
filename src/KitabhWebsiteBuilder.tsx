@@ -383,7 +383,7 @@ export default function KitabhWebsiteBuilder(props: any) {
       customDomain: "",
       status: "draft",
       templateId,
-      branding: { logoUrl: "", logoLayout: "text_only" as LogoLayout, siteName: "شعار المؤسسة", accentColor: "#E82222", buttonColor: "#E82222", headlineColor: "#1a1a1a", textColor: "#666666", linkColor: "#E82222", bgColor: "#ffffff", cardBg: "#ffffff", fontFamily: "IBM Plex Sans Arabic", layoutWidth: "compact" as "compact" | "full", darkMode: false },
+      branding: { logoUrl: "", logoLayout: "text_only" as LogoLayout, siteName: "شعار المؤسسة", accentColor: "#E82222", buttonColor: "#E82222", headlineColor: "#1a1a1a", textColor: "#666666", linkColor: "#E82222", bgColor: "#ffffff", cardBg: "#ffffff", fontFamily: "Alyamama", layoutWidth: "compact" as "compact" | "full", darkMode: false },
       pages,
       hasNewsletter: true,
       visits: 0,
@@ -679,7 +679,7 @@ export default function KitabhWebsiteBuilder(props: any) {
     if (!activeSite || typeof window === "undefined") return;
     const previewWindow = window.open("", "_blank");
     if (!previewWindow) return;
-    const ff = activeSite.branding.fontFamily || "IBM Plex Sans Arabic";
+    const ff = activeSite.branding.fontFamily || "Alyamama";
     const ll = activeSite.branding.logoLayout || "text_only";
     const bc = activeSite.branding.buttonColor || "#E82222";
     const sn = activeSite.branding.siteName || "";
@@ -1656,9 +1656,9 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                   <label className="kwb-label" style={{ marginTop: 16 }}>الخط</label>
                   <div className="kwb-font-picker">
                     {[
-                      "IBM Plex Sans Arabic", "Noto Sans Arabic", "Cairo", "Tajawal", "Almarai",
-                      "Changa", "El Messiri", "Readex Pro", "Rubik", "Amiri",
-                      "Alyamama", "Playpen Sans Arabic",
+                      "Alyamama", "IBM Plex Sans Arabic", "Noto Sans Arabic", "Cairo", "Tajawal",
+                      "Almarai", "Changa", "El Messiri", "Readex Pro", "Rubik",
+                      "Amiri", "Playpen Sans Arabic",
                     ].map(font => (
                       <button
                         key={font}
