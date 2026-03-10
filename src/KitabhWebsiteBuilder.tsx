@@ -2095,28 +2095,12 @@ html.dark .pv-darkmode-btn:hover{background:#333;}
                   <div className="kwb-add-comp-section">
                     <label className="kwb-label">إضافة مكون</label>
                     <div className="kwb-add-comp-cards">
-                      {([
-                        { type: "hero_news", icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><rect x="5" y="5" width="8" height="10" rx="1" fill="currentColor" opacity=".15"/><rect x="15" y="5" width="4" height="4" rx="1" fill="currentColor" opacity=".1"/><rect x="15" y="11" width="4" height="4" rx="1" fill="currentColor" opacity=".1"/></svg>, mini: <div className="kwb-mc-hero-news"><div className="kwb-mc-box kwb-mc-lg" /><div className="kwb-mc-stack"><div className="kwb-mc-box" /><div className="kwb-mc-box" /></div></div> },
-                        { type: "hero_subscribe", icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="3" y="6" width="18" height="12" rx="2"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="9" y1="13" x2="15" y2="13"/><rect x="9" y="15" width="6" height="2" rx="1" fill="currentColor" opacity=".15"/></svg>, mini: <div className="kwb-mc-hero-sub"><div className="kwb-mc-line kwb-mc-w60" /><div className="kwb-mc-line kwb-mc-w40" /><div className="kwb-mc-input-row"><div className="kwb-mc-input" /><div className="kwb-mc-btn-sm" /></div></div> },
-                        { type: "banner", icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="2" y="7" width="20" height="10" rx="2"/><circle cx="8" cy="11" r="2" fill="currentColor" opacity=".15"/><path d="M21 17l-4-5-3 3-2-2-6 4"/></svg>, mini: <div className="kwb-mc-banner"><div className="kwb-mc-banner-img" /></div> },
-                        { type: "cta_newsletter", icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M2 8l10 6 10-6"/></svg>, mini: <div className="kwb-mc-cta"><div className="kwb-mc-line kwb-mc-w50" /><div className="kwb-mc-line kwb-mc-w70" /><div className="kwb-mc-input-row"><div className="kwb-mc-input" /><div className="kwb-mc-btn-sm" /></div></div> },
-                        { type: "article_collection", icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="3" y="3" width="7" height="8" rx="1"/><rect x="14" y="3" width="7" height="8" rx="1"/><rect x="3" y="13" width="7" height="8" rx="1"/><rect x="14" y="13" width="7" height="8" rx="1"/></svg>, mini: <div className="kwb-mc-articles"><div className="kwb-mc-card" /><div className="kwb-mc-card" /><div className="kwb-mc-card" /><div className="kwb-mc-card" /></div> },
-                        { type: "brands_ticker", icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><line x1="2" y1="12" x2="22" y2="12"/><circle cx="7" cy="12" r="2"/><circle cx="17" cy="12" r="2"/><path d="M10 12h4"/></svg>, mini: <div className="kwb-mc-ticker"><div className="kwb-mc-line kwb-mc-w100" /></div> },
-                        { type: "testimonials", icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>, mini: <div className="kwb-mc-testimonials"><div className="kwb-mc-quote" /><div className="kwb-mc-quote" /></div> },
-                        { type: "products", icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>, mini: <div className="kwb-mc-products"><div className="kwb-mc-prod" /><div className="kwb-mc-prod" /><div className="kwb-mc-prod" /></div> },
-                        { type: "podcast", icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>, mini: <div className="kwb-mc-podcast"><div className="kwb-mc-pod-thumb" /><div className="kwb-mc-pod-lines"><div className="kwb-mc-line kwb-mc-w70" /><div className="kwb-mc-line kwb-mc-w40" /></div></div> },
-                        { type: "courses", icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>, mini: <div className="kwb-mc-courses"><div className="kwb-mc-course" /><div className="kwb-mc-course" /><div className="kwb-mc-course" /></div> },
-                        { type: "topics", icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg>, mini: <div className="kwb-mc-topics"><div className="kwb-mc-tag" /><div className="kwb-mc-tag" /><div className="kwb-mc-tag" /><div className="kwb-mc-tag" /><div className="kwb-mc-tag" /><div className="kwb-mc-tag" /></div> },
-                        { type: "text_block", icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><line x1="17" y1="10" x2="3" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="17" y1="18" x2="3" y2="18"/></svg>, mini: <div className="kwb-mc-text"><div className="kwb-mc-line kwb-mc-w100" /><div className="kwb-mc-line kwb-mc-w80" /><div className="kwb-mc-line kwb-mc-w60" /></div> },
-                        { type: "image_block", icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>, mini: <div className="kwb-mc-image"><div className="kwb-mc-img-placeholder" /></div> },
-                        { type: "subscribe_form", icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="3" y="5" width="18" height="14" rx="2"/><line x1="7" y1="10" x2="17" y2="10"/><line x1="7" y1="14" x2="12" y2="14"/></svg>, mini: <div className="kwb-mc-form"><div className="kwb-mc-input" style={{width:"100%"}} /><div className="kwb-mc-btn-sm" style={{width:"100%"}} /></div> },
-                        { type: "contact_form", icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><path d="M22 6l-10 7L2 6"/></svg>, mini: <div className="kwb-mc-form"><div className="kwb-mc-input" style={{width:"100%"}} /><div className="kwb-mc-input" style={{width:"100%"}} /><div className="kwb-mc-btn-sm" style={{width:"100%"}} /></div> },
-                        { type: "divider", icon: <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><line x1="3" y1="12" x2="21" y2="12"/></svg>, mini: <div className="kwb-mc-divider"><div className="kwb-mc-hr" /></div> },
-                      ].map(({ type, icon, mini }) => (
+                      {(["hero_news","hero_subscribe","banner","cta_newsletter","article_collection","brands_ticker","testimonials","products","podcast","courses","topics","text_block","image_block","subscribe_form","contact_form","divider"] as ComponentType[]).map(type => (
                         <button key={type} className="kwb-add-comp-card" onClick={() => addComponentToPage(type)}>
-                          <div className="kwb-add-comp-mini">{mini}</div>
+                          <div className="kwb-add-comp-mini">
+                            <div className={`kwb-mc-auto kwb-mc-${type.replace(/_/g,"-")}`} />
+                          </div>
                           <div className="kwb-add-comp-label-row">
-                            <span className="kwb-add-comp-icon">{icon}</span>
                             <span className="kwb-add-comp-name">{COMPONENT_META[type].label}</span>
                           </div>
                         </button>
@@ -2703,64 +2687,24 @@ const CSS_STYLES = `
 .kwb-mc-input-row{display:flex;gap:3px;width:100%;direction:rtl;}
 .kwb-mc-btn-sm{height:8px;width:24px;background:#E82222;border-radius:2px;flex-shrink:0;}
 
-/* Hero news mini */
-.kwb-mc-hero-news{display:flex;gap:3px;width:100%;height:100%;direction:rtl;}
-.kwb-mc-hero-news .kwb-mc-lg{flex:2;background:#e0e0e0;border-radius:2px;}
-.kwb-mc-hero-news .kwb-mc-stack{flex:1;}
-.kwb-mc-hero-news .kwb-mc-box{flex:1;background:#e8e8e8;border-radius:2px;}
-
-/* Hero subscribe mini */
-.kwb-mc-hero-sub{display:flex;flex-direction:column;align-items:center;gap:4px;width:100%;}
-
-/* Banner mini */
-.kwb-mc-banner{width:100%;height:100%;display:flex;align-items:center;justify-content:center;}
-.kwb-mc-banner-img{width:100%;height:100%;background:linear-gradient(135deg,#e8e8e8,#f0f0f0);border-radius:2px;}
-
-/* CTA mini */
-.kwb-mc-cta{display:flex;flex-direction:column;align-items:center;gap:4px;width:100%;}
-
-/* Articles mini */
-.kwb-mc-articles{display:grid;grid-template-columns:1fr 1fr;gap:3px;width:100%;}
-.kwb-mc-card{background:#e8e8e8;border-radius:2px;height:16px;}
-
-/* Ticker mini */
-.kwb-mc-ticker{width:100%;display:flex;align-items:center;padding:0 4px;background:#f0f0f0;border-radius:2px;height:100%;}
-.kwb-mc-ticker .kwb-mc-line{height:4px;background:#ccc;}
-
-/* Testimonials mini */
-.kwb-mc-testimonials{display:flex;gap:4px;width:100%;}
-.kwb-mc-quote{flex:1;height:28px;background:#f0f0f0;border-radius:3px;border-right:2px solid #ddd;}
-
-/* Products mini */
-.kwb-mc-products{display:flex;gap:3px;width:100%;}
-.kwb-mc-prod{flex:1;height:28px;background:#e8e8e8;border-radius:3px;}
-
-/* Podcast mini */
-.kwb-mc-podcast{display:flex;gap:5px;width:100%;direction:rtl;align-items:center;}
-.kwb-mc-pod-thumb{width:24px;height:24px;background:#e0e0e0;border-radius:4px;flex-shrink:0;}
-.kwb-mc-pod-lines{display:flex;flex-direction:column;gap:3px;flex:1;}
-
-/* Courses mini */
-.kwb-mc-courses{display:flex;gap:3px;width:100%;}
-.kwb-mc-course{flex:1;height:28px;background:#e8e8e8;border-radius:3px;}
-
-/* Topics mini */
-.kwb-mc-topics{display:flex;flex-wrap:wrap;gap:2px;width:100%;justify-content:center;}
-.kwb-mc-tag{width:20px;height:10px;background:#e8e8e8;border-radius:8px;}
-
-/* Text block mini */
-.kwb-mc-text{display:flex;flex-direction:column;gap:3px;width:100%;direction:rtl;}
-
-/* Image block mini */
-.kwb-mc-image{width:100%;height:100%;display:flex;align-items:center;justify-content:center;}
-.kwb-mc-img-placeholder{width:100%;height:100%;background:#e8e8e8;border-radius:2px;}
-
-/* Form mini */
-.kwb-mc-form{display:flex;flex-direction:column;gap:3px;width:100%;}
-
-/* Divider mini */
-.kwb-mc-divider{width:100%;display:flex;align-items:center;}
-.kwb-mc-hr{width:100%;height:1px;background:#ccc;}
+/* CSS-only mini previews */
+.kwb-mc-auto{width:100%;height:100%;border-radius:2px;}
+.kwb-mc-hero-news{background:linear-gradient(90deg,#e8e8e8 30%,#e0e0e0 30% 65%,#e8e8e8 65%);}
+.kwb-mc-hero-subscribe{background:#f0f0f0;position:relative;}.kwb-mc-hero-subscribe::after{content:'';position:absolute;bottom:6px;left:50%;transform:translateX(-50%);width:40%;height:6px;background:#E82222;border-radius:2px;}
+.kwb-mc-banner{background:linear-gradient(135deg,#e8e8e8,#f0f0f0);}
+.kwb-mc-cta-newsletter{background:#f8f8f8;position:relative;}.kwb-mc-cta-newsletter::after{content:'';position:absolute;bottom:6px;left:50%;transform:translateX(-50%);width:35%;height:6px;background:#E82222;border-radius:2px;}
+.kwb-mc-article-collection{background:repeating-conic-gradient(#e8e8e8 0% 25%,#f2f2f2 0% 50%) 0 0/50% 50%;border-radius:2px;}
+.kwb-mc-brands-ticker{background:repeating-linear-gradient(90deg,#e0e0e0 0 20px,#f0f0f0 20px 30px);opacity:.6;}
+.kwb-mc-testimonials{background:linear-gradient(90deg,#f0f0f0 48%,transparent 48% 52%,#f0f0f0 52%);position:relative;}.kwb-mc-testimonials::before,.kwb-mc-testimonials::after{content:'';position:absolute;top:4px;width:2px;height:calc(100% - 8px);background:#ddd;}.kwb-mc-testimonials::before{right:48%;}.kwb-mc-testimonials::after{right:4px;}
+.kwb-mc-products{background:linear-gradient(90deg,#e8e8e8 31%,transparent 31% 34.5%,#e8e8e8 34.5% 65.5%,transparent 65.5% 69%,#e8e8e8 69%);}
+.kwb-mc-podcast{background:#f0f0f0;position:relative;}.kwb-mc-podcast::before{content:'';position:absolute;right:6px;top:50%;transform:translateY(-50%);width:20px;height:20px;background:#e0e0e0;border-radius:4px;}
+.kwb-mc-courses{background:linear-gradient(90deg,#e8e8e8 31%,transparent 31% 34.5%,#e8e8e8 34.5% 65.5%,transparent 65.5% 69%,#e8e8e8 69%);}
+.kwb-mc-topics{background:#f8f8f8;position:relative;}.kwb-mc-topics::after{content:'';position:absolute;inset:8px;background:repeating-linear-gradient(90deg,#e8e8e8 0 16px,transparent 16px 20px);border-radius:8px;}
+.kwb-mc-text-block{background:#f8f8f8;position:relative;}.kwb-mc-text-block::after{content:'';position:absolute;right:8px;top:8px;width:60%;height:3px;background:#ddd;border-radius:2px;box-shadow:0 7px 0 #e0e0e0,0 14px 0 #e8e8e8;}
+.kwb-mc-image-block{background:#e8e8e8;position:relative;}.kwb-mc-image-block::after{content:'';position:absolute;left:8px;bottom:6px;border-left:8px solid transparent;border-right:8px solid transparent;border-bottom:10px solid rgba(0,0,0,.08);}
+.kwb-mc-subscribe-form{background:#f8f8f8;position:relative;}.kwb-mc-subscribe-form::after{content:'';position:absolute;bottom:6px;left:50%;transform:translateX(-50%);width:50%;height:6px;background:#E82222;border-radius:2px;}
+.kwb-mc-contact-form{background:#f8f8f8;position:relative;}.kwb-mc-contact-form::after{content:'';position:absolute;bottom:6px;left:50%;transform:translateX(-50%);width:40%;height:6px;background:#E82222;border-radius:2px;box-shadow:0 -10px 0 #eee,0 -20px 0 #eee;}
+.kwb-mc-divider{background:transparent;position:relative;}.kwb-mc-divider::after{content:'';position:absolute;top:50%;left:10%;width:80%;height:1px;background:#ccc;}
 
 /* Toggle */
 .kwb-toggle{position:relative;display:inline-block;width:44px;height:24px;flex-shrink:0;}
