@@ -186,11 +186,7 @@ interface ColorTheme {
 const COLOR_THEMES: ColorTheme[] = [
   // ── Kitabh signature ──
   { id: "kitabh_blue", name: "أزرق كتابة", buttonColor: "#FFD600", headlineColor: "#ffffff", textColor: "#b0c4ff", linkColor: "#FFD600", bgColor: "#0000FF", cardBg: "#1a1aff" },
-  { id: "classic", name: "كلاسيكي", buttonColor: "#00C853", headlineColor: "#ffffff", textColor: "#90caf9", linkColor: "#69f0ae", bgColor: "#1565C0", cardBg: "#1976D2" },
   // ── Vibrant & bold ──
-  { id: "sulfur", name: "كبريتي", buttonColor: "#1a1a1a", headlineColor: "#1a1a1a", textColor: "#555555", linkColor: "#0000FF", bgColor: "#FFD600", cardBg: "#ffe54c" },
-  { id: "sunny", name: "مشمسي", buttonColor: "#FFD600", headlineColor: "#ffffff", textColor: "#ffd6e0", linkColor: "#FFD600", bgColor: "#FF4D6A", cardBg: "#ff6b83" },
-  { id: "coral_reef", name: "مرجاني", buttonColor: "#FFD600", headlineColor: "#ffffff", textColor: "#ffe0cc", linkColor: "#FFD600", bgColor: "#FF5722", cardBg: "#ff7043" },
   { id: "neon", name: "نيون", buttonColor: "#1a1a1a", headlineColor: "#1a1a1a", textColor: "#1b5e20", linkColor: "#1a1a1a", bgColor: "#00FF41", cardBg: "#69f0ae" },
   // ── Dark & moody ──
   { id: "sunset_glow", name: "غروب", buttonColor: "#f43f5e", headlineColor: "#fef2f2", textColor: "#fda4af", linkColor: "#fb7185", bgColor: "#1a0a10", cardBg: "#2d1520" },
