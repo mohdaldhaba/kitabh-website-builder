@@ -75,6 +75,7 @@ interface SiteBranding {
   fontFamily: string;
   layoutWidth: "compact" | "full";
   darkMode: boolean;
+  designStyle: DesignStyle;
 }
 
 interface Article {
@@ -106,12 +107,16 @@ interface Site {
   updatedAt: string;
 }
 
+type DesignStyle = "classic" | "podcast";
+
 interface Template {
   id: string;
   name: string;
   description: string;
   pages: string[];
   defaultComponents: ComponentType[];
+  designStyle: DesignStyle;
+  defaultBranding?: Partial<SiteBranding>;
 }
 
 // ─── Helpers ────────────────────────────────────────────
@@ -131,6 +136,20 @@ const TEMPLATES: Template[] = [
     description: "مثالي للناشرين وصنّاع المحتوى",
     pages: ["الرئيسية", "مقالات", "عرض المقال", "عن المدونة", "المتجر", "اشتراك"],
     defaultComponents: ["header", "hero_news", "brands_ticker", "article_collection", "banner", "cta_newsletter", "article_collection", "banner", "footer"],
+    designStyle: "classic",
+  },
+  {
+    id: "podcast",
+    name: "نشرة بودكاست",
+    description: "نشرة بريدية مع بودكاست وحلقات ومقالات",
+    pages: ["الرئيسية", "مقالات", "عرض المقال", "البودكاست", "عن المدونة", "اشتراك"],
+    defaultComponents: ["header", "hero_subscribe", "brands_ticker", "article_collection", "podcast", "testimonials", "cta_newsletter", "footer"],
+    designStyle: "podcast",
+    defaultBranding: {
+      buttonColor: "#E35625", headlineColor: "#1a1a1a", textColor: "#666666",
+      linkColor: "#E35625", bgColor: "#FAF7F2", cardBg: "#ffffff",
+      fontFamily: "Amiri", accentColor: "#E35625",
+    },
   },
 ];
 
@@ -376,6 +395,9 @@ export default function KitabhWebsiteBuilder(props: any) {
         : getPageDefaultComponents(name),
     }));
 
+    const defaultBranding: SiteBranding = { logoUrl: "", logoLayout: "text_only" as LogoLayout, siteName: "شعار المؤسسة", accentColor: "#E82222", buttonColor: "#E82222", headlineColor: "#1a1a1a", textColor: "#666666", linkColor: "#E82222", bgColor: "#ffffff", cardBg: "#ffffff", fontFamily: "Alyamama", layoutWidth: "compact" as "compact" | "full", darkMode: false, designStyle: tpl.designStyle || "classic" };
+    const mergedBranding = tpl.defaultBranding ? { ...defaultBranding, ...tpl.defaultBranding, designStyle: tpl.designStyle || "classic" } : defaultBranding;
+
     const site: Site = {
       id: genId(),
       name: "موقع جديد",
@@ -383,7 +405,7 @@ export default function KitabhWebsiteBuilder(props: any) {
       customDomain: "",
       status: "draft",
       templateId,
-      branding: { logoUrl: "", logoLayout: "text_only" as LogoLayout, siteName: "شعار المؤسسة", accentColor: "#E82222", buttonColor: "#E82222", headlineColor: "#1a1a1a", textColor: "#666666", linkColor: "#E82222", bgColor: "#ffffff", cardBg: "#ffffff", fontFamily: "Alyamama", layoutWidth: "compact" as "compact" | "full", darkMode: false },
+      branding: mergedBranding,
       pages,
       hasNewsletter: true,
       visits: 0,
@@ -1069,8 +1091,40 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
             {TEMPLATES.map(t => (
               <div key={t.id} className="kwb-template-card">
                 <div className="kwb-template-thumb">
+                  {t.designStyle === "podcast" ? (
+                    <div className="kwb-template-thumb-inner kwb-skeleton-preview" style={{ background: "#FAF7F2" }}>
+                      <div className="kwb-skel-header" style={{ justifyContent: "center" }}>
+                        <div className="kwb-skel-bar" style={{width:50,height:8,borderRadius:4}} />
+                      </div>
+                      <div style={{ display:"flex",justifyContent:"center",gap:8,padding:"4px 0",borderBottom:"1.5px solid #E35625" }}>
+                        <div className="kwb-skel-bar" style={{width:20,height:5,borderRadius:3}} />
+                        <div style={{width:1,background:"#E35625"}} />
+                        <div className="kwb-skel-bar" style={{width:20,height:5,borderRadius:3}} />
+                        <div style={{width:1,background:"#E35625"}} />
+                        <div className="kwb-skel-bar" style={{width:20,height:5,borderRadius:3}} />
+                      </div>
+                      <div style={{ display:"flex",gap:6,padding:"8px 6px" }}>
+                        <div className="kwb-skel-img" style={{flex:2,height:60,borderRadius:8}} />
+                        <div style={{flex:1,display:"flex",flexDirection:"column",gap:4}}>
+                          <div style={{background:"#fff",borderRadius:6,padding:4,flex:1,display:"flex",flexDirection:"column",gap:2}}>
+                            <div style={{width:14,height:4,borderRadius:2,background:"#E35625",opacity:0.3}} />
+                            <div className="kwb-skel-bar" style={{width:"80%",height:4,borderRadius:2}} />
+                          </div>
+                          <div style={{background:"#fff",borderRadius:6,padding:4,flex:1,display:"flex",flexDirection:"column",gap:2}}>
+                            <div style={{width:14,height:4,borderRadius:2,background:"#E35625",opacity:0.3}} />
+                            <div className="kwb-skel-bar" style={{width:"70%",height:4,borderRadius:2}} />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="kwb-skel-articles" style={{ gap: 6 }}>
+                        {[1,2,3].map(n => <div key={n} className="kwb-skel-article" style={{borderRadius:8,background:"#fff"}}><div className="kwb-skel-img" style={{height:28,borderRadius:6}} /><div className="kwb-skel-bar" style={{width:"70%",height:4,borderRadius:2}} /></div>)}
+                      </div>
+                      <div className="kwb-skel-footer" style={{ background:"#1a1a1a" }}>
+                        <div className="kwb-skel-bar" style={{width:40,height:6,borderRadius:3,background:"#666"}} />
+                      </div>
+                    </div>
+                  ) : (
                   <div className="kwb-template-thumb-inner kwb-skeleton-preview">
-                    {/* Skeleton header */}
                     <div className="kwb-skel-header">
                       <div className="kwb-skel-bar" style={{width:50,height:8,borderRadius:4}} />
                       <div style={{display:"flex",gap:6,flex:1,justifyContent:"flex-start"}}>
@@ -1080,7 +1134,6 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                       </div>
                       <div className="kwb-skel-btn" style={{width:36,height:10,borderRadius:2}} />
                     </div>
-                    {/* Skeleton hero grid */}
                     <div className="kwb-skel-hero">
                       <div className="kwb-skel-hero-side">
                         <div className="kwb-skel-img" style={{flex:1}} />
@@ -1092,19 +1145,18 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                         <div className="kwb-skel-img" style={{flex:1}} />
                       </div>
                     </div>
-                    {/* Skeleton article cards */}
                     <div className="kwb-skel-articles">
                       <div className="kwb-skel-article"><div className="kwb-skel-img" style={{height:24}} /><div className="kwb-skel-bar" style={{width:"70%",height:5,borderRadius:3}} /><div className="kwb-skel-bar" style={{width:"50%",height:4,borderRadius:2}} /></div>
                       <div className="kwb-skel-article"><div className="kwb-skel-img" style={{height:24}} /><div className="kwb-skel-bar" style={{width:"60%",height:5,borderRadius:3}} /><div className="kwb-skel-bar" style={{width:"40%",height:4,borderRadius:2}} /></div>
                       <div className="kwb-skel-article"><div className="kwb-skel-img" style={{height:24}} /><div className="kwb-skel-bar" style={{width:"80%",height:5,borderRadius:3}} /><div className="kwb-skel-bar" style={{width:"55%",height:4,borderRadius:2}} /></div>
                       <div className="kwb-skel-article"><div className="kwb-skel-img" style={{height:24}} /><div className="kwb-skel-bar" style={{width:"65%",height:5,borderRadius:3}} /><div className="kwb-skel-bar" style={{width:"45%",height:4,borderRadius:2}} /></div>
                     </div>
-                    {/* Skeleton footer */}
                     <div className="kwb-skel-footer">
                       <div className="kwb-skel-bar" style={{width:40,height:7,borderRadius:3,background:"#666"}} />
                       <div className="kwb-skel-bar" style={{width:60,height:4,borderRadius:2,background:"#555"}} />
                     </div>
                   </div>
+                  )}
                 </div>
                 <div className="kwb-template-info">
                   <h3 className="kwb-template-name">{t.name}</h3>
@@ -1146,7 +1198,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
           {/* ─── PREVIEW ─── */}
           <div className="kwb-preview-area">
             <div className={`kwb-preview-frame ${previewDevice === "mobile" ? "kwb-preview-mobile" : ""}`}>
-              <div className="kwb-preview-content" style={{ fontFamily: `'${activeSite.branding.fontFamily}', system-ui, sans-serif`, '--kwb-btn-color': activeSite.branding.buttonColor || '#E82222', '--kwb-headline-color': activeSite.branding.headlineColor || '#1a1a1a', '--kwb-text-color': activeSite.branding.textColor || '#666666', '--kwb-link-color': activeSite.branding.linkColor || '#E82222', '--kwb-bg': activeSite.branding.bgColor || '#ffffff', '--kwb-card-bg': activeSite.branding.cardBg || '#ffffff' } as any}>
+              <div className={`kwb-preview-content ${activeSite.branding.designStyle === "podcast" ? "kwb-style-podcast" : ""}`} style={{ fontFamily: `'${activeSite.branding.fontFamily}', system-ui, sans-serif`, '--kwb-btn-color': activeSite.branding.buttonColor || '#E82222', '--kwb-headline-color': activeSite.branding.headlineColor || '#1a1a1a', '--kwb-text-color': activeSite.branding.textColor || '#666666', '--kwb-link-color': activeSite.branding.linkColor || '#E82222', '--kwb-bg': activeSite.branding.bgColor || '#ffffff', '--kwb-card-bg': activeSite.branding.cardBg || '#ffffff' } as any}>
                 {/* Render each enabled component */}
                 {activePage.components.filter(c => c.enabled).map(comp => {
                   switch (comp.type) {
@@ -1691,6 +1743,18 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                         <span className="kwb-font-name">{font}</span>
                       </button>
                     ))}
+                  </div>
+
+                  <label className="kwb-label" style={{ marginTop: 16 }}>نمط التصميم</label>
+                  <div style={{ display: "flex", gap: 8 }}>
+                    <button className={`kwb-style-pick ${(activeSite.branding.designStyle || "classic") === "classic" ? "kwb-style-pick-active" : ""}`} onClick={() => updateSite(activeSite.id, { branding: { ...activeSite.branding, designStyle: "classic" } })}>
+                      <span style={{ fontSize: 16 }}>▦</span>
+                      <span>كلاسيكي</span>
+                    </button>
+                    <button className={`kwb-style-pick ${activeSite.branding.designStyle === "podcast" ? "kwb-style-pick-active" : ""}`} onClick={() => updateSite(activeSite.id, { branding: { ...activeSite.branding, designStyle: "podcast" } })}>
+                      <span style={{ fontSize: 16 }}>◉</span>
+                      <span>بودكاست</span>
+                    </button>
                   </div>
 
                   <label className="kwb-label" style={{ marginTop: 16 }}>سمة الألوان</label>
@@ -2726,6 +2790,67 @@ const CSS_STYLES = `
 /* Testimonial image */
 .kwb-p-testi-img{width:48px;height:48px;border-radius:50%;object-fit:cover;}
 
+/* ═══════════════════════════════════════════════════════
+   PODCAST DESIGN STYLE OVERRIDES
+   ═══════════════════════════════════════════════════════ */
+/* Header: centered logo, nav with orange separators */
+.kwb-style-podcast .kwb-p-header{border-bottom:none;background:transparent;}
+.kwb-style-podcast .kwb-p-header-inner{flex-direction:column;gap:0;padding:16px 20px 0;}
+.kwb-style-podcast .kwb-p-header-inner .kwb-p-logo-wrap{order:0;}
+.kwb-style-podcast .kwb-p-header-inner .kwb-p-nav{order:1;justify-content:center;gap:0;padding:14px 0;border-bottom:2px solid var(--kwb-btn-color,#E35625);margin-top:12px;flex-wrap:wrap;}
+.kwb-style-podcast .kwb-p-nav-link{padding:0 14px;border-left:1.5px solid var(--kwb-btn-color,#E35625);font-weight:500;}
+.kwb-style-podcast .kwb-p-nav-link:last-child{border-left:none;}
+.kwb-style-podcast .kwb-p-header-actions{position:absolute;left:16px;top:16px;order:2;}
+.kwb-style-podcast .kwb-p-subscribe-btn{border-radius:4px;border:2px solid var(--kwb-btn-color,#E35625);font-weight:700;letter-spacing:0.5px;text-transform:uppercase;font-size:12px;padding:0 18px;height:38px;}
+.kwb-style-podcast .kwb-p-darkmode-btn{display:none;}
+
+/* Hero subscribe: larger, more editorial */
+.kwb-style-podcast .kwb-p-hero-sub{padding:40px 24px;text-align:center;}
+.kwb-style-podcast .kwb-p-hero-sub h2{font-size:28px;font-weight:700;line-height:1.3;}
+.kwb-style-podcast .kwb-p-hero-sub p{font-size:16px;max-width:500px;margin:8px auto 0;}
+.kwb-style-podcast .kwb-p-hero-sub-form{max-width:440px;margin:20px auto 0;}
+.kwb-style-podcast .kwb-p-email-input{border-radius:4px;border:1.5px solid #ccc;}
+.kwb-style-podcast .kwb-p-hero-sub-form .kwb-p-subscribe-btn{border:none;}
+
+/* Article cards: bigger images, rounded, category tag */
+.kwb-style-podcast .kwb-p-articles{padding:24px;}
+.kwb-style-podcast .kwb-p-article-card{border-radius:12px;overflow:hidden;border:1px solid rgba(128,128,128,0.15);}
+.kwb-style-podcast .kwb-p-article-img{height:180px;border-radius:0;}
+.kwb-style-podcast .kwb-p-article-body{padding:16px;}
+.kwb-style-podcast .kwb-p-article-title{font-size:16px;line-height:1.4;}
+
+/* Section titles */
+.kwb-style-podcast .kwb-p-section-title{font-size:22px;text-align:center;margin-bottom:24px;font-weight:700;}
+
+/* Ticker: cleaner, with headline */
+.kwb-style-podcast .kwb-p-ticker{border-top:1.5px solid rgba(128,128,128,0.2);border-bottom:1.5px solid rgba(128,128,128,0.2);padding:20px 0;}
+.kwb-style-podcast .kwb-p-ticker-headline{font-size:14px;font-weight:700;margin-bottom:16px;}
+
+/* CTA: cleaner rounded */
+.kwb-style-podcast .kwb-p-cta{border-radius:0;border-top:2px solid var(--kwb-btn-color,#E35625);border-bottom:2px solid var(--kwb-btn-color,#E35625);margin:0;background:transparent;}
+
+/* Testimonials: cream bg cards */
+.kwb-style-podcast .kwb-p-testi-card{background:#FDF5ED;border-radius:12px;border:1px solid rgba(128,128,128,0.1);}
+
+/* Footer: two-column editorial style */
+.kwb-style-podcast .kwb-p-footer{border-radius:0;padding:40px 24px;background:var(--kwb-card-bg,#fff);border-top:2px solid var(--kwb-headline-color,#1a1a1a);color:var(--kwb-text-color,#666);}
+.kwb-style-podcast .kwb-p-footer-logo{color:var(--kwb-headline-color,#1a1a1a);font-size:18px;}
+.kwb-style-podcast .kwb-p-footer-tagline{color:var(--kwb-text-color,#666);}
+.kwb-style-podcast .kwb-p-footer-email{background:transparent;border:1.5px solid #ccc;color:var(--kwb-text-color,#333);}
+.kwb-style-podcast .kwb-p-footer-nav a{color:var(--kwb-headline-color,#1a1a1a);opacity:1;font-weight:600;font-size:16px;}
+
+/* Podcast cards: rounded */
+.kwb-style-podcast .kwb-p-podcast-card{border-radius:12px;overflow:hidden;}
+
+/* Banners: rounded */
+.kwb-style-podcast .kwb-p-banner-card{border-radius:12px;}
+
+/* Divider: orange */
+.kwb-style-podcast .kwb-p-divider{border-color:var(--kwb-btn-color,#E35625);opacity:0.4;}
+
+/* General spacing */
+.kwb-style-podcast .kwb-p-section{padding:24px;}
+
 /* Subscribe Popup */
 .kwb-subscribe-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;}
 .kwb-subscribe-popup{position:relative;background:#fff;border-radius:16px;padding:40px 32px;max-width:400px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.3);animation:kwbPopupIn .2s ease-out;}
@@ -3052,6 +3177,11 @@ const CSS_STYLES = `
 .kwb-input::placeholder{color:#CCC;}
 
 /* Font picker */
+/* Style picker */
+.kwb-style-pick{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:12px 8px;border:1.5px solid #E8E8E8;border-radius:10px;background:#fff;font-family:inherit;font-size:12px;font-weight:600;color:#888;cursor:pointer;transition:all .15s;}
+.kwb-style-pick:hover{border-color:#bbb;}
+.kwb-style-pick-active{border-color:#0000FF;color:#0000FF;background:#F5F5FF;}
+
 .kwb-font-picker{display:flex;flex-direction:column;gap:4px;max-height:280px;overflow-y:auto;border:1.5px solid #E8E8E8;border-radius:10px;padding:4px;background:#F8F8F8;}
 .kwb-font-option{display:flex;flex-direction:column;gap:2px;padding:10px 12px;border:none;border-radius:8px;background:transparent;cursor:pointer;text-align:right;transition:all .15s;font-family:inherit;}
 .kwb-font-option:hover{background:#fff;}
