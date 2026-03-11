@@ -93,7 +93,16 @@ interface HubLayoutProps {
 
 const navItems: NavItem[] = [
   { id: 'dashboard', label: 'لوحة التحكم', icon: icons.dashboard },
-  { id: 'posts', label: 'المنشورات', icon: icons.posts },
+  {
+    id: 'posts',
+    label: 'المنشورات',
+    icon: icons.posts,
+    subItems: [
+      { id: 'all-posts', label: 'كل المنشورات' },
+      { id: 'draft', label: 'مسودة كتابة' },
+      { id: 'editor', label: 'محرر كتابة' },
+    ],
+  },
   { id: 'audience', label: 'الجمهور', icon: icons.audience },
   {
     id: 'grow',
