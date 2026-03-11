@@ -493,7 +493,7 @@ const TipAuthorPage: React.FC = () => {
                 textAlign: 'center' as const, animation: 'fadeIn 0.2s ease',
               }}>
                 <div style={{ fontSize: '13px', color: '#1D4ED8', lineHeight: 1.7 }}>
-                  هذه تجربة فقط — لا يتم تحصيل أي مبلغ من القرّاء. نختبر مدى اهتمامهم بدعمك.
+                  هذا مجرد اختبار لرغبة القرّاء في دعم الكتّاب. لن نحصّل أي مبالغ منهم بل سنسجل اهتمامهم فقط.
                 </div>
               </div>
             )}
