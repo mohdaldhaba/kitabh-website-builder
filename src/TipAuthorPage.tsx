@@ -1,5 +1,34 @@
 import React, { useState, useEffect, useRef } from 'react'
 
+// ========== DATA RECORDING ==========
+interface TipInteraction {
+  timestamp: string
+  authorId: string
+  authorName: string
+  action: 'popup_opened' | 'amount_selected' | 'custom_amount_entered' | 'interest_submitted' | 'popup_closed_without_submit'
+  drinkType: 'coffee' | 'tea'
+  selectedAmount: number | null
+  isCustomAmount: boolean
+  visitorId: string // random ID per browser
+}
+
+function getVisitorId(): string {
+  let id = localStorage.getItem('kitabh_visitor_id')
+  if (!id) {
+    id = 'v_' + Math.random().toString(36).slice(2) + Date.now().toString(36)
+    localStorage.setItem('kitabh_visitor_id', id)
+  }
+  return id
+}
+
+function recordInteraction(interaction: TipInteraction) {
+  const existing = JSON.parse(localStorage.getItem('kitabh_tip_interactions') || '[]')
+  existing.push(interaction)
+  localStorage.setItem('kitabh_tip_interactions', JSON.stringify(existing))
+  console.log('[Kitabh Tip] Recorded:', interaction)
+}
+
+// ========== OPTIONS ==========
 const COFFEE_OPTIONS = [
   { id: 'small', amount: 30, image: '/images/galao.png', size: 36 },
   { id: 'mid', amount: 60, image: '/images/espresso.png', size: 44 },
@@ -29,6 +58,7 @@ const TEA_MESSAGES = [
 ]
 
 const DEMO_AUTHOR = {
+  id: 'author_hawas55',
   name: 'عبدالله الحواس',
   username: 'hawas55',
   image: '/images/author.jpg',
@@ -37,6 +67,8 @@ const DEMO_AUTHOR = {
   followers: 59,
   following: 16,
   newsletter: { name: 'سنارة' },
+  prefersTea: false, // Author's drink preference — set by the author
+  tipButtonEnabled: true, // Author can hide this from their profile
 }
 
 const keyframes = `
@@ -109,15 +141,20 @@ const TipAuthorPage: React.FC = () => {
   const [dialogOpen, setDialogOpen] = useState(false)
   const [selectedIndex, setSelectedIndex] = useState(0)
   const [submitted, setSubmitted] = useState(false)
-  const [isTea, setIsTea] = useState(false)
   const [isCustom, setIsCustom] = useState(false)
   const [customAmount, setCustomAmount] = useState('')
   const [randomMessage, setRandomMessage] = useState(0)
   const customInputRef = useRef<HTMLInputElement>(null)
 
+  // Author settings (in production these come from the author's profile)
+  const [authorTipEnabled, setAuthorTipEnabled] = useState(DEMO_AUTHOR.tipButtonEnabled)
+  const [authorPrefersTea, setAuthorPrefersTea] = useState(DEMO_AUTHOR.prefersTea)
+  const [showAuthorSettings, setShowAuthorSettings] = useState(false)
+
+  // Drink type is determined by author preference, not visitor
+  const isTea = authorPrefersTea
   const options = isTea ? TEA_OPTIONS : COFFEE_OPTIONS
   const messages = isTea ? TEA_MESSAGES : COFFEE_MESSAGES
-  const drinkWord = isTea ? 'شاي' : 'قهوة'
 
   useEffect(() => {
     const style = document.createElement('style')
@@ -129,12 +166,18 @@ const TipAuthorPage: React.FC = () => {
   const openDialog = () => {
     setRandomMessage(Math.floor(Math.random() * messages.length))
     setDialogOpen(true)
+    // Record popup opened
+    recordInteraction({
+      timestamp: new Date().toISOString(),
+      authorId: DEMO_AUTHOR.id,
+      authorName: DEMO_AUTHOR.name,
+      action: 'popup_opened',
+      drinkType: isTea ? 'tea' : 'coffee',
+      selectedAmount: null,
+      isCustomAmount: false,
+      visitorId: getVisitorId(),
+    })
   }
-
-  // Update message when toggling drink type
-  useEffect(() => {
-    setRandomMessage(Math.floor(Math.random() * messages.length))
-  }, [isTea])
 
   const getAmount = () => {
     if (isCustom && customAmount) return Number(customAmount)
@@ -143,10 +186,34 @@ const TipAuthorPage: React.FC = () => {
 
   const handleSubmit = () => {
     if (isCustom && (!customAmount || Number(customAmount) <= 0)) return
+    // Record interest submission
+    recordInteraction({
+      timestamp: new Date().toISOString(),
+      authorId: DEMO_AUTHOR.id,
+      authorName: DEMO_AUTHOR.name,
+      action: 'interest_submitted',
+      drinkType: isTea ? 'tea' : 'coffee',
+      selectedAmount: getAmount(),
+      isCustomAmount: isCustom,
+      visitorId: getVisitorId(),
+    })
     setSubmitted(true)
   }
 
   const handleClose = () => {
+    // Record close without submit
+    if (!submitted && dialogOpen) {
+      recordInteraction({
+        timestamp: new Date().toISOString(),
+        authorId: DEMO_AUTHOR.id,
+        authorName: DEMO_AUTHOR.name,
+        action: 'popup_closed_without_submit',
+        drinkType: isTea ? 'tea' : 'coffee',
+        selectedAmount: isCustom ? (customAmount ? Number(customAmount) : null) : options[selectedIndex].amount,
+        isCustomAmount: isCustom,
+        visitorId: getVisitorId(),
+      })
+    }
     setDialogOpen(false)
     setTimeout(() => {
       setSubmitted(false)
@@ -160,6 +227,17 @@ const TipAuthorPage: React.FC = () => {
     setSelectedIndex(index)
     setIsCustom(false)
     setCustomAmount('')
+    // Record amount selection
+    recordInteraction({
+      timestamp: new Date().toISOString(),
+      authorId: DEMO_AUTHOR.id,
+      authorName: DEMO_AUTHOR.name,
+      action: 'amount_selected',
+      drinkType: isTea ? 'tea' : 'coffee',
+      selectedAmount: options[index].amount,
+      isCustomAmount: false,
+      visitorId: getVisitorId(),
+    })
   }
 
   const activateCustom = () => {
@@ -180,8 +258,83 @@ const TipAuthorPage: React.FC = () => {
           padding: '12px 16px', borderBottom: '1px solid #F0F0F0',
         }}>
           <div style={{ fontSize: '18px', fontWeight: 700, color: '#0000FF' }}>كتابة :&gt;</div>
-          <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: '#F0F0F0' }} />
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            {/* Author settings gear icon — only visible to the author themselves */}
+            <button
+              onClick={() => setShowAuthorSettings(!showAuthorSettings)}
+              style={{
+                width: '32px', height: '32px', borderRadius: '50%', background: '#F0F0F0',
+                border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: '16px', color: '#666',
+              }}
+              title="إعدادات الكاتب"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+              </svg>
+            </button>
+            <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: '#F0F0F0' }} />
+          </div>
         </div>
+
+        {/* Author Settings Panel — shown when gear icon is clicked */}
+        {showAuthorSettings && (
+          <div style={{
+            margin: '0 16px', padding: '16px 20px', background: '#F8FAFC',
+            borderRadius: '12px', border: '1px solid #E2E8F0',
+            animation: 'fadeIn 0.2s ease',
+          }}>
+            <div style={{ fontSize: '15px', fontWeight: 600, color: '#1E293B', marginBottom: '14px' }}>
+              إعدادات الكاتب
+            </div>
+
+            {/* Toggle: show/hide tip button */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+              <span style={{ fontSize: '14px', color: '#475569' }}>إظهار زر الدعم في ملفي الشخصي</span>
+              <button
+                onClick={() => setAuthorTipEnabled(!authorTipEnabled)}
+                style={{
+                  width: '44px', height: '24px', borderRadius: '12px', border: 'none',
+                  background: authorTipEnabled ? '#0000FF' : '#CBD5E1',
+                  cursor: 'pointer', position: 'relative', transition: 'background 0.3s',
+                  flexShrink: 0,
+                }}
+              >
+                <div style={{
+                  width: '18px', height: '18px', borderRadius: '50%', background: '#fff',
+                  position: 'absolute', top: '3px',
+                  transition: 'all 0.3s ease',
+                  ...(authorTipEnabled ? { right: '3px' } : { left: '3px' }),
+                }} />
+              </button>
+            </div>
+
+            {/* Toggle: coffee or tea preference */}
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <span style={{ fontSize: '14px', color: '#475569' }}>أفضّل {authorPrefersTea ? 'الشاي' : 'القهوة'}</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ fontSize: '13px', fontWeight: 500, color: !authorPrefersTea ? '#1E293B' : '#94A3B8' }}>قهوة</span>
+                <button
+                  onClick={() => setAuthorPrefersTea(!authorPrefersTea)}
+                  style={{
+                    width: '44px', height: '24px', borderRadius: '12px', border: 'none',
+                    background: authorPrefersTea ? '#8B2020' : '#8B5E3C',
+                    cursor: 'pointer', position: 'relative', transition: 'background 0.3s',
+                    flexShrink: 0,
+                  }}
+                >
+                  <div style={{
+                    width: '18px', height: '18px', borderRadius: '50%', background: '#fff',
+                    position: 'absolute', top: '3px',
+                    transition: 'all 0.3s ease',
+                    ...(authorPrefersTea ? { left: '3px' } : { right: '3px' }),
+                  }} />
+                </button>
+                <span style={{ fontSize: '13px', fontWeight: 500, color: authorPrefersTea ? '#1E293B' : '#94A3B8' }}>شاي</span>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Author Card */}
         <div style={{
@@ -199,19 +352,22 @@ const TipAuthorPage: React.FC = () => {
                     <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
                   </svg>
                 </span>
-                <button
-                  onClick={openDialog}
-                  style={{
-                    display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                    width: '30px', height: '30px', borderRadius: '50%', background: '#F5F0EB',
-                    border: 'none', cursor: 'pointer', transition: 'transform 0.2s, box-shadow 0.2s',
-                    animation: 'float 2.5s ease-in-out infinite', flexShrink: 0,
-                  }}
-                  onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.12)'; e.currentTarget.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)' }}
-                  onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = 'none' }}
-                >
-                  <img src="/images/espresso.png" alt="" style={{ width: '18px', height: '18px', objectFit: 'contain' }} />
-                </button>
+                {/* Tip button — only shown if author has it enabled */}
+                {authorTipEnabled && (
+                  <button
+                    onClick={openDialog}
+                    style={{
+                      display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                      width: '30px', height: '30px', borderRadius: '50%', background: '#F5F0EB',
+                      border: 'none', cursor: 'pointer', transition: 'transform 0.2s, box-shadow 0.2s',
+                      animation: 'float 2.5s ease-in-out infinite', flexShrink: 0,
+                    }}
+                    onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.12)'; e.currentTarget.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)' }}
+                    onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = 'none' }}
+                  >
+                    <img src={isTea ? '/images/tea-small.png' : '/images/espresso.png'} alt="" style={{ width: '18px', height: '18px', objectFit: 'contain' }} />
+                  </button>
+                )}
               </div>
               <p style={{ fontSize: '14px', color: '#888', margin: '4px 0 0' }}>@{DEMO_AUTHOR.username}</p>
             </div>
@@ -296,29 +452,19 @@ const TipAuthorPage: React.FC = () => {
               onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(0,0,0,0.05)')}
             >✕</button>
 
-            {/* Toggle: قهوة / شاي — top right */}
+            {/* Drink type badge — shows what the author prefers (read-only for visitors) */}
             <div style={{
               position: 'absolute', top: '16px', right: '16px', zIndex: 10,
               display: 'flex', alignItems: 'center', gap: '6px',
+              background: 'rgba(0,0,0,0.04)', borderRadius: '20px', padding: '4px 12px',
             }}>
-              <span style={{ fontSize: '12px', fontWeight: 500, color: !isTea ? '#1E293B' : '#CBD5E1' }}>قهوة</span>
-              <button
-                onClick={() => setIsTea(!isTea)}
-                style={{
-                  width: '40px', height: '22px', borderRadius: '11px', border: 'none',
-                  background: isTea ? '#8B2020' : '#8B5E3C',
-                  cursor: 'pointer', position: 'relative', transition: 'background 0.3s',
-                  flexShrink: 0,
-                }}
-              >
-                <div style={{
-                  width: '16px', height: '16px', borderRadius: '50%', background: '#fff',
-                  position: 'absolute', top: '3px',
-                  transition: 'all 0.3s ease',
-                  ...(isTea ? { left: '3px' } : { right: '3px' }),
-                }} />
-              </button>
-              <span style={{ fontSize: '12px', fontWeight: 500, color: isTea ? '#1E293B' : '#CBD5E1' }}>شاي</span>
+              <img
+                src={isTea ? '/images/tea-small.png' : '/images/espresso.png'}
+                alt="" style={{ width: '14px', height: '14px', objectFit: 'contain' }}
+              />
+              <span style={{ fontSize: '13px', fontWeight: 500, color: '#64748B' }}>
+                {isTea ? 'يفضّل الشاي' : 'يفضّل القهوة'}
+              </span>
             </div>
 
             {!submitted ? (
@@ -333,14 +479,27 @@ const TipAuthorPage: React.FC = () => {
                       display: 'block', margin: '0 auto 12px',
                     }}
                   />
-                  <div style={{ fontSize: '17px', fontWeight: 600, color: '#1E293B' }}>
-                    هل تريد دعم {DEMO_AUTHOR.name} ليستمر في النشر؟
+                  <div style={{ fontSize: '18px', fontWeight: 600, color: '#1E293B' }}>
+                    هل تودّ دعم {DEMO_AUTHOR.name} ليستمر في الكتابة؟
                   </div>
                   <div style={{
-                    fontSize: '12px', color: '#94A3B8', marginTop: '8px', lineHeight: 1.7,
-                    fontStyle: 'italic',
+                    fontSize: '14px', color: '#64748B', marginTop: '10px', lineHeight: 1.8,
                   }}>
                     {messages[randomMessage]}
+                  </div>
+                </div>
+
+                {/* Survey notice — clearly framed as interest, not payment */}
+                <div style={{
+                  margin: '12px 28px 0', padding: '10px 14px', borderRadius: '10px',
+                  background: 'rgba(0, 0, 255, 0.04)', border: '1px solid rgba(0, 0, 255, 0.08)',
+                  textAlign: 'center' as const,
+                }}>
+                  <div style={{ fontSize: '14px', color: '#475569', lineHeight: 1.8 }}>
+                    هذا استطلاع رأي فقط — لن يتم خصم أي مبلغ.
+                  </div>
+                  <div style={{ fontSize: '13px', color: '#64748B', lineHeight: 1.7, marginTop: '2px' }}>
+                    نريد معرفة مدى اهتمامك بدعم هذا الكاتب لنقرر إطلاق هذه الميزة.
                   </div>
                 </div>
 
@@ -373,8 +532,8 @@ const TipAuthorPage: React.FC = () => {
                           }}
                         />
                         <span style={{
-                          fontSize: '13px', fontWeight: 600,
-                          color: isSelected ? '#0000FF' : '#94A3B8', transition: 'color 0.2s',
+                          fontSize: '14px', fontWeight: 600,
+                          color: isSelected ? '#0000FF' : '#64748B', transition: 'color 0.2s',
                         }}>
                           {option.amount} ر.س
                         </span>
@@ -399,11 +558,11 @@ const TipAuthorPage: React.FC = () => {
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                       fontSize: '20px', transition: 'all 0.2s',
                     }}>
-                      <span style={{ color: isCustom ? '#0000FF' : '#94A3B8' }}>+</span>
+                      <span style={{ color: isCustom ? '#0000FF' : '#64748B' }}>+</span>
                     </div>
                     <span style={{
-                      fontSize: '13px', fontWeight: 600,
-                      color: isCustom ? '#0000FF' : '#94A3B8', transition: 'color 0.2s',
+                      fontSize: '14px', fontWeight: 600,
+                      color: isCustom ? '#0000FF' : '#64748B', transition: 'color 0.2s',
                     }}>
                       مبلغ آخر
                     </span>
@@ -431,7 +590,21 @@ const TipAuthorPage: React.FC = () => {
                         className="custom-input"
                         placeholder="أدخل المبلغ"
                         value={customAmount}
-                        onChange={(e) => setCustomAmount(e.target.value)}
+                        onChange={(e) => {
+                          setCustomAmount(e.target.value)
+                          if (e.target.value && Number(e.target.value) > 0) {
+                            recordInteraction({
+                              timestamp: new Date().toISOString(),
+                              authorId: DEMO_AUTHOR.id,
+                              authorName: DEMO_AUTHOR.name,
+                              action: 'custom_amount_entered',
+                              drinkType: isTea ? 'tea' : 'coffee',
+                              selectedAmount: Number(e.target.value),
+                              isCustomAmount: true,
+                              visitorId: getVisitorId(),
+                            })
+                          }
+                        }}
                         min={1}
                         style={{
                           width: '100%', height: '44px', borderRadius: '12px',
@@ -444,7 +617,7 @@ const TipAuthorPage: React.FC = () => {
                       />
                       <span style={{
                         position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)',
-                        fontSize: '13px', color: '#94A3B8', fontWeight: 500,
+                        fontSize: '14px', color: '#64748B', fontWeight: 500,
                       }}>ر.س</span>
                     </div>
                   </div>
@@ -455,22 +628,17 @@ const TipAuthorPage: React.FC = () => {
                   textAlign: 'center' as const, padding: '16px 0 4px',
                   fontSize: '32px', fontWeight: 700, color: '#1E293B',
                 }}>
-                  {getAmount() || '—'} <span style={{ fontSize: '16px', fontWeight: 500, color: '#94A3B8' }}>ر.س</span>
+                  {getAmount() || '—'} <span style={{ fontSize: '16px', fontWeight: 500, color: '#64748B' }}>ر.س</span>
                 </div>
 
-                {/* Test disclaimer */}
-                <div style={{ textAlign: 'center' as const, padding: '0 32px', fontSize: '11px', color: '#CBD5E1' }}>
-                  نختبر هذه الميزة لمعرفة رأيك — لن يتم خصم أي مبلغ
-                </div>
-
-                {/* Submit */}
+                {/* Submit — NO money amount on button */}
                 <div style={{ padding: '14px 28px 28px' }}>
                   <button
                     onClick={handleSubmit}
                     disabled={isCustom && (!customAmount || Number(customAmount) <= 0)}
                     style={{
-                      width: '100%', height: '46px', borderRadius: '14px',
-                      border: 'none', fontSize: '15px', fontWeight: 600,
+                      width: '100%', height: '48px', borderRadius: '14px',
+                      border: 'none', fontSize: '16px', fontWeight: 600,
                       cursor: (isCustom && (!customAmount || Number(customAmount) <= 0)) ? 'default' : 'pointer',
                       fontFamily: 'inherit',
                       background: (isCustom && (!customAmount || Number(customAmount) <= 0)) ? '#E2E8F0' : '#0000FF',
@@ -479,7 +647,7 @@ const TipAuthorPage: React.FC = () => {
                       boxShadow: (isCustom && (!customAmount || Number(customAmount) <= 0)) ? 'none' : '0 2px 8px rgba(0, 0, 255, 0.25)',
                     }}
                   >
-                    {getAmount() > 0 ? `أرغب بدعمه بـ ${getAmount()} ر.س` : `اختر مبلغ الدعم`}
+                    أرغب بدعم هذا الكاتب
                   </button>
                 </div>
               </div>
@@ -487,24 +655,25 @@ const TipAuthorPage: React.FC = () => {
               <div style={{
                 padding: '44px 28px', textAlign: 'center' as const,
                 display: 'flex', flexDirection: 'column' as const,
-                alignItems: 'center', gap: '10px', animation: 'scaleIn 0.3s ease',
+                alignItems: 'center', gap: '12px', animation: 'scaleIn 0.3s ease',
               }}>
                 <img
                   src={isCustom ? options[1].image : options[selectedIndex]?.image}
                   alt="" style={{ width: '56px', height: '56px', objectFit: 'contain' as const }}
                 />
-                <div style={{ fontSize: '18px', fontWeight: 600, color: '#1E293B', marginTop: '4px' }}>
-                  شكراً لمشاركتك!
+                <div style={{ fontSize: '20px', fontWeight: 600, color: '#1E293B', marginTop: '4px' }}>
+                  شكراً لمشاركتك رأيك!
                 </div>
-                <div style={{ fontSize: '13px', color: '#94A3B8', lineHeight: 1.8, maxWidth: '290px' }}>
-                  سنعمل على تحسين التجربة لدعم كتّاب المنصة. رأيك يساعدنا نبني ميزة أفضل.
+                <div style={{ fontSize: '15px', color: '#64748B', lineHeight: 1.8, maxWidth: '300px' }}>
+                  لم يتم خصم أي مبلغ — هذا مجرد استطلاع.
+                  سنستخدم رأيك لنقرر هل نطلق ميزة الدعم على المنصة.
                 </div>
                 <button
                   onClick={handleClose}
                   style={{
                     marginTop: '12px', padding: '10px 28px', borderRadius: '12px',
                     border: '1.5px solid #E2E8F0', background: 'transparent',
-                    color: '#1E293B', fontSize: '14px', fontWeight: 500,
+                    color: '#1E293B', fontSize: '15px', fontWeight: 500,
                     cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.2s',
                   }}
                   onMouseEnter={(e) => (e.currentTarget.style.background = '#F8FAFC')}
