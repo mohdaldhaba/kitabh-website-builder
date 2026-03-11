@@ -58,6 +58,15 @@ const TEA_OPTIONS = [
 const COFFEE_MESSAGE = 'هذا الكاتب يحب القهوة .. بإمكانك التكّفل بفنجانه القادم ليكتب أكثر'
 const TEA_MESSAGE = 'هذا الكاتب يحب الشاي .. بإمكانك التكفّل بكوبه القادم ليكتب أكثر'
 
+// Demo supporters — in production this comes from the database
+const DEMO_SUPPORTERS = [
+  { name: 'سارة العتيبي', image: 'https://i.pravatar.cc/80?img=47', amount: 30 },
+  { name: 'فهد المالكي', image: 'https://i.pravatar.cc/80?img=12', amount: 100 },
+  { name: 'نورة الشمري', image: 'https://i.pravatar.cc/80?img=32', amount: 10 },
+  { name: 'خالد الدوسري', image: 'https://i.pravatar.cc/80?img=53', amount: 30 },
+  { name: 'ريم القحطاني', image: 'https://i.pravatar.cc/80?img=44', amount: 10 },
+]
+
 const DEMO_AUTHOR = {
   id: 'author_hawas55',
   name: 'عبدالله الحواس',
@@ -661,11 +670,54 @@ const TipAuthorPage: React.FC = () => {
 
                 {/* Survey disclaimer — below button */}
                 <div style={{
-                  textAlign: 'center' as const, padding: '0 28px 24px',
+                  textAlign: 'center' as const, padding: '0 28px 16px',
                   fontSize: '13px', color: '#94A3B8', lineHeight: 1.7,
                 }}>
                   هذا استطلاع رأي فقط — لن نخصم أي مبلغ منك
                 </div>
+
+                {/* Supporters list */}
+                {DEMO_SUPPORTERS.length > 0 && (
+                  <div style={{
+                    padding: '0 24px 24px',
+                    borderTop: '1px solid rgba(0,0,0,0.06)',
+                  }}>
+                    <div style={{
+                      fontSize: '13px', fontWeight: 600, color: '#94A3B8',
+                      padding: '14px 0 10px', textAlign: 'center' as const,
+                    }}>
+                      أبدوا رغبتهم بالدعم
+                    </div>
+                    <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '8px' }}>
+                      {DEMO_SUPPORTERS.map((supporter, i) => (
+                        <div key={i} style={{
+                          display: 'flex', alignItems: 'center', gap: '10px',
+                          padding: '6px 10px', borderRadius: '10px',
+                          background: 'rgba(0,0,0,0.02)',
+                        }}>
+                          <img
+                            src={supporter.image} alt={supporter.name}
+                            style={{
+                              width: '32px', height: '32px', borderRadius: '50%',
+                              objectFit: 'cover', border: '1.5px solid #fff',
+                              boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
+                            }}
+                          />
+                          <span style={{ flex: 1, fontSize: '13px', fontWeight: 500, color: '#1E293B' }}>
+                            {supporter.name}
+                          </span>
+                          <span style={{
+                            fontSize: '13px', fontWeight: 600, color: '#0000FF',
+                            background: 'rgba(0,0,255,0.05)', padding: '2px 8px',
+                            borderRadius: '6px',
+                          }}>
+                            {supporter.amount} ر.س
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             ) : (
               <div style={{
