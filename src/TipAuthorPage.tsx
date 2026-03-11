@@ -481,19 +481,16 @@ const TipAuthorPage: React.FC = () => {
                     <span style={{ fontSize: '12px', fontWeight: 500, color: authorPrefersTea ? '#1E293B' : '#94A3B8' }}>شاي</span>
                   </div>
                 </div>
-              </div>
-            )}
 
-            {/* Author test notice — shown when feature is active */}
-            {authorTipEnabled && (
-              <div style={{
-                margin: showAuthorSettings ? '12px 20px 0' : '52px 20px 0',
-                padding: '10px 14px', borderRadius: '10px',
-                background: '#EFF6FF', border: '1px solid #DBEAFE',
-                textAlign: 'center' as const, animation: 'fadeIn 0.2s ease',
-              }}>
-                <div style={{ fontSize: '13px', color: '#1D4ED8', lineHeight: 1.7 }}>
-                  هذا مجرد اختبار لرغبة القرّاء في دعم الكتّاب. لن نحصّل أي مبالغ منهم بل سنسجل اهتمامهم فقط.
+                {/* Test notice — inside settings panel */}
+                <div style={{
+                  marginTop: '12px', padding: '8px 12px', borderRadius: '8px',
+                  background: '#EFF6FF', border: '1px solid #DBEAFE',
+                  textAlign: 'center' as const,
+                }}>
+                  <div style={{ fontSize: '12px', color: '#1D4ED8', lineHeight: 1.7 }}>
+                    هذا مجرد اختبار لرغبة القرّاء في دعم الكتّاب. لن نحصّل أي مبالغ منهم بل سنسجل اهتمامهم فقط.
+                  </div>
                 </div>
               </div>
             )}
