@@ -159,6 +159,7 @@ const TipAuthorPage: React.FC = () => {
   const [authorTipEnabled, setAuthorTipEnabled] = useState(DEMO_AUTHOR.tipButtonEnabled)
   const [authorPrefersTea, setAuthorPrefersTea] = useState(DEMO_AUTHOR.prefersTea)
   const [showAuthorSettings, setShowAuthorSettings] = useState(false)
+  const [showSupporters, setShowSupporters] = useState(false)
 
   // Drink type is determined by author preference, not visitor
   const isTea = authorPrefersTea
@@ -372,8 +373,9 @@ const TipAuthorPage: React.FC = () => {
               backdropFilter: 'blur(20px) saturate(180%)', WebkitBackdropFilter: 'blur(20px) saturate(180%)',
               borderRadius: '28px', border: '1px solid rgba(255, 255, 255, 0.6)',
               boxShadow: '0 8px 40px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.04)',
-              maxWidth: '400px', width: 'calc(100% - 32px)', animation: 'slideUp 0.3s ease',
-              overflow: 'hidden', direction: 'rtl' as const, fontFamily: "'IBM Plex Sans Arabic', sans-serif",
+              maxWidth: '400px', width: 'calc(100% - 32px)', maxHeight: 'calc(100vh - 40px)',
+              overflowY: 'auto' as const, animation: 'slideUp 0.3s ease',
+              direction: 'rtl' as const, fontFamily: "'IBM Plex Sans Arabic', sans-serif",
             }}
           >
             {/* Close button */}
@@ -676,47 +678,73 @@ const TipAuthorPage: React.FC = () => {
                   هذا استطلاع رأي فقط — لن نخصم أي مبلغ منك
                 </div>
 
-                {/* Supporters list */}
+                {/* Supporters — compact row with expand */}
                 {DEMO_SUPPORTERS.length > 0 && (
-                  <div style={{
-                    padding: '0 24px 24px',
-                    borderTop: '1px solid rgba(0,0,0,0.06)',
-                  }}>
-                    <div style={{
-                      fontSize: '13px', fontWeight: 600, color: '#94A3B8',
-                      padding: '14px 0 10px', textAlign: 'center' as const,
-                    }}>
-                      أبدوا رغبتهم بالدعم
-                    </div>
-                    <div style={{ display: 'flex', flexDirection: 'column' as const, gap: '8px' }}>
-                      {DEMO_SUPPORTERS.map((supporter, i) => (
-                        <div key={i} style={{
-                          display: 'flex', alignItems: 'center', gap: '10px',
-                          padding: '6px 10px', borderRadius: '10px',
-                          background: 'rgba(0,0,0,0.02)',
-                        }}>
+                  <div style={{ padding: '0 24px 20px' }}>
+                    <button
+                      onClick={() => setShowSupporters(!showSupporters)}
+                      style={{
+                        width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                        gap: '10px', padding: '8px 0', background: 'none', border: 'none',
+                        cursor: 'pointer', fontFamily: 'inherit',
+                      }}
+                    >
+                      {/* Overlapping avatars */}
+                      <div style={{ display: 'flex', flexDirection: 'row-reverse' as const }}>
+                        {DEMO_SUPPORTERS.slice(0, 4).map((s, i) => (
                           <img
-                            src={supporter.image} alt={supporter.name}
+                            key={i} src={s.image} alt=""
                             style={{
-                              width: '32px', height: '32px', borderRadius: '50%',
-                              objectFit: 'cover', border: '1.5px solid #fff',
-                              boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
+                              width: '24px', height: '24px', borderRadius: '50%',
+                              objectFit: 'cover', border: '2px solid #fff',
+                              marginRight: i === 0 ? 0 : '-8px',
                             }}
                           />
-                          <span style={{ flex: 1, fontSize: '13px', fontWeight: 500, color: '#1E293B' }}>
-                            {supporter.name}
-                          </span>
-                          <span style={{
-                            fontSize: '13px', fontWeight: 600, color: '#0000FF',
-                            background: 'rgba(0,0,255,0.05)', padding: '2px 8px',
-                            borderRadius: '6px',
+                        ))}
+                      </div>
+                      <span style={{ fontSize: '12px', color: '#94A3B8', fontWeight: 500 }}>
+                        {DEMO_SUPPORTERS.length} أبدوا رغبتهم بالدعم
+                      </span>
+                      <span style={{
+                        fontSize: '11px', color: '#CBD5E1',
+                        transform: showSupporters ? 'rotate(180deg)' : 'rotate(0)',
+                        transition: 'transform 0.2s',
+                      }}>▼</span>
+                    </button>
+
+                    {showSupporters && (
+                      <div style={{
+                        display: 'flex', flexDirection: 'column' as const, gap: '6px',
+                        marginTop: '6px', maxHeight: '120px', overflowY: 'auto' as const,
+                        animation: 'fadeIn 0.2s ease',
+                      }}>
+                        {DEMO_SUPPORTERS.map((supporter, i) => (
+                          <div key={i} style={{
+                            display: 'flex', alignItems: 'center', gap: '8px',
+                            padding: '4px 8px', borderRadius: '8px',
+                            background: 'rgba(0,0,0,0.02)',
                           }}>
-                            {supporter.amount} ر.س
-                          </span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+                            <img
+                              src={supporter.image} alt={supporter.name}
+                              style={{
+                                width: '26px', height: '26px', borderRadius: '50%',
+                                objectFit: 'cover', border: '1.5px solid #fff',
+                              }}
+                            />
+                            <span style={{ flex: 1, fontSize: '12px', fontWeight: 500, color: '#1E293B' }}>
+                              {supporter.name}
+                            </span>
+                            <span style={{
+                              fontSize: '12px', fontWeight: 600, color: '#0000FF',
+                              background: 'rgba(0,0,255,0.05)', padding: '2px 6px',
+                              borderRadius: '6px',
+                            }}>
+                              {supporter.amount} ر.س
+                            </span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
                 )}
               </div>
             ) : (
