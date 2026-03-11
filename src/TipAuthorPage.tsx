@@ -504,20 +504,20 @@ const TipAuthorPage: React.FC = () => {
             {!submitted ? (
               <div style={{ animation: 'fadeIn 0.3s ease', opacity: authorTipEnabled ? 1 : 0.4, pointerEvents: authorTipEnabled ? 'auto' : 'none' }}>
                 {/* Header */}
-                <div style={{ padding: authorTipEnabled ? '24px 24px 4px' : '12px 24px 4px', textAlign: 'center' as const }}>
+                <div style={{ padding: authorTipEnabled ? '28px 28px 4px' : '16px 28px 4px', textAlign: 'center' as const }}>
                   <img
                     src={DEMO_AUTHOR.image} alt={DEMO_AUTHOR.name}
                     style={{
-                      width: '42px', height: '42px', borderRadius: '50%', objectFit: 'cover',
+                      width: '48px', height: '48px', borderRadius: '50%', objectFit: 'cover',
                       border: '2px solid rgba(255,255,255,0.8)', boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-                      display: 'block', margin: '0 auto 8px',
+                      display: 'block', margin: '0 auto 12px',
                     }}
                   />
-                  <div style={{ fontSize: '16px', fontWeight: 600, color: '#1E293B' }}>
+                  <div style={{ fontSize: '18px', fontWeight: 600, color: '#1E293B' }}>
                     هل تريد دعم {DEMO_AUTHOR.name} ليكتب أكثر؟
                   </div>
                   <div style={{
-                    fontSize: '13px', color: '#64748B', marginTop: '6px', lineHeight: 1.7,
+                    fontSize: '14px', color: '#64748B', marginTop: '10px', lineHeight: 1.8,
                   }}>
                     {message}
                   </div>
@@ -526,7 +526,7 @@ const TipAuthorPage: React.FC = () => {
                 {/* Cups */}
                 <div style={{
                   display: 'flex', alignItems: 'flex-end', justifyContent: 'center',
-                  gap: '4px', padding: '12px 16px 6px',
+                  gap: '6px', padding: '18px 20px 8px',
                 }}>
                   {options.map((option, index) => {
                     const isSelected = !isCustom && selectedIndex === index
@@ -536,7 +536,7 @@ const TipAuthorPage: React.FC = () => {
                         onClick={() => selectPreset(index)}
                         style={{
                           display: 'flex', flexDirection: 'column' as const, alignItems: 'center', gap: '6px',
-                          padding: '8px 14px', borderRadius: '14px', border: 'none',
+                          padding: '10px 16px', borderRadius: '16px', border: 'none',
                           cursor: 'pointer', transition: 'all 0.2s ease',
                           background: isSelected ? 'rgba(0, 0, 255, 0.05)' : 'transparent',
                           outline: isSelected ? '1.5px solid rgba(0, 0, 255, 0.2)' : '1.5px solid transparent',
@@ -566,7 +566,7 @@ const TipAuthorPage: React.FC = () => {
                     onClick={activateCustom}
                     style={{
                       display: 'flex', flexDirection: 'column' as const, alignItems: 'center', gap: '6px',
-                      padding: '8px 14px', borderRadius: '14px', border: 'none',
+                      padding: '10px 16px', borderRadius: '16px', border: 'none',
                       cursor: 'pointer', transition: 'all 0.2s ease',
                       background: isCustom ? 'rgba(0, 0, 255, 0.05)' : 'transparent',
                       outline: isCustom ? '1.5px solid rgba(0, 0, 255, 0.2)' : '1.5px solid transparent',
@@ -591,7 +591,7 @@ const TipAuthorPage: React.FC = () => {
 
                 {/* Slider — snaps to 3 positions (only when not in custom mode) */}
                 {!isCustom && (
-                  <div style={{ padding: '4px 40px 0' }}>
+                  <div style={{ padding: '8px 44px 0' }}>
                     <input
                       type="range" min={0} max={2} step={1} value={selectedIndex}
                       onChange={(e) => selectPreset(Number(e.target.value))}
@@ -602,7 +602,7 @@ const TipAuthorPage: React.FC = () => {
 
                 {/* Custom amount input */}
                 {isCustom && (
-                  <div style={{ padding: '4px 40px 0' }}>
+                  <div style={{ padding: '8px 44px 0' }}>
                     <div style={{ position: 'relative' }}>
                       <input
                         ref={customInputRef}
@@ -643,8 +643,16 @@ const TipAuthorPage: React.FC = () => {
                   </div>
                 )}
 
+                {/* Amount display */}
+                <div style={{
+                  textAlign: 'center' as const, padding: '16px 0 4px',
+                  fontSize: '32px', fontWeight: 700, color: '#1E293B',
+                }}>
+                  {getAmount() || '—'} <span style={{ fontSize: '16px', fontWeight: 500, color: '#64748B' }}>ر.س</span>
+                </div>
+
                 {/* Submit */}
-                <div style={{ padding: '10px 28px 6px' }}>
+                <div style={{ padding: '14px 28px 8px' }}>
                   <button
                     onClick={handleSubmit}
                     disabled={isCustom && (!customAmount || Number(customAmount) <= 0)}
@@ -665,7 +673,7 @@ const TipAuthorPage: React.FC = () => {
 
                 {/* Survey disclaimer — below button */}
                 <div style={{
-                  textAlign: 'center' as const, padding: '0 28px 10px',
+                  textAlign: 'center' as const, padding: '0 28px 16px',
                   fontSize: '13px', color: '#94A3B8', lineHeight: 1.7,
                 }}>
                   هذا استطلاع رأي فقط — لن نخصم أي مبلغ منك
@@ -673,7 +681,7 @@ const TipAuthorPage: React.FC = () => {
 
                 {/* Supporters — compact row with expand */}
                 {DEMO_SUPPORTERS.length > 0 && (
-                  <div style={{ padding: '0 24px 14px' }}>
+                  <div style={{ padding: '0 24px 20px' }}>
                     <button
                       onClick={() => setShowSupporters(!showSupporters)}
                       style={{
@@ -743,7 +751,7 @@ const TipAuthorPage: React.FC = () => {
               </div>
             ) : (
               <div style={{
-                padding: '32px 24px', textAlign: 'center' as const,
+                padding: '44px 28px', textAlign: 'center' as const,
                 display: 'flex', flexDirection: 'column' as const,
                 alignItems: 'center', gap: '12px', animation: 'scaleIn 0.3s ease',
               }}>
