@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react'
 
 // ========== DATA RECORDING ==========
+// Replace this with your Google Apps Script web app URL after deploying
+const GOOGLE_SHEET_WEBHOOK = 'PASTE_YOUR_GOOGLE_APPS_SCRIPT_URL_HERE'
+
 interface TipInteraction {
   timestamp: string
   authorId: string
@@ -9,7 +12,7 @@ interface TipInteraction {
   drinkType: 'coffee' | 'tea'
   selectedAmount: number | null
   isCustomAmount: boolean
-  visitorId: string // random ID per browser
+  visitorId: string
 }
 
 function getVisitorId(): string {
@@ -22,10 +25,21 @@ function getVisitorId(): string {
 }
 
 function recordInteraction(interaction: TipInteraction) {
+  // Always save locally as backup
   const existing = JSON.parse(localStorage.getItem('kitabh_tip_interactions') || '[]')
   existing.push(interaction)
   localStorage.setItem('kitabh_tip_interactions', JSON.stringify(existing))
   console.log('[Kitabh Tip] Recorded:', interaction)
+
+  // Send to Google Sheets
+  if (GOOGLE_SHEET_WEBHOOK && !GOOGLE_SHEET_WEBHOOK.includes('PASTE_YOUR')) {
+    fetch(GOOGLE_SHEET_WEBHOOK, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(interaction),
+    }).catch((err) => console.warn('[Kitabh Tip] Sheet webhook failed:', err))
+  }
 }
 
 // ========== OPTIONS ==========
