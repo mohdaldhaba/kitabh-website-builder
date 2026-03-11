@@ -274,6 +274,12 @@ export default function KitabhWebsiteBuilder(props: any) {
   const [hoveredCompId, setHoveredCompId] = useState<string | null>(null);
   const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved">("idle");
 
+  // Undo/Redo history
+  const undoStack = useRef<string[]>([]);
+  const redoStack = useRef<string[]>([]);
+  const isUndoRedo = useRef(false);
+  const prevSitesJson = useRef<string>("");
+
   // Modals
   const [configModal, setConfigModal] = useState(false);
   const [addPageModal, setAddPageModal] = useState(false);
@@ -289,12 +295,58 @@ export default function KitabhWebsiteBuilder(props: any) {
   const [articleSearch, setArticleSearch] = useState("");
   const [activePageId, setActivePageId] = useState<string | null>(null);
 
+  // ─── Undo/Redo tracking ────────
+  useEffect(() => {
+    if (isUndoRedo.current) { isUndoRedo.current = false; return; }
+    const json = JSON.stringify(sites);
+    if (json !== prevSitesJson.current && prevSitesJson.current) {
+      undoStack.current.push(prevSitesJson.current);
+      if (undoStack.current.length > 50) undoStack.current.shift();
+      redoStack.current = [];
+    }
+    prevSitesJson.current = json;
+  }, [sites]);
+
+  const undo = useCallback(() => {
+    if (undoStack.current.length === 0) return;
+    redoStack.current.push(JSON.stringify(sites));
+    const prev = undoStack.current.pop()!;
+    isUndoRedo.current = true;
+    prevSitesJson.current = prev;
+    setSites(JSON.parse(prev));
+  }, [sites]);
+
+  const redo = useCallback(() => {
+    if (redoStack.current.length === 0) return;
+    undoStack.current.push(JSON.stringify(sites));
+    const next = redoStack.current.pop()!;
+    isUndoRedo.current = true;
+    prevSitesJson.current = next;
+    setSites(JSON.parse(next));
+  }, [sites]);
+
+  // Keyboard shortcuts: Ctrl+Z / Cmd+Z for undo, Ctrl+Shift+Z / Cmd+Shift+Z for redo
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if ((e.metaKey || e.ctrlKey) && e.key === "z") {
+        e.preventDefault();
+        if (e.shiftKey) redo(); else undo();
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [undo, redo]);
+
   // ─── Load/Save ────────
   useEffect(() => {
     try {
       if (typeof window !== "undefined" && window.localStorage) {
         const saved = localStorage.getItem("kb_websites");
-        if (saved) setSites(JSON.parse(saved));
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          setSites(parsed);
+          prevSitesJson.current = JSON.stringify(parsed);
+        }
       }
     } catch (_) {}
   }, []);
@@ -601,7 +653,7 @@ export default function KitabhWebsiteBuilder(props: any) {
     }, 100);
   };
 
-  const INSERT_TYPES: ComponentType[] = ["hero_news", "hero_subscribe", "banner", "cta_newsletter", "article_collection", "brands_ticker", "testimonials", "products", "podcast", "courses", "topics", "text_block", "rich_text", "image_block", "subscribe_form", "contact_form", "divider"];
+  const INSERT_TYPES: ComponentType[] = ["header", "hero_news", "hero_subscribe", "banner", "cta_newsletter", "article_collection", "brands_ticker", "testimonials", "products", "podcast", "courses", "topics", "text_block", "rich_text", "image_block", "subscribe_form", "contact_form", "divider", "footer"];
 
   // ─── Move component up/down ────────
   const moveComponent = (compId: string, direction: "up" | "down") => {
@@ -1181,6 +1233,14 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
       <div className="kwb-builder">
         {/* Top controls */}
         <div className="kwb-builder-top">
+          <div className="kwb-undo-redo">
+            <button className="kwb-undo-btn" onClick={undo} disabled={undoStack.current.length === 0} title="تراجع (Ctrl+Z)">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+            </button>
+            <button className="kwb-undo-btn" onClick={redo} disabled={redoStack.current.length === 0} title="إعادة (Ctrl+Shift+Z)">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.13-9.36L23 10"/></svg>
+            </button>
+          </div>
           <div className="kwb-device-toggle">
             <button className={`kwb-device-btn ${previewDevice === "desktop" ? "kwb-device-active" : ""}`} onClick={() => setPreviewDevice("desktop")}>{Icons.monitor}</button>
             <button className={`kwb-device-btn ${previewDevice === "mobile" ? "kwb-device-active" : ""}`} onClick={() => setPreviewDevice("mobile")}>{Icons.phone}</button>
@@ -2434,7 +2494,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                 {showAddComponent && (
                   <div className="kwb-add-comp-dropdown">
                     <div className="kwb-add-comp-cards">
-                      {(["hero_news","hero_subscribe","banner","cta_newsletter","article_collection","brands_ticker","testimonials","products","podcast","courses","topics","text_block","rich_text","image_block","subscribe_form","contact_form","divider"] as ComponentType[]).map(type => (
+                      {(["header","hero_news","hero_subscribe","banner","cta_newsletter","article_collection","brands_ticker","testimonials","products","podcast","courses","topics","text_block","rich_text","image_block","subscribe_form","contact_form","divider","footer"] as ComponentType[]).map(type => (
                         <button key={type} className="kwb-add-comp-card" onClick={() => { addComponentToPage(type); setShowAddComponent(false); }}>
                           <div className="kwb-add-comp-mini">
                             <div className={`kwb-mc-auto kwb-mc-${type.replace(/_/g,"-")}`} />
@@ -2637,7 +2697,11 @@ const CSS_STYLES = `
 
 /* ─── BUILDER ─── */
 .kwb-builder{position:absolute;top:0;left:0;right:0;bottom:0;background:#F2F2F2;display:flex;flex-direction:column;z-index:50;}
-.kwb-builder-top{display:flex;align-items:center;justify-content:center;padding:12px 0;flex-shrink:0;}
+.kwb-builder-top{display:flex;align-items:center;justify-content:center;padding:12px 16px;flex-shrink:0;position:relative;}
+.kwb-undo-redo{position:absolute;left:16px;display:flex;gap:4px;}
+.kwb-undo-btn{width:32px;height:32px;border:1.5px solid #E0E0E0;background:#fff;border-radius:8px;color:#666;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;transition:all .15s;}
+.kwb-undo-btn:hover:not(:disabled){border-color:#371D12;color:#371D12;background:#F8F8F8;}
+.kwb-undo-btn:disabled{opacity:0.3;cursor:default;}
 .kwb-device-toggle{display:flex;gap:4px;background:#fff;border:1.5px solid #E0E0E0;border-radius:10px;padding:3px;}
 .kwb-device-btn{width:36px;height:32px;border:none;background:none;border-radius:7px;color:#BBB;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;}
 .kwb-device-btn:hover{color:#371D12;}
@@ -3016,13 +3080,13 @@ const CSS_STYLES = `
 /* Add component */
 .kwb-add-comp-section{margin-top:16px;padding-top:16px;border-top:1px solid #F0F0F0;}
 .kwb-comp-sticky-footer{position:relative;background:#fff;padding:10px 16px;border-top:1px solid #E8E8E8;flex-shrink:0;}
-.kwb-add-comp-dropdown{position:absolute;bottom:100%;left:0;right:0;background:#fff;border:1px solid #E8E8E8;border-bottom:none;border-radius:12px 12px 0 0;box-shadow:0 -4px 20px rgba(0,0,0,0.1);padding:12px;max-height:50vh;overflow-y:auto;z-index:10;}
-.kwb-add-comp-cards{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px;}
-.kwb-add-comp-card{display:flex;flex-direction:column;border:1.5px solid #E8E8E8;border-radius:10px;background:#fff;cursor:pointer;transition:all .15s;overflow:hidden;text-align:right;}
+.kwb-add-comp-dropdown{position:absolute;bottom:100%;left:0;right:0;background:#fff;border:1px solid #E8E8E8;border-bottom:none;border-radius:12px 12px 0 0;box-shadow:0 -4px 20px rgba(0,0,0,0.1);padding:8px;max-height:40vh;overflow-y:auto;z-index:10;}
+.kwb-add-comp-cards{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;}
+.kwb-add-comp-card{display:flex;flex-direction:column;border:1.5px solid #E8E8E8;border-radius:8px;background:#fff;cursor:pointer;transition:all .15s;overflow:hidden;text-align:center;}
 .kwb-add-comp-card:hover{border-color:#371D12;box-shadow:0 2px 8px rgba(0,0,0,0.06);}
-.kwb-add-comp-mini{height:48px;background:#fafafa;display:flex;align-items:center;justify-content:center;padding:6px 8px;overflow:hidden;border-bottom:1px solid #f0f0f0;}
-.kwb-add-comp-label-row{display:flex;align-items:center;gap:6px;padding:7px 10px;direction:rtl;}
-.kwb-add-comp-name{font-family:inherit;font-size:11.5px;font-weight:600;color:#555;}
+.kwb-add-comp-mini{display:none;}
+.kwb-add-comp-label-row{display:flex;align-items:center;justify-content:center;gap:4px;padding:8px 4px;direction:rtl;}
+.kwb-add-comp-name{font-family:inherit;font-size:11px;font-weight:600;color:#555;}
 .kwb-add-comp-card:hover .kwb-add-comp-name{color:#371D12;}
 
 /* CSS-only mini layout previews */
