@@ -1,24 +1,21 @@
 import React, { useState, useEffect } from 'react'
 
-// Cups ordered: cheapest first (right side in RTL) → expensive (left side in RTL)
+// Order: وسط (right) → إسبريسو (middle) → كبيرة (left)
 const TIP_OPTIONS = [
   {
-    id: 'espresso',
-    label: 'إسبريسو',
-    amount: 5,
-    image: '/images/espresso.png',
-    size: 36,
-  },
-  {
     id: 'galao',
-    label: 'قهوة وسط',
     amount: 10,
     image: '/images/galao.png',
     size: 44,
   },
   {
+    id: 'espresso',
+    amount: 5,
+    image: '/images/espresso.png',
+    size: 36,
+  },
+  {
     id: 'lungo',
-    label: 'قهوة كبيرة',
     amount: 15,
     image: '/images/lungo.png',
     size: 52,
@@ -70,29 +67,29 @@ const keyframes = `
     width: 100%;
     height: 4px;
     border-radius: 2px;
-    background: linear-gradient(to left, #E2E8F0, #94A3B8);
+    background: #E2E8F0;
     outline: none;
     direction: ltr;
   }
   input[type="range"]::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
-    width: 20px;
-    height: 20px;
+    width: 22px;
+    height: 22px;
     border-radius: 50%;
-    background: #1E293B;
+    background: #0000FF;
     cursor: pointer;
     border: 3px solid #fff;
-    box-shadow: 0 1px 8px rgba(0,0,0,0.15);
+    box-shadow: 0 1px 8px rgba(0,0,255,0.2);
   }
   input[type="range"]::-moz-range-thumb {
-    width: 20px;
-    height: 20px;
+    width: 22px;
+    height: 22px;
     border-radius: 50%;
-    background: #1E293B;
+    background: #0000FF;
     cursor: pointer;
     border: 3px solid #fff;
-    box-shadow: 0 1px 8px rgba(0,0,0,0.15);
+    box-shadow: 0 1px 8px rgba(0,0,255,0.2);
   }
 `
 
@@ -100,7 +97,6 @@ const TipAuthorPage: React.FC = () => {
   const [dialogOpen, setDialogOpen] = useState(false)
   const [selectedIndex, setSelectedIndex] = useState(0)
   const [submitted, setSubmitted] = useState(false)
-  const [customAmount, setCustomAmount] = useState(5)
 
   useEffect(() => {
     const style = document.createElement('style')
@@ -109,17 +105,9 @@ const TipAuthorPage: React.FC = () => {
     return () => { document.head.removeChild(style) }
   }, [])
 
-  useEffect(() => {
-    if (selectedIndex === 0) setCustomAmount(5)
-    else if (selectedIndex === 1) setCustomAmount(10)
-    else setCustomAmount(15)
-  }, [selectedIndex])
-
+  // Slider snaps to 3 positions only: 0, 1, 2
   const handleSliderChange = (value: number) => {
-    setCustomAmount(value)
-    if (value <= 7) setSelectedIndex(0)
-    else if (value <= 12) setSelectedIndex(1)
-    else setSelectedIndex(2)
+    setSelectedIndex(value)
   }
 
   const handleSubmit = () => {
@@ -131,7 +119,6 @@ const TipAuthorPage: React.FC = () => {
     setTimeout(() => {
       setSubmitted(false)
       setSelectedIndex(0)
-      setCustomAmount(5)
     }, 300)
   }
 
@@ -175,78 +162,40 @@ const TipAuthorPage: React.FC = () => {
         }}>
           <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
             <div style={{ flex: 1 }}>
-              {/* Name row with coffee icon */}
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexWrap: 'wrap' }}>
                 <h1 style={{ fontSize: '22px', fontWeight: 700, color: '#000', margin: 0 }}>
                   {DEMO_AUTHOR.name}
                 </h1>
-                {/* Verification badge */}
                 <span style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  width: '22px',
-                  height: '22px',
-                  borderRadius: '50%',
-                  background: '#0000FF',
-                  flexShrink: 0,
+                  display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                  width: '22px', height: '22px', borderRadius: '50%', background: '#0000FF', flexShrink: 0,
                 }}>
                   <svg width="12" height="12" viewBox="0 0 24 24" fill="white">
                     <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
                   </svg>
                 </span>
-                {/* Coffee tip icon — uses the actual espresso PNG */}
                 <button
                   onClick={() => setDialogOpen(true)}
                   style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    width: '30px',
-                    height: '30px',
-                    borderRadius: '50%',
-                    background: '#F5F0EB',
-                    border: 'none',
-                    cursor: 'pointer',
-                    transition: 'transform 0.2s, box-shadow 0.2s',
-                    animation: 'float 2.5s ease-in-out infinite',
-                    flexShrink: 0,
+                    display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                    width: '30px', height: '30px', borderRadius: '50%', background: '#F5F0EB',
+                    border: 'none', cursor: 'pointer', transition: 'transform 0.2s, box-shadow 0.2s',
+                    animation: 'float 2.5s ease-in-out infinite', flexShrink: 0,
                   }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = 'scale(1.12)'
-                    e.currentTarget.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)'
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = 'scale(1)'
-                    e.currentTarget.style.boxShadow = 'none'
-                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.12)'; e.currentTarget.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)' }}
+                  onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = 'none' }}
                   title="ادعم الكاتب بقهوة"
                 >
-                  <img
-                    src="/images/espresso.png"
-                    alt="ادعم بقهوة"
-                    style={{ width: '18px', height: '18px', objectFit: 'contain' }}
-                  />
+                  <img src="/images/espresso.png" alt="ادعم بقهوة" style={{ width: '18px', height: '18px', objectFit: 'contain' }} />
                 </button>
               </div>
-              <p style={{ fontSize: '14px', color: '#888', margin: '4px 0 0' }}>
-                @{DEMO_AUTHOR.username}
-              </p>
+              <p style={{ fontSize: '14px', color: '#888', margin: '4px 0 0' }}>@{DEMO_AUTHOR.username}</p>
             </div>
-            <img
-              src={DEMO_AUTHOR.image}
-              alt={DEMO_AUTHOR.name}
-              style={{
-                width: '80px',
-                height: '80px',
-                borderRadius: '50%',
-                objectFit: 'cover',
-                border: '2px solid #F0F0F0',
-              }}
-            />
+            <img src={DEMO_AUTHOR.image} alt={DEMO_AUTHOR.name} style={{
+              width: '80px', height: '80px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #F0F0F0',
+            }} />
           </div>
 
-          {/* Action icons */}
           <div style={{ display: 'flex', gap: '8px', alignItems: 'center', justifyContent: 'center', marginTop: '16px' }}>
             <div style={{
               display: 'flex', alignItems: 'center', gap: '8px',
@@ -288,7 +237,6 @@ const TipAuthorPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Tabs */}
         <div style={{ display: 'flex', borderBottom: '2px solid #F0F0F0', padding: '0 16px' }}>
           {['النصوص', 'الأفكار', 'التعليقات', 'عن الكاتب'].map((tab, i) => (
             <div key={tab} style={{
@@ -318,7 +266,7 @@ const TipAuthorPage: React.FC = () => {
             style={{
               position: 'fixed', top: '50%', left: '50%',
               transform: 'translate(-50%, -50%)',
-              background: 'rgba(255, 255, 255, 0.85)',
+              background: 'rgba(255, 255, 255, 0.88)',
               backdropFilter: 'blur(20px) saturate(180%)',
               WebkitBackdropFilter: 'blur(20px) saturate(180%)',
               borderRadius: '28px',
@@ -332,7 +280,6 @@ const TipAuthorPage: React.FC = () => {
               fontFamily: "'IBM Plex Sans Arabic', sans-serif",
             }}
           >
-            {/* Close */}
             <button
               onClick={handleClose}
               style={{
@@ -349,7 +296,6 @@ const TipAuthorPage: React.FC = () => {
 
             {!submitted ? (
               <div style={{ animation: 'fadeIn 0.3s ease' }}>
-                {/* Header */}
                 <div style={{ padding: '28px 28px 8px', textAlign: 'center' as const }}>
                   <img
                     src={DEMO_AUTHOR.image}
@@ -361,15 +307,15 @@ const TipAuthorPage: React.FC = () => {
                       display: 'block', margin: '0 auto 12px',
                     }}
                   />
-                  <div style={{ fontSize: '18px', fontWeight: 600, color: '#1E293B', letterSpacing: '-0.2px' }}>
-                    ادعم {DEMO_AUTHOR.name}
+                  <div style={{ fontSize: '17px', fontWeight: 600, color: '#1E293B' }}>
+                    هل تريد دعم {DEMO_AUTHOR.name} ليستمر في النشر؟
                   </div>
-                  <div style={{ fontSize: '13px', color: '#94A3B8', marginTop: '4px' }}>
-                    اختر حجم القهوة اللي تحب تهديه
+                  <div style={{ fontSize: '13px', color: '#94A3B8', marginTop: '6px', lineHeight: 1.6 }}>
+                    نختبر هذه الميزة لمعرفة رأيك — اختر المبلغ الذي تراه مناسباً
                   </div>
                 </div>
 
-                {/* Cups row — RTL: small (right) → large (left) */}
+                {/* Cups: وسط (right) → إسبريسو (middle) → كبيرة (left) */}
                 <div style={{
                   display: 'flex', alignItems: 'flex-end', justifyContent: 'center',
                   gap: '8px', padding: '20px 24px 12px',
@@ -383,15 +329,15 @@ const TipAuthorPage: React.FC = () => {
                         style={{
                           display: 'flex', flexDirection: 'column' as const,
                           alignItems: 'center', gap: '6px',
-                          padding: '10px 16px', borderRadius: '16px', border: 'none',
+                          padding: '10px 18px', borderRadius: '16px', border: 'none',
                           cursor: 'pointer', transition: 'all 0.2s ease',
-                          background: isSelected ? 'rgba(30, 41, 59, 0.06)' : 'transparent',
-                          outline: isSelected ? '1.5px solid rgba(30, 41, 59, 0.15)' : '1.5px solid transparent',
+                          background: isSelected ? 'rgba(0, 0, 255, 0.05)' : 'transparent',
+                          outline: isSelected ? '1.5px solid rgba(0, 0, 255, 0.2)' : '1.5px solid transparent',
                         }}
                       >
                         <img
                           src={option.image}
-                          alt={option.label}
+                          alt=""
                           style={{
                             width: `${option.size}px`, height: `${option.size}px`,
                             objectFit: 'contain' as const,
@@ -401,49 +347,38 @@ const TipAuthorPage: React.FC = () => {
                           }}
                         />
                         <span style={{
-                          fontSize: '11px', fontWeight: 500,
-                          color: isSelected ? '#1E293B' : '#94A3B8',
+                          fontSize: '13px', fontWeight: 600,
+                          color: isSelected ? '#0000FF' : '#94A3B8',
                           transition: 'color 0.2s',
                         }}>
-                          {option.label}
+                          {option.amount} ر.س
                         </span>
                       </button>
                     )
                   })}
                 </div>
 
-                {/* Slider — LTR direction: left=5 (cheap), right=15 (expensive) */}
-                {/* But visually in RTL page: right=cheap, left=expensive */}
-                <div style={{ padding: '4px 32px 0' }}>
+                {/* Slider — snaps to 3 positions only */}
+                <div style={{ padding: '4px 40px 0' }}>
                   <input
                     type="range"
-                    min={5}
-                    max={15}
+                    min={0}
+                    max={2}
                     step={1}
-                    value={customAmount}
+                    value={selectedIndex}
                     onChange={(e) => handleSliderChange(Number(e.target.value))}
                     style={{ width: '100%', direction: 'rtl' as const }}
                   />
-                  <div style={{
-                    display: 'flex', justifyContent: 'space-between',
-                    fontSize: '10px', color: '#CBD5E1', marginTop: '6px',
-                  }}>
-                    <span>15 ر.س</span>
-                    <span>10 ر.س</span>
-                    <span>5 ر.س</span>
-                  </div>
                 </div>
 
                 {/* Amount */}
                 <div style={{
-                  textAlign: 'center' as const, padding: '16px 0 4px',
+                  textAlign: 'center' as const, padding: '18px 0 4px',
                   fontSize: '32px', fontWeight: 700, color: '#1E293B',
-                  letterSpacing: '-0.5px',
                 }}>
-                  {customAmount} <span style={{ fontSize: '16px', fontWeight: 500, color: '#94A3B8' }}>ر.س</span>
+                  {selectedOption.amount} <span style={{ fontSize: '16px', fontWeight: 500, color: '#94A3B8' }}>ر.س</span>
                 </div>
 
-                {/* Submit */}
                 <div style={{ padding: '12px 28px 28px' }}>
                   <button
                     onClick={handleSubmit}
@@ -451,20 +386,20 @@ const TipAuthorPage: React.FC = () => {
                       width: '100%', height: '46px', borderRadius: '14px',
                       border: 'none', fontSize: '15px', fontWeight: 600,
                       cursor: 'pointer', fontFamily: 'inherit',
-                      background: '#1E293B', color: '#fff',
+                      background: '#0000FF', color: '#fff',
                       transition: 'all 0.2s',
-                      boxShadow: '0 2px 8px rgba(30, 41, 59, 0.2)',
+                      boxShadow: '0 2px 8px rgba(0, 0, 255, 0.25)',
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.background = '#0F172A'
-                      e.currentTarget.style.boxShadow = '0 4px 12px rgba(30, 41, 59, 0.3)'
+                      e.currentTarget.style.background = '#0000CC'
+                      e.currentTarget.style.boxShadow = '0 4px 12px rgba(0, 0, 255, 0.35)'
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.background = '#1E293B'
-                      e.currentTarget.style.boxShadow = '0 2px 8px rgba(30, 41, 59, 0.2)'
+                      e.currentTarget.style.background = '#0000FF'
+                      e.currentTarget.style.boxShadow = '0 2px 8px rgba(0, 0, 255, 0.25)'
                     }}
                   >
-                    ادعم بـ {customAmount} ر.س
+                    أرغب بدعمه بـ {selectedOption.amount} ر.س
                   </button>
                 </div>
               </div>
@@ -476,14 +411,14 @@ const TipAuthorPage: React.FC = () => {
               }}>
                 <img
                   src={selectedOption?.image}
-                  alt="coffee"
-                  style={{ width: '64px', height: '64px', objectFit: 'contain' as const }}
+                  alt=""
+                  style={{ width: '56px', height: '56px', objectFit: 'contain' as const }}
                 />
                 <div style={{ fontSize: '18px', fontWeight: 600, color: '#1E293B', marginTop: '4px' }}>
-                  شكراً لدعمك!
+                  شكراً لمشاركتك!
                 </div>
-                <div style={{ fontSize: '13px', color: '#94A3B8', lineHeight: 1.6 }}>
-                  قهوتك وصلت — {DEMO_AUTHOR.name} يقدّر دعمك
+                <div style={{ fontSize: '13px', color: '#94A3B8', lineHeight: 1.8, maxWidth: '280px' }}>
+                  سنعمل على تحسين التجربة لدعم كتّاب المنصة. رأيك يساعدنا نبني ميزة أفضل.
                 </div>
                 <button
                   onClick={handleClose}
