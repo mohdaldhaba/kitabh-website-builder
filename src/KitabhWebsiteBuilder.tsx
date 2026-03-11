@@ -6,6 +6,7 @@
 // ═══════════════════════════════════════════════════════
 
 import React, { useState, useCallback, useEffect, useRef } from "react";
+import { MOCK_ARTICLES as RAW_MOCK_ARTICLES, MOCK_AUTHOR, MOCK_CATEGORIES } from "./mockData";
 
 // ─── Types ──────────────────────────────────────────────
 type ViewMode = "sites" | "templates" | "builder";
@@ -41,7 +42,8 @@ type ComponentType =
   | "subscribe_form"
   | "contact_form"
   | "divider"
-  | "rich_text";
+  | "rich_text"
+  | "bento_grid";
 
 interface SitePage {
   id: string;
@@ -49,6 +51,11 @@ interface SitePage {
   slug: string;
   hidden?: boolean;
   components: SiteComponent[];
+  seo?: {
+    metaTitle?: string;
+    metaDescription?: string;
+    ogImage?: string;
+  };
 }
 
 interface NavLink {
@@ -75,10 +82,12 @@ interface SiteBranding {
   fontFamily: string;
   layoutWidth: "compact" | "full";
   darkMode: boolean;
+  borderRadius: number; // 0-100 scale
 }
 
 interface Article {
   id: string;
+  slug: string;
   title: string;
   excerpt: string;
   imageUrl: string;
@@ -87,6 +96,7 @@ interface Article {
   likes: number;
   comments: number;
   shares: number;
+  categories: string[];
   selected?: boolean;
 }
 
@@ -133,7 +143,7 @@ const SKELETON = {
     logoUrl: "", logoLayout: "text_only" as LogoLayout, siteName: "شعار المؤسسة",
     accentColor: "#E82222", buttonColor: "#E82222", headlineColor: "#1a1a1a",
     textColor: "#666666", linkColor: "#E82222", bgColor: "#ffffff", cardBg: "#ffffff",
-    fontFamily: "Alyamama", layoutWidth: "compact" as "compact" | "full", darkMode: false,
+    fontFamily: "Alyamama", layoutWidth: "compact" as "compact" | "full", darkMode: false, borderRadius: 0,
   } as SiteBranding,
 };
 
@@ -147,17 +157,20 @@ const TEMPLATES: Template[] = [
   },
 ];
 
-// ─── Mock articles ──────────────────────────────────────
-const MOCK_ARTICLES: Article[] = [
-  { id: "a1", title: "ملف كامل عن جيل الألفية في 2025: متى تبدأ الساعات بالعد؟", excerpt: "هنا نص يشرح مقدمة المقال ويعطي تفاصيل عن محتوى الرابط ليتمكن القارئ من مراجعته والإطلاع عليه قبل القراءة.", imageUrl: "", author: "محمد الضبع", date: "10 نوفمبر 2025", likes: 19, comments: 2, shares: 5 },
-  { id: "a2", title: "ماذا يعني ترشح زهران ماهداني لمستقبل الأحزاب الأمريكية وكيف يمكن التفكير في العام القادم؟", excerpt: "هذا نص يشرح مقدمة المقال ويعطي تفاصيل عن محتوى الرابط ليتمكن القارئ من مراجعته.", imageUrl: "", author: "محمد الضبع", date: "10 نوفمبر 2025", likes: 5, comments: 4, shares: 3 },
-  { id: "a3", title: "5 أسباب تدفع كل صانع محتوى لتأسيس بودكاست مرئي", excerpt: "هذا نص يشرح مقدمة المقال ويعطي تفاصيل عن محتوى الرابط ليتمكن القارئ من مراجعته.", imageUrl: "", author: "محمد الضبع", date: "10 نوفمبر 2025", likes: 21, comments: 5, shares: 7 },
-  { id: "a4", title: "كيف نجح هذا الرجل في الوصول إلى مليون مشترك في قائمة توصيات يوتيوب؟", excerpt: "هذا نص يشرح مقدمة المقال ويعطي تفاصيل عن محتوى الرابط ليتمكن القارئ من مراجعته.", imageUrl: "", author: "محمد الضبع", date: "10 نوفمبر 2025", likes: 1, comments: 0, shares: 1 },
-  { id: "a5", title: "من الذكاء الاصطناعي إلى عالم الوظائف في المستقبل: كيف ستؤثر التقنية على مستقبل العمل؟", excerpt: "هذا نص يشرح مقدمة المقال ويعطي تفاصيل عن محتوى الرابط ليتمكن القارئ من مراجعته.", imageUrl: "", author: "محمد الضبع", date: "10 نوفمبر 2025", likes: 3, comments: 2, shares: 1 },
-  { id: "a6", title: "كيف تبني نشرة بريدية ناجحة من الصفر خلال 90 يوما", excerpt: "هذا نص يشرح مقدمة المقال ويعطي تفاصيل عن محتوى الرابط ليتمكن القارئ من مراجعته.", imageUrl: "", author: "محمد الضبع", date: "10 نوفمبر 2025", likes: 15, comments: 8, shares: 12 },
-  { id: "a7", title: "لماذا توقفت نشرة رسالة السبت؟ وماذا حدث في الشهرين الماضيين؟", excerpt: "هذا نص يشرح مقدمة المقال ويعطي تفاصيل عن محتوى الرابط ليتمكن القارئ من مراجعته.", imageUrl: "", author: "محمد الضبع", date: "11 سبتمبر 2025", likes: 7, comments: 1, shares: 1 },
-  { id: "a8", title: "من رسمة على ورقة إلى منصة عربية للكتابة", excerpt: "هذا نص يشرح مقدمة المقال ويعطي تفاصيل عن محتوى الرابط ليتمكن القارئ من مراجعته.", imageUrl: "", author: "محمد الضبع", date: "12 سبتمبر 2025", likes: 21, comments: 5, shares: 7 },
-];
+// ─── Mock articles (derived from mockData.ts — matches MongoDB schema) ──────
+const MOCK_ARTICLES: Article[] = RAW_MOCK_ARTICLES.map(a => ({
+  id: a._id,
+  slug: a.slug,
+  title: a.title,
+  excerpt: a.description || a.articleText.slice(0, 120),
+  imageUrl: a.coverImage,
+  author: MOCK_AUTHOR.name,
+  date: new Date(a.publishedAt).toLocaleDateString("ar-SA", { year: "numeric", month: "long", day: "numeric" }),
+  likes: a.likeCount,
+  comments: a.commentCount,
+  shares: a.views,
+  categories: a.categories,
+}));
 
 const COMPONENT_META: Record<ComponentType, { label: string; hasSettings: boolean }> = {
   header: { label: "الهيدر", hasSettings: true },
@@ -181,6 +194,7 @@ const COMPONENT_META: Record<ComponentType, { label: string; hasSettings: boolea
   contact_form: { label: "نموذج تواصل", hasSettings: true },
   divider: { label: "فاصل", hasSettings: false },
   rich_text: { label: "محتوى منسق", hasSettings: true },
+  bento_grid: { label: "شبكة بينتو", hasSettings: true },
 };
 
 const PRESET_COLORS = ["#E82222", "#7C3AED", "#2563EB", "#0891B2", "#10B981", "#F59E0B"];
@@ -294,6 +308,8 @@ export default function KitabhWebsiteBuilder(props: any) {
   const [selectedArticles, setSelectedArticles] = useState<string[]>([]);
   const [articleSearch, setArticleSearch] = useState("");
   const [activePageId, setActivePageId] = useState<string | null>(null);
+  const [articleFilterSearch, setArticleFilterSearch] = useState("");
+  const [articleFilterCategory, setArticleFilterCategory] = useState<string | null>(null);
 
   // ─── Undo/Redo tracking ────────
   useEffect(() => {
@@ -482,16 +498,21 @@ export default function KitabhWebsiteBuilder(props: any) {
       case "hero_slider": return { articles: MOCK_ARTICLES.slice(0, 3).map(a => a.id) };
       case "banner": return { imageUrl: "", title: "", linkUrl: "" };
       case "cta_newsletter": return { title: "اشترك في نشرتنا", buttonText: "اشتراك", description: "محتوى حصري يصلك مباشرة إلى بريدك" };
-      case "article_collection": return { articles: MOCK_ARTICLES.slice(0, 4).map(a => a.id), title: "" };
-      case "footer": return { logoUrl: "", title: "", buttonText: "اشتراك", links: [] };
+      case "article_collection": return { articles: MOCK_ARTICLES.slice(0, 4).map(a => a.id), title: "", showSearch: false, showCategories: false };
+      case "footer": return { logoUrl: "", title: "", buttonText: "اشتراك", links: [], customText: "", customLinks: [] as { label: string; url: string }[], showKitabhBadge: true };
       case "article_view": return {};
       case "text_block": return { content: "أضف نصك هنا..." };
       case "image_block": return { imageUrl: "", caption: "" };
-      case "subscribe_form": return { title: "اشترك في نشرتنا", buttonText: "اشتراك" };
-      case "contact_form": return { title: "تواصل معنا", buttonText: "إرسال", fields: ["الاسم", "البريد الإلكتروني", "الرسالة"] };
+      case "subscribe_form": return { title: "اشترك في نشرتنا", buttonText: "اشتراك", showNameField: true, description: "محتوى حصري يصلك مباشرة إلى بريدك" };
+      case "contact_form": return { title: "تواصل معنا", buttonText: "إرسال" };
       case "brands_ticker": return { speed: 30, items: [] };
       case "divider": return {};
       case "rich_text": return { html: "<h2>عنوان القسم</h2>\n<p>هذا نص تجريبي يمكنك تعديله. يدعم <strong>النص العريض</strong> و<em>المائل</em> والعناوين والقوائم.</p>\n<ul>\n<li>العنصر الأول</li>\n<li>العنصر الثاني</li>\n</ul>" };
+      case "bento_grid": return { layout: "2-1" as string, items: [
+        { title: "عنوان البطاقة الأولى", text: "نص وصفي قصير للبطاقة", imageUrl: "", linkUrl: "" },
+        { title: "عنوان البطاقة الثانية", text: "نص وصفي قصير للبطاقة", imageUrl: "", linkUrl: "" },
+        { title: "عنوان البطاقة الثالثة", text: "نص وصفي قصير للبطاقة", imageUrl: "", linkUrl: "" },
+      ] };
       case "testimonials": return { sectionTitle: "آراء العملاء", layout: "grid", items: [
         { name: "أحمد محمد", role: "كاتب محتوى", text: "منصة رائعة ساعدتني في بناء جمهوري", imageUrl: "" },
         { name: "سارة العلي", role: "صحفية", text: "أفضل أداة لإدارة النشرات البريدية", imageUrl: "" },
@@ -852,7 +873,7 @@ export default function KitabhWebsiteBuilder(props: any) {
             break;
           case "article_collection":
             const ac = (s.articles || []).map((id: string) => MOCK_ARTICLES.find(a => a.id === id)).filter(Boolean);
-            const acH = ac.map((a: any) => `<div class="pv-art-card"><div class="pv-img" style="height:260px;min-height:260px"></div><h4>${a.title}</h4><p class="pv-excerpt-sm">${a.excerpt.slice(0, 80)}...</p><div class="pv-author-row"><div class="pv-avatar">${a.author.charAt(0)}</div><span class="pv-author-name">${a.author}</span></div><div class="pv-meta-row"><span>${a.date}</span><span class="pv-eng"><span style="color:var(--pv-btn)">❤ ${a.likes}</span><span>💬 ${a.comments}</span></span></div></div>`).join("");
+            const acH = ac.map((a: any) => `<a href="/article/${a.slug}" class="pv-art-card" style="text-decoration:none;color:inherit"><div class="pv-img" style="height:260px;min-height:260px;${a.imageUrl ? `background-image:url(${a.imageUrl});background-size:cover;background-position:center` : ''}"></div><h4>${a.title}</h4><p class="pv-excerpt-sm">${a.excerpt.slice(0, 80)}...</p><div class="pv-author-row"><div class="pv-avatar">${a.author.charAt(0)}</div><span class="pv-author-name">${a.author}</span></div><div class="pv-meta-row"><span>${a.date}</span><span class="pv-eng"><span style="color:var(--pv-btn)">❤ ${a.likes}</span><span>💬 ${a.comments}</span></span></div></a>`).join("");
             pc += `<div class="pv-articles"><div class="pv-articles-grid">${acH}</div><a class="pv-all-link">جميع المقالات &#x2197;</a></div>`;
             break;
           case "banner":
@@ -1251,7 +1272,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
           {/* ─── PREVIEW ─── */}
           <div className="kwb-preview-area" onClick={(e) => { if (!(e.target as HTMLElement).closest('.kwb-p-comp-wrap') && !(e.target as HTMLElement).closest('.kwb-p-insert-line')) { setExpandedComponent(null); setInsertAtIndex(null); } }}>
             <div className={`kwb-preview-frame ${previewDevice === "mobile" ? "kwb-preview-mobile" : ""}`}>
-              <div className="kwb-preview-content" style={{ fontFamily: `'${activeSite.branding.fontFamily}', system-ui, sans-serif`, '--kwb-btn-color': activeSite.branding.buttonColor || '#E82222', '--kwb-headline-color': activeSite.branding.headlineColor || '#1a1a1a', '--kwb-text-color': activeSite.branding.textColor || '#666666', '--kwb-link-color': activeSite.branding.linkColor || '#E82222', '--kwb-bg': activeSite.branding.bgColor || '#ffffff', '--kwb-card-bg': activeSite.branding.cardBg || '#ffffff' } as any}>
+              <div className="kwb-preview-content" style={{ fontFamily: `'${activeSite.branding.fontFamily}', system-ui, sans-serif`, '--kwb-btn-color': activeSite.branding.buttonColor || '#E82222', '--kwb-headline-color': activeSite.branding.headlineColor || '#1a1a1a', '--kwb-text-color': activeSite.branding.textColor || '#666666', '--kwb-link-color': activeSite.branding.linkColor || '#E82222', '--kwb-bg': activeSite.branding.bgColor || '#ffffff', '--kwb-card-bg': activeSite.branding.cardBg || '#ffffff', '--kwb-radius': `${Math.round((activeSite.branding.borderRadius || 0) * 0.24)}px` } as any}>
                 {/* Render each enabled component */}
                 {activePage.components.filter(c => c.enabled).map((comp, _idx, _enabledComps) => {
                   const _isSelected = expandedComponent === comp.id;
@@ -1417,13 +1438,36 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                       ); break;
 
                     case "article_collection":
-                      const collArticles = (comp.settings.articles || []).map((id: string) => MOCK_ARTICLES.find(a => a.id === id)).filter(Boolean) as Article[];
+                      const collArticlesRaw = (comp.settings.articles || []).map((id: string) => MOCK_ARTICLES.find(a => a.id === id)).filter(Boolean) as Article[];
+                      const collArticles = collArticlesRaw.filter(a => {
+                        if (comp.settings.showSearch && articleFilterSearch && !a.title.includes(articleFilterSearch) && !a.excerpt.includes(articleFilterSearch)) return false;
+                        if (comp.settings.showCategories && articleFilterCategory && !a.categories.includes(articleFilterCategory)) return false;
+                        return true;
+                      });
                       _inner = (
                         <div className="kwb-p-articles">
+                          {(comp.settings.showSearch || comp.settings.showCategories) && (
+                            <div className="kwb-p-articles-filters">
+                              {comp.settings.showSearch && (
+                                <div className="kwb-p-articles-search-wrap">
+                                  <input className="kwb-p-articles-search" placeholder="ابحث في المقالات..." value={articleFilterSearch} onChange={e => setArticleFilterSearch(e.target.value)} />
+                                  <span className="kwb-p-articles-search-icon">{Icons.search}</span>
+                                </div>
+                              )}
+                              {comp.settings.showCategories && (
+                                <div className="kwb-p-articles-cats">
+                                  <button className={`kwb-p-cat-btn ${!articleFilterCategory ? "kwb-p-cat-active" : ""}`} onClick={() => setArticleFilterCategory(null)}>الكل</button>
+                                  {MOCK_CATEGORIES.map(cat => (
+                                    <button key={cat._id} className={`kwb-p-cat-btn ${articleFilterCategory === cat._id ? "kwb-p-cat-active" : ""}`} onClick={() => setArticleFilterCategory(articleFilterCategory === cat._id ? null : cat._id)}>{cat.name}</button>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          )}
                           <div className="kwb-p-articles-grid">
                             {collArticles.map(a => (
-                              <div key={a.id} className="kwb-p-article-card">
-                                <div className="kwb-p-article-img" />
+                              <a key={a.id} className="kwb-p-article-card" href={`/article/${a.slug}`} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none", color: "inherit" }}>
+                                <div className="kwb-p-article-img" style={a.imageUrl ? { backgroundImage: `url(${a.imageUrl})`, backgroundSize: "cover", backgroundPosition: "center" } : undefined} />
                                 <h4 className="kwb-p-article-title">{a.title}</h4>
                                 <p className="kwb-p-article-excerpt">{a.excerpt.slice(0, 80)}...</p>
                                 <div className="kwb-p-article-author-row">
@@ -1437,9 +1481,12 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                                     <span>{Icons.comment} {a.comments}</span>
                                   </span>
                                 </div>
-                              </div>
+                              </a>
                             ))}
                           </div>
+                          {collArticles.length === 0 && (comp.settings.showSearch || comp.settings.showCategories) && (
+                            <p style={{ textAlign: "center", color: "var(--kwb-text-color,#999)", fontSize: 13, padding: 20 }}>لا توجد مقالات تطابق البحث</p>
+                          )}
                           <a className="kwb-p-all-articles">جميع المقالات &#x2197;</a>
                         </div>
                       ); break;
@@ -1462,11 +1509,11 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
 
                     case "footer":
                       const footerLogoLayout = activeSite.branding.logoLayout || "text_only";
-                      // Get nav links from header component to keep footer consistent
                       const headerCompForFooter = activePage.components.find(c => c.type === "header");
                       const footerNavLinks: NavLink[] = (headerCompForFooter?.settings?.navLinks || comp.settings.links || []).map((link: any) =>
                         typeof link === "string" ? { id: String(Math.random()), label: link, linkType: "page" as const, target: "", visible: true } : link
                       );
+                      const footerCustomLinks = comp.settings.customLinks || [];
                       _inner = (
                         <div className="kwb-p-footer">
                           <div className="kwb-p-footer-inner">
@@ -1476,6 +1523,9 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                               )}
                               {(footerLogoLayout === "text_only" || footerLogoLayout === "logo_and_text") && (
                                 <span className="kwb-p-footer-logo">{comp.settings.title || activeSite.branding.siteName}</span>
+                              )}
+                              {comp.settings.customText && (
+                                <p className="kwb-p-footer-custom-text">{comp.settings.customText}</p>
                               )}
                             </div>
                             <div className="kwb-p-footer-right">
@@ -1488,11 +1538,20 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                               </div>
                               <nav className="kwb-p-footer-nav">
                                 {footerNavLinks.filter(l => l.visible).map((l, i) => <a key={l.id || i}>{l.label}</a>)}
+                                {footerCustomLinks.map((cl: any, i: number) => (
+                                  <a key={`cl-${i}`} href={cl.url || "#"} target={cl.url ? "_blank" : undefined} rel="noopener noreferrer">{cl.label}</a>
+                                ))}
                               </nav>
                             </div>
                           </div>
                           <div className="kwb-p-footer-bottom">
-                            جميع الحقوق محفوظة {new Date().getFullYear()} {activeSite.branding.siteName}
+                            <span>جميع الحقوق محفوظة {new Date().getFullYear()} {activeSite.branding.siteName}</span>
+                            {(comp.settings.showKitabhBadge !== false) && (
+                              <span className="kwb-p-footer-kitabh-badge">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
+                                صُنع في منصة كتابة
+                              </span>
+                            )}
                           </div>
                         </div>
                       ); break;
@@ -1574,12 +1633,14 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                       _inner = (
                         <div className="kwb-p-subscribe-form">
                           <h3 contentEditable suppressContentEditableWarning onBlur={(e) => updateComponentSettings(comp.id, { title: e.currentTarget.textContent || "" })} className="kwb-p-editable">{comp.settings.title || "اشترك في نشرتنا"}</h3>
-                          <div className="kwb-p-sf-row">
-                            <input type="email" name="email" autoComplete="email" placeholder="أدخل بريدك الإلكتروني" className="kwb-p-email-input" />
-                            <button className="kwb-p-subscribe-btn" style={{ background: comp.settings.buttonColor || activeSite.branding.buttonColor }} onClick={() => setShowSubscribePopup(true)}>
+                          {comp.settings.description && <p style={{ fontSize: 14, color: "var(--kwb-text-color,#666)", marginBottom: 12 }}>{comp.settings.description}</p>}
+                          <form className="kwb-p-cf-fields" onSubmit={(e) => { e.preventDefault(); const fd = new FormData(e.currentTarget); console.log("Newsletter subscribe:", { email: fd.get("email"), name: fd.get("name"), subscribedTo: activeSite.id }); alert("شكرا لاشتراكك!"); e.currentTarget.reset(); }}>
+                            {comp.settings.showNameField && <input name="name" placeholder="الاسم" className="kwb-p-cf-input" autoComplete="name" />}
+                            <input name="email" type="email" placeholder="أدخل بريدك الإلكتروني" className="kwb-p-cf-input" required autoComplete="email" />
+                            <button type="submit" className="kwb-p-subscribe-btn kwb-p-cf-btn" style={{ background: comp.settings.buttonColor || activeSite.branding.buttonColor }}>
                               {comp.settings.buttonText || "اشتراك"}
                             </button>
-                          </div>
+                          </form>
                         </div>
                       ); break;
 
@@ -1587,14 +1648,14 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                       _inner = (
                         <div className="kwb-p-contact-form">
                           <h3 contentEditable suppressContentEditableWarning onBlur={(e) => updateComponentSettings(comp.id, { title: e.currentTarget.textContent || "" })} className="kwb-p-editable">{comp.settings.title || "تواصل معنا"}</h3>
-                          <div className="kwb-p-cf-fields">
-                            <input placeholder="الاسم" className="kwb-p-cf-input" />
-                            <input placeholder="البريد الإلكتروني" className="kwb-p-cf-input" />
-                            <textarea placeholder="الرسالة" className="kwb-p-cf-textarea" rows={4} />
-                            <button className="kwb-p-subscribe-btn kwb-p-cf-btn" style={{ background: comp.settings.buttonColor || activeSite.branding.buttonColor }}>
+                          <form className="kwb-p-cf-fields" onSubmit={(e) => { e.preventDefault(); const fd = new FormData(e.currentTarget); console.log("Contact form:", { name: fd.get("name"), email: fd.get("email"), message: fd.get("message"), to: activeSite.name }); alert("تم إرسال رسالتك بنجاح!"); e.currentTarget.reset(); }}>
+                            <input name="name" placeholder="الاسم" className="kwb-p-cf-input" required autoComplete="name" />
+                            <input name="email" type="email" placeholder="البريد الإلكتروني" className="kwb-p-cf-input" required autoComplete="email" />
+                            <textarea name="message" placeholder="الرسالة" className="kwb-p-cf-textarea" rows={4} required />
+                            <button type="submit" className="kwb-p-subscribe-btn kwb-p-cf-btn" style={{ background: comp.settings.buttonColor || activeSite.branding.buttonColor }}>
                               {comp.settings.buttonText || "إرسال"}
                             </button>
-                          </div>
+                          </form>
                         </div>
                       ); break;
 
@@ -1713,6 +1774,23 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                               </div>
                             ))}
                           </div>
+                        </div>
+                      ); break;
+                    }
+
+                    case "bento_grid": {
+                      const bentoLayout = comp.settings.layout || "2-1";
+                      const bentoItems = comp.settings.items || [];
+                      _inner = (
+                        <div className={`kwb-p-bento kwb-p-bento-${bentoLayout}`}>
+                          {bentoItems.map((item: any, i: number) => (
+                            <div key={i} className="kwb-p-bento-card" style={item.imageUrl ? { backgroundImage: `url(${item.imageUrl})`, backgroundSize: "cover", backgroundPosition: "center" } : {}}>
+                              <div className="kwb-p-bento-card-overlay">
+                                <h4 className="kwb-p-bento-title">{item.title}</h4>
+                                {item.text && <p className="kwb-p-bento-text">{item.text}</p>}
+                              </div>
+                            </div>
+                          ))}
                         </div>
                       ); break;
                     }
@@ -1973,6 +2051,19 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                     </label>
                     <span style={{ fontSize: 13, color: "#888" }}>{activeSite.branding.darkMode ? "مفعّل" : "تلقائي حسب الجهاز"}</span>
                   </div>
+
+                  <label className="kwb-label" style={{ marginTop: 16 }}>استدارة الزوايا</label>
+                  <div className="kwb-radius-control">
+                    <div className="kwb-radius-preview-row">
+                      <div className="kwb-radius-preview-box" style={{ borderRadius: `${Math.round((activeSite.branding.borderRadius || 0) * 0.24)}px`, background: activeSite.branding.buttonColor || "#E82222" }} />
+                      <span className="kwb-radius-value">{activeSite.branding.borderRadius || 0}</span>
+                    </div>
+                    <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                      <span style={{ fontSize: 11, color: "#999" }}>حاد</span>
+                      <input type="range" min="0" max="100" value={activeSite.branding.borderRadius || 0} onChange={e => updateSite(activeSite.id, { branding: { ...activeSite.branding, borderRadius: parseInt(e.target.value) } })} style={{ flex: 1, accentColor: activeSite.branding.buttonColor || "#E82222" }} />
+                      <span style={{ fontSize: 11, color: "#999" }}>مستدير</span>
+                    </div>
+                  </div>
                 </div>
               )}
 
@@ -2099,6 +2190,25 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                                   اختيار المقالات
                                 </button>
                                 <p className="kwb-hint">{(comp.settings.articles || []).length} مقالات مختارة</p>
+                                {comp.type === "article_collection" && (
+                                  <>
+                                    <div className="kwb-newsletter-toggle" style={{ marginTop: 12 }}>
+                                      <label className="kwb-toggle">
+                                        <input type="checkbox" checked={comp.settings.showSearch || false} onChange={e => updateComponentSettings(comp.id, { showSearch: e.target.checked })} />
+                                        <span className="kwb-toggle-track"><span className="kwb-toggle-thumb" /></span>
+                                      </label>
+                                      <span>حقل البحث</span>
+                                    </div>
+                                    <div className="kwb-newsletter-toggle" style={{ marginTop: 8 }}>
+                                      <label className="kwb-toggle">
+                                        <input type="checkbox" checked={comp.settings.showCategories || false} onChange={e => updateComponentSettings(comp.id, { showCategories: e.target.checked })} />
+                                        <span className="kwb-toggle-track"><span className="kwb-toggle-thumb" /></span>
+                                      </label>
+                                      <span>فلاتر التصنيفات</span>
+                                    </div>
+                                    <p className="kwb-hint">التصنيفات متصلة بقاعدة بيانات كتابة (categories)</p>
+                                  </>
+                                )}
                               </>
                             )}
 
@@ -2186,7 +2296,28 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                                   ))}
                                   <input type="color" className="kwb-color-input" value={comp.settings.buttonColor || activeSite.branding.buttonColor || "#E82222"} onChange={e => updateComponentSettings(comp.id, { buttonColor: e.target.value })} />
                                 </div>
-                                <p className="kwb-hint" style={{ marginTop: 12 }}>الروابط في الفوتر متصلة بروابط الهيدر تلقائياً. عدّل الروابط من إعدادات الهيدر.</p>
+                                <label className="kwb-label" style={{ marginTop: 12 }}>نص مخصص</label>
+                                <textarea className="kwb-input" style={{ height: 60, paddingTop: 8, resize: "vertical" }} value={comp.settings.customText || ""} placeholder="أضف نصا يظهر أسفل الشعار..." onChange={e => updateComponentSettings(comp.id, { customText: e.target.value })} />
+
+                                <label className="kwb-label" style={{ marginTop: 12 }}>روابط إضافية</label>
+                                {(comp.settings.customLinks || []).map((cl: any, i: number) => (
+                                  <div key={i} style={{ display: "flex", gap: 4, marginTop: 4, alignItems: "center" }}>
+                                    <input className="kwb-input kwb-input-sm" placeholder="الاسم" value={cl.label || ""} onChange={e => { const links = [...(comp.settings.customLinks || [])]; links[i] = { ...links[i], label: e.target.value }; updateComponentSettings(comp.id, { customLinks: links }); }} style={{ flex: 1 }} />
+                                    <input className="kwb-input kwb-input-sm" placeholder="الرابط" value={cl.url || ""} dir="ltr" onChange={e => { const links = [...(comp.settings.customLinks || [])]; links[i] = { ...links[i], url: e.target.value }; updateComponentSettings(comp.id, { customLinks: links }); }} style={{ flex: 1 }} />
+                                    <button className="kwb-icon-btn-sm kwb-icon-btn-danger" onClick={() => { const links = [...(comp.settings.customLinks || [])]; links.splice(i, 1); updateComponentSettings(comp.id, { customLinks: links }); }}>{Icons.x}</button>
+                                  </div>
+                                ))}
+                                <button className="kwb-btn-outline kwb-btn-full" style={{ marginTop: 6 }} onClick={() => updateComponentSettings(comp.id, { customLinks: [...(comp.settings.customLinks || []), { label: "", url: "" }] })}>+ إضافة رابط</button>
+
+                                <div className="kwb-newsletter-toggle" style={{ marginTop: 12 }}>
+                                  <label className="kwb-toggle">
+                                    <input type="checkbox" checked={comp.settings.showKitabhBadge !== false} onChange={e => updateComponentSettings(comp.id, { showKitabhBadge: e.target.checked })} />
+                                    <span className="kwb-toggle-track"><span className="kwb-toggle-thumb" /></span>
+                                  </label>
+                                  <span>إظهار شارة "صُنع في منصة كتابة"</span>
+                                </div>
+
+                                <p className="kwb-hint" style={{ marginTop: 12 }}>الروابط الأساسية متصلة بروابط الهيدر تلقائيا. عدّل الروابط من إعدادات الهيدر.</p>
                               </>
                             )}
 
@@ -2244,6 +2375,15 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                               <>
                                 <label className="kwb-label">العنوان</label>
                                 <input className="kwb-input" value={comp.settings.title || ""} onChange={e => updateComponentSettings(comp.id, { title: e.target.value })} />
+                                <label className="kwb-label" style={{ marginTop: 12 }}>الوصف</label>
+                                <input className="kwb-input" value={comp.settings.description || ""} placeholder="محتوى حصري يصلك مباشرة إلى بريدك" onChange={e => updateComponentSettings(comp.id, { description: e.target.value })} />
+                                <div className="kwb-newsletter-toggle" style={{ marginTop: 12 }}>
+                                  <label className="kwb-toggle">
+                                    <input type="checkbox" checked={comp.settings.showNameField !== false} onChange={e => updateComponentSettings(comp.id, { showNameField: e.target.checked })} />
+                                    <span className="kwb-toggle-track"><span className="kwb-toggle-thumb" /></span>
+                                  </label>
+                                  <span>إظهار حقل الاسم</span>
+                                </div>
                                 <label className="kwb-label" style={{ marginTop: 12 }}>نص الزر</label>
                                 <input className="kwb-input" value={comp.settings.buttonText || ""} onChange={e => updateComponentSettings(comp.id, { buttonText: e.target.value })} />
                                 <label className="kwb-label" style={{ marginTop: 12 }}>لون الزر</label>
@@ -2414,6 +2554,45 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                                 <button className="kwb-btn-outline kwb-btn-full" style={{ marginTop: 10 }} onClick={() => { const items = [...(comp.settings.items || []), { title: "", icon: "", url: "" }]; updateComponentSettings(comp.id, { items }); }}>{Icons.plus} إضافة موضوع</button>
                               </>
                             )}
+
+                            {comp.type === "bento_grid" && (
+                              <>
+                                <label className="kwb-label">تخطيط الشبكة</label>
+                                <div className="kwb-bento-layouts">
+                                  {[
+                                    { id: "2-1", label: "٢ + ١", desc: "بطاقتان صغيرتان + واحدة كبيرة" },
+                                    { id: "1-2", label: "١ + ٢", desc: "واحدة كبيرة + بطاقتان صغيرتان" },
+                                    { id: "3-col", label: "٣ أعمدة", desc: "ثلاث بطاقات متساوية" },
+                                    { id: "2-col", label: "٢ أعمدة", desc: "بطاقتان متساويتان" },
+                                    { id: "1-3", label: "١ + ٣", desc: "واحدة كبيرة + ثلاث صغيرة" },
+                                    { id: "4-grid", label: "شبكة ٤", desc: "٢×٢ بطاقات متساوية" },
+                                  ].map(l => (
+                                    <button key={l.id} className={`kwb-bento-layout-btn ${(comp.settings.layout || "2-1") === l.id ? "kwb-bento-layout-active" : ""}`} onClick={() => updateComponentSettings(comp.id, { layout: l.id })}>
+                                      <strong>{l.label}</strong>
+                                      <span>{l.desc}</span>
+                                    </button>
+                                  ))}
+                                </div>
+                                <label className="kwb-label" style={{ marginTop: 12 }}>البطاقات</label>
+                                {(comp.settings.items || []).map((item: any, i: number) => (
+                                  <div key={i} style={{ borderTop: "1px solid #f0f0f0", paddingTop: 8, marginTop: 8 }}>
+                                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                                      <span style={{ fontSize: 12, fontWeight: 600, color: "#888" }}>بطاقة {i + 1}</span>
+                                      <button className="kwb-comp-delete-btn" onClick={() => { const items = [...(comp.settings.items || [])]; items.splice(i, 1); updateComponentSettings(comp.id, { items }); }}>{Icons.x}</button>
+                                    </div>
+                                    <input className="kwb-input" placeholder="العنوان" value={item.title || ""} onChange={e => { const items = [...(comp.settings.items || [])]; items[i] = { ...items[i], title: e.target.value }; updateComponentSettings(comp.id, { items }); }} style={{ marginTop: 4 }} />
+                                    <input className="kwb-input" placeholder="النص الوصفي" value={item.text || ""} onChange={e => { const items = [...(comp.settings.items || [])]; items[i] = { ...items[i], text: e.target.value }; updateComponentSettings(comp.id, { items }); }} style={{ marginTop: 4 }} />
+                                    <input className="kwb-input" placeholder="رابط (اختياري)" value={item.linkUrl || ""} dir="ltr" onChange={e => { const items = [...(comp.settings.items || [])]; items[i] = { ...items[i], linkUrl: e.target.value }; updateComponentSettings(comp.id, { items }); }} style={{ marginTop: 4 }} />
+                                    {item.imageUrl ? (
+                                      <div className="kwb-upload-preview" style={{ marginTop: 4 }}><img src={item.imageUrl} alt="" /><button className="kwb-upload-remove" onClick={() => { const items = [...(comp.settings.items || [])]; items[i] = { ...items[i], imageUrl: "" }; updateComponentSettings(comp.id, { items }); }}>{Icons.x}</button></div>
+                                    ) : (
+                                      <button className="kwb-btn-outline kwb-btn-full" style={{ marginTop: 4, fontSize: 11 }} onClick={() => triggerUpload({ type: "testi_img", compId: comp.id, itemIndex: i })}>{Icons.image} رفع صورة</button>
+                                    )}
+                                  </div>
+                                ))}
+                                <button className="kwb-btn-outline kwb-btn-full" style={{ marginTop: 8 }} onClick={() => { const items = [...(comp.settings.items || []), { title: "", text: "", imageUrl: "", linkUrl: "" }]; updateComponentSettings(comp.id, { items }); }}>{Icons.plus} إضافة بطاقة</button>
+                              </>
+                            )}
                           </div>
                         )}
                       </div>
@@ -2460,6 +2639,53 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                             <button className="kwb-btn-primary kwb-btn-full" style={{ fontSize: 12, padding: "8px 0", marginTop: 4 }} onClick={() => { setActivePageId(p.id); setExpandedComponent(null); setSidebarTab("components"); }}>
                               تعديل المكونات
                             </button>
+
+                            {/* SEO Meta Settings */}
+                            <div className="kwb-seo-section">
+                              <div className="kwb-seo-header">تحسين محركات البحث (SEO)</div>
+                              <div className="kwb-field-row">
+                                <label className="kwb-label-inline">عنوان الصفحة (Meta Title)</label>
+                                <input className="kwb-input kwb-input-sm" value={p.seo?.metaTitle || ""} placeholder={p.name + " — " + activeSite.name} onChange={e => { const pages = activeSite.pages.map(pg => pg.id === p.id ? { ...pg, seo: { ...pg.seo, metaTitle: e.target.value } } : pg); updateSite(activeSite.id, { pages }); }} />
+                                <span className="kwb-char-count">{(p.seo?.metaTitle || "").length}/60</span>
+                              </div>
+                              <div className="kwb-field-row">
+                                <label className="kwb-label-inline">الوصف (Meta Description)</label>
+                                <textarea className="kwb-input kwb-input-sm" style={{ height: 60, paddingTop: 8, resize: "vertical" }} value={p.seo?.metaDescription || ""} placeholder="وصف موجز للصفحة يظهر في نتائج البحث" onChange={e => { const pages = activeSite.pages.map(pg => pg.id === p.id ? { ...pg, seo: { ...pg.seo, metaDescription: e.target.value } } : pg); updateSite(activeSite.id, { pages }); }} />
+                                <span className="kwb-char-count">{(p.seo?.metaDescription || "").length}/160</span>
+                              </div>
+                              <div className="kwb-field-row">
+                                <label className="kwb-label-inline">صورة المشاركة (OG Image)</label>
+                                <input className="kwb-input kwb-input-sm" value={p.seo?.ogImage || ""} dir="ltr" placeholder="https://example.com/image.jpg" onChange={e => { const pages = activeSite.pages.map(pg => pg.id === p.id ? { ...pg, seo: { ...pg.seo, ogImage: e.target.value } } : pg); updateSite(activeSite.id, { pages }); }} />
+                              </div>
+
+                              {/* Google Preview */}
+                              <div className="kwb-seo-preview">
+                                <div className="kwb-seo-preview-label">معاينة نتيجة البحث</div>
+                                <div className="kwb-seo-google-preview" dir="ltr">
+                                  <div className="kwb-seo-gp-url">
+                                    <span className="kwb-seo-gp-favicon">K</span>
+                                    {activeSite.customDomain || "example.com"} › {p.slug}
+                                  </div>
+                                  <div className="kwb-seo-gp-title">{p.seo?.metaTitle || p.name + " — " + activeSite.name}</div>
+                                  <div className="kwb-seo-gp-desc">{p.seo?.metaDescription || "وصف الصفحة يظهر هنا. أضف وصفا مخصصا لتحسين ظهور صفحتك في نتائج البحث."}</div>
+                                </div>
+                              </div>
+
+                              {/* Social Share Preview */}
+                              <div className="kwb-seo-preview" style={{ marginTop: 8 }}>
+                                <div className="kwb-seo-preview-label">معاينة المشاركة في السوشال</div>
+                                <div className="kwb-seo-social-preview">
+                                  <div className="kwb-seo-sp-image" style={p.seo?.ogImage ? { backgroundImage: `url(${p.seo.ogImage})`, backgroundSize: "cover", backgroundPosition: "center" } : {}}>
+                                    {!p.seo?.ogImage && <span style={{ fontSize: 11, color: "#999" }}>لم تُحدد صورة</span>}
+                                  </div>
+                                  <div className="kwb-seo-sp-text">
+                                    <div className="kwb-seo-sp-domain">{activeSite.customDomain || "example.com"}</div>
+                                    <div className="kwb-seo-sp-title">{p.seo?.metaTitle || p.name}</div>
+                                    <div className="kwb-seo-sp-desc">{(p.seo?.metaDescription || "").slice(0, 80) || "أضف وصفا..."}</div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
                           </div>
                         )}
                       </div>
@@ -2494,7 +2720,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                 {showAddComponent && (
                   <div className="kwb-add-comp-dropdown">
                     <div className="kwb-add-comp-cards">
-                      {(["header","hero_news","hero_subscribe","banner","cta_newsletter","article_collection","brands_ticker","testimonials","products","podcast","courses","topics","text_block","rich_text","image_block","subscribe_form","contact_form","divider","footer"] as ComponentType[]).map(type => (
+                      {(["header","hero_news","hero_subscribe","bento_grid","banner","cta_newsletter","article_collection","brands_ticker","testimonials","products","podcast","courses","topics","text_block","rich_text","image_block","subscribe_form","contact_form","divider","footer"] as ComponentType[]).map(type => (
                         <button key={type} className="kwb-add-comp-card" onClick={() => { addComponentToPage(type); setShowAddComponent(false); }}>
                           <div className="kwb-add-comp-mini">
                             <div className={`kwb-mc-auto kwb-mc-${type.replace(/_/g,"-")}`} />
@@ -2798,7 +3024,8 @@ const CSS_STYLES = `
 /* Article Collection */
 .kwb-p-articles{padding:24px 16px;background:var(--kwb-bg,#fff);}
 .kwb-p-articles-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
-.kwb-p-article-card{display:flex;flex-direction:column;gap:6px;}
+.kwb-p-article-card{display:flex;flex-direction:column;gap:6px;cursor:pointer;transition:transform .15s,box-shadow .15s;border-radius:12px;padding:8px;margin:-8px;}
+.kwb-p-article-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.08);}
 .kwb-p-article-img{width:100%;height:240px;background:rgba(128,128,128,0.15);}
 .kwb-p-article-title{font-size:12px;font-weight:700;margin:0;line-height:1.5;color:var(--kwb-headline-color,#1a1a1a);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
 .kwb-p-article-excerpt{font-size:10px;color:var(--kwb-text-color,#888);opacity:0.8;margin:0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
@@ -3173,6 +3400,25 @@ const CSS_STYLES = `
 .kwb-page-row-actions{display:flex;gap:2px;align-items:center;flex-shrink:0;}
 .kwb-page-edit-fields{padding:8px 12px 10px;display:flex;flex-direction:column;gap:6px;border-top:1px solid #F0F0F0;background:#FAFAFF;}
 
+/* SEO section */
+.kwb-seo-section{margin-top:12px;padding-top:12px;border-top:1px dashed #E0E0E0;}
+.kwb-seo-header{font-size:12px;font-weight:700;color:#0000FF;margin-bottom:8px;display:flex;align-items:center;gap:4px;}
+.kwb-seo-header::before{content:'';display:inline-block;width:3px;height:12px;background:#0000FF;border-radius:2px;}
+.kwb-char-count{font-size:10px;color:#BBB;text-align:left;direction:ltr;}
+.kwb-seo-preview{margin-top:4px;}
+.kwb-seo-preview-label{font-size:10px;font-weight:600;color:#999;margin-bottom:4px;}
+.kwb-seo-google-preview{background:#fff;border:1px solid #E8E8E8;border-radius:8px;padding:12px;font-family:Arial,sans-serif;}
+.kwb-seo-gp-url{font-size:12px;color:#202124;margin-bottom:4px;display:flex;align-items:center;gap:6px;}
+.kwb-seo-gp-favicon{width:18px;height:18px;border-radius:50%;background:#E82222;color:#fff;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;}
+.kwb-seo-gp-title{font-size:16px;color:#1a0dab;font-weight:400;line-height:1.3;margin-bottom:4px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.kwb-seo-gp-desc{font-size:13px;color:#4d5156;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.kwb-seo-social-preview{background:#fff;border:1px solid #E8E8E8;border-radius:8px;overflow:hidden;}
+.kwb-seo-sp-image{height:80px;background:#F0F0F0;display:flex;align-items:center;justify-content:center;}
+.kwb-seo-sp-text{padding:8px 10px;}
+.kwb-seo-sp-domain{font-size:10px;color:#999;text-transform:uppercase;margin-bottom:2px;}
+.kwb-seo-sp-title{font-size:13px;font-weight:700;color:#1a1a1a;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.kwb-seo-sp-desc{font-size:11px;color:#888;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+
 /* Page presets */
 .kwb-page-presets{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:16px;}
 .kwb-page-preset-btn{position:relative;padding:8px 18px;border:1.5px solid #E8E8E8;border-radius:20px;background:#fff;font-family:inherit;font-size:13px;font-weight:600;color:#371D12;cursor:pointer;transition:all .15s;}
@@ -3271,6 +3517,92 @@ const CSS_STYLES = `
 .kwb-p-editable:hover{outline-color:rgba(0,0,255,0.15);background:rgba(0,0,255,0.02);}
 .kwb-p-editable:focus{outline-color:#0000FF;background:rgba(0,0,255,0.03);outline-offset:2px;}
 
+/* ─── Border Radius (global) ─── */
+.kwb-preview-content .kwb-p-subscribe-btn{border-radius:var(--kwb-radius,0);}
+.kwb-preview-content .kwb-p-article-img{border-radius:var(--kwb-radius,0);}
+.kwb-preview-content .kwb-p-hero-side-img{border-radius:var(--kwb-radius,0);}
+.kwb-preview-content .kwb-p-hero-main-img{border-radius:var(--kwb-radius,0);}
+.kwb-preview-content .kwb-p-email-input{border-radius:var(--kwb-radius,0) 0 0 var(--kwb-radius,0);}
+.kwb-preview-content .kwb-p-footer-email{border-radius:var(--kwb-radius,0) 0 0 var(--kwb-radius,0);}
+.kwb-preview-content .kwb-p-cf-input{border-radius:var(--kwb-radius,0);}
+.kwb-preview-content .kwb-p-cf-textarea{border-radius:var(--kwb-radius,0);}
+.kwb-preview-content .kwb-p-cf-btn{border-radius:var(--kwb-radius,0);}
+.kwb-preview-content .kwb-p-article-card{border-radius:var(--kwb-radius,0);}
+.kwb-preview-content .kwb-p-bento-card{border-radius:var(--kwb-radius,0);}
+.kwb-preview-content .kwb-p-testi-card{border-radius:var(--kwb-radius,0);}
+.kwb-preview-content .kwb-p-product-card{border-radius:var(--kwb-radius,0);}
+.kwb-preview-content .kwb-p-course-card{border-radius:var(--kwb-radius,0);}
+.kwb-preview-content .kwb-p-topic-card{border-radius:var(--kwb-radius,0);}
+.kwb-preview-content .kwb-p-av-cover{border-radius:var(--kwb-radius,0);}
+.kwb-preview-content .kwb-p-product-img{border-radius:var(--kwb-radius,0);}
+.kwb-preview-content .kwb-p-course-img{border-radius:var(--kwb-radius,0);}
+.kwb-preview-content .kwb-p-image-full{border-radius:var(--kwb-radius,0);}
+.kwb-preview-content .kwb-p-av-tag{border-radius:var(--kwb-radius,0);}
+.kwb-preview-content .kwb-p-cat-btn{border-radius:var(--kwb-radius,0);}
+.kwb-preview-content .kwb-p-articles-search{border-radius:var(--kwb-radius,0);}
+.kwb-radius-control{display:flex;flex-direction:column;gap:8px;}
+.kwb-radius-preview-row{display:flex;align-items:center;gap:10px;}
+.kwb-radius-preview-box{width:48px;height:32px;transition:border-radius .2s;}
+.kwb-radius-value{font-size:18px;font-weight:700;color:#371D12;}
+
+/* ─── Bento Grid ─── */
+.kwb-p-bento{display:grid;gap:8px;padding:16px;min-height:120px;}
+.kwb-p-bento-2-1{grid-template-columns:1fr 1fr;grid-template-rows:auto auto;}
+.kwb-p-bento-2-1 .kwb-p-bento-card:nth-child(3){grid-column:1/-1;}
+.kwb-p-bento-1-2{grid-template-columns:1fr 1fr;grid-template-rows:auto auto;}
+.kwb-p-bento-1-2 .kwb-p-bento-card:first-child{grid-column:1/-1;}
+.kwb-p-bento-3-col{grid-template-columns:repeat(3,1fr);}
+.kwb-p-bento-2-col{grid-template-columns:repeat(2,1fr);}
+.kwb-p-bento-1-3{grid-template-columns:repeat(3,1fr);grid-template-rows:auto auto;}
+.kwb-p-bento-1-3 .kwb-p-bento-card:first-child{grid-column:1/-1;}
+.kwb-p-bento-4-grid{grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;}
+.kwb-p-bento-card{min-height:120px;background:var(--kwb-card-bg,#f5f5f5);border:1px solid rgba(128,128,128,0.15);display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden;position:relative;transition:transform .15s,box-shadow .15s;}
+.kwb-p-bento-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.08);}
+.kwb-p-bento-card-overlay{padding:16px;background:linear-gradient(to top,rgba(0,0,0,0.6) 0%,transparent 100%);position:relative;z-index:1;}
+.kwb-p-bento-card[style*="background-image"] .kwb-p-bento-card-overlay{color:#fff;}
+.kwb-p-bento-card:not([style*="background-image"]) .kwb-p-bento-card-overlay{background:none;}
+.kwb-p-bento-title{font-size:14px;font-weight:700;margin:0;line-height:1.4;color:var(--kwb-headline-color,#1a1a1a);}
+.kwb-p-bento-card[style*="background-image"] .kwb-p-bento-title{color:#fff;}
+.kwb-p-bento-text{font-size:11px;margin:4px 0 0;opacity:0.8;color:var(--kwb-text-color,#666);}
+.kwb-p-bento-card[style*="background-image"] .kwb-p-bento-text{color:#fff;}
+.kwb-bento-layouts{display:flex;flex-direction:column;gap:4px;}
+.kwb-bento-layout-btn{display:flex;flex-direction:column;padding:8px 12px;border:1.5px solid #E8E8E8;border-radius:8px;background:#fff;cursor:pointer;transition:all .15s;text-align:right;font-family:inherit;}
+.kwb-bento-layout-btn:hover{border-color:#BBB;}
+.kwb-bento-layout-btn strong{font-size:13px;color:#371D12;}
+.kwb-bento-layout-btn span{font-size:11px;color:#999;}
+.kwb-bento-layout-active{border-color:#0000FF;background:#F5F5FF;}
+.kwb-preview-mobile .kwb-p-bento{grid-template-columns:1fr!important;}
+.kwb-preview-mobile .kwb-p-bento .kwb-p-bento-card{grid-column:auto!important;}
+
+/* ─── Article Search & Categories ─── */
+.kwb-p-articles-filters{margin-bottom:16px;display:flex;flex-direction:column;gap:10px;}
+.kwb-p-articles-search-wrap{position:relative;}
+.kwb-p-articles-search{width:100%;height:40px;padding:0 14px 0 36px;border:1px solid rgba(128,128,128,0.2);font-family:inherit;font-size:13px;outline:none;background:var(--kwb-card-bg,#fff);color:var(--kwb-text-color,#333);direction:rtl;}
+.kwb-p-articles-search::placeholder{color:var(--kwb-text-color,#bbb);opacity:0.5;}
+.kwb-p-articles-search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--kwb-text-color,#ccc);opacity:0.5;pointer-events:none;}
+.kwb-p-articles-cats{display:flex;gap:6px;flex-wrap:wrap;}
+.kwb-p-cat-btn{padding:6px 14px;border:1px solid rgba(128,128,128,0.2);background:var(--kwb-card-bg,#fff);color:var(--kwb-text-color,#666);font-family:inherit;font-size:11px;font-weight:600;cursor:pointer;transition:all .15s;}
+.kwb-p-cat-btn:hover{border-color:var(--kwb-btn-color,#E82222);color:var(--kwb-btn-color,#E82222);}
+.kwb-p-cat-active{background:var(--kwb-btn-color,#E82222)!important;color:#fff!important;border-color:var(--kwb-btn-color,#E82222)!important;}
+
+/* ─── Footer enhancements ─── */
+.kwb-p-footer-custom-text{font-size:12px;color:var(--kwb-bg,#fff);opacity:0.5;margin:8px 0 0;line-height:1.6;}
+.kwb-p-footer-bottom{border-top:1px solid rgba(255,255,255,0.15);padding:16px 0;text-align:center;font-size:11px;color:var(--kwb-bg,#fff);opacity:0.4;display:flex;flex-direction:column;align-items:center;gap:8px;}
+.kwb-p-footer-kitabh-badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;opacity:0.7;direction:rtl;}
+.kwb-p-footer-kitabh-badge svg{opacity:0.6;}
+
+/* Bento mini preview */
+.kwb-mc-bento-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:2px;}
+.kwb-mc-bento-grid::before{content:'';background:#e0e0e0;border-radius:2px;height:16px;}
+.kwb-mc-bento-grid::after{content:'';background:#e8e8e8;border-radius:2px;height:16px;grid-column:1/-1;}
+.kwb-mc-rich-text{display:flex;flex-direction:column;gap:3px;direction:rtl;padding:4px;}
+.kwb-mc-rich-text::before{content:'';width:100%;height:3px;background:#ddd;border-radius:2px;}
+.kwb-mc-rich-text::after{content:'';width:60%;height:3px;background:#ddd;border-radius:2px;}
+
+/* ─── Editable field ─── */
+.kwb-p-editable{cursor:text;outline:none;}
+.kwb-p-editable:focus{outline:2px dashed var(--kwb-btn-color,#E82222);outline-offset:2px;}
+
 /* ─── RESPONSIVE ─── */
 @media(max-width:900px){
   .kwb-builder-body{flex-direction:column-reverse;}
@@ -3284,6 +3616,8 @@ const CSS_STYLES = `
   .kwb-p-footer-logo{font-size:32px;}
   .kwb-p-cta-inner{flex-direction:column;}
   .kwb-p-articles-grid{grid-template-columns:repeat(2,1fr);}
+  .kwb-p-bento{grid-template-columns:1fr!important;}
+  .kwb-p-bento .kwb-p-bento-card{grid-column:auto!important;}
 }
 @media(max-width:600px){
   .kwb{padding:16px 12px 40px;}

@@ -3,21 +3,23 @@ import ReactDOM from 'react-dom/client'
 
 const path = window.location.pathname
 
-// Simple routing: /tip shows TipAuthorPage, everything else shows KitabhWebsiteBuilder
+const root = ReactDOM.createRoot(document.getElementById('root')!)
+
 if (path === '/tip') {
   import('./TipAuthorPage').then(({ default: TipAuthorPage }) => {
-    ReactDOM.createRoot(document.getElementById('root')!).render(
-      <React.StrictMode>
-        <TipAuthorPage />
-      </React.StrictMode>
-    )
+    root.render(<React.StrictMode><TipAuthorPage /></React.StrictMode>)
+  })
+} else if (path === '/dashboard') {
+  import('./components/OwnerDashboard').then(({ default: OwnerDashboard }) => {
+    root.render(<React.StrictMode><OwnerDashboard /></React.StrictMode>)
+  })
+} else if (path.startsWith('/article/')) {
+  const slug = path.replace('/article/', '')
+  import('./components/ArticleViewWrapper').then(({ default: ArticleViewWrapper }) => {
+    root.render(<React.StrictMode><ArticleViewWrapper articleSlug={slug} /></React.StrictMode>)
   })
 } else {
   import('./KitabhWebsiteBuilder').then(({ default: KitabhWebsiteBuilder }) => {
-    ReactDOM.createRoot(document.getElementById('root')!).render(
-      <React.StrictMode>
-        <KitabhWebsiteBuilder />
-      </React.StrictMode>
-    )
+    root.render(<React.StrictMode><KitabhWebsiteBuilder /></React.StrictMode>)
   })
 }
