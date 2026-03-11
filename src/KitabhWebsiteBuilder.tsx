@@ -110,8 +110,8 @@ interface Template {
   id: string;
   name: string;
   description: string;
-  pages: string[];
-  defaultComponents: ComponentType[];
+  defaultBranding?: Partial<SiteBranding>;
+  componentOverrides?: Partial<Record<ComponentType, Record<string, any>>>;
 }
 
 // ─── Helpers ────────────────────────────────────────────
@@ -123,14 +123,27 @@ function slugify(text: string): string {
   return text.trim().toLowerCase().replace(/\s+/g, "-").replace(/[^a-z0-9\u0600-\u06FF\-]/g, "").replace(/-+/g, "-").replace(/^-|-$/g, "") || "page";
 }
 
-// ─── Templates ──────────────────────────────────────────
+// ─── Skeleton Template (single source of truth for structure) ─────
+// All design variations inherit pages & components from the skeleton.
+// To add a new component or page, add it here — every template gets it automatically.
+const SKELETON = {
+  pages: ["الرئيسية", "مقالات", "عرض المقال", "عن المدونة", "المتجر", "اشتراك"] as string[],
+  defaultComponents: ["header", "hero_news", "brands_ticker", "article_collection", "banner", "cta_newsletter", "article_collection", "banner", "footer"] as ComponentType[],
+  defaultBranding: {
+    logoUrl: "", logoLayout: "text_only" as LogoLayout, siteName: "شعار المؤسسة",
+    accentColor: "#E82222", buttonColor: "#E82222", headlineColor: "#1a1a1a",
+    textColor: "#666666", linkColor: "#E82222", bgColor: "#ffffff", cardBg: "#ffffff",
+    fontFamily: "Alyamama", layoutWidth: "compact" as "compact" | "full", darkMode: false,
+  } as SiteBranding,
+};
+
+// ─── Design Variations (visual overrides only) ──────────
+// Each template inherits skeleton structure and overrides branding/settings.
 const TEMPLATES: Template[] = [
   {
     id: "media",
     name: "مؤسسة إعلامية",
     description: "مثالي للناشرين وصنّاع المحتوى",
-    pages: ["الرئيسية", "مقالات", "عرض المقال", "عن المدونة", "المتجر", "اشتراك"],
-    defaultComponents: ["header", "hero_news", "brands_ticker", "article_collection", "banner", "cta_newsletter", "article_collection", "banner", "footer"],
   },
 ];
 
@@ -257,6 +270,8 @@ export default function KitabhWebsiteBuilder(props: any) {
   const [expandedComponent, setExpandedComponent] = useState<string | null>(null);
   const [showAddComponent, setShowAddComponent] = useState(false);
   const [showSubscribePopup, setShowSubscribePopup] = useState(false);
+  const [insertAtIndex, setInsertAtIndex] = useState<number | null>(null);
+  const [hoveredCompId, setHoveredCompId] = useState<string | null>(null);
   const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved">("idle");
 
   // Modals
@@ -362,17 +377,20 @@ export default function KitabhWebsiteBuilder(props: any) {
     const tpl = TEMPLATES.find(t => t.id === templateId);
     if (!tpl) return;
 
-    const pages: SitePage[] = tpl.pages.map(name => ({
+    // Merge skeleton branding with template's visual overrides
+    const branding: SiteBranding = { ...SKELETON.defaultBranding, ...(tpl.defaultBranding || {}) };
+
+    // Build pages from skeleton structure
+    const pages: SitePage[] = SKELETON.pages.map(name => ({
       id: genId(),
       name,
       slug: slugify(name),
-      components: name === "الرئيسية" || name === tpl.pages[0]
-        ? tpl.defaultComponents.map(type => ({
-            id: genId(),
-            type,
-            enabled: true,
-            settings: getDefaultSettings(type),
-          }))
+      components: name === "الرئيسية" || name === SKELETON.pages[0]
+        ? SKELETON.defaultComponents.map(type => {
+            const baseSettings = getDefaultSettings(type);
+            const overrides = tpl.componentOverrides?.[type] || {};
+            return { id: genId(), type, enabled: true, settings: { ...baseSettings, ...overrides } };
+          })
         : getPageDefaultComponents(name),
     }));
 
@@ -383,7 +401,7 @@ export default function KitabhWebsiteBuilder(props: any) {
       customDomain: "",
       status: "draft",
       templateId,
-      branding: { logoUrl: "", logoLayout: "text_only" as LogoLayout, siteName: "شعار المؤسسة", accentColor: "#E82222", buttonColor: "#E82222", headlineColor: "#1a1a1a", textColor: "#666666", linkColor: "#E82222", bgColor: "#ffffff", cardBg: "#ffffff", fontFamily: "Alyamama", layoutWidth: "compact" as "compact" | "full", darkMode: false },
+      branding,
       pages,
       hasNewsletter: true,
       visits: 0,
@@ -557,6 +575,33 @@ export default function KitabhWebsiteBuilder(props: any) {
       if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
     }, 100);
   };
+
+  const insertComponentAt = (type: ComponentType, index: number) => {
+    if (!activeSiteId || !activePageId) return;
+    const comp: SiteComponent = { id: genId(), type, enabled: true, settings: getDefaultSettings(type) };
+    setSites(prev => prev.map(s => {
+      if (s.id !== activeSiteId) return s;
+      return {
+        ...s,
+        pages: s.pages.map(p => {
+          if (p.id !== activePageId) return p;
+          const comps = [...p.components];
+          comps.splice(index, 0, comp);
+          return { ...p, components: comps };
+        }),
+        updatedAt: new Date().toISOString(),
+      };
+    }));
+    setInsertAtIndex(null);
+    setExpandedComponent(comp.id);
+    setSidebarTab("components");
+    setTimeout(() => {
+      const el = document.querySelector(`[data-comp-id="${comp.id}"]`);
+      if (el) el.scrollIntoView({ behavior: "smooth", block: "center" });
+    }, 100);
+  };
+
+  const INSERT_TYPES: ComponentType[] = ["hero_news", "hero_subscribe", "banner", "cta_newsletter", "article_collection", "brands_ticker", "testimonials", "products", "podcast", "courses", "topics", "text_block", "rich_text", "image_block", "subscribe_form", "contact_form", "divider"];
 
   // ─── Move component up/down ────────
   const moveComponent = (compId: string, direction: "up" | "down") => {
@@ -1110,7 +1155,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                   <h3 className="kwb-template-name">{t.name}</h3>
                   <p className="kwb-template-desc">{t.description}</p>
                   <div className="kwb-template-pages">
-                    {t.pages.map(p => <span key={p} className="kwb-template-page-badge">{p}</span>)}
+                    {SKELETON.pages.map(p => <span key={p} className="kwb-template-page-badge">{p}</span>)}
                   </div>
                   <button className="kwb-btn-primary kwb-btn-full" onClick={() => createFromTemplate(t.id)}>ابدأ بهذا القالب</button>
                 </div>
@@ -1144,16 +1189,21 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
 
         <div className="kwb-builder-body">
           {/* ─── PREVIEW ─── */}
-          <div className="kwb-preview-area">
+          <div className="kwb-preview-area" onClick={(e) => { if (!(e.target as HTMLElement).closest('.kwb-p-comp-wrap') && !(e.target as HTMLElement).closest('.kwb-p-insert-line')) { setExpandedComponent(null); setInsertAtIndex(null); } }}>
             <div className={`kwb-preview-frame ${previewDevice === "mobile" ? "kwb-preview-mobile" : ""}`}>
               <div className="kwb-preview-content" style={{ fontFamily: `'${activeSite.branding.fontFamily}', system-ui, sans-serif`, '--kwb-btn-color': activeSite.branding.buttonColor || '#E82222', '--kwb-headline-color': activeSite.branding.headlineColor || '#1a1a1a', '--kwb-text-color': activeSite.branding.textColor || '#666666', '--kwb-link-color': activeSite.branding.linkColor || '#E82222', '--kwb-bg': activeSite.branding.bgColor || '#ffffff', '--kwb-card-bg': activeSite.branding.cardBg || '#ffffff' } as any}>
                 {/* Render each enabled component */}
-                {activePage.components.filter(c => c.enabled).map(comp => {
+                {activePage.components.filter(c => c.enabled).map((comp, _idx, _enabledComps) => {
+                  const _isSelected = expandedComponent === comp.id;
+                  const _isHovered = hoveredCompId === comp.id;
+                  const _meta = COMPONENT_META[comp.type];
+                  const _realIdx = activePage.components.findIndex(c => c.id === comp.id);
+                  let _inner: any = null;
                   switch (comp.type) {
                     case "header":
                       const logoLayout = activeSite.branding.logoLayout || "text_only";
-                      return (
-                        <div key={comp.id} data-comp-id={comp.id} className="kwb-p-header">
+                      _inner = (
+                        <div className="kwb-p-header">
                           <div className="kwb-p-header-inner">
                             <div className="kwb-p-logo-wrap">
                               {(logoLayout === "logo_only" || logoLayout === "logo_and_text") && activeSite.branding.logoUrl && (
@@ -1182,14 +1232,14 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                             </div>
                           </div>
                         </div>
-                      );
+                      ); break;
 
                     case "hero_news":
                       const heroArticles = (comp.settings.articles || []).map((id: string) => MOCK_ARTICLES.find(a => a.id === id)).filter(Boolean) as Article[];
                       const mainArticle = heroArticles[0];
                       const sideArticles = heroArticles.slice(1, 5);
-                      return (
-                        <div key={comp.id} data-comp-id={comp.id} className="kwb-p-hero-news">
+                      _inner = (
+                        <div className="kwb-p-hero-news">
                           {/* Right side articles */}
                           <div className="kwb-p-hero-side kwb-p-hero-side-r">
                             {sideArticles.slice(0, 2).map(a => (
@@ -1234,13 +1284,13 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                             ))}
                           </div>
                         </div>
-                      );
+                      ); break;
 
                     case "hero_subscribe":
-                      return (
-                        <div key={comp.id} data-comp-id={comp.id} className="kwb-p-hero-sub">
-                          <h2>{comp.settings.title || "انضم لنشرتنا البريدية"}</h2>
-                          <p>{comp.settings.subtitle || "محتوى حصري يصلك كل أسبوع"}</p>
+                      _inner = (
+                        <div className="kwb-p-hero-sub">
+                          <h2 contentEditable suppressContentEditableWarning onBlur={(e) => updateComponentSettings(comp.id, { title: e.currentTarget.textContent || "" })} className="kwb-p-editable">{comp.settings.title || "انضم لنشرتنا البريدية"}</h2>
+                          <p contentEditable suppressContentEditableWarning onBlur={(e) => updateComponentSettings(comp.id, { subtitle: e.currentTarget.textContent || "" })} className="kwb-p-editable">{comp.settings.subtitle || "محتوى حصري يصلك كل أسبوع"}</p>
                           <div className="kwb-p-hero-sub-form">
                             <input type="email" name="email" autoComplete="email" placeholder="أدخل بريدك الإلكتروني" className="kwb-p-email-input" />
                             <button className="kwb-p-subscribe-btn" style={{ background: comp.settings.buttonColor || activeSite.branding.buttonColor }} onClick={() => setShowSubscribePopup(true)}>
@@ -1248,7 +1298,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                             </button>
                           </div>
                         </div>
-                      );
+                      ); break;
 
                     case "brands_ticker": {
                       const tickerSpeed = comp.settings.speed || 30;
@@ -1271,9 +1321,9 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                           <span>مدونة {activeSite.branding.siteName}</span>
                         </>
                       );
-                      return (
-                        <div key={comp.id} data-comp-id={comp.id} className="kwb-p-ticker">
-                          {comp.settings.headline && <h3 className="kwb-p-ticker-headline">{comp.settings.headline}</h3>}
+                      _inner = (
+                        <div className="kwb-p-ticker">
+                          {comp.settings.headline && <h3 className="kwb-p-ticker-headline kwb-p-editable" contentEditable suppressContentEditableWarning onBlur={(e) => updateComponentSettings(comp.id, { headline: e.currentTarget.textContent || "" })}>{comp.settings.headline}</h3>}
                           <div className="kwb-p-ticker-inner" style={{ animationDuration: `${tickerSpeed}s` }}>
                             {brandItems.length > 0 ? (
                               <>
@@ -1282,18 +1332,18 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                             ) : renderText()}
                           </div>
                         </div>
-                      );
+                      ); break;
                     }
 
                     case "cta_newsletter":
-                      return (
-                        <div key={comp.id} data-comp-id={comp.id} className="kwb-p-cta">
+                      _inner = (
+                        <div className="kwb-p-cta">
                           <div className="kwb-p-cta-inner">
                             <div className="kwb-p-cta-text">
                               <div className="kwb-p-cta-logo">{activeSite.branding.siteName.charAt(0)}</div>
                               <div>
-                                <h3>{comp.settings.title || "اشترك في نشرتنا"}</h3>
-                                <p>{comp.settings.description || "محتوى حصري يصلك مباشرة إلى بريدك"}</p>
+                                <h3 contentEditable suppressContentEditableWarning onBlur={(e) => updateComponentSettings(comp.id, { title: e.currentTarget.textContent || "" })} className="kwb-p-editable">{comp.settings.title || "اشترك في نشرتنا"}</h3>
+                                <p contentEditable suppressContentEditableWarning onBlur={(e) => updateComponentSettings(comp.id, { description: e.currentTarget.textContent || "" })} className="kwb-p-editable">{comp.settings.description || "محتوى حصري يصلك مباشرة إلى بريدك"}</p>
                               </div>
                             </div>
                             <div className="kwb-p-cta-form">
@@ -1304,12 +1354,12 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                             </div>
                           </div>
                         </div>
-                      );
+                      ); break;
 
                     case "article_collection":
                       const collArticles = (comp.settings.articles || []).map((id: string) => MOCK_ARTICLES.find(a => a.id === id)).filter(Boolean) as Article[];
-                      return (
-                        <div key={comp.id} data-comp-id={comp.id} className="kwb-p-articles">
+                      _inner = (
+                        <div className="kwb-p-articles">
                           <div className="kwb-p-articles-grid">
                             {collArticles.map(a => (
                               <div key={a.id} className="kwb-p-article-card">
@@ -1332,11 +1382,11 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                           </div>
                           <a className="kwb-p-all-articles">جميع المقالات &#x2197;</a>
                         </div>
-                      );
+                      ); break;
 
                     case "banner":
-                      return (
-                        <div key={comp.id} data-comp-id={comp.id} className="kwb-p-banners">
+                      _inner = (
+                        <div className="kwb-p-banners">
                           <div className="kwb-p-banner-grid">
                             <div className="kwb-p-banner-card" style={{ background: activeSite.branding.buttonColor || "#E82222" }}>
                               <span>تصفح أرشيف {activeSite.branding.siteName}</span>
@@ -1348,7 +1398,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                             </div>
                           </div>
                         </div>
-                      );
+                      ); break;
 
                     case "footer":
                       const footerLogoLayout = activeSite.branding.logoLayout || "text_only";
@@ -1357,8 +1407,8 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                       const footerNavLinks: NavLink[] = (headerCompForFooter?.settings?.navLinks || comp.settings.links || []).map((link: any) =>
                         typeof link === "string" ? { id: String(Math.random()), label: link, linkType: "page" as const, target: "", visible: true } : link
                       );
-                      return (
-                        <div key={comp.id} data-comp-id={comp.id} className="kwb-p-footer">
+                      _inner = (
+                        <div className="kwb-p-footer">
                           <div className="kwb-p-footer-inner">
                             <div className="kwb-p-footer-logo-col">
                               {(footerLogoLayout === "logo_only" || footerLogoLayout === "logo_and_text") && activeSite.branding.logoUrl && (
@@ -1385,12 +1435,12 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                             جميع الحقوق محفوظة {new Date().getFullYear()} {activeSite.branding.siteName}
                           </div>
                         </div>
-                      );
+                      ); break;
 
                     case "article_view":
                       const sampleArticle = MOCK_ARTICLES[0];
-                      return (
-                        <div key={comp.id} data-comp-id={comp.id} className="kwb-p-article-view">
+                      _inner = (
+                        <div className="kwb-p-article-view">
                           <div className="kwb-p-av-header">
                             <span className="kwb-p-av-category">مقالات</span>
                             <h1 className="kwb-p-av-title">{sampleArticle.title}</h1>
@@ -1432,25 +1482,25 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                             </div>
                           </div>
                         </div>
-                      );
+                      ); break;
 
                     case "text_block":
-                      return (
-                        <div key={comp.id} data-comp-id={comp.id} className="kwb-p-text-block">
-                          <p>{comp.settings.content || "أضف نصك هنا..."}</p>
+                      _inner = (
+                        <div className="kwb-p-text-block">
+                          <p contentEditable suppressContentEditableWarning onBlur={(e) => updateComponentSettings(comp.id, { content: e.currentTarget.textContent || "" })} className="kwb-p-editable">{comp.settings.content || "أضف نصك هنا..."}</p>
                         </div>
-                      );
+                      ); break;
 
                     case "rich_text":
-                      return (
-                        <div key={comp.id} data-comp-id={comp.id} className="kwb-p-rich-text">
+                      _inner = (
+                        <div className="kwb-p-rich-text">
                           <div className="kwb-p-rich-text-content" dangerouslySetInnerHTML={{ __html: comp.settings.html || "<p>أضف محتواك المنسق هنا...</p>" }} />
                         </div>
-                      );
+                      ); break;
 
                     case "image_block":
-                      return (
-                        <div key={comp.id} data-comp-id={comp.id} className="kwb-p-image-block">
+                      _inner = (
+                        <div className="kwb-p-image-block">
                           {comp.settings.imageUrl ? (
                             <img src={comp.settings.imageUrl} alt="" className="kwb-p-image-full" />
                           ) : (
@@ -1458,12 +1508,12 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                           )}
                           {comp.settings.caption && <p className="kwb-p-image-caption">{comp.settings.caption}</p>}
                         </div>
-                      );
+                      ); break;
 
                     case "subscribe_form":
-                      return (
-                        <div key={comp.id} data-comp-id={comp.id} className="kwb-p-subscribe-form">
-                          <h3>{comp.settings.title || "اشترك في نشرتنا"}</h3>
+                      _inner = (
+                        <div className="kwb-p-subscribe-form">
+                          <h3 contentEditable suppressContentEditableWarning onBlur={(e) => updateComponentSettings(comp.id, { title: e.currentTarget.textContent || "" })} className="kwb-p-editable">{comp.settings.title || "اشترك في نشرتنا"}</h3>
                           <div className="kwb-p-sf-row">
                             <input type="email" name="email" autoComplete="email" placeholder="أدخل بريدك الإلكتروني" className="kwb-p-email-input" />
                             <button className="kwb-p-subscribe-btn" style={{ background: comp.settings.buttonColor || activeSite.branding.buttonColor }} onClick={() => setShowSubscribePopup(true)}>
@@ -1471,12 +1521,12 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                             </button>
                           </div>
                         </div>
-                      );
+                      ); break;
 
                     case "contact_form":
-                      return (
-                        <div key={comp.id} data-comp-id={comp.id} className="kwb-p-contact-form">
-                          <h3>{comp.settings.title || "تواصل معنا"}</h3>
+                      _inner = (
+                        <div className="kwb-p-contact-form">
+                          <h3 contentEditable suppressContentEditableWarning onBlur={(e) => updateComponentSettings(comp.id, { title: e.currentTarget.textContent || "" })} className="kwb-p-editable">{comp.settings.title || "تواصل معنا"}</h3>
                           <div className="kwb-p-cf-fields">
                             <input placeholder="الاسم" className="kwb-p-cf-input" />
                             <input placeholder="البريد الإلكتروني" className="kwb-p-cf-input" />
@@ -1486,17 +1536,17 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                             </button>
                           </div>
                         </div>
-                      );
+                      ); break;
 
                     case "divider":
-                      return <hr key={comp.id} className="kwb-p-divider" />;
+                      _inner = <hr className="kwb-p-divider" />; break;
 
                     case "testimonials": {
                       const items = comp.settings.items || [];
                       const isGrid = (comp.settings.layout || "grid") === "grid";
-                      return (
-                        <div key={comp.id} data-comp-id={comp.id} className="kwb-p-section">
-                          <h3 className="kwb-p-section-title">{comp.settings.sectionTitle || "آراء العملاء"}</h3>
+                      _inner = (
+                        <div className="kwb-p-section">
+                          <h3 className="kwb-p-section-title kwb-p-editable" contentEditable suppressContentEditableWarning onBlur={(e) => updateComponentSettings(comp.id, { sectionTitle: e.currentTarget.textContent || "" })}>{comp.settings.sectionTitle || "آراء العملاء"}</h3>
                           <div className={isGrid ? "kwb-p-testi-grid" : "kwb-p-testi-list"}>
                             {items.map((item: any, i: number) => (
                               <div key={i} className="kwb-p-testi-card">
@@ -1512,15 +1562,15 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                             ))}
                           </div>
                         </div>
-                      );
+                      ); break;
                     }
 
                     case "products": {
                       const items = comp.settings.items || [];
                       const isGrid = (comp.settings.layout || "grid") === "grid";
-                      return (
-                        <div key={comp.id} data-comp-id={comp.id} className="kwb-p-section">
-                          <h3 className="kwb-p-section-title">{comp.settings.sectionTitle || "المنتجات"}</h3>
+                      _inner = (
+                        <div className="kwb-p-section">
+                          <h3 className="kwb-p-section-title kwb-p-editable" contentEditable suppressContentEditableWarning onBlur={(e) => updateComponentSettings(comp.id, { sectionTitle: e.currentTarget.textContent || "" })}>{comp.settings.sectionTitle || "المنتجات"}</h3>
                           <div className={isGrid ? "kwb-p-products-grid" : "kwb-p-products-list"}>
                             {items.map((item: any, i: number) => (
                               <div key={i} className="kwb-p-product-card">
@@ -1533,15 +1583,15 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                             ))}
                           </div>
                         </div>
-                      );
+                      ); break;
                     }
 
                     case "podcast": {
                       const programs = comp.settings.programs || [];
                       const podIsGrid = (comp.settings.layout || "list") === "grid";
-                      return (
-                        <div key={comp.id} data-comp-id={comp.id} className="kwb-p-section">
-                          <h3 className="kwb-p-section-title">{comp.settings.sectionTitle || "البودكاست"}</h3>
+                      _inner = (
+                        <div className="kwb-p-section">
+                          <h3 className="kwb-p-section-title kwb-p-editable" contentEditable suppressContentEditableWarning onBlur={(e) => updateComponentSettings(comp.id, { sectionTitle: e.currentTarget.textContent || "" })}>{comp.settings.sectionTitle || "البودكاست"}</h3>
                           {programs.map((prog: any, pi: number) => (
                             <div key={pi} style={{ marginBottom: pi < programs.length - 1 ? 20 : 0 }}>
                               <div className="kwb-p-podcast-program">
@@ -1566,15 +1616,15 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                             </div>
                           ))}
                         </div>
-                      );
+                      ); break;
                     }
 
                     case "courses": {
                       const items = comp.settings.items || [];
                       const isGrid = (comp.settings.layout || "grid") === "grid";
-                      return (
-                        <div key={comp.id} data-comp-id={comp.id} className="kwb-p-section">
-                          <h3 className="kwb-p-section-title">{comp.settings.sectionTitle || "الدورات"}</h3>
+                      _inner = (
+                        <div className="kwb-p-section">
+                          <h3 className="kwb-p-section-title kwb-p-editable" contentEditable suppressContentEditableWarning onBlur={(e) => updateComponentSettings(comp.id, { sectionTitle: e.currentTarget.textContent || "" })}>{comp.settings.sectionTitle || "الدورات"}</h3>
                           <div className={isGrid ? "kwb-p-courses-grid" : "kwb-p-courses-list"}>
                             {items.map((item: any, i: number) => (
                               <div key={i} className="kwb-p-course-card">
@@ -1587,15 +1637,15 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                             ))}
                           </div>
                         </div>
-                      );
+                      ); break;
                     }
 
                     case "topics": {
                       const items = comp.settings.items || [];
                       const isGrid = (comp.settings.layout || "grid") === "grid";
-                      return (
-                        <div key={comp.id} data-comp-id={comp.id} className="kwb-p-section">
-                          <h3 className="kwb-p-section-title">{comp.settings.sectionTitle || "المواضيع"}</h3>
+                      _inner = (
+                        <div className="kwb-p-section">
+                          <h3 className="kwb-p-section-title kwb-p-editable" contentEditable suppressContentEditableWarning onBlur={(e) => updateComponentSettings(comp.id, { sectionTitle: e.currentTarget.textContent || "" })}>{comp.settings.sectionTitle || "المواضيع"}</h3>
                           <div className={isGrid ? "kwb-p-topics-grid" : "kwb-p-topics-list"}>
                             {items.map((item: any, i: number) => (
                               <div key={i} className="kwb-p-topic-card">
@@ -1604,16 +1654,80 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                             ))}
                           </div>
                         </div>
-                      );
+                      ); break;
                     }
 
                     default:
-                      return (
-                        <div key={comp.id} data-comp-id={comp.id} className="kwb-p-placeholder">
+                      _inner = (
+                        <div className="kwb-p-placeholder">
                           <span>{COMPONENT_META[comp.type]?.label || comp.type}</span>
                         </div>
-                      );
+                      ); break;
                   }
+
+                  // ─── Wrapper with toolbar, selection, insert buttons ────────
+                  return (
+                    <React.Fragment key={comp.id}>
+                      {/* Insert line before first component */}
+                      {_idx === 0 && (
+                        <div className={`kwb-p-insert-line ${insertAtIndex === _realIdx ? "kwb-p-insert-open" : ""}`}>
+                          <button className="kwb-p-insert-btn" onClick={(e) => { e.stopPropagation(); setInsertAtIndex(insertAtIndex === _realIdx ? null : _realIdx); }} title="إضافة قسم">+</button>
+                          {insertAtIndex === _realIdx && (
+                            <div className="kwb-p-insert-dropdown">
+                              {INSERT_TYPES.map(t => (
+                                <button key={t} className="kwb-p-insert-item" onClick={() => insertComponentAt(t, _realIdx)}>
+                                  {COMPONENT_META[t].label}
+                                </button>
+                              ))}
+                            </div>
+                          )}
+                        </div>
+                      )}
+
+                      {/* Component wrapper */}
+                      <div
+                        className={`kwb-p-comp-wrap ${_isSelected ? "kwb-p-comp-selected" : ""}`}
+                        data-comp-id={comp.id}
+                        onClick={(e) => {
+                          if ((e.target as HTMLElement).closest(".kwb-p-comp-toolbar") || (e.target as HTMLElement).closest(".kwb-p-insert-btn")) return;
+                          if ((e.target as HTMLElement).closest("[contenteditable]")) return;
+                          setExpandedComponent(_isSelected ? null : comp.id);
+                          if (!_isSelected) setSidebarTab("components");
+                          setInsertAtIndex(null);
+                        }}
+                        onMouseEnter={() => setHoveredCompId(comp.id)}
+                        onMouseLeave={() => setHoveredCompId(null)}
+                      >
+                        {/* Hover/selection toolbar */}
+                        {(_isSelected || _isHovered) && (
+                          <div className="kwb-p-comp-toolbar">
+                            <span className="kwb-p-toolbar-label">{_meta?.label}</span>
+                            <div className="kwb-p-toolbar-actions">
+                              {_idx > 0 && <button onClick={(e) => { e.stopPropagation(); moveComponent(comp.id, "up"); }} title="نقل لأعلى">&#x2191;</button>}
+                              {_idx < _enabledComps.length - 1 && <button onClick={(e) => { e.stopPropagation(); moveComponent(comp.id, "down"); }} title="نقل لأسفل">&#x2193;</button>}
+                              <button onClick={(e) => { e.stopPropagation(); setExpandedComponent(comp.id); setSidebarTab("components"); }} title="الإعدادات">&#x2699;</button>
+                              <button className="kwb-p-toolbar-delete" onClick={(e) => { e.stopPropagation(); removeComponent(comp.id); }} title="حذف">&#x2715;</button>
+                            </div>
+                          </div>
+                        )}
+                        {_inner}
+                      </div>
+
+                      {/* Insert line after component */}
+                      <div className={`kwb-p-insert-line ${insertAtIndex === _realIdx + 1 ? "kwb-p-insert-open" : ""}`}>
+                        <button className="kwb-p-insert-btn" onClick={(e) => { e.stopPropagation(); setInsertAtIndex(insertAtIndex === _realIdx + 1 ? null : _realIdx + 1); }} title="إضافة قسم">+</button>
+                        {insertAtIndex === _realIdx + 1 && (
+                          <div className="kwb-p-insert-dropdown">
+                            {INSERT_TYPES.map(t => (
+                              <button key={t} className="kwb-p-insert-item" onClick={() => insertComponentAt(t, _realIdx + 1)}>
+                                {COMPONENT_META[t].label}
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </React.Fragment>
+                  );
                 })}
               </div>
             </div>
@@ -3059,6 +3173,39 @@ const CSS_STYLES = `
 .kwb-font-option-active::after{content:'\u2713';position:absolute;left:10px;top:50%;transform:translateY(-50%);color:#0000FF;font-weight:700;font-size:14px;}
 .kwb-font-preview{font-size:18px;font-weight:600;color:#371D12;line-height:1.4;}
 .kwb-font-name{font-size:11px;color:#999;font-weight:500;font-family:'IBM Plex Sans Arabic',sans-serif;}
+
+/* ─── PREVIEW INLINE EDITING ─── */
+/* Component wrapper */
+.kwb-p-comp-wrap{position:relative;transition:outline .15s, box-shadow .15s;outline:2px solid transparent;outline-offset:-2px;}
+.kwb-p-comp-wrap:hover{outline-color:rgba(0,0,255,0.15);}
+.kwb-p-comp-selected{outline-color:#0000FF !important;outline-offset:-2px;z-index:2;}
+.kwb-p-comp-selected:hover{outline-color:#0000FF !important;}
+
+/* Toolbar on hover/select */
+.kwb-p-comp-toolbar{position:absolute;top:0;left:0;right:auto;display:flex;align-items:center;gap:2px;padding:4px 8px;background:rgba(0,0,255,0.9);color:#fff;border-radius:0 0 8px 0;font-size:12px;z-index:10;pointer-events:auto;direction:ltr;opacity:0;transition:opacity .15s;}
+.kwb-p-comp-wrap:hover .kwb-p-comp-toolbar,.kwb-p-comp-selected .kwb-p-comp-toolbar{opacity:1;}
+.kwb-p-toolbar-label{font-weight:600;margin-left:8px;white-space:nowrap;font-family:'IBM Plex Sans Arabic',sans-serif;}
+.kwb-p-toolbar-actions{display:flex;gap:2px;margin-right:auto;}
+.kwb-p-toolbar-actions button{width:24px;height:24px;border:none;background:rgba(255,255,255,0.15);color:#fff;border-radius:4px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;padding:0;transition:background .1s;}
+.kwb-p-toolbar-actions button:hover{background:rgba(255,255,255,0.3);}
+.kwb-p-toolbar-delete:hover{background:rgba(255,80,80,0.6) !important;}
+
+/* Insert line between components */
+.kwb-p-insert-line{position:relative;height:0;display:flex;align-items:center;justify-content:center;z-index:5;transition:height .2s;}
+.kwb-p-insert-line:hover,.kwb-p-insert-open{height:28px;}
+.kwb-p-insert-btn{width:28px;height:28px;border:2px dashed #ccc;border-radius:50%;background:#fff;color:#999;font-size:18px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .15s;opacity:0;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);padding:0;line-height:1;}
+.kwb-p-insert-line:hover .kwb-p-insert-btn,.kwb-p-insert-open .kwb-p-insert-btn{opacity:1;}
+.kwb-p-insert-btn:hover{border-color:#0000FF;color:#0000FF;background:#F0F0FF;}
+
+/* Insert dropdown */
+.kwb-p-insert-dropdown{position:absolute;top:32px;left:50%;transform:translateX(-50%);background:#fff;border:1px solid #E0E0E0;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,0.12);padding:8px;display:grid;grid-template-columns:repeat(3,1fr);gap:4px;z-index:20;min-width:320px;direction:rtl;}
+.kwb-p-insert-item{padding:8px 6px;border:1px solid #f0f0f0;border-radius:8px;background:#fff;font-family:inherit;font-size:12px;font-weight:600;color:#371D12;cursor:pointer;text-align:center;transition:all .1s;white-space:nowrap;}
+.kwb-p-insert-item:hover{background:#F0F0FF;border-color:#0000FF;color:#0000FF;}
+
+/* Inline editable text */
+.kwb-p-editable{cursor:text;border-radius:4px;transition:outline .15s, background .15s;outline:2px solid transparent;}
+.kwb-p-editable:hover{outline-color:rgba(0,0,255,0.15);background:rgba(0,0,255,0.02);}
+.kwb-p-editable:focus{outline-color:#0000FF;background:rgba(0,0,255,0.03);outline-offset:2px;}
 
 /* ─── RESPONSIVE ─── */
 @media(max-width:900px){
