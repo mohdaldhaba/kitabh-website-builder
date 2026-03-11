@@ -42,7 +42,8 @@ type ComponentType =
   | "divider"
   | "rich_text"
   | "bento_grid"
-  | "social_links";
+  | "social_links"
+  | "movies";
 
 interface SitePage {
   id: string;
@@ -196,6 +197,7 @@ const COMPONENT_META: Record<ComponentType, { label: string; hasSettings: boolea
   rich_text: { label: "محتوى منسق", hasSettings: true },
   bento_grid: { label: "شبكة بينتو", hasSettings: true },
   social_links: { label: "روابط التواصل", hasSettings: true },
+  movies: { label: "أفلام / مسلسلات", hasSettings: true },
 
 };
 
@@ -222,6 +224,7 @@ const COMPONENT_ICONS: Record<ComponentType, string> = {
   rich_text: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>',
   bento_grid: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D946EF" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>',
   social_links: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>',
+  movies: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#DC2626" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="2"/><path d="M7 2v20"/><path d="M17 2v20"/><path d="M2 7h5"/><path d="M2 12h20"/><path d="M2 17h5"/><path d="M17 7h5"/><path d="M17 17h5"/></svg>',
 };
 
 const PRESET_COLORS = ["#E82222", "#0000FF", "#2563EB", "#0891B2", "#10B981", "#F59E0B"];
@@ -556,7 +559,11 @@ export default function KitabhWebsiteBuilder(props: any) {
       case "contact_form": return { title: "تواصل معنا", buttonText: "إرسال" };
       case "brands_ticker": return { speed: 30, items: [] };
       case "divider": return {};
-      case "rich_text": return { html: "<h2>عنوان القسم</h2>\n<p>هذا نص تجريبي يمكنك تعديله. يدعم <strong>النص العريض</strong> و<em>المائل</em> والعناوين والقوائم.</p>\n<ul>\n<li>العنصر الأول</li>\n<li>العنصر الثاني</li>\n</ul>" };
+      case "rich_text": return { html: "<h2>عنوان القسم</h2><p>هذا نص تجريبي يمكنك تعديله. يدعم النص العريض والمائل والعناوين والقوائم.</p>" };
+      case "movies": return { sectionTitle: "أفلام ومسلسلات", items: [
+        { title: "اسم الفيلم", subtitle: "وصف قصير عن الفيلم", imageUrl: "", url: "", buttonText: "شاهد الآن" },
+        { title: "اسم المسلسل", subtitle: "وصف قصير عن المسلسل", imageUrl: "", url: "", buttonText: "شاهد الآن" },
+      ] };
       case "social_links": return { platforms: [
         { platform: "twitter", url: MOCK_AUTHOR.socials.twitter, enabled: true },
         { platform: "instagram", url: MOCK_AUTHOR.socials.instagram, enabled: true },
@@ -733,7 +740,7 @@ export default function KitabhWebsiteBuilder(props: any) {
     }, 100);
   };
 
-  const INSERT_TYPES: ComponentType[] = ["header", "hero_news", "subscribe", "article_collection", "bento_grid", "banner", "brands_ticker", "testimonials", "products", "podcast", "courses", "topics", "text_block", "rich_text", "image_block", "contact_form", "social_links", "divider", "footer"];
+  const INSERT_TYPES: ComponentType[] = ["header", "hero_news", "subscribe", "article_collection", "bento_grid", "banner", "brands_ticker", "testimonials", "products", "movies", "podcast", "courses", "topics", "text_block", "rich_text", "image_block", "contact_form", "social_links", "divider", "footer"];
 
   // ─── Move component up/down ────────
   const moveComponent = (compId: string, direction: "up" | "down") => {
@@ -847,7 +854,7 @@ export default function KitabhWebsiteBuilder(props: any) {
 
   // ─── File upload (local preview via FileReader) ────────
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [uploadTarget, setUploadTarget] = useState<{ type: "branding_logo" | "comp_logo" | "comp_banner" | "testi_img" | "ticker_img" | "gallery_sidebar" | "podcast_cover" | "header_hero_img"; compId?: string; itemIndex?: number } | null>(null);
+  const [uploadTarget, setUploadTarget] = useState<{ type: "branding_logo" | "comp_logo" | "comp_banner" | "testi_img" | "ticker_img" | "gallery_sidebar" | "podcast_cover" | "header_hero_img" | "movie_poster"; compId?: string; itemIndex?: number } | null>(null);
 
   const triggerUpload = (target: typeof uploadTarget) => {
     setUploadTarget(target);
@@ -885,6 +892,13 @@ export default function KitabhWebsiteBuilder(props: any) {
         }
       } else if (uploadTarget.type === "header_hero_img" && uploadTarget.compId) {
         updateComponentSettings(uploadTarget.compId, { heroImageUrl: dataUrl });
+      } else if (uploadTarget.type === "movie_poster" && uploadTarget.compId && uploadTarget.itemIndex !== undefined) {
+        const comp = activeSite!.pages.flatMap(p => p.components).find(c => c.id === uploadTarget.compId);
+        if (comp) {
+          const items = [...(comp.settings.items || [])];
+          items[uploadTarget.itemIndex] = { ...items[uploadTarget.itemIndex], imageUrl: dataUrl };
+          updateComponentSettings(uploadTarget.compId, { items });
+        }
       }
       setUploadTarget(null);
     };
@@ -1093,6 +1107,12 @@ export default function KitabhWebsiteBuilder(props: any) {
             pc += `<div class="pv-social-links">${slHtml}</div>`;
             break;
           }
+          case "movies": {
+            const mItems = s.items || [];
+            const mHtml = mItems.map((item: any) => `<a class="pv-movie-card" href="${item.url || "#"}" target="_blank" rel="noopener" style="text-decoration:none;color:inherit"><div class="pv-movie-poster">${item.imageUrl ? `<img src="${item.imageUrl}" alt="${item.title || ""}"/>` : `<div class="pv-movie-poster-ph"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="2"/><polygon points="10 8 16 12 10 16"/></svg></div>`}</div><div class="pv-movie-info"><h4>${item.title || ""}</h4><p>${item.subtitle || ""}</p>${item.buttonText ? `<span class="pv-movie-btn" style="background:${bc}">${item.buttonText}</span>` : ""}</div></a>`).join("");
+            pc += `<div class="pv-section"><h2 class="pv-section-title">${s.sectionTitle || "أفلام ومسلسلات"}</h2><div class="pv-movies-grid">${mHtml}</div></div>`;
+            break;
+          }
           default:
             pc += `<div class="pv-placeholder">${COMPONENT_META[comp.type]?.label || comp.type}</div>`;
         }
@@ -1227,6 +1247,17 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
 .pv-testimonials{padding:32px 24px;}.pv-testi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px;}.pv-testi-card{padding:20px;background:var(--pv-card-bg);border:1px solid rgba(128,128,128,0.15);border-radius:var(--pv-radius);}.pv-testi-text{font-size:15px;line-height:1.7;color:var(--pv-text);margin:0 0 12px;font-style:italic;}.pv-testi-author strong{display:block;font-size:14px;color:var(--pv-headline);}.pv-testi-author span{font-size:12px;color:var(--pv-text);opacity:0.7;}
 /* Bento Grid */
 .pv-bento{padding:24px;}.pv-bento-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}.pv-bento-card{background:var(--pv-card-bg);border:1px solid rgba(128,128,128,0.15);overflow:hidden;display:flex;flex-direction:column;border-radius:var(--pv-radius);}.pv-bento-square{}.pv-bento-wide{grid-column:span 2;}.pv-bento-tall{grid-row:span 2;}.pv-bento-img{width:100%;height:200px;object-fit:cover;}.pv-bento-img-ph{width:100%;height:200px;background:rgba(128,128,128,0.1);}.pv-bento-body{padding:12px 16px;}.pv-bento-body h4{font-size:15px;font-weight:700;color:var(--pv-headline);margin:0 0 4px;}.pv-bento-body p{font-size:13px;color:var(--pv-text);margin:0;}
+/* Movies */
+.pv-movies-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:16px;padding:0 24px 24px;}
+.pv-movie-card{display:flex;flex-direction:column;overflow:hidden;transition:transform .15s;}
+.pv-movie-card:hover{transform:translateY(-2px);}
+.pv-movie-poster{width:100%;aspect-ratio:2/3;background:rgba(128,128,128,0.12);overflow:hidden;border-radius:var(--pv-radius);}
+.pv-movie-poster img{width:100%;height:100%;object-fit:cover;display:block;}
+.pv-movie-poster-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#ccc;}
+.pv-movie-info{padding:8px 0;}
+.pv-movie-info h4{font-size:14px;font-weight:700;margin:0;color:var(--pv-headline);line-height:1.4;}
+.pv-movie-info p{font-size:12px;color:var(--pv-text);margin:4px 0 0;line-height:1.5;}
+.pv-movie-btn{display:inline-block;padding:6px 16px;color:#fff;font-size:12px;font-weight:600;border-radius:var(--pv-radius);margin-top:8px;text-align:center;}
 /* Social Links */
 .pv-social-links{display:flex;justify-content:center;gap:16px;padding:24px;flex-wrap:wrap;}.pv-social-link{font-size:14px;font-weight:600;color:var(--pv-link);padding:8px 16px;border:1px solid rgba(128,128,128,0.2);transition:all .15s;border-radius:var(--pv-radius);}.pv-social-link:hover{background:var(--pv-btn);color:#fff;border-color:var(--pv-btn);}
 /* Gallery */
@@ -2050,12 +2081,46 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                         </div>
                       ); break;
 
-                    case "rich_text":
+                    case "rich_text": {
+                      const rteRef = `rte-${comp.id}`;
+                      const execRte = (cmd: string, val?: string) => {
+                        const el = document.getElementById(rteRef);
+                        if (el) { el.focus(); document.execCommand(cmd, false, val); }
+                      };
                       _inner = (
                         <div className="kwb-p-rich-text">
-                          <div className="kwb-p-rich-text-content" dangerouslySetInnerHTML={{ __html: comp.settings.html || "<p>أضف محتواك المنسق هنا...</p>" }} />
+                          <div className="kwb-p-rte-toolbar">
+                            <button type="button" onMouseDown={e => { e.preventDefault(); execRte("formatBlock", "h2"); }} title="عنوان">H</button>
+                            <button type="button" onMouseDown={e => { e.preventDefault(); execRte("formatBlock", "h3"); }} title="عنوان فرعي">H3</button>
+                            <button type="button" onMouseDown={e => { e.preventDefault(); execRte("formatBlock", "p"); }} title="فقرة">P</button>
+                            <span className="kwb-p-rte-sep" />
+                            <button type="button" onMouseDown={e => { e.preventDefault(); execRte("bold"); }} title="عريض"><strong>B</strong></button>
+                            <button type="button" onMouseDown={e => { e.preventDefault(); execRte("italic"); }} title="مائل"><em>I</em></button>
+                            <button type="button" onMouseDown={e => { e.preventDefault(); execRte("underline"); }} title="تحته خط"><u>U</u></button>
+                            <span className="kwb-p-rte-sep" />
+                            <button type="button" onMouseDown={e => { e.preventDefault(); const url = prompt("أدخل الرابط:", "https://"); if (url) execRte("createLink", url); }} title="رابط">🔗</button>
+                            <button type="button" onMouseDown={e => { e.preventDefault(); execRte("insertUnorderedList"); }} title="قائمة نقطية">•</button>
+                            <button type="button" onMouseDown={e => { e.preventDefault(); execRte("insertOrderedList"); }} title="قائمة رقمية">1.</button>
+                            <span className="kwb-p-rte-sep" />
+                            <button type="button" onMouseDown={e => { e.preventDefault(); execRte("justifyRight"); }} title="محاذاة يمين">⫡</button>
+                            <button type="button" onMouseDown={e => { e.preventDefault(); execRte("justifyCenter"); }} title="محاذاة وسط">⫠</button>
+                            <button type="button" onMouseDown={e => { e.preventDefault(); execRte("justifyLeft"); }} title="محاذاة يسار">⫢</button>
+                            <span className="kwb-p-rte-sep" />
+                            <button type="button" onMouseDown={e => { e.preventDefault(); execRte("insertHorizontalRule"); }} title="فاصل">—</button>
+                            <button type="button" onMouseDown={e => { e.preventDefault(); const url = prompt("رابط الصورة:", "https://"); if (url) execRte("insertImage", url); }} title="صورة">{Icons.image}</button>
+                          </div>
+                          <div
+                            id={rteRef}
+                            className="kwb-p-rich-text-content kwb-p-rte-editable"
+                            contentEditable
+                            suppressContentEditableWarning
+                            dir="rtl"
+                            dangerouslySetInnerHTML={{ __html: comp.settings.html || "<h2>عنوان القسم</h2><p>أضف محتواك المنسق هنا...</p>" }}
+                            onBlur={(e) => updateComponentSettings(comp.id, { html: e.currentTarget.innerHTML })}
+                          />
                         </div>
                       ); break;
+                    }
 
                     case "image_block":
                       _inner = (
@@ -2127,6 +2192,29 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                                 <span className="kwb-p-product-price">{item.price}</span>
                                 <button className="kwb-p-subscribe-btn" style={{ background: activeSite.branding.buttonColor, width: "100%", marginTop: 8 }}>{item.buttonText || "اشتري"}</button>
                               </div>
+                            ))}
+                          </div>
+                        </div>
+                      ); break;
+                    }
+
+                    case "movies": {
+                      const movieItems = comp.settings.items || [];
+                      _inner = (
+                        <div className="kwb-p-section">
+                          <h3 className="kwb-p-section-title kwb-p-editable" contentEditable suppressContentEditableWarning onBlur={(e) => updateComponentSettings(comp.id, { sectionTitle: e.currentTarget.textContent || "" })}>{comp.settings.sectionTitle || "أفلام ومسلسلات"}</h3>
+                          <div className="kwb-p-movies-grid">
+                            {movieItems.map((item: any, i: number) => (
+                              <a key={i} className="kwb-p-movie-card" href={item.url || "#"} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none", color: "inherit" }}>
+                                <div className="kwb-p-movie-poster">
+                                  {item.imageUrl ? <img src={item.imageUrl} alt={item.title} /> : <div className="kwb-p-movie-poster-ph"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><rect x="2" y="2" width="20" height="20" rx="2"/><polygon points="10 8 16 12 10 16"/></svg></div>}
+                                </div>
+                                <div className="kwb-p-movie-info">
+                                  <h4 className="kwb-p-movie-title">{item.title}</h4>
+                                  <p className="kwb-p-movie-subtitle">{item.subtitle}</p>
+                                  {item.buttonText && <span className="kwb-p-movie-btn" style={{ background: activeSite.branding.buttonColor }}>{item.buttonText}</span>}
+                                </div>
+                              </a>
                             ))}
                           </div>
                         </div>
@@ -3017,19 +3105,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
 
                             {comp.type === "rich_text" && (
                               <>
-                                <label className="kwb-label">المحتوى المنسق (HTML)</label>
-                                <div className="kwb-rich-toolbar">
-                                  <button type="button" onClick={() => { const ta = document.getElementById(`rte-${comp.id}`) as HTMLTextAreaElement; if (ta) { const s = ta.selectionStart; const e = ta.selectionEnd; const v = ta.value; const sel = v.substring(s, e); const nv = v.substring(0, s) + `<strong>${sel || "نص عريض"}</strong>` + v.substring(e); updateComponentSettings(comp.id, { html: nv }); } }} title="عريض"><strong>B</strong></button>
-                                  <button type="button" onClick={() => { const ta = document.getElementById(`rte-${comp.id}`) as HTMLTextAreaElement; if (ta) { const s = ta.selectionStart; const e = ta.selectionEnd; const v = ta.value; const sel = v.substring(s, e); const nv = v.substring(0, s) + `<em>${sel || "نص مائل"}</em>` + v.substring(e); updateComponentSettings(comp.id, { html: nv }); } }} title="مائل"><em>I</em></button>
-                                  <button type="button" onClick={() => { const v = comp.settings.html || ""; updateComponentSettings(comp.id, { html: v + "\n<h2>عنوان</h2>" }); }} title="عنوان">H</button>
-                                  <button type="button" onClick={() => { const v = comp.settings.html || ""; updateComponentSettings(comp.id, { html: v + "\n<ul>\n<li>عنصر</li>\n<li>عنصر</li>\n</ul>" }); }} title="قائمة نقطية">•</button>
-                                  <button type="button" onClick={() => { const v = comp.settings.html || ""; updateComponentSettings(comp.id, { html: v + '\n<a href="https://" target="_blank">رابط</a>' }); }} title="رابط">🔗</button>
-                                  <button type="button" onClick={() => { const v = comp.settings.html || ""; updateComponentSettings(comp.id, { html: v + '\n<img src="" alt="" style="max-width:100%" />' }); }} title="صورة">{Icons.image}</button>
-                                  <button type="button" onClick={() => { const v = comp.settings.html || ""; updateComponentSettings(comp.id, { html: v + '\n<button style="padding:12px 24px;background:#E82222;color:#fff;border:none;font-size:14px;cursor:pointer">زر</button>' }); }} title="زر">☐</button>
-                                  <button type="button" onClick={() => { const v = comp.settings.html || ""; updateComponentSettings(comp.id, { html: v + "\n<hr />" }); }} title="فاصل">—</button>
-                                </div>
-                                <textarea id={`rte-${comp.id}`} className="kwb-input kwb-rte-textarea" value={comp.settings.html || ""} onChange={e => updateComponentSettings(comp.id, { html: e.target.value })} placeholder="<p>أضف محتواك هنا...</p>" />
-                                <p className="kwb-hint">يمكنك كتابة HTML مباشرة مع التنسيقات</p>
+                                <p className="kwb-hint" style={{ marginTop: 0 }}>انقر على المحتوى في المعاينة للتعديل مباشرة. استخدم شريط الأدوات أعلى المحتوى للتنسيق.</p>
                               </>
                             )}
 
@@ -3116,6 +3192,32 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                                   </div>
                                 ))}
                                 <button className="kwb-btn-outline kwb-btn-full" style={{ marginTop: 10 }} onClick={() => { const items = [...(comp.settings.items || []), { title: "", subtitle: "", price: "", imageUrl: "", url: "", buttonText: "اشتري الآن" }]; updateComponentSettings(comp.id, { items }); }}>{Icons.plus} إضافة منتج</button>
+                              </>
+                            )}
+
+                            {comp.type === "movies" && (
+                              <>
+                                <label className="kwb-label">عنوان القسم</label>
+                                <input className="kwb-input" value={comp.settings.sectionTitle || ""} onChange={e => updateComponentSettings(comp.id, { sectionTitle: e.target.value })} placeholder="عنوان القسم" />
+                                {(comp.settings.items || []).map((item: any, i: number) => (
+                                  <div key={i} style={{ borderTop: "1px solid #f0f0f0", paddingTop: 10, marginTop: 10 }}>
+                                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                                      <span style={{ fontSize: 12, fontWeight: 600, color: "#888" }}>عنصر {i + 1}</span>
+                                      <button className="kwb-comp-delete-btn" onClick={() => { const items = [...(comp.settings.items || [])]; items.splice(i, 1); updateComponentSettings(comp.id, { items }); }}>{Icons.x}</button>
+                                    </div>
+                                    <label className="kwb-label" style={{ marginTop: 6 }}>البوستر</label>
+                                    {item.imageUrl ? (
+                                      <div className="kwb-upload-preview" style={{ marginTop: 4 }}><img src={item.imageUrl} alt="" /><button className="kwb-upload-remove" onClick={() => { const items = [...(comp.settings.items || [])]; items[i] = { ...items[i], imageUrl: "" }; updateComponentSettings(comp.id, { items }); }}>{Icons.x}</button></div>
+                                    ) : (
+                                      <button className="kwb-btn-outline kwb-btn-full" style={{ marginTop: 4, fontSize: 11 }} onClick={() => triggerUpload({ type: "movie_poster", compId: comp.id, itemIndex: i })}>{Icons.image} رفع بوستر</button>
+                                    )}
+                                    <input className="kwb-input" placeholder="اسم الفيلم / المسلسل" value={item.title || ""} onChange={e => { const items = [...(comp.settings.items || [])]; items[i] = { ...items[i], title: e.target.value }; updateComponentSettings(comp.id, { items }); }} style={{ marginTop: 6 }} />
+                                    <input className="kwb-input" placeholder="وصف مختصر" value={item.subtitle || ""} onChange={e => { const items = [...(comp.settings.items || [])]; items[i] = { ...items[i], subtitle: e.target.value }; updateComponentSettings(comp.id, { items }); }} style={{ marginTop: 6 }} />
+                                    <input className="kwb-input" placeholder="رابط المشاهدة" value={item.url || ""} onChange={e => { const items = [...(comp.settings.items || [])]; items[i] = { ...items[i], url: e.target.value }; updateComponentSettings(comp.id, { items }); }} style={{ marginTop: 6 }} dir="ltr" />
+                                    <input className="kwb-input" placeholder="نص الزر" value={item.buttonText || ""} onChange={e => { const items = [...(comp.settings.items || [])]; items[i] = { ...items[i], buttonText: e.target.value }; updateComponentSettings(comp.id, { items }); }} style={{ marginTop: 6 }} />
+                                  </div>
+                                ))}
+                                <button className="kwb-btn-outline kwb-btn-full" style={{ marginTop: 10 }} onClick={() => { const items = [...(comp.settings.items || []), { title: "", subtitle: "", imageUrl: "", url: "", buttonText: "شاهد الآن" }]; updateComponentSettings(comp.id, { items }); }}>{Icons.plus} إضافة عنصر</button>
                               </>
                             )}
 
@@ -3360,7 +3462,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                 {showAddComponent && (
                   <div className="kwb-add-comp-dropdown">
                     <div className="kwb-add-comp-cards">
-                      {(["header","hero_news","subscribe","article_collection","bento_grid","banner","brands_ticker","testimonials","products","podcast","courses","topics","text_block","rich_text","image_block","contact_form","social_links","divider","footer"] as ComponentType[]).map(type => (
+                      {(["header","hero_news","subscribe","article_collection","bento_grid","banner","brands_ticker","testimonials","products","movies","podcast","courses","topics","text_block","rich_text","image_block","contact_form","social_links","divider","footer"] as ComponentType[]).map(type => (
                         <button key={type} className="kwb-add-comp-card" onClick={() => { addComponentToPage(type); setShowAddComponent(false); }}>
                           <span className="kwb-add-comp-icon" dangerouslySetInnerHTML={{ __html: COMPONENT_ICONS[type] || '' }} />
                           <span className="kwb-add-comp-name">{COMPONENT_META[type].label}</span>
@@ -3713,15 +3815,15 @@ const CSS_STYLES = `
 .kwb-p-cta-logo{width:40px;height:40px;border-radius:50%;background:var(--kwb-headline-color,#1a1a1a);color:var(--kwb-bg,#fff);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;flex-shrink:0;}
 .kwb-p-cta h3{font-size:18px;font-weight:700;margin:0;color:var(--kwb-headline-color,#1a1a1a);}
 .kwb-p-cta p{font-size:15px;color:var(--kwb-text-color,#888);margin:2px 0 0;}
-.kwb-p-cta-form{display:flex;gap:0;flex:1;min-width:250px;}
-.kwb-p-email-input{flex:1;height:48px;padding:0 18px;border:1px solid rgba(128,128,128,0.3);border-left:none;font-family:inherit;font-size:15px;outline:none;background:var(--kwb-card-bg,#fff);color:var(--kwb-text-color,#333);min-width:180px;direction:rtl;}
+.kwb-p-cta-form{display:flex;gap:0;flex:1;min-width:0;width:100%;}
+.kwb-p-email-input{flex:1;height:48px;padding:0 18px;border:1px solid rgba(128,128,128,0.3);font-family:inherit;font-size:15px;outline:none;background:var(--kwb-card-bg,#fff);color:var(--kwb-text-color,#333);min-width:0;width:100%;direction:rtl;box-sizing:border-box;}
 .kwb-p-email-input::placeholder{color:var(--kwb-text-color,#bbb);opacity:0.5;}
 
 /* Hero Subscribe */
 .kwb-p-hero-sub{padding:56px 16px;text-align:center;background:var(--kwb-card-bg,#f5f5f5);}
 .kwb-p-hero-sub h2{font-size:36px;font-weight:800;margin:0 0 8px;color:var(--kwb-headline-color,#1a1a1a);}
 .kwb-p-hero-sub p{font-size:18px;color:var(--kwb-text-color,#666);margin:0 0 24px;}
-.kwb-p-hero-sub-form{display:flex;gap:0;max-width:400px;margin:0 auto;}
+.kwb-p-hero-sub-form{display:flex;gap:0;max-width:480px;width:100%;margin:0 auto;}
 .kwb-p-header-hero-img-wrap{width:100px;height:100px;margin:0 auto 20px;border-radius:var(--kwb-radius,12px);overflow:hidden;background:var(--kwb-card-bg,#f0f0f0);display:flex;align-items:center;justify-content:center;}
 .kwb-p-header-hero-img{width:100%;height:100%;object-fit:cover;}
 .kwb-p-header-hero-img-ph{color:#bbb;display:flex;align-items:center;justify-content:center;width:100%;height:100%;}
@@ -3813,7 +3915,7 @@ const CSS_STYLES = `
 /* Subscribe Form */
 .kwb-p-subscribe-form{padding:40px 16px;text-align:center;background:var(--kwb-card-bg,#f5f5f5);}
 .kwb-p-subscribe-form h3{font-size:22px;font-weight:700;margin:0 0 16px;color:var(--kwb-headline-color,#1a1a1a);}
-.kwb-p-sf-row{display:flex;gap:0;max-width:400px;margin:0 auto;}
+.kwb-p-sf-row{display:flex;gap:0;max-width:480px;width:100%;margin:0 auto;}
 /* Contact Form */
 .kwb-p-contact-form{padding:40px 16px;max-width:500px;margin:0 auto;}
 .kwb-p-contact-form h3{font-size:22px;font-weight:700;margin:0 0 16px;color:var(--kwb-headline-color,#1a1a1a);text-align:center;}
@@ -3890,6 +3992,26 @@ const CSS_STYLES = `
 .kwb-p-product-title{font-size:13px;font-weight:700;margin:0;color:var(--kwb-headline-color,#1a1a1a);}
 .kwb-p-product-subtitle{font-size:11px;color:var(--kwb-text-color,#888);margin:0;}
 .kwb-p-product-price{font-size:14px;font-weight:800;color:var(--kwb-headline-color,#1a1a1a);}
+
+/* Movies */
+.kwb-p-movies-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:16px;}
+.kwb-p-movie-card{display:flex;flex-direction:column;gap:0;overflow:hidden;transition:transform .15s;cursor:pointer;}
+.kwb-p-movie-card:hover{transform:translateY(-2px);}
+.kwb-p-movie-poster{width:100%;aspect-ratio:2/3;background:rgba(128,128,128,0.12);overflow:hidden;border-radius:var(--kwb-radius,0);}
+.kwb-p-movie-poster img{width:100%;height:100%;object-fit:cover;display:block;}
+.kwb-p-movie-poster-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#ccc;}
+.kwb-p-movie-info{padding:8px 0;}
+.kwb-p-movie-title{font-size:13px;font-weight:700;margin:0;color:var(--kwb-headline-color,#1a1a1a);line-height:1.4;}
+.kwb-p-movie-subtitle{font-size:11px;color:var(--kwb-text-color,#888);margin:4px 0 0;line-height:1.5;}
+.kwb-p-movie-btn{display:inline-block;padding:6px 16px;color:#fff;font-size:11px;font-weight:600;border-radius:var(--kwb-radius,4px);margin-top:6px;text-align:center;}
+
+/* Rich Text WYSIWYG Toolbar */
+.kwb-p-rte-toolbar{display:flex;gap:2px;flex-wrap:wrap;padding:6px 8px;background:var(--kwb-card-bg,#f5f5f5);border:1px solid rgba(128,128,128,0.2);border-bottom:none;}
+.kwb-p-rte-toolbar button{width:30px;height:30px;border:none;background:transparent;cursor:pointer;border-radius:4px;font-size:13px;display:flex;align-items:center;justify-content:center;color:var(--kwb-text-color,#555);font-family:inherit;}
+.kwb-p-rte-toolbar button:hover{background:rgba(128,128,128,0.15);}
+.kwb-p-rte-sep{width:1px;height:24px;background:rgba(128,128,128,0.2);margin:3px 4px;align-self:center;}
+.kwb-p-rte-editable{min-height:120px;padding:16px;border:1px solid rgba(128,128,128,0.2);outline:none;cursor:text;}
+.kwb-p-rte-editable:focus{border-color:var(--kwb-btn-color,#E82222);box-shadow:0 0 0 2px rgba(232,34,34,0.1);}
 
 /* Podcast */
 .kwb-p-podcast-list{display:flex;flex-direction:column;gap:1px;background:rgba(128,128,128,0.2);}
@@ -4273,8 +4395,7 @@ const CSS_STYLES = `
 .kwb-preview-content .kwb-p-article-img{border-radius:var(--kwb-radius,0);}
 .kwb-preview-content .kwb-p-hero-side-img{border-radius:var(--kwb-radius,0);}
 .kwb-preview-content .kwb-p-hero-main-img{border-radius:var(--kwb-radius,0);}
-.kwb-preview-content .kwb-p-hero-side-card{border-radius:var(--kwb-radius,0);overflow:hidden;}
-.kwb-preview-content .kwb-p-email-input{border-radius:0 var(--kwb-radius,0) var(--kwb-radius,0) 0;}
+.kwb-preview-content .kwb-p-email-input{border-radius:var(--kwb-radius,0);}
 .kwb-preview-content .kwb-p-footer-email{border-radius:0 var(--kwb-radius,0) var(--kwb-radius,0) 0;}
 .kwb-preview-content .kwb-p-cf-input{border-radius:var(--kwb-radius,0);}
 .kwb-preview-content .kwb-p-cf-textarea{border-radius:var(--kwb-radius,0);}
