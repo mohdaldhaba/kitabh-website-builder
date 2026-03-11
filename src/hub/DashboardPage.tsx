@@ -12,13 +12,10 @@ const StatCard: React.FC<{
 }> = ({ label, value, change, positive, icon }) => (
   <div
     style={{
-      background: 'rgba(255,255,255,0.6)',
-      backdropFilter: 'blur(12px)',
-      WebkitBackdropFilter: 'blur(12px)',
+      background: '#fff',
       borderRadius: 14,
       padding: '20px 24px',
-      border: '1px solid rgba(255,255,255,0.5)',
-      boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
+      border: '1px solid #E5E7EB',
       flex: 1,
       minWidth: 180,
     }}
@@ -183,7 +180,7 @@ const DashboardPage: React.FC = () => {
       {/* Two columns: Recent articles + Email performance */}
       <div className="hub-dashboard-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: 20 }}>
         {/* Recent Articles */}
-        <div style={{ background: 'rgba(255,255,255,0.6)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)', borderRadius: 14, border: '1px solid rgba(255,255,255,0.5)', padding: '20px 24px' }}>
+        <div style={{ background: '#fff', borderRadius: 14, border: '1px solid #E5E7EB', padding: '20px 24px' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
             <h2 style={{ fontSize: 16, fontWeight: 700, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: 0 }}>
               آخر المنشورات
@@ -210,7 +207,7 @@ const DashboardPage: React.FC = () => {
         {/* Right column */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
           {/* Email Performance */}
-          <div style={{ background: 'rgba(255,255,255,0.6)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)', borderRadius: 14, border: '1px solid rgba(255,255,255,0.5)', padding: '20px 24px' }}>
+          <div style={{ background: '#fff', borderRadius: 14, border: '1px solid #E5E7EB', padding: '20px 24px' }}>
             <h2 style={{ fontSize: 16, fontWeight: 700, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 16px' }}>
               أداء النشرة البريدية
             </h2>
@@ -237,7 +234,7 @@ const DashboardPage: React.FC = () => {
           </div>
 
           {/* Quick Actions */}
-          <div style={{ background: 'rgba(255,255,255,0.6)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)', borderRadius: 14, border: '1px solid rgba(255,255,255,0.5)', padding: '20px 24px' }}>
+          <div style={{ background: '#fff', borderRadius: 14, border: '1px solid #E5E7EB', padding: '20px 24px' }}>
             <h2 style={{ fontSize: 16, fontWeight: 700, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 12px' }}>
               إجراءات سريعة
             </h2>

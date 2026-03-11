@@ -40,7 +40,7 @@ const MembersPage: React.FC = () => (
       </button>
     </div>
 
-    <div style={{ background: 'rgba(255,255,255,0.6)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)', borderRadius: 14, border: '1px solid rgba(255,255,255,0.5)', overflow: 'hidden' }}>
+    <div style={{ background: '#fff', borderRadius: 12, border: '1px solid #E5E7EB', overflow: 'hidden' }}>
       {mockMembers.map((member, index) => {
         const roleStyle = roleColors[member.role] || roleColors['كاتب'];
         return (
@@ -125,7 +125,7 @@ const MembersPage: React.FC = () => (
     </div>
 
     {/* Roles explanation */}
-    <div style={{ marginTop: 24, background: 'rgba(255,255,255,0.6)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)', borderRadius: 14, border: '1px solid rgba(255,255,255,0.5)', padding: 24 }}>
+    <div style={{ marginTop: 24, background: '#fff', borderRadius: 12, border: '1px solid #E5E7EB', padding: 24 }}>
       <h3 style={{ fontSize: 15, fontWeight: 600, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 16px' }}>
         الأدوار والصلاحيات
       </h3>

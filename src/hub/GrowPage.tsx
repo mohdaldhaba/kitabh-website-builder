@@ -16,7 +16,7 @@ const CarouselSection: React.FC = () => (
       أنشئ كاروسيلات جذابة لمشاركتها على وسائل التواصل الاجتماعي لجذب مشتركين جدد
     </p>
 
-    <div style={{ background: 'rgba(255,255,255,0.6)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)', borderRadius: 14, border: '1px solid rgba(255,255,255,0.5)', padding: 24, marginBottom: 20 }}>
+    <div style={{ background: '#fff', borderRadius: 12, border: '1px solid #E5E7EB', padding: 24, marginBottom: 20 }}>
       {/* Topic input */}
       <div style={{ marginBottom: 20 }}>
         <label style={{ display: 'block', fontSize: 14, fontWeight: 600, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', marginBottom: 8 }}>
@@ -28,7 +28,7 @@ const CarouselSection: React.FC = () => (
           style={{
             width: '100%',
             padding: '12px 16px',
-            border: '1px solid rgba(0,0,0,0.1)',
+            border: '1px solid #E5E7EB',
             borderRadius: 8,
             fontSize: 14,
             fontFamily: 'IBM Plex Sans Arabic, sans-serif',
@@ -117,7 +117,7 @@ const CarouselSection: React.FC = () => (
     </div>
 
     {/* Previous carousels */}
-    <div style={{ background: 'rgba(255,255,255,0.6)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)', borderRadius: 14, border: '1px solid rgba(255,255,255,0.5)', padding: 24 }}>
+    <div style={{ background: '#fff', borderRadius: 12, border: '1px solid #E5E7EB', padding: 24 }}>
       <h3 style={{ fontSize: 15, fontWeight: 600, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 16px' }}>
         الكاروسيلات السابقة
       </h3>

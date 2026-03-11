@@ -149,22 +149,21 @@ const navItems: NavItem[] = [
 
 // ─── Styles ──────────────────────────────────────────────
 const colors = {
-  sidebarBg: 'rgba(255,255,255,0.6)',
-  sidebarBorder: 'rgba(0,0,0,0.06)',
-  activeItem: 'rgba(0,0,0,0.06)',
-  activeText: '#000000',
-  text: '#111111',
-  textMuted: '#888888',
+  sidebarBg: '#FFFFFF',
+  sidebarBorder: '#E5E7EB',
+  activeItem: '#F3F4F6',
+  activeText: '#111827',
+  text: '#111827',
+  textMuted: '#6B7280',
   white: '#FFFFFF',
-  primary: '#000000',
-  primaryHover: '#222222',
-  topBarBg: 'rgba(255,255,255,0.7)',
-  topBarBorder: 'rgba(0,0,0,0.05)',
-  contentBg: '#F5F5F7',
-  hoverBg: 'rgba(0,0,0,0.03)',
-  glass: 'rgba(255,255,255,0.55)',
-  glassBorder: 'rgba(255,255,255,0.3)',
-  glassCard: 'rgba(255,255,255,0.7)',
+  primary: '#111827',
+  primaryHover: '#1F2937',
+  topBarBg: '#FFFFFF',
+  topBarBorder: '#E5E7EB',
+  contentBg: '#F9FAFB',
+  hoverBg: '#F9FAFB',
+  border: '#E5E7EB',
+  cardBg: '#FFFFFF',
 };
 
 const pageTitles: Record<Page, string> = {
@@ -395,7 +394,7 @@ const HubLayout: React.FC<HubLayoutProps> = ({ children, activePage, activeSubPa
       {/* Bottom: Settings, Help, Logout */}
       <div style={{ borderTop: `1px solid ${colors.sidebarBorder}`, padding: '12px 16px' }}>
         {/* Plan info */}
-        <div style={{ marginBottom: 12, padding: '10px 12px', background: 'rgba(255,255,255,0.5)', borderRadius: 10, border: '1px solid rgba(0,0,0,0.04)' }}>
+        <div style={{ marginBottom: 12, padding: '10px 12px', background: '#F9FAFB', borderRadius: 10, border: `1px solid ${colors.border}` }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
             <span style={{ fontSize: 13, fontWeight: 600, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>
               خطة الأعمال
@@ -403,7 +402,7 @@ const HubLayout: React.FC<HubLayoutProps> = ({ children, activePage, activeSubPa
             <button
               style={{
                 padding: '3px 10px',
-                background: 'rgba(0,0,0,0.06)',
+                background: '#F3F4F6',
                 color: '#111',
                 border: 'none',
                 borderRadius: 6,
@@ -419,7 +418,7 @@ const HubLayout: React.FC<HubLayoutProps> = ({ children, activePage, activeSubPa
           <div style={{ fontSize: 12, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif', marginBottom: 6 }}>
             المشتركون
           </div>
-          <div style={{ height: 3, background: 'rgba(0,0,0,0.06)', borderRadius: 2, overflow: 'hidden' }}>
+          <div style={{ height: 3, background: '#E5E7EB', borderRadius: 2, overflow: 'hidden' }}>
             <div style={{ height: '100%', width: '38%', background: '#111', borderRadius: 2 }} />
           </div>
           <div style={{ fontSize: 11, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif', marginTop: 4 }}>
@@ -513,24 +512,14 @@ const HubLayout: React.FC<HubLayoutProps> = ({ children, activePage, activeSubPa
     </>
   );
 
-  const glassStyle = {
-    background: colors.glass,
-    backdropFilter: 'blur(20px) saturate(180%)',
-    WebkitBackdropFilter: 'blur(20px) saturate(180%)',
-    border: `1px solid ${colors.glassBorder}`,
-  };
-
   return (
-    <div style={{ direction: 'rtl', display: 'flex', minHeight: '100vh', fontFamily: 'IBM Plex Sans Arabic, sans-serif', background: `linear-gradient(135deg, #f5f5f7 0%, #e8e8ed 50%, #f0f0f5 100%)` }}>
+    <div style={{ direction: 'rtl', display: 'flex', minHeight: '100vh', fontFamily: 'IBM Plex Sans Arabic, sans-serif', background: colors.contentBg }}>
       {/* Desktop Sidebar */}
       <aside
         style={{
           width: 260,
-          ...glassStyle,
+          background: colors.sidebarBg,
           borderLeft: `1px solid ${colors.sidebarBorder}`,
-          borderRight: 'none',
-          borderTop: 'none',
-          borderBottom: 'none',
           display: 'flex',
           flexDirection: 'column',
           position: 'fixed',
@@ -547,7 +536,7 @@ const HubLayout: React.FC<HubLayoutProps> = ({ children, activePage, activeSubPa
       {/* Mobile overlay */}
       {mobileMenuOpen && (
         <div
-          style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.3)', backdropFilter: 'blur(4px)', WebkitBackdropFilter: 'blur(4px)', zIndex: 49 }}
+          style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.3)', zIndex: 49 }}
           onClick={() => setMobileMenuOpen(false)}
         />
       )}
@@ -560,12 +549,12 @@ const HubLayout: React.FC<HubLayoutProps> = ({ children, activePage, activeSubPa
           right: mobileMenuOpen ? 0 : -280,
           bottom: 0,
           width: 270,
-          ...glassStyle,
+          background: colors.sidebarBg,
           zIndex: 50,
           transition: 'right 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
           display: 'flex',
           flexDirection: 'column',
-          boxShadow: mobileMenuOpen ? '-8px 0 30px rgba(0,0,0,0.08)' : 'none',
+          boxShadow: mobileMenuOpen ? '-4px 0 20px rgba(0,0,0,0.1)' : 'none',
         }}
         className="hub-sidebar-mobile"
       >
@@ -578,10 +567,8 @@ const HubLayout: React.FC<HubLayoutProps> = ({ children, activePage, activeSubPa
         <header
           style={{
             height: 56,
-            ...glassStyle,
-            borderLeft: 'none',
-            borderRight: 'none',
-            borderTop: 'none',
+            background: colors.topBarBg,
+            borderBottom: `1px solid ${colors.topBarBorder}`,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',

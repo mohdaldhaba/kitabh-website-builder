@@ -15,9 +15,9 @@ const WebsitePage: React.FC = () => {
       </p>
 
       {/* Website preview card */}
-      <div style={{ background: 'rgba(255,255,255,0.6)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)', borderRadius: 14, border: '1px solid rgba(255,255,255,0.5)', overflow: 'hidden', marginBottom: 20 }}>
+      <div style={{ background: '#fff', borderRadius: 12, border: '1px solid #E5E7EB', overflow: 'hidden', marginBottom: 20 }}>
         {/* Browser mockup */}
-        <div style={{ background: '#F3F4F6', padding: '10px 16px', borderBottom: '1px solid rgba(255,255,255,0.5)', display: 'flex', alignItems: 'center', gap: 8 }}>
+        <div style={{ background: '#F3F4F6', padding: '10px 16px', borderBottom: '1px solid #E5E7EB', display: 'flex', alignItems: 'center', gap: 8 }}>
           <div style={{ display: 'flex', gap: 6 }}>
             <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#FCA5A5' }} />
             <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#FDE68A' }} />
@@ -43,7 +43,7 @@ const WebsitePage: React.FC = () => {
         <div
           style={{
             height: 280,
-            background: `linear-gradient(135deg, rgba(17,17,17,0.1) 0%, #fff 50%, rgba(17,17,17,0.05) 100%)`,
+            background: '#F9FAFB',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -92,7 +92,7 @@ const WebsitePage: React.FC = () => {
             padding: '16px 20px',
             background: '#fff',
             color: colors.text,
-            border: '1px solid rgba(255,255,255,0.5)',
+            border: '1px solid #E5E7EB',
             borderRadius: 12,
             fontSize: 15,
             fontWeight: 600,
@@ -110,7 +110,7 @@ const WebsitePage: React.FC = () => {
       </div>
 
       {/* Website settings summary */}
-      <div style={{ background: 'rgba(255,255,255,0.6)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)', borderRadius: 14, border: '1px solid rgba(255,255,255,0.5)', padding: 24 }}>
+      <div style={{ background: '#fff', borderRadius: 12, border: '1px solid #E5E7EB', padding: 24 }}>
         <h3 style={{ fontSize: 15, fontWeight: 600, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 16px' }}>
           إعدادات الموقع
         </h3>

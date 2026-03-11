@@ -16,7 +16,7 @@ const AccountSection: React.FC = () => (
       أدر معلوماتك الشخصية وإعدادات حسابك
     </p>
 
-    <div style={{ background: 'rgba(255,255,255,0.6)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)', borderRadius: 14, border: '1px solid rgba(255,255,255,0.5)', padding: 24 }}>
+    <div style={{ background: '#fff', borderRadius: 12, border: '1px solid #E5E7EB', padding: 24 }}>
       {/* Profile section */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 24, paddingBottom: 24, borderBottom: '1px solid #F3F4F6' }}>
         <div
@@ -49,7 +49,7 @@ const AccountSection: React.FC = () => (
             padding: '8px 16px',
             background: 'transparent',
             color: colors.text,
-            border: '1px solid rgba(0,0,0,0.1)',
+            border: '1px solid #E5E7EB',
             borderRadius: 8,
             fontSize: 13,
             fontWeight: 600,
@@ -92,7 +92,7 @@ const AccountSection: React.FC = () => (
               padding: '6px 12px',
               background: 'transparent',
               color: colors.textMuted,
-              border: '1px solid rgba(0,0,0,0.08)',
+              border: '1px solid #E5E7EB',
               borderRadius: 6,
               fontSize: 12,
               fontWeight: 600,
@@ -119,7 +119,7 @@ const BillingSection: React.FC = () => (
     </p>
 
     {/* Current plan */}
-    <div style={{ background: 'rgba(255,255,255,0.6)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)', borderRadius: 14, border: '1px solid rgba(255,255,255,0.5)', padding: 24, marginBottom: 20 }}>
+    <div style={{ background: '#fff', borderRadius: 12, border: '1px solid #E5E7EB', padding: 24, marginBottom: 20 }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
         <div>
           <h3 style={{ fontSize: 16, fontWeight: 700, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 4px' }}>
@@ -157,7 +157,7 @@ const BillingSection: React.FC = () => (
             padding: '10px 20px',
             background: 'transparent',
             color: colors.text,
-            border: '1px solid rgba(0,0,0,0.1)',
+            border: '1px solid #E5E7EB',
             borderRadius: 8,
             fontSize: 14,
             fontWeight: 600,
@@ -171,7 +171,7 @@ const BillingSection: React.FC = () => (
     </div>
 
     {/* Usage */}
-    <div style={{ background: 'rgba(255,255,255,0.6)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)', borderRadius: 14, border: '1px solid rgba(255,255,255,0.5)', padding: 24 }}>
+    <div style={{ background: '#fff', borderRadius: 12, border: '1px solid #E5E7EB', padding: 24 }}>
       <h3 style={{ fontSize: 15, fontWeight: 600, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 16px' }}>
         الاستهلاك
       </h3>
@@ -218,7 +218,7 @@ const SubdomainSection: React.FC = () => {
       </p>
 
       {/* Current subdomain */}
-      <div style={{ background: 'rgba(255,255,255,0.6)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)', borderRadius: 14, border: '1px solid rgba(255,255,255,0.5)', padding: 24, marginBottom: 20 }}>
+      <div style={{ background: '#fff', borderRadius: 12, border: '1px solid #E5E7EB', padding: 24, marginBottom: 20 }}>
         <h3 style={{ fontSize: 15, fontWeight: 600, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 16px' }}>
           النطاق الفرعي الحالي
         </h3>
@@ -230,7 +230,7 @@ const SubdomainSection: React.FC = () => {
             padding: '12px 16px',
             background: '#F9FAFB',
             borderRadius: 8,
-            border: '1px solid rgba(0,0,0,0.06)',
+            border: '1px solid #E5E7EB',
             marginBottom: 16,
           }}
         >
@@ -259,7 +259,7 @@ const SubdomainSection: React.FC = () => {
       </div>
 
       {/* Custom domain — coming soon */}
-      <div style={{ background: 'rgba(255,255,255,0.6)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)', borderRadius: 14, border: '1px solid rgba(255,255,255,0.5)', padding: 24, opacity: 0.6 }}>
+      <div style={{ background: '#fff', borderRadius: 12, border: '1px solid #E5E7EB', padding: 24, opacity: 0.6 }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
           <h3 style={{ fontSize: 15, fontWeight: 600, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: 0 }}>
             نطاق مخصص

@@ -11,7 +11,7 @@ interface PostsPageProps {
 
 const statusConfig: Record<string, { label: string; bg: string; color: string }> = {
   published: { label: 'منشور', bg: '#ECFDF5', color: '#059669' },
-  draft: { label: 'مسودة', bg: '#FEF3C7', color: '#D97706' },
+  draft: { label: 'مسودة', bg: '#374151', color: '#FFFFFF' },
   scheduled: { label: 'مجدول', bg: '#EEF2FF', color: '#4F46E5' },
   archived: { label: 'مؤرشف', bg: '#F3F4F6', color: '#6B7280' },
 };
@@ -26,7 +26,7 @@ const OutlineCreator: React.FC = () => (
       أنشئ مخططا لمنشورك قبل البدء بالكتابة
     </p>
 
-    <div style={{ background: 'rgba(255,255,255,0.6)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)', borderRadius: 14, border: '1px solid rgba(255,255,255,0.5)', padding: 24 }}>
+    <div style={{ background: '#fff', borderRadius: 14, border: '1px solid #E5E7EB', padding: 24 }}>
       {/* Topic */}
       <div style={{ marginBottom: 20 }}>
         <label style={{ display: 'block', fontSize: 14, fontWeight: 600, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', marginBottom: 8 }}>
@@ -213,7 +213,7 @@ const ArticlesList: React.FC<{ defaultFilter?: FilterStatus }> = ({ defaultFilte
         style={{
           background: '#fff',
           borderRadius: 12,
-          border: '1px solid rgba(255,255,255,0.5)',
+          border: '1px solid #E5E7EB',
           padding: '16px 20px',
           marginBottom: 16,
           display: 'flex',
@@ -233,7 +233,7 @@ const ArticlesList: React.FC<{ defaultFilter?: FilterStatus }> = ({ defaultFilte
             padding: '8px 12px',
             flex: 1,
             minWidth: 200,
-            border: '1px solid rgba(255,255,255,0.5)',
+            border: '1px solid #E5E7EB',
           }}
         >
           <span style={{ opacity: 0.4 }}>{icons.search}</span>
@@ -291,7 +291,7 @@ const ArticlesList: React.FC<{ defaultFilter?: FilterStatus }> = ({ defaultFilte
           onChange={(e) => setSort(e.target.value as SortBy)}
           style={{
             padding: '8px 12px',
-            border: '1px solid rgba(255,255,255,0.5)',
+            border: '1px solid #E5E7EB',
             borderRadius: 8,
             fontSize: 13,
             fontFamily: 'IBM Plex Sans Arabic, sans-serif',
@@ -313,7 +313,7 @@ const ArticlesList: React.FC<{ defaultFilter?: FilterStatus }> = ({ defaultFilte
       </div>
 
       {/* Posts list */}
-      <div style={{ background: 'rgba(255,255,255,0.6)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)', borderRadius: 14, border: '1px solid rgba(255,255,255,0.5)', overflow: 'hidden' }}>
+      <div style={{ background: '#fff', borderRadius: 14, border: '1px solid #E5E7EB', overflow: 'hidden' }}>
         {filtered.map((article, index) => {
           const status = statusConfig[article.status] || statusConfig.draft;
           return (
