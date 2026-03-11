@@ -316,6 +316,9 @@ export default function KitabhWebsiteBuilder(props: any) {
   const [insertAtIndex, setInsertAtIndex] = useState<number | null>(null);
   const [hoveredCompId, setHoveredCompId] = useState<string | null>(null);
   const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved">("idle");
+  const [draggedCompId, setDraggedCompId] = useState<string | null>(null);
+  const [dragOverCompId, setDragOverCompId] = useState<string | null>(null);
+  const [dragOverPosition, setDragOverPosition] = useState<"above" | "below" | null>(null);
 
   // Undo/Redo history
   const undoStack = useRef<string[]>([]);
@@ -755,6 +758,77 @@ export default function KitabhWebsiteBuilder(props: any) {
       };
     }));
     if (expandedComponent === compId) setExpandedComponent(null);
+  };
+
+  // ─── Duplicate component ────────
+  const duplicateComponent = (compId: string) => {
+    if (!activeSiteId || !activePageId) return;
+    setSites(prev => prev.map(s => {
+      if (s.id !== activeSiteId) return s;
+      return {
+        ...s,
+        pages: s.pages.map(p => {
+          if (p.id !== activePageId) return p;
+          const idx = p.components.findIndex(c => c.id === compId);
+          if (idx < 0) return p;
+          const original = p.components[idx];
+          const clone = { ...original, id: crypto.randomUUID(), settings: JSON.parse(JSON.stringify(original.settings)) };
+          const newComps = [...p.components];
+          newComps.splice(idx + 1, 0, clone);
+          return { ...p, components: newComps };
+        }),
+        updatedAt: new Date().toISOString(),
+      };
+    }));
+  };
+
+  // ─── Drag-and-drop reorder ────────
+  const reorderComponent = (fromId: string, toId: string, position: "above" | "below") => {
+    if (!activeSiteId || !activePageId || fromId === toId) return;
+    setSites(prev => prev.map(s => {
+      if (s.id !== activeSiteId) return s;
+      return {
+        ...s,
+        pages: s.pages.map(p => {
+          if (p.id !== activePageId) return p;
+          const comps = p.components.filter(c => c.id !== fromId);
+          const movedComp = p.components.find(c => c.id === fromId);
+          if (!movedComp) return p;
+          const targetIdx = comps.findIndex(c => c.id === toId);
+          if (targetIdx < 0) return p;
+          const insertIdx = position === "below" ? targetIdx + 1 : targetIdx;
+          comps.splice(insertIdx, 0, movedComp);
+          return { ...p, components: comps };
+        }),
+        updatedAt: new Date().toISOString(),
+      };
+    }));
+  };
+
+  const handleDragOver = (e: React.DragEvent, compId: string) => {
+    e.preventDefault();
+    e.dataTransfer.dropEffect = "move";
+    if (compId === draggedCompId) return;
+    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+    const midY = rect.top + rect.height / 2;
+    setDragOverCompId(compId);
+    setDragOverPosition(e.clientY < midY ? "above" : "below");
+  };
+
+  const handleDrop = (e: React.DragEvent, compId: string) => {
+    e.preventDefault();
+    if (draggedCompId && dragOverPosition && draggedCompId !== compId) {
+      reorderComponent(draggedCompId, compId, dragOverPosition);
+    }
+    setDraggedCompId(null);
+    setDragOverCompId(null);
+    setDragOverPosition(null);
+  };
+
+  const handleDragEnd = () => {
+    setDraggedCompId(null);
+    setDragOverCompId(null);
+    setDragOverPosition(null);
   };
 
   // ─── File upload (local preview via FileReader) ────────
@@ -1895,8 +1969,9 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
 
                       {/* Component wrapper */}
                       <div
-                        className={`kwb-p-comp-wrap ${_isSelected ? "kwb-p-comp-selected" : ""}`}
+                        className={`kwb-p-comp-wrap ${_isSelected ? "kwb-p-comp-selected" : ""}${draggedCompId === comp.id ? " kwb-p-comp-dragging" : ""}${dragOverCompId === comp.id && dragOverPosition === "above" ? " kwb-p-drop-above" : ""}${dragOverCompId === comp.id && dragOverPosition === "below" ? " kwb-p-drop-below" : ""}`}
                         data-comp-id={comp.id}
+                        draggable={false}
                         onClick={(e) => {
                           if ((e.target as HTMLElement).closest(".kwb-p-comp-toolbar") || (e.target as HTMLElement).closest(".kwb-p-insert-btn")) return;
                           if ((e.target as HTMLElement).closest("[contenteditable]")) return;
@@ -1906,17 +1981,48 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                         }}
                         onMouseEnter={() => setHoveredCompId(comp.id)}
                         onMouseLeave={() => setHoveredCompId(null)}
+                        onDragOver={(e) => handleDragOver(e, comp.id)}
+                        onDrop={(e) => handleDrop(e, comp.id)}
                       >
                         {/* Hover/selection toolbar */}
                         {(_isSelected || _isHovered) && (
                           <div className="kwb-p-comp-toolbar">
+                            {/* Drag handle */}
+                            <button
+                              className="kwb-p-toolbar-drag"
+                              draggable
+                              onDragStart={(e) => {
+                                e.dataTransfer.effectAllowed = "move";
+                                e.dataTransfer.setData("text/plain", comp.id);
+                                setDraggedCompId(comp.id);
+                              }}
+                              onDragEnd={handleDragEnd}
+                              title="اسحب لتغيير الترتيب"
+                            >
+                              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><circle cx="9" cy="6" r="1.5"/><circle cx="15" cy="6" r="1.5"/><circle cx="9" cy="12" r="1.5"/><circle cx="15" cy="12" r="1.5"/><circle cx="9" cy="18" r="1.5"/><circle cx="15" cy="18" r="1.5"/></svg>
+                            </button>
+                            {/* Move up/down */}
+                            <button className="kwb-p-toolbar-btn" onClick={(e) => { e.stopPropagation(); moveComponent(comp.id, "up"); }} title="نقل لأعلى" disabled={_idx === 0}>
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>
+                            </button>
+                            <button className="kwb-p-toolbar-btn" onClick={(e) => { e.stopPropagation(); moveComponent(comp.id, "down"); }} title="نقل لأسفل" disabled={_idx === _enabledComps.length - 1}>
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+                            </button>
+                            <div className="kwb-p-toolbar-sep" />
+                            {/* Settings / manage data */}
+                            <button className="kwb-p-toolbar-btn" onClick={(e) => { e.stopPropagation(); setExpandedComponent(comp.id); setSidebarTab("components"); }} title="إدارة البيانات">
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                            </button>
+                            {/* Duplicate */}
+                            <button className="kwb-p-toolbar-btn" onClick={(e) => { e.stopPropagation(); duplicateComponent(comp.id); }} title="تكرار">
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+                            </button>
+                            {/* Delete */}
+                            <button className="kwb-p-toolbar-btn kwb-p-toolbar-delete" onClick={(e) => { e.stopPropagation(); removeComponent(comp.id); }} title="حذف">
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                            </button>
+                            {/* Component label */}
                             <span className="kwb-p-toolbar-label">{_meta?.label}</span>
-                            <div className="kwb-p-toolbar-actions">
-                              {_idx > 0 && <button onClick={(e) => { e.stopPropagation(); moveComponent(comp.id, "up"); }} title="نقل لأعلى">&#x2191;</button>}
-                              {_idx < _enabledComps.length - 1 && <button onClick={(e) => { e.stopPropagation(); moveComponent(comp.id, "down"); }} title="نقل لأسفل">&#x2193;</button>}
-                              <button onClick={(e) => { e.stopPropagation(); setExpandedComponent(comp.id); setSidebarTab("components"); }} title="الإعدادات">&#x2699;</button>
-                              <button className="kwb-p-toolbar-delete" onClick={(e) => { e.stopPropagation(); removeComponent(comp.id); }} title="حذف">&#x2715;</button>
-                            </div>
                           </div>
                         )}
                         {_inner}
@@ -3050,7 +3156,7 @@ const CSS_STYLES = `
 .kwb-builder-body{display:flex;flex-direction:row-reverse;flex:1;overflow:hidden;}
 
 /* Preview */
-.kwb-preview-area{flex:1;overflow-y:auto;display:flex;justify-content:center;padding:0 20px 40px;}
+.kwb-preview-area{flex:1;overflow-y:auto;display:flex;justify-content:center;padding:50px 20px 40px;}
 .kwb-preview-frame{width:100%;max-width:1200px;background:var(--kwb-bg,#fff);border:1px solid #E0E0E0;overflow:visible;transition:max-width .3s;}
 .kwb-preview-mobile{max-width:375px;}
 .kwb-preview-mobile .kwb-p-hero-news{grid-template-columns:1fr;}
@@ -3600,19 +3706,27 @@ const CSS_STYLES = `
 
 /* ─── PREVIEW INLINE EDITING ─── */
 /* Component wrapper */
-.kwb-p-comp-wrap{position:relative;transition:outline .15s, box-shadow .15s;outline:2px solid transparent;outline-offset:-2px;}
+.kwb-p-comp-wrap{position:relative;transition:outline .15s, box-shadow .15s;outline:2px solid transparent;outline-offset:-2px;margin-top:0;}
 .kwb-p-comp-wrap:hover{outline-color:rgba(0,0,255,0.15);}
 .kwb-p-comp-selected{outline-color:#0000FF !important;outline-offset:-2px;z-index:2;}
 .kwb-p-comp-selected:hover{outline-color:#0000FF !important;}
 
 /* Toolbar on hover/select */
-.kwb-p-comp-toolbar{position:absolute;top:0;left:0;right:auto;display:flex;align-items:center;gap:2px;padding:4px 8px;background:rgba(0,0,255,0.9);color:#fff;border-radius:0 0 8px 0;font-size:12px;z-index:10;pointer-events:auto;direction:ltr;opacity:0;transition:opacity .15s;}
+.kwb-p-comp-toolbar{position:absolute;top:-44px;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:2px;padding:6px 8px;background:#fff;color:#444;border-radius:10px;font-size:12px;z-index:20;pointer-events:auto;direction:ltr;opacity:0;transition:opacity .15s;box-shadow:0 2px 12px rgba(0,0,0,0.12),0 0 0 1px rgba(0,0,0,0.06);white-space:nowrap;}
 .kwb-p-comp-wrap:hover .kwb-p-comp-toolbar,.kwb-p-comp-selected .kwb-p-comp-toolbar{opacity:1;}
-.kwb-p-toolbar-label{font-weight:600;margin-left:8px;white-space:nowrap;font-family:'IBM Plex Sans Arabic',sans-serif;}
-.kwb-p-toolbar-actions{display:flex;gap:2px;margin-right:auto;}
-.kwb-p-toolbar-actions button{width:24px;height:24px;border:none;background:rgba(255,255,255,0.15);color:#fff;border-radius:4px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;padding:0;transition:background .1s;}
-.kwb-p-toolbar-actions button:hover{background:rgba(255,255,255,0.3);}
-.kwb-p-toolbar-delete:hover{background:rgba(255,80,80,0.6) !important;}
+.kwb-p-toolbar-label{font-weight:600;font-size:11px;color:#888;margin-left:6px;white-space:nowrap;font-family:'IBM Plex Sans Arabic',sans-serif;padding:0 4px;}
+.kwb-p-toolbar-sep{width:1px;height:20px;background:#e0e0e0;margin:0 2px;}
+.kwb-p-toolbar-btn{width:30px;height:30px;border:none;background:transparent;color:#555;border-radius:6px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;padding:0;transition:all .12s;}
+.kwb-p-toolbar-btn:hover{background:#f0f0f0;color:#111;}
+.kwb-p-toolbar-btn:disabled{opacity:0.3;cursor:default;pointer-events:none;}
+.kwb-p-toolbar-delete:hover{background:#FEE2E2 !important;color:#DC2626 !important;}
+.kwb-p-toolbar-drag{width:30px;height:30px;border:none;background:transparent;color:#999;border-radius:6px;cursor:grab;display:flex;align-items:center;justify-content:center;padding:0;transition:all .12s;}
+.kwb-p-toolbar-drag:hover{background:#f0f0f0;color:#555;}
+.kwb-p-toolbar-drag:active{cursor:grabbing;}
+/* Drag states */
+.kwb-p-comp-dragging{opacity:0.4;outline-color:#0000FF !important;}
+.kwb-p-drop-above{box-shadow:0 -3px 0 0 #0000FF inset;}
+.kwb-p-drop-below{box-shadow:0 3px 0 0 #0000FF inset;}
 
 /* Insert line between components */
 .kwb-p-insert-line{position:relative;height:0;display:flex;align-items:center;justify-content:center;z-index:5;transition:height .2s;}
