@@ -4343,7 +4343,7 @@ const CSS_STYLES = `
 
 /* ─── MODALS ─── */
 .kwb-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.5);z-index:200;display:flex;align-items:center;justify-content:center;padding:20px;}
-.kwb-modal{background:#fff;border-radius:16px;width:100%;max-width:480px;max-height:90vh;display:flex;flex-direction:column;overflow:hidden;}
+.kwb-modal{background:#fff;border-radius:16px;width:100%;max-width:480px;max-height:90vh;display:flex;flex-direction:column;overflow:hidden;font-family:'IBM Plex Sans Arabic',system-ui,sans-serif;direction:rtl;}
 .kwb-modal-sm{max-width:400px;}
 .kwb-modal-lg{max-width:560px;}
 .kwb-modal-header{display:flex;align-items:center;justify-content:space-between;padding:20px 20px 0;gap:12px;}
