@@ -173,6 +173,21 @@ const TipAuthorPage: React.FC = () => {
     return () => { document.head.removeChild(style) }
   }, [])
 
+  // Lock body scroll when dialog is open
+  useEffect(() => {
+    if (dialogOpen) {
+      document.body.style.overflow = 'hidden'
+      document.body.style.touchAction = 'none'
+    } else {
+      document.body.style.overflow = ''
+      document.body.style.touchAction = ''
+    }
+    return () => {
+      document.body.style.overflow = ''
+      document.body.style.touchAction = ''
+    }
+  }, [dialogOpen])
+
   const openDialog = () => {
     setDialogOpen(true)
     // Record popup opened
@@ -375,7 +390,8 @@ const TipAuthorPage: React.FC = () => {
               borderRadius: '28px', border: '1px solid rgba(255, 255, 255, 0.6)',
               boxShadow: '0 8px 40px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.04)',
               maxWidth: '400px', width: 'calc(100% - 32px)', maxHeight: 'calc(100vh - 40px)',
-              overflowY: 'auto' as const, animation: 'slideUp 0.3s ease',
+              overflowY: 'auto' as const, overscrollBehavior: 'contain' as const,
+              animation: 'slideUp 0.3s ease',
               direction: 'rtl' as const, fontFamily: "'IBM Plex Sans Arabic', sans-serif",
             }}
           >
