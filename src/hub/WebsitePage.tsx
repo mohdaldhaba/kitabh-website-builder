@@ -43,7 +43,7 @@ const WebsitePage: React.FC = () => {
         <div
           style={{
             height: 280,
-            background: `linear-gradient(135deg, #11110 0%, #fff 50%, #11105 100%)`,
+            background: `linear-gradient(135deg, rgba(17,17,17,0.1) 0%, #fff 50%, rgba(17,17,17,0.05) 100%)`,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -144,7 +144,7 @@ const WebsitePage: React.FC = () => {
               <button
                 style={{
                   padding: '6px 14px',
-                  background: `#11110`,
+                  background: 'rgba(17,17,17,0.1)',
                   color: '#111',
                   border: 'none',
                   borderRadius: 6,

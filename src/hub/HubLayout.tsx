@@ -67,14 +67,40 @@ const icons = {
       <line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="18" x2="21" y2="18" />
     </svg>
   ),
+  members: (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" />
+    </svg>
+  ),
+  help: (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="10" /><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" /><line x1="12" y1="17" x2="12.01" y2="17" />
+    </svg>
+  ),
+  logout: (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" /><polyline points="16 17 21 12 16 7" /><line x1="21" y1="12" x2="9" y2="12" />
+    </svg>
+  ),
+  emailJourney: (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" /><polyline points="22,6 12,13 2,6" />
+    </svg>
+  ),
+  subdomain: (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" />
+    </svg>
+  ),
 };
 
 // ─── Types ───────────────────────────────────────────────
-type Page = 'dashboard' | 'posts' | 'audience' | 'grow' | 'website' | 'analyze' | 'settings';
+type Page = 'dashboard' | 'posts' | 'notifications' | 'grow' | 'website' | 'members' | 'subscribers' | 'email-journeys' | 'settings';
 
 interface SubItem {
   id: string;
   label: string;
+  comingSoon?: boolean;
 }
 
 interface NavItem {
@@ -82,6 +108,7 @@ interface NavItem {
   label: string;
   icon: React.ReactNode;
   subItems?: SubItem[];
+  comingSoon?: boolean;
 }
 
 interface HubLayoutProps {
@@ -95,35 +122,29 @@ const navItems: NavItem[] = [
   { id: 'dashboard', label: 'لوحة التحكم', icon: icons.dashboard },
   {
     id: 'posts',
-    label: 'المنشورات',
+    label: 'المحتوى',
     icon: icons.posts,
     subItems: [
       { id: 'all-posts', label: 'كل المنشورات' },
-      { id: 'draft', label: 'مسودة كتابة' },
-      { id: 'editor', label: 'محرر كتابة' },
+      { id: 'drafts', label: 'المسودات' },
+      { id: 'outline', label: 'إنشاء مخطط' },
+      { id: 'newsletter-stats', label: 'إحصائيات النشرة' },
     ],
   },
-  { id: 'audience', label: 'الجمهور', icon: icons.audience },
+  { id: 'notifications', label: 'الإشعارات', icon: icons.notification },
   {
     id: 'grow',
     label: 'النمو',
     icon: icons.grow,
     subItems: [
-      { id: 'magic-link', label: 'رابط الاشتراك السريع' },
-      { id: 'referral', label: 'برنامج الإحالة' },
-      { id: 'embed', label: 'نماذج مدمجة' },
+      { id: 'carousel', label: 'مولّد الكاروسيل' },
+      { id: 'magic-link', label: 'نماذج الاشتراك', comingSoon: true },
     ],
   },
   { id: 'website', label: 'الموقع', icon: icons.website },
-  {
-    id: 'analyze',
-    label: 'التحليلات',
-    icon: icons.analyze,
-    subItems: [
-      { id: 'newsletter-stats', label: 'إحصائيات النشرة' },
-      { id: 'website-stats', label: 'إحصائيات الموقع' },
-    ],
-  },
+  { id: 'members', label: 'الأعضاء', icon: icons.members },
+  { id: 'subscribers', label: 'المشتركون', icon: icons.audience, comingSoon: true },
+  { id: 'email-journeys', label: 'رحلات البريد', icon: icons.emailJourney, comingSoon: true },
 ];
 
 // ─── Styles ──────────────────────────────────────────────
@@ -146,8 +167,20 @@ const colors = {
   glassCard: 'rgba(255,255,255,0.7)',
 };
 
+const pageTitles: Record<Page, string> = {
+  dashboard: 'لوحة التحكم',
+  posts: 'المحتوى',
+  notifications: 'الإشعارات',
+  grow: 'النمو',
+  website: 'الموقع',
+  members: 'الأعضاء',
+  subscribers: 'المشتركون',
+  'email-journeys': 'رحلات البريد',
+  settings: 'الإعدادات',
+};
+
 const HubLayout: React.FC<HubLayoutProps> = ({ children, activePage, activeSubPage, onNavigate }) => {
-  const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set(['grow', 'analyze']));
+  const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set(['posts']));
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const toggleExpand = (id: string) => {
@@ -158,6 +191,23 @@ const HubLayout: React.FC<HubLayoutProps> = ({ children, activePage, activeSubPa
       return next;
     });
   };
+
+  const comingSoonBadge = (
+    <span
+      style={{
+        fontSize: 10,
+        fontWeight: 600,
+        fontFamily: 'IBM Plex Sans Arabic, sans-serif',
+        color: '#9CA3AF',
+        background: '#F3F4F6',
+        padding: '2px 6px',
+        borderRadius: 4,
+        whiteSpace: 'nowrap',
+      }}
+    >
+      قريبا
+    </span>
+  );
 
   const sidebarContent = (
     <>
@@ -227,14 +277,19 @@ const HubLayout: React.FC<HubLayoutProps> = ({ children, activePage, activeSubPa
           const isActive = activePage === item.id;
           const isExpanded = expandedItems.has(item.id);
           const hasSubItems = item.subItems && item.subItems.length > 0;
+          const isComingSoon = item.comingSoon;
 
           return (
             <div key={item.id} style={{ marginBottom: 2 }}>
               <button
                 onClick={() => {
+                  if (isComingSoon) return;
                   if (hasSubItems) {
                     toggleExpand(item.id);
-                    onNavigate(item.id, item.subItems![0].id);
+                    if (!isActive) {
+                      const firstActive = item.subItems!.find((s) => !s.comingSoon);
+                      onNavigate(item.id, firstActive?.id || item.subItems![0].id);
+                    }
                   } else {
                     onNavigate(item.id);
                   }
@@ -243,32 +298,34 @@ const HubLayout: React.FC<HubLayoutProps> = ({ children, activePage, activeSubPa
                 style={{
                   width: '100%',
                   padding: '10px 12px',
-                  background: isActive ? colors.activeItem : 'transparent',
-                  color: isActive ? colors.activeText : colors.text,
+                  background: isActive && !isComingSoon ? colors.activeItem : 'transparent',
+                  color: isComingSoon ? '#C0C0C0' : isActive ? colors.activeText : colors.text,
                   border: 'none',
                   borderRadius: 8,
                   fontSize: 14,
-                  fontWeight: isActive ? 600 : 500,
+                  fontWeight: isActive && !isComingSoon ? 600 : 500,
                   fontFamily: 'IBM Plex Sans Arabic, sans-serif',
-                  cursor: 'pointer',
+                  cursor: isComingSoon ? 'default' : 'pointer',
                   display: 'flex',
                   alignItems: 'center',
                   gap: 10,
                   transition: 'all 0.15s',
                   textAlign: 'right',
+                  opacity: isComingSoon ? 0.5 : 1,
                 }}
                 onMouseEnter={(e) => {
-                  if (!isActive) e.currentTarget.style.background = colors.hoverBg;
+                  if (!isActive && !isComingSoon) e.currentTarget.style.background = colors.hoverBg;
                 }}
                 onMouseLeave={(e) => {
-                  if (!isActive) e.currentTarget.style.background = 'transparent';
+                  if (!isActive && !isComingSoon) e.currentTarget.style.background = 'transparent';
                 }}
               >
                 <span style={{ display: 'flex', alignItems: 'center', opacity: isActive ? 1 : 0.7 }}>
                   {item.icon}
                 </span>
                 <span style={{ flex: 1, textAlign: 'right' }}>{item.label}</span>
-                {hasSubItems && (
+                {isComingSoon && comingSoonBadge}
+                {hasSubItems && !isComingSoon && (
                   <span
                     style={{
                       display: 'flex',
@@ -284,41 +341,47 @@ const HubLayout: React.FC<HubLayoutProps> = ({ children, activePage, activeSubPa
               </button>
 
               {/* Sub-items */}
-              {hasSubItems && isExpanded && (
+              {hasSubItems && isExpanded && !isComingSoon && (
                 <div style={{ paddingRight: 42, paddingTop: 2 }}>
                   {item.subItems!.map((sub) => {
                     const isSubActive = activePage === item.id && activeSubPage === sub.id;
+                    const isSubComingSoon = sub.comingSoon;
                     return (
                       <button
                         key={sub.id}
                         onClick={() => {
+                          if (isSubComingSoon) return;
                           onNavigate(item.id, sub.id);
                           setMobileMenuOpen(false);
                         }}
                         style={{
                           width: '100%',
                           padding: '8px 12px',
-                          background: isSubActive ? colors.activeItem : 'transparent',
-                          color: isSubActive ? colors.activeText : colors.textMuted,
+                          background: isSubActive && !isSubComingSoon ? colors.activeItem : 'transparent',
+                          color: isSubComingSoon ? '#C0C0C0' : isSubActive ? colors.activeText : colors.textMuted,
                           border: 'none',
                           borderRadius: 6,
                           fontSize: 13,
-                          fontWeight: isSubActive ? 600 : 400,
+                          fontWeight: isSubActive && !isSubComingSoon ? 600 : 400,
                           fontFamily: 'IBM Plex Sans Arabic, sans-serif',
-                          cursor: 'pointer',
+                          cursor: isSubComingSoon ? 'default' : 'pointer',
                           textAlign: 'right',
                           transition: 'all 0.15s',
-                          display: 'block',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
                           marginBottom: 1,
+                          opacity: isSubComingSoon ? 0.5 : 1,
                         }}
                         onMouseEnter={(e) => {
-                          if (!isSubActive) e.currentTarget.style.background = colors.hoverBg;
+                          if (!isSubActive && !isSubComingSoon) e.currentTarget.style.background = colors.hoverBg;
                         }}
                         onMouseLeave={(e) => {
-                          if (!isSubActive) e.currentTarget.style.background = 'transparent';
+                          if (!isSubActive && !isSubComingSoon) e.currentTarget.style.background = 'transparent';
                         }}
                       >
-                        {sub.label}
+                        <span>{sub.label}</span>
+                        {isSubComingSoon && comingSoonBadge}
                       </button>
                     );
                   })}
@@ -329,7 +392,7 @@ const HubLayout: React.FC<HubLayoutProps> = ({ children, activePage, activeSubPa
         })}
       </nav>
 
-      {/* Bottom: Plan & Settings */}
+      {/* Bottom: Settings, Help, Logout */}
       <div style={{ borderTop: `1px solid ${colors.sidebarBorder}`, padding: '12px 16px' }}>
         {/* Plan info */}
         <div style={{ marginBottom: 12, padding: '10px 12px', background: 'rgba(255,255,255,0.5)', borderRadius: 10, border: '1px solid rgba(0,0,0,0.04)' }}>
@@ -367,7 +430,7 @@ const HubLayout: React.FC<HubLayoutProps> = ({ children, activePage, activeSubPa
         {/* Settings */}
         <button
           onClick={() => {
-            onNavigate('settings');
+            onNavigate('settings', 'account');
             setMobileMenuOpen(false);
           }}
           style={{
@@ -385,10 +448,66 @@ const HubLayout: React.FC<HubLayoutProps> = ({ children, activePage, activeSubPa
             alignItems: 'center',
             gap: 10,
             textAlign: 'right',
+            marginBottom: 2,
           }}
         >
           <span style={{ display: 'flex', alignItems: 'center', opacity: 0.7 }}>{icons.settings}</span>
           الإعدادات
+        </button>
+
+        {/* Help */}
+        <button
+          onClick={() => {
+            window.open('https://help.kitabh.com', '_blank');
+          }}
+          style={{
+            width: '100%',
+            padding: '10px 12px',
+            background: 'transparent',
+            color: colors.text,
+            border: 'none',
+            borderRadius: 8,
+            fontSize: 14,
+            fontWeight: 500,
+            fontFamily: 'IBM Plex Sans Arabic, sans-serif',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 10,
+            textAlign: 'right',
+            marginBottom: 2,
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.background = colors.hoverBg)}
+          onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+        >
+          <span style={{ display: 'flex', alignItems: 'center', opacity: 0.7 }}>{icons.help}</span>
+          المساعدة
+        </button>
+
+        {/* Logout */}
+        <button
+          onClick={() => console.log('Logout')}
+          style={{
+            width: '100%',
+            padding: '10px 12px',
+            background: 'transparent',
+            color: '#DC2626',
+            border: 'none',
+            borderRadius: 8,
+            fontSize: 14,
+            fontWeight: 500,
+            fontFamily: 'IBM Plex Sans Arabic, sans-serif',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 10,
+            textAlign: 'right',
+          }}
+          onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(220,38,38,0.04)')}
+          onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+        >
+          <span style={{ display: 'flex', alignItems: 'center', opacity: 0.7 }}>{icons.logout}</span>
+          تسجيل الخروج
         </button>
       </div>
     </>
@@ -490,20 +609,15 @@ const HubLayout: React.FC<HubLayoutProps> = ({ children, activePage, activeSubPa
 
           {/* Page title */}
           <div style={{ fontWeight: 600, fontSize: 16, color: colors.text, letterSpacing: '-0.01em' }}>
-            {activePage === 'dashboard' && 'لوحة التحكم'}
-            {activePage === 'posts' && 'المنشورات'}
-            {activePage === 'audience' && 'الجمهور'}
-            {activePage === 'grow' && 'النمو'}
-            {activePage === 'website' && 'الموقع'}
-            {activePage === 'analyze' && 'التحليلات'}
-            {activePage === 'settings' && 'الإعدادات'}
+            {pageTitles[activePage] || ''}
           </div>
 
           {/* Right side actions */}
           <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <button
+              onClick={() => onNavigate('notifications')}
               style={{
-                background: 'none',
+                background: activePage === 'notifications' ? 'rgba(0,0,0,0.04)' : 'none',
                 border: 'none',
                 cursor: 'pointer',
                 padding: 8,
@@ -514,7 +628,9 @@ const HubLayout: React.FC<HubLayoutProps> = ({ children, activePage, activeSubPa
                 transition: 'background 0.15s',
               }}
               onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(0,0,0,0.04)')}
-              onMouseLeave={(e) => (e.currentTarget.style.background = 'none')}
+              onMouseLeave={(e) => {
+                if (activePage !== 'notifications') e.currentTarget.style.background = 'none';
+              }}
             >
               {icons.notification}
             </button>

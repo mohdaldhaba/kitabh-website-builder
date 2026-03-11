@@ -244,15 +244,15 @@ const DashboardPage: React.FC = () => {
             {[
               { label: 'اكتب منشورًا جديدًا', icon: icons.write, primary: true },
               { label: 'عدّل موقعك', icon: icons.website, primary: false },
-              { label: 'شارك رابط الاشتراك', icon: icons.magicLink, primary: false },
+              { label: 'أنشئ كاروسيل', icon: icons.grow, primary: false },
             ].map((action, i) => (
               <button
                 key={i}
                 style={{
                   width: '100%',
                   padding: '10px 14px',
-                  background: action.primary ? `#11108` : 'transparent',
-                  border: `1px solid ${action.primary ? `#11130` : '#E5E7EB'}`,
+                  background: action.primary ? 'rgba(17,17,17,0.08)' : 'transparent',
+                  border: `1px solid ${action.primary ? 'rgba(17,17,17,0.3)' : '#E5E7EB'}`,
                   borderRadius: 8,
                   fontSize: 14,
                   fontWeight: 500,
@@ -266,8 +266,8 @@ const DashboardPage: React.FC = () => {
                   marginBottom: 8,
                   transition: 'background 0.15s',
                 }}
-                onMouseEnter={(e) => (e.currentTarget.style.background = action.primary ? `#11115` : '#F9FAFB')}
-                onMouseLeave={(e) => (e.currentTarget.style.background = action.primary ? `#11108` : 'transparent')}
+                onMouseEnter={(e) => (e.currentTarget.style.background = action.primary ? 'rgba(17,17,17,0.15)' : '#F9FAFB')}
+                onMouseLeave={(e) => (e.currentTarget.style.background = action.primary ? 'rgba(17,17,17,0.08)' : 'transparent')}
               >
                 <span style={{ display: 'flex', alignItems: 'center', opacity: 0.7 }}>{action.icon}</span>
                 {action.label}

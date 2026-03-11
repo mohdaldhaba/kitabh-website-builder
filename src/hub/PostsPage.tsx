@@ -5,6 +5,10 @@ import { colors, icons } from './HubLayout';
 type FilterStatus = 'all' | 'published' | 'draft' | 'scheduled' | 'archived';
 type SortBy = 'newest' | 'oldest' | 'most-viewed';
 
+interface PostsPageProps {
+  subPage?: string;
+}
+
 const statusConfig: Record<string, { label: string; bg: string; color: string }> = {
   published: { label: 'منشور', bg: '#ECFDF5', color: '#059669' },
   draft: { label: 'مسودة', bg: '#FEF3C7', color: '#D97706' },
@@ -12,12 +16,125 @@ const statusConfig: Record<string, { label: string; bg: string; color: string }>
   archived: { label: 'مؤرشف', bg: '#F3F4F6', color: '#6B7280' },
 };
 
-const PostsPage: React.FC = () => {
-  const [filter, setFilter] = useState<FilterStatus>('all');
+// ─── Outline Creator ─────────────────────────────────────
+const OutlineCreator: React.FC = () => (
+  <div style={{ maxWidth: 800, margin: '0 auto' }}>
+    <h2 style={{ fontSize: 18, fontWeight: 700, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 8px' }}>
+      إنشاء مخطط
+    </h2>
+    <p style={{ fontSize: 14, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 24px' }}>
+      أنشئ مخططا لمنشورك قبل البدء بالكتابة
+    </p>
+
+    <div style={{ background: 'rgba(255,255,255,0.6)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)', borderRadius: 14, border: '1px solid rgba(255,255,255,0.5)', padding: 24 }}>
+      {/* Topic */}
+      <div style={{ marginBottom: 20 }}>
+        <label style={{ display: 'block', fontSize: 14, fontWeight: 600, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', marginBottom: 8 }}>
+          موضوع المنشور
+        </label>
+        <input
+          type="text"
+          placeholder="مثال: كيف تبني نشرة بريدية ناجحة..."
+          style={{
+            width: '100%',
+            padding: '12px 16px',
+            border: '1px solid rgba(0,0,0,0.1)',
+            borderRadius: 8,
+            fontSize: 14,
+            fontFamily: 'IBM Plex Sans Arabic, sans-serif',
+            color: colors.text,
+            background: '#FAFAFA',
+            direction: 'rtl',
+            outline: 'none',
+            boxSizing: 'border-box',
+          }}
+        />
+      </div>
+
+      {/* Key points */}
+      <div style={{ marginBottom: 20 }}>
+        <label style={{ display: 'block', fontSize: 14, fontWeight: 600, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', marginBottom: 8 }}>
+          النقاط الرئيسية (اختياري)
+        </label>
+        <textarea
+          placeholder="أضف النقاط التي تريد تغطيتها، كل نقطة في سطر..."
+          rows={4}
+          style={{
+            width: '100%',
+            padding: '12px 16px',
+            border: '1px solid rgba(0,0,0,0.1)',
+            borderRadius: 8,
+            fontSize: 14,
+            fontFamily: 'IBM Plex Sans Arabic, sans-serif',
+            color: colors.text,
+            background: '#FAFAFA',
+            direction: 'rtl',
+            outline: 'none',
+            resize: 'vertical',
+            boxSizing: 'border-box',
+          }}
+        />
+      </div>
+
+      {/* Tone */}
+      <div style={{ marginBottom: 24 }}>
+        <label style={{ display: 'block', fontSize: 14, fontWeight: 600, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', marginBottom: 8 }}>
+          نبرة الكتابة
+        </label>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+          {['تعليمي', 'شخصي', 'تحليلي', 'قصصي', 'ملهم'].map((tone) => (
+            <button
+              key={tone}
+              style={{
+                padding: '8px 16px',
+                background: '#F3F4F6',
+                border: 'none',
+                borderRadius: 8,
+                fontSize: 13,
+                fontWeight: 500,
+                fontFamily: 'IBM Plex Sans Arabic, sans-serif',
+                color: colors.text,
+                cursor: 'pointer',
+                transition: 'background 0.15s',
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = '#E5E7EB')}
+              onMouseLeave={(e) => (e.currentTarget.style.background = '#F3F4F6')}
+            >
+              {tone}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <button
+        style={{
+          padding: '12px 24px',
+          background: '#111',
+          color: '#fff',
+          border: 'none',
+          borderRadius: 8,
+          fontSize: 14,
+          fontWeight: 600,
+          fontFamily: 'IBM Plex Sans Arabic, sans-serif',
+          cursor: 'pointer',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 8,
+        }}
+      >
+        {icons.write}
+        إنشاء المخطط
+      </button>
+    </div>
+  </div>
+);
+
+// ─── Articles List ───────────────────────────────────────
+const ArticlesList: React.FC<{ defaultFilter?: FilterStatus }> = ({ defaultFilter = 'all' }) => {
+  const [filter, setFilter] = useState<FilterStatus>(defaultFilter);
   const [sort, setSort] = useState<SortBy>('newest');
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Add some mock drafts
   const allArticles = [
     ...MOCK_ARTICLES,
     {
@@ -295,7 +412,7 @@ const PostsPage: React.FC = () => {
                 }}
                 onClick={(e) => e.stopPropagation()}
               >
-                ⋮
+                &#x22EE;
               </button>
             </div>
           );
@@ -314,6 +431,13 @@ const PostsPage: React.FC = () => {
       </div>
     </div>
   );
+};
+
+// ─── Posts Page Router ───────────────────────────────────
+const PostsPage: React.FC<PostsPageProps> = ({ subPage = 'all-posts' }) => {
+  if (subPage === 'outline') return <OutlineCreator />;
+  if (subPage === 'drafts') return <ArticlesList defaultFilter="draft" />;
+  return <ArticlesList />;
 };
 
 export default PostsPage;

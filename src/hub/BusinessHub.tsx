@@ -2,12 +2,49 @@ import React, { useState } from 'react';
 import HubLayout from './HubLayout';
 import DashboardPage from './DashboardPage';
 import PostsPage from './PostsPage';
-import AudiencePage from './AudiencePage';
+import NotificationsPage from './NotificationsPage';
 import GrowPage from './GrowPage';
 import WebsitePage from './WebsitePage';
+import MembersPage from './MembersPage';
+import SettingsPage from './SettingsPage';
 import AnalyzePage from './AnalyzePage';
 import { colors } from './HubLayout';
 import type { Page } from './HubLayout';
+
+// Coming soon placeholder
+const ComingSoonPage: React.FC<{ title: string; description: string }> = ({ title, description }) => (
+  <div style={{ maxWidth: 600, margin: '80px auto', textAlign: 'center' }}>
+    <div style={{
+      width: 64, height: 64, borderRadius: 16, background: '#F3F4F6',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      margin: '0 auto 20px', fontSize: 28,
+    }}>
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" />
+      </svg>
+    </div>
+    <h2 style={{ fontSize: 20, fontWeight: 700, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 8px' }}>
+      {title}
+    </h2>
+    <p style={{ fontSize: 14, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 24px', lineHeight: 1.7 }}>
+      {description}
+    </p>
+    <span
+      style={{
+        display: 'inline-block',
+        padding: '6px 16px',
+        background: '#F3F4F6',
+        borderRadius: 8,
+        fontSize: 13,
+        fontWeight: 600,
+        fontFamily: 'IBM Plex Sans Arabic, sans-serif',
+        color: '#9CA3AF',
+      }}
+    >
+      قريبا
+    </span>
+  </div>
+);
 
 const BusinessHub: React.FC = () => {
   const [activePage, setActivePage] = useState<Page>('dashboard');
@@ -23,31 +60,34 @@ const BusinessHub: React.FC = () => {
       case 'dashboard':
         return <DashboardPage />;
       case 'posts':
-        return <PostsPage />;
-      case 'audience':
-        return <AudiencePage />;
+        if (activeSubPage === 'newsletter-stats') {
+          return <AnalyzePage subPage="newsletter-stats" />;
+        }
+        return <PostsPage subPage={activeSubPage} />;
+      case 'notifications':
+        return <NotificationsPage />;
       case 'grow':
         return <GrowPage subPage={activeSubPage} />;
       case 'website':
         return <WebsitePage />;
-      case 'analyze':
-        return <AnalyzePage subPage={activeSubPage} />;
-      case 'settings':
+      case 'members':
+        return <MembersPage />;
+      case 'subscribers':
         return (
-          <div style={{ maxWidth: 900, margin: '0 auto' }}>
-            <h2 style={{ fontSize: 18, fontWeight: 700, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 8px' }}>
-              الإعدادات
-            </h2>
-            <p style={{ fontSize: 14, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 24px' }}>
-              إعدادات الحساب والنشرة البريدية والموقع
-            </p>
-            <div style={{ background: 'rgba(255,255,255,0.6)', backdropFilter: 'blur(12px)', borderRadius: 14, border: '1px solid rgba(255,255,255,0.5)', padding: 40, textAlign: 'center' }}>
-              <div style={{ fontSize: 15, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>
-                صفحة الإعدادات — قريبا
-              </div>
-            </div>
-          </div>
+          <ComingSoonPage
+            title="المشتركون"
+            description="قريبا ستتمكن من إدارة مشتركيك، عرض تفاصيلهم، تصديرهم، وتصنيفهم حسب مستوى التفاعل"
+          />
         );
+      case 'email-journeys':
+        return (
+          <ComingSoonPage
+            title="رحلات البريد الإلكتروني"
+            description="قريبا ستتمكن من إنشاء تسلسلات بريدية تلقائية لاستقبال المشتركين الجدد وتنمية جمهورك"
+          />
+        );
+      case 'settings':
+        return <SettingsPage subPage={activeSubPage} />;
       default:
         return <DashboardPage />;
     }
