@@ -292,22 +292,25 @@ const TipAuthorPage: React.FC = () => {
                     <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
                   </svg>
                 </span>
-                {/* Tip button — only shown if author has it enabled */}
-                {authorTipEnabled && (
-                  <button
-                    onClick={openDialog}
-                    style={{
-                      display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                      width: '30px', height: '30px', borderRadius: '50%', background: '#F5F0EB',
-                      border: 'none', cursor: 'pointer', transition: 'transform 0.2s, box-shadow 0.2s',
-                      animation: 'float 2.5s ease-in-out infinite', flexShrink: 0,
-                    }}
-                    onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.12)'; e.currentTarget.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)' }}
-                    onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = 'none' }}
-                  >
-                    <img src={isTea ? '/images/tea-small.png' : '/images/espresso.png'} alt="" style={{ width: '18px', height: '18px', objectFit: 'contain' }} />
-                  </button>
-                )}
+                {/* Tip button — grey when disabled, active when enabled */}
+                <button
+                  onClick={openDialog}
+                  style={{
+                    display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                    width: '30px', height: '30px', borderRadius: '50%',
+                    background: authorTipEnabled ? '#F5F0EB' : '#E8E8E8',
+                    border: 'none', cursor: 'pointer', transition: 'transform 0.2s, box-shadow 0.2s',
+                    animation: authorTipEnabled ? 'float 2.5s ease-in-out infinite' : 'none',
+                    flexShrink: 0, opacity: authorTipEnabled ? 1 : 0.5,
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.12)'; e.currentTarget.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)' }}
+                  onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = 'none' }}
+                >
+                  <img
+                    src={isTea ? '/images/tea-small.png' : '/images/espresso.png'} alt=""
+                    style={{ width: '18px', height: '18px', objectFit: 'contain', filter: authorTipEnabled ? 'none' : 'grayscale(100%)' }}
+                  />
+                </button>
               </div>
               <p style={{ fontSize: '14px', color: '#888', margin: '4px 0 0' }}>@{DEMO_AUTHOR.username}</p>
             </div>
@@ -484,10 +487,27 @@ const TipAuthorPage: React.FC = () => {
               </div>
             )}
 
+            {/* Deactivated banner */}
+            {!authorTipEnabled && (
+              <div style={{
+                margin: showAuthorSettings ? '12px 20px 0' : '52px 20px 0',
+                padding: '12px 16px', borderRadius: '10px',
+                background: '#FEF2F2', border: '1px solid #FECACA',
+                textAlign: 'center' as const, animation: 'fadeIn 0.2s ease',
+              }}>
+                <div style={{ fontSize: '14px', fontWeight: 600, color: '#DC2626' }}>
+                  ميزة الدعم معطّلة حالياً
+                </div>
+                <div style={{ fontSize: '13px', color: '#991B1B', marginTop: '4px', lineHeight: 1.7 }}>
+                  فعّلها من الإعدادات (⚙️) لتظهر للقرّاء
+                </div>
+              </div>
+            )}
+
             {!submitted ? (
-              <div style={{ animation: 'fadeIn 0.3s ease' }}>
+              <div style={{ animation: 'fadeIn 0.3s ease', opacity: authorTipEnabled ? 1 : 0.4, pointerEvents: authorTipEnabled ? 'auto' : 'none' }}>
                 {/* Header */}
-                <div style={{ padding: '28px 28px 4px', textAlign: 'center' as const }}>
+                <div style={{ padding: authorTipEnabled ? '28px 28px 4px' : '16px 28px 4px', textAlign: 'center' as const }}>
                   <img
                     src={DEMO_AUTHOR.image} alt={DEMO_AUTHOR.name}
                     style={{
