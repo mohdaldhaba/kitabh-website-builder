@@ -273,83 +273,8 @@ const TipAuthorPage: React.FC = () => {
           padding: '12px 16px', borderBottom: '1px solid #F0F0F0',
         }}>
           <div style={{ fontSize: '18px', fontWeight: 700, color: '#0000FF' }}>كتابة :&gt;</div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            {/* Author settings gear icon — only visible to the author themselves */}
-            <button
-              onClick={() => setShowAuthorSettings(!showAuthorSettings)}
-              style={{
-                width: '32px', height: '32px', borderRadius: '50%', background: '#F0F0F0',
-                border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: '16px', color: '#666',
-              }}
-              title="إعدادات الكاتب"
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-              </svg>
-            </button>
-            <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: '#F0F0F0' }} />
-          </div>
+          <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: '#F0F0F0' }} />
         </div>
-
-        {/* Author Settings Panel — shown when gear icon is clicked */}
-        {showAuthorSettings && (
-          <div style={{
-            margin: '0 16px', padding: '16px 20px', background: '#F8FAFC',
-            borderRadius: '12px', border: '1px solid #E2E8F0',
-            animation: 'fadeIn 0.2s ease',
-          }}>
-            <div style={{ fontSize: '15px', fontWeight: 600, color: '#1E293B', marginBottom: '14px' }}>
-              إعدادات الكاتب
-            </div>
-
-            {/* Toggle: show/hide tip button */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
-              <span style={{ fontSize: '14px', color: '#475569' }}>إظهار زر الدعم في ملفي الشخصي</span>
-              <button
-                onClick={() => setAuthorTipEnabled(!authorTipEnabled)}
-                style={{
-                  width: '44px', height: '24px', borderRadius: '12px', border: 'none',
-                  background: authorTipEnabled ? '#0000FF' : '#CBD5E1',
-                  cursor: 'pointer', position: 'relative', transition: 'background 0.3s',
-                  flexShrink: 0,
-                }}
-              >
-                <div style={{
-                  width: '18px', height: '18px', borderRadius: '50%', background: '#fff',
-                  position: 'absolute', top: '3px',
-                  transition: 'all 0.3s ease',
-                  ...(authorTipEnabled ? { right: '3px' } : { left: '3px' }),
-                }} />
-              </button>
-            </div>
-
-            {/* Toggle: coffee or tea preference */}
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-              <span style={{ fontSize: '14px', color: '#475569' }}>أفضّل {authorPrefersTea ? 'الشاي' : 'القهوة'}</span>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ fontSize: '13px', fontWeight: 500, color: !authorPrefersTea ? '#1E293B' : '#94A3B8' }}>قهوة</span>
-                <button
-                  onClick={() => setAuthorPrefersTea(!authorPrefersTea)}
-                  style={{
-                    width: '44px', height: '24px', borderRadius: '12px', border: 'none',
-                    background: authorPrefersTea ? '#8B2020' : '#8B5E3C',
-                    cursor: 'pointer', position: 'relative', transition: 'background 0.3s',
-                    flexShrink: 0,
-                  }}
-                >
-                  <div style={{
-                    width: '18px', height: '18px', borderRadius: '50%', background: '#fff',
-                    position: 'absolute', top: '3px',
-                    transition: 'all 0.3s ease',
-                    ...(authorPrefersTea ? { left: '3px' } : { right: '3px' }),
-                  }} />
-                </button>
-                <span style={{ fontSize: '13px', fontWeight: 500, color: authorPrefersTea ? '#1E293B' : '#94A3B8' }}>شاي</span>
-              </div>
-            </div>
-          </div>
-        )}
 
         {/* Author Card */}
         <div style={{
@@ -467,20 +392,97 @@ const TipAuthorPage: React.FC = () => {
               onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(0,0,0,0.05)')}
             >✕</button>
 
-            {/* Drink type badge — shows what the author prefers (read-only for visitors) */}
+            {/* Drink type badge + gear icon — top right of popup */}
             <div style={{
               position: 'absolute', top: '16px', right: '16px', zIndex: 10,
               display: 'flex', alignItems: 'center', gap: '6px',
-              background: 'rgba(0,0,0,0.04)', borderRadius: '20px', padding: '4px 12px',
             }}>
-              <img
-                src={isTea ? '/images/tea-small.png' : '/images/espresso.png'}
-                alt="" style={{ width: '14px', height: '14px', objectFit: 'contain' }}
-              />
-              <span style={{ fontSize: '13px', fontWeight: 500, color: '#64748B' }}>
-                {isTea ? 'يفضّل الشاي' : 'يفضّل القهوة'}
-              </span>
+              <div style={{
+                display: 'flex', alignItems: 'center', gap: '6px',
+                background: 'rgba(0,0,0,0.04)', borderRadius: '20px', padding: '4px 12px',
+              }}>
+                <img
+                  src={isTea ? '/images/tea-small.png' : '/images/espresso.png'}
+                  alt="" style={{ width: '14px', height: '14px', objectFit: 'contain' }}
+                />
+                <span style={{ fontSize: '13px', fontWeight: 500, color: '#64748B' }}>
+                  {isTea ? 'يفضّل الشاي' : 'يفضّل القهوة'}
+                </span>
+              </div>
+              {/* Gear icon — only for the author */}
+              <button
+                onClick={() => setShowAuthorSettings(!showAuthorSettings)}
+                style={{
+                  width: '26px', height: '26px', borderRadius: '50%', border: 'none',
+                  background: showAuthorSettings ? 'rgba(0,0,255,0.08)' : 'rgba(0,0,0,0.04)',
+                  cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  transition: 'background 0.2s',
+                }}
+              >
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={showAuthorSettings ? '#0000FF' : '#94A3B8'} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                </svg>
+              </button>
             </div>
+
+            {/* Author Settings — inline, inside popup */}
+            {showAuthorSettings && (
+              <div style={{
+                margin: '52px 20px 0', padding: '14px 16px', borderRadius: '12px',
+                background: 'rgba(0,0,0,0.03)', border: '1px solid rgba(0,0,0,0.06)',
+                animation: 'fadeIn 0.2s ease',
+              }}>
+                <div style={{ fontSize: '13px', fontWeight: 600, color: '#1E293B', marginBottom: '12px' }}>
+                  إعدادات الكاتب
+                </div>
+
+                {/* Toggle: show/hide tip button */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
+                  <span style={{ fontSize: '13px', color: '#475569' }}>إظهار زر الدعم في ملفي</span>
+                  <button
+                    onClick={() => setAuthorTipEnabled(!authorTipEnabled)}
+                    style={{
+                      width: '40px', height: '22px', borderRadius: '11px', border: 'none',
+                      background: authorTipEnabled ? '#0000FF' : '#CBD5E1',
+                      cursor: 'pointer', position: 'relative', transition: 'background 0.3s',
+                      flexShrink: 0,
+                    }}
+                  >
+                    <div style={{
+                      width: '16px', height: '16px', borderRadius: '50%', background: '#fff',
+                      position: 'absolute', top: '3px',
+                      transition: 'all 0.3s ease',
+                      ...(authorTipEnabled ? { right: '3px' } : { left: '3px' }),
+                    }} />
+                  </button>
+                </div>
+
+                {/* Toggle: coffee or tea preference */}
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <span style={{ fontSize: '13px', color: '#475569' }}>أفضّل</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <span style={{ fontSize: '12px', fontWeight: 500, color: !authorPrefersTea ? '#1E293B' : '#94A3B8' }}>قهوة</span>
+                    <button
+                      onClick={() => setAuthorPrefersTea(!authorPrefersTea)}
+                      style={{
+                        width: '40px', height: '22px', borderRadius: '11px', border: 'none',
+                        background: authorPrefersTea ? '#8B2020' : '#8B5E3C',
+                        cursor: 'pointer', position: 'relative', transition: 'background 0.3s',
+                        flexShrink: 0,
+                      }}
+                    >
+                      <div style={{
+                        width: '16px', height: '16px', borderRadius: '50%', background: '#fff',
+                        position: 'absolute', top: '3px',
+                        transition: 'all 0.3s ease',
+                        ...(authorPrefersTea ? { left: '3px' } : { right: '3px' }),
+                      }} />
+                    </button>
+                    <span style={{ fontSize: '12px', fontWeight: 500, color: authorPrefersTea ? '#1E293B' : '#94A3B8' }}>شاي</span>
+                  </div>
+                </div>
+              </div>
+            )}
 
             {!submitted ? (
               <div style={{ animation: 'fadeIn 0.3s ease' }}>
