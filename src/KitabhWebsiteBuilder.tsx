@@ -241,55 +241,42 @@ interface ColorTheme {
 }
 
 const COLOR_THEMES: ColorTheme[] = [
-  // ── 1. Light themes (Happy Hues curated) ──
-  // HH3 — Clean blue
-  { id: "hh_clean_blue", name: "أزرق نظيف", buttonColor: "#3da9fc", headlineColor: "#094067", textColor: "#5f6c7b", linkColor: "#ef4565", bgColor: "#fffffe", cardBg: "#d8eefe" },
-  // HH5 — Mint & gold
-  { id: "hh_mint_gold", name: "نعناع ذهبي", buttonColor: "#faae2b", headlineColor: "#00473e", textColor: "#475d5b", linkColor: "#faae2b", bgColor: "#f2f7f5", cardBg: "#fffffe" },
-  // HH6 — Lavender
-  { id: "hh_lavender", name: "لافندر", buttonColor: "#6246ea", headlineColor: "#2b2c34", textColor: "#2b2c34", linkColor: "#6246ea", bgColor: "#fffffe", cardBg: "#d1d1e9" },
-  // HH8 — Warm cream & teal
-  { id: "hh_warm_teal", name: "كريمي ودافئ", buttonColor: "#078080", headlineColor: "#232323", textColor: "#222525", linkColor: "#f45d48", bgColor: "#f8f5f2", cardBg: "#fffffe" },
-  // HH9 — Soft gray & orange
-  { id: "hh_gray_orange", name: "رمادي برتقالي", buttonColor: "#ff8e3c", headlineColor: "#0d0d0d", textColor: "#2a2a2a", linkColor: "#ff8e3c", bgColor: "#eff0f3", cardBg: "#fffffe" },
-  // HH11 — Antique cream & brown
-  { id: "hh_antique", name: "عتيق", buttonColor: "#8c7851", headlineColor: "#020826", textColor: "#716040", linkColor: "#8c7851", bgColor: "#f9f4ef", cardBg: "#fffffe" },
-  // HH14 — Yellow pop & dark navy
-  { id: "hh_yellow_pop", name: "أصفر منعش", buttonColor: "#ffd803", headlineColor: "#272343", textColor: "#2d334a", linkColor: "#272343", bgColor: "#fffffe", cardBg: "#e3f6f5" },
-  // HH15 — Peachy pink
-  { id: "hh_peachy", name: "خوخي ناعم", buttonColor: "#ff8ba7", headlineColor: "#33272a", textColor: "#594a4e", linkColor: "#ff8ba7", bgColor: "#faeee7", cardBg: "#fffffe" },
-  // HH17 — Warm cream & navy pink
-  { id: "hh_cream_navy", name: "كريمي بحري", buttonColor: "#f582ae", headlineColor: "#001858", textColor: "#172c66", linkColor: "#f582ae", bgColor: "#fef6e4", cardBg: "#f3d2c1" },
-  // Classic white & red
-  { id: "clean_light", name: "نظيف كلاسيكي", buttonColor: "#E82222", headlineColor: "#1a1a1a", textColor: "#555555", linkColor: "#E82222", bgColor: "#ffffff", cardBg: "#ffffff" },
-
-  // ── 2. Pink/rose light backgrounds ──
-  // HH7 — Soft pink & navy
-  { id: "hh_pink_navy", name: "وردي بحري", buttonColor: "#0e172c", headlineColor: "#0e172c", textColor: "#0e172c", linkColor: "#a786df", bgColor: "#fec7d7", cardBg: "#d9d4e7" },
-
-  // ── 3. Dark themes (Happy Hues curated) ──
-  // HH4 — Dark UI purple
-  { id: "hh_dark_purple", name: "داكن بنفسجي", buttonColor: "#7f5af0", headlineColor: "#fffffe", textColor: "#94a1b2", linkColor: "#7f5af0", bgColor: "#16161a", cardBg: "#242629" },
-  // HH10 — Deep teal & gold
-  { id: "hh_deep_teal", name: "فيروزي عميق", buttonColor: "#f9bc60", headlineColor: "#fffffe", textColor: "#abd1c6", linkColor: "#f9bc60", bgColor: "#004643", cardBg: "#004643" },
-  // HH12 — Navy & soft pink
-  { id: "hh_navy_blush", name: "بحري وردي", buttonColor: "#eebbc3", headlineColor: "#fffffe", textColor: "#b8c1ec", linkColor: "#eebbc3", bgColor: "#232946", cardBg: "#232946" },
-  // HH13 — Dark fire & orange
-  { id: "hh_dark_fire", name: "ناري داكن", buttonColor: "#ff8906", headlineColor: "#fffffe", textColor: "#a7a9be", linkColor: "#e53170", bgColor: "#0f0e17", cardBg: "#0f0e17" },
-  // HH16 — Warm chocolate
-  { id: "hh_chocolate", name: "شوكولاتة", buttonColor: "#ffc0ad", headlineColor: "#fffffe", textColor: "#fff3ec", linkColor: "#e78fb3", bgColor: "#55423d", cardBg: "#55423d" },
-  // Dark classic
-  { id: "dark_card", name: "داكن كلاسيكي", buttonColor: "#E82222", headlineColor: "#f5f5f5", textColor: "#9e9e9e", linkColor: "#ef5350", bgColor: "#121212", cardBg: "#1e1e1e" },
-  // Space gray
-  { id: "space_gray", name: "فضائي", buttonColor: "#8b5cf6", headlineColor: "#e2e8f0", textColor: "#94a3b8", linkColor: "#a78bfa", bgColor: "#1e293b", cardBg: "#334155" },
-  // Dark navy
+  // ── 1. Standard (white bg, first position) ──
+  { id: "clean_light", name: "نظيف", buttonColor: "#E82222", headlineColor: "#1a1a1a", textColor: "#555555", linkColor: "#E82222", bgColor: "#ffffff", cardBg: "#ffffff" },
+  // ── 2. Dark (second position) ──
+  { id: "dark_card", name: "داكن", buttonColor: "#E82222", headlineColor: "#f5f5f5", textColor: "#9e9e9e", linkColor: "#ef5350", bgColor: "#121212", cardBg: "#1e1e1e" },
+  // ── 3. Soft tinted light themes (like the mint screenshot — light bg, dark text, strong contrast) ──
+  { id: "soft_blue", name: "أزرق ناعم", buttonColor: "#1565C0", headlineColor: "#0d47a1", textColor: "#546e7a", linkColor: "#1565C0", bgColor: "#e3f2fd", cardBg: "#bbdefb" },
+  { id: "soft_orange", name: "برتقالي ناعم", buttonColor: "#e65100", headlineColor: "#bf360c", textColor: "#8d6e63", linkColor: "#e65100", bgColor: "#fff3e0", cardBg: "#ffe0b2" },
+  { id: "soft_red", name: "أحمر ناعم", buttonColor: "#c62828", headlineColor: "#b71c1c", textColor: "#8e6565", linkColor: "#c62828", bgColor: "#ffebee", cardBg: "#ffcdd2" },
+  { id: "soft_coffee", name: "قهوة ناعم", buttonColor: "#4e342e", headlineColor: "#3e2723", textColor: "#6d4c41", linkColor: "#5d4037", bgColor: "#efebe9", cardBg: "#d7ccc8" },
+  { id: "mint", name: "نعناعي", buttonColor: "#2e7d32", headlineColor: "#1b5e20", textColor: "#4e6e50", linkColor: "#2e7d32", bgColor: "#e8f5e9", cardBg: "#c8e6c9" },
+  { id: "soft_purple", name: "بنفسجي ناعم", buttonColor: "#6a1b9a", headlineColor: "#4a148c", textColor: "#7b6b8a", linkColor: "#7b1fa2", bgColor: "#f3e5f5", cardBg: "#e1bee7" },
+  { id: "soft_teal", name: "فيروزي ناعم", buttonColor: "#00695c", headlineColor: "#004d40", textColor: "#4e7a72", linkColor: "#00796b", bgColor: "#e0f2f1", cardBg: "#b2dfdb" },
+  { id: "soft_gold", name: "ذهبي ناعم", buttonColor: "#f57f17", headlineColor: "#e65100", textColor: "#8d6e63", linkColor: "#ff8f00", bgColor: "#fffde7", cardBg: "#fff9c4" },
+  // ── 4. Deep dark themes ──
   { id: "dark_navy", name: "بحري داكن", buttonColor: "#00BCD4", headlineColor: "#eceff1", textColor: "#90a4ae", linkColor: "#4dd0e1", bgColor: "#0d1b2a", cardBg: "#1b2838" },
-  // Forest
-  { id: "forest", name: "غابة", buttonColor: "#facc15", headlineColor: "#f0fdf4", textColor: "#86efac", linkColor: "#fde047", bgColor: "#14532d", cardBg: "#166534" },
-  // Wine
+  { id: "dark_coffee", name: "قهوة داكن", buttonColor: "#ffab40", headlineColor: "#efebe9", textColor: "#bcaaa4", linkColor: "#ffcc80", bgColor: "#1a120e", cardBg: "#2c1e16" },
+  { id: "dark_red", name: "أحمر داكن", buttonColor: "#ff5252", headlineColor: "#ffebee", textColor: "#ef9a9a", linkColor: "#ff8a80", bgColor: "#1a0a0a", cardBg: "#2d1414" },
+  { id: "dark_blue", name: "أزرق داكن", buttonColor: "#448aff", headlineColor: "#e3f2fd", textColor: "#90caf9", linkColor: "#82b1ff", bgColor: "#0a1628", cardBg: "#142240" },
+  { id: "dark_orange", name: "برتقالي داكن", buttonColor: "#ff9100", headlineColor: "#fff3e0", textColor: "#ffcc80", linkColor: "#ffab40", bgColor: "#1a110a", cardBg: "#2d1e10" },
   { id: "wine_dark", name: "خمري", buttonColor: "#f59e0b", headlineColor: "#fef3c7", textColor: "#d4d4d8", linkColor: "#fbbf24", bgColor: "#1c1917", cardBg: "#292524" },
-  // Ocean
-  { id: "ocean_deep", name: "بحري عميق", buttonColor: "#06b6d4", headlineColor: "#f0f9ff", textColor: "#7dd3fc", linkColor: "#22d3ee", bgColor: "#0c4a6e", cardBg: "#164e63" },
+  { id: "forest", name: "غابة", buttonColor: "#facc15", headlineColor: "#f0fdf4", textColor: "#86efac", linkColor: "#fde047", bgColor: "#14532d", cardBg: "#166534" },
+  { id: "dark_emerald", name: "زمردي", buttonColor: "#10b981", headlineColor: "#d1fae5", textColor: "#6ee7b7", linkColor: "#34d399", bgColor: "#022c22", cardBg: "#064e3b" },
+  { id: "space_gray", name: "فضائي", buttonColor: "#8b5cf6", headlineColor: "#e2e8f0", textColor: "#94a3b8", linkColor: "#a78bfa", bgColor: "#1e293b", cardBg: "#334155" },
+  { id: "royal_purple", name: "ملكي", buttonColor: "#a78bfa", headlineColor: "#f5f3ff", textColor: "#c4b5fd", linkColor: "#c084fc", bgColor: "#1e1b4b", cardBg: "#312e81" },
+  { id: "sunset_glow", name: "غروب", buttonColor: "#f43f5e", headlineColor: "#fef2f2", textColor: "#fda4af", linkColor: "#fb7185", bgColor: "#1a0a10", cardBg: "#2d1520" },
+  // ── 5. Earthy & warm ──
+  { id: "elegant_beige", name: "بيج أنيق", buttonColor: "#6d6132", headlineColor: "#3e2723", textColor: "#795548", linkColor: "#6d6132", bgColor: "#D7CCC8", cardBg: "#efebe9" },
+  { id: "natural_green", name: "أخضر طبيعي", buttonColor: "#6d7c3a", headlineColor: "#ffffff", textColor: "#c8e6c9", linkColor: "#aed581", bgColor: "#33691e", cardBg: "#3e7c23" },
+  { id: "notebook", name: "دفتر", buttonColor: "#F9A825", headlineColor: "#3e2723", textColor: "#6d4c41", linkColor: "#f57f17", bgColor: "#FFF8E1", cardBg: "#ffffff" },
+  { id: "calm_gray", name: "رمادي هادئ", buttonColor: "#1565C0", headlineColor: "#212121", textColor: "#616161", linkColor: "#1976D2", bgColor: "#ECEFF1", cardBg: "#ffffff" },
+  // ── 6. Signature & accent ──
+  { id: "kitabh_blue", name: "أزرق كتابة", buttonColor: "#1a1aaa", headlineColor: "#ffffff", textColor: "#b0c4ff", linkColor: "#90b0ff", bgColor: "#0000FF", cardBg: "#1a1aff" },
+  { id: "neon", name: "نيون", buttonColor: "#1a1a1a", headlineColor: "#1a1a1a", textColor: "#1b5e20", linkColor: "#1a1a1a", bgColor: "#00FF41", cardBg: "#69f0ae" },
+  { id: "bold_yellow", name: "أصفر جريء", buttonColor: "#E82222", headlineColor: "#212121", textColor: "#5d4037", linkColor: "#c62828", bgColor: "#FFC107", cardBg: "#ffd54f" },
+  { id: "hot_pink", name: "وردي", buttonColor: "#FFD600", headlineColor: "#ffffff", textColor: "#fce4ec", linkColor: "#FFD600", bgColor: "#E91E63", cardBg: "#f06292" },
+  { id: "ocean_deep", name: "بحري", buttonColor: "#06b6d4", headlineColor: "#f0f9ff", textColor: "#7dd3fc", linkColor: "#22d3ee", bgColor: "#0c4a6e", cardBg: "#164e63" },
 ];
 
 // ─── SVG Icons ──────────────────────────────────────────
