@@ -24,10 +24,9 @@ interface SiteComponent {
 type ComponentType =
   | "header"
   | "hero_news"
-  | "hero_subscribe"
   | "hero_slider"
   | "banner"
-  | "cta_newsletter"
+  | "subscribe"
   | "article_collection"
   | "footer"
   | "testimonials"
@@ -39,14 +38,11 @@ type ComponentType =
   | "article_view"
   | "text_block"
   | "image_block"
-  | "subscribe_form"
   | "contact_form"
   | "divider"
   | "rich_text"
   | "bento_grid"
-  | "social_links"
-  | "gallery"
-  | "category_feed";
+  | "social_links";
 
 interface SitePage {
   id: string;
@@ -142,7 +138,7 @@ function slugify(text: string): string {
 // To add a new component or page, add it here — every template gets it automatically.
 const SKELETON = {
   pages: ["الرئيسية", "مقالات", "عرض المقال", "عن المدونة", "المتجر", "اشتراك"] as string[],
-  defaultComponents: ["header", "hero_news", "brands_ticker", "article_collection", "banner", "cta_newsletter", "article_collection", "banner", "footer"] as ComponentType[],
+  defaultComponents: ["header", "hero_news", "brands_ticker", "article_collection", "banner", "subscribe", "article_collection", "banner", "footer"] as ComponentType[],
   defaultBranding: {
     logoUrl: "", logoLayout: "text_only" as LogoLayout, siteName: "شعار المؤسسة",
     accentColor: "#E82222", buttonColor: "#E82222", headlineColor: "#1a1a1a",
@@ -179,11 +175,11 @@ const MOCK_ARTICLES: Article[] = RAW_MOCK_ARTICLES.map(a => ({
 const COMPONENT_META: Record<ComponentType, { label: string; hasSettings: boolean }> = {
   header: { label: "الهيدر", hasSettings: true },
   hero_news: { label: "البطل: أخبار", hasSettings: true },
-  hero_subscribe: { label: "البطل: اشتراك", hasSettings: true },
+
   hero_slider: { label: "البطل: عرض شرائح", hasSettings: true },
   banner: { label: "بانر", hasSettings: true },
-  cta_newsletter: { label: "اشتراك بالنشرة", hasSettings: true },
-  article_collection: { label: "مجموعة مقالات", hasSettings: true },
+  subscribe: { label: "اشتراك", hasSettings: true },
+  article_collection: { label: "مقالات", hasSettings: true },
   footer: { label: "التذييل", hasSettings: true },
   testimonials: { label: "آراء العملاء", hasSettings: true },
   products: { label: "المنتجات", hasSettings: true },
@@ -194,24 +190,23 @@ const COMPONENT_META: Record<ComponentType, { label: string; hasSettings: boolea
   article_view: { label: "عرض المقال", hasSettings: false },
   text_block: { label: "نص", hasSettings: true },
   image_block: { label: "صورة", hasSettings: true },
-  subscribe_form: { label: "نموذج اشتراك", hasSettings: true },
+
   contact_form: { label: "نموذج تواصل", hasSettings: true },
   divider: { label: "فاصل", hasSettings: false },
   rich_text: { label: "محتوى منسق", hasSettings: true },
   bento_grid: { label: "شبكة بينتو", hasSettings: true },
   social_links: { label: "روابط التواصل", hasSettings: true },
-  gallery: { label: "معرض المقالات", hasSettings: true },
-  category_feed: { label: "تصنيف مقالات", hasSettings: true },
+
 };
 
 
 const COMPONENT_ICONS: Record<ComponentType, string> = {
   header: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="4" rx="1"/><line x1="6" y1="11" x2="18" y2="11"/></svg>',
   hero_news: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg>',
-  hero_subscribe: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M8 12h8"/><path d="M12 12v4"/></svg>',
+
   hero_slider: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="15 12 19 12"/><polyline points="5 12 9 12"/></svg>',
   banner: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><line x1="6" y1="10" x2="18" y2="10"/></svg>',
-  cta_newsletter: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22 6 12 13 2 6"/></svg>',
+  subscribe: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22 6 12 13 2 6"/></svg>',
   article_collection: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>',
   footer: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="17" width="20" height="4" rx="1"/><line x1="6" y1="13" x2="18" y2="13"/></svg>',
   testimonials: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>',
@@ -223,17 +218,16 @@ const COMPONENT_ICONS: Record<ComponentType, string> = {
   article_view: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>',
   text_block: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="17" y1="10" x2="3" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="17" y1="18" x2="3" y2="18"/></svg>',
   image_block: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>',
-  subscribe_form: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22 6 12 13 2 6"/></svg>',
+
   contact_form: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>',
   divider: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="2" y1="12" x2="22" y2="12"/></svg>',
   rich_text: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>',
   bento_grid: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>',
   social_links: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>',
-  gallery: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="18" rx="2"/><rect x="14" y="3" width="8" height="18" rx="0"/><line x1="2" y1="12" x2="14" y2="12"/></svg>',
-  category_feed: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4z"/><line x1="14" y1="17" x2="20" y2="17"/><line x1="14" y1="14" x2="20" y2="14"/><line x1="14" y1="20" x2="18" y2="20"/></svg>',
+
 };
 
-const PRESET_COLORS = ["#E82222", "#7C3AED", "#2563EB", "#0891B2", "#10B981", "#F59E0B"];
+const PRESET_COLORS = ["#E82222", "#0000FF", "#2563EB", "#0891B2", "#10B981", "#F59E0B"];
 
 interface ColorTheme {
   id: string;
@@ -396,6 +390,8 @@ export default function KitabhWebsiteBuilder(props: any) {
   }, [undo, redo]);
 
   // ─── Load/Save ────────
+  const hasLoaded = useRef(false);
+
   useEffect(() => {
     try {
       if (typeof window !== "undefined" && window.localStorage) {
@@ -407,9 +403,11 @@ export default function KitabhWebsiteBuilder(props: any) {
         }
       }
     } catch (_) {}
+    hasLoaded.current = true;
   }, []);
 
   useEffect(() => {
+    if (!hasLoaded.current) return;
     try {
       if (typeof window !== "undefined" && window.localStorage) {
         localStorage.setItem("kb_websites", JSON.stringify(sites));
@@ -536,16 +534,16 @@ export default function KitabhWebsiteBuilder(props: any) {
         { id: genId(), label: "اشتراك", linkType: "anchor", target: "", visible: true },
       ] as NavLink[] };
       case "hero_news": return { articles: MOCK_ARTICLES.slice(0, 5).map(a => a.id) };
-      case "hero_subscribe": return { title: "انضم لنشرتنا البريدية", subtitle: "محتوى حصري يصلك كل أسبوع", buttonText: "اشتراك" };
+      case "subscribe": return { layout: "hero", title: "انضم لنشرتنا البريدية", subtitle: "محتوى حصري يصلك كل أسبوع", description: "محتوى حصري يصلك مباشرة إلى بريدك", buttonText: "اشتراك", showNameField: false };
       case "hero_slider": return { articles: MOCK_ARTICLES.slice(0, 3).map(a => a.id) };
       case "banner": return { imageUrl: "", title: "", linkUrl: "" };
-      case "cta_newsletter": return { title: "اشترك في نشرتنا", buttonText: "اشتراك", description: "محتوى حصري يصلك مباشرة إلى بريدك" };
-      case "article_collection": return { articles: MOCK_ARTICLES.slice(0, 4).map(a => a.id), title: "", showSearch: false, showCategories: false };
+
+      case "article_collection": return { layout: "grid", articles: MOCK_ARTICLES.slice(0, 4).map(a => a.id), title: "", showSearch: false, showCategories: false };
       case "footer": return { logoUrl: "", title: "", buttonText: "اشتراك", links: [], customText: "", customLinks: [] as { label: string; url: string }[], showKitabhBadge: true };
       case "article_view": return {};
       case "text_block": return { content: "أضف نصك هنا..." };
       case "image_block": return { imageUrl: "", caption: "" };
-      case "subscribe_form": return { title: "اشترك في نشرتنا", buttonText: "اشتراك", showNameField: true, description: "محتوى حصري يصلك مباشرة إلى بريدك" };
+
       case "contact_form": return { title: "تواصل معنا", buttonText: "إرسال" };
       case "brands_ticker": return { speed: 30, items: [] };
       case "divider": return {};
@@ -560,25 +558,6 @@ export default function KitabhWebsiteBuilder(props: any) {
         { platform: "snapchat", url: "", enabled: false },
         { platform: "facebook", url: "", enabled: false },
       ] };
-      case "gallery": return {
-        sectionTitle: "في هذا العدد",
-        showSidebar: true,
-        sidebarTitle: "العدد الأخير",
-        sidebarButtonText: "النسخة الإلكترونية",
-        articles: MOCK_ARTICLES.slice(0, 3).map(a => a.id),
-        sidebarArticle: MOCK_ARTICLES[0]?.id || "",
-        sidebarImageUrl: "",
-      };
-      case "category_feed": return {
-        categoryId: MOCK_CATEGORIES[0]?._id || "",
-        layout: "featured_right",
-        maxArticles: 5,
-        showMoreLink: true,
-        moreText: "",
-        showSidebar: true,
-        sidebarCategoryId: "",
-        sidebarTitle: "",
-      };
       case "bento_grid": return { layout: "2-1" as string, items: [
         { title: "عنوان البطاقة الأولى", text: "نص وصفي قصير للبطاقة", imageUrl: "", linkUrl: "" },
         { title: "عنوان البطاقة الثانية", text: "نص وصفي قصير للبطاقة", imageUrl: "", linkUrl: "" },
@@ -798,7 +777,7 @@ export default function KitabhWebsiteBuilder(props: any) {
           const idx = p.components.findIndex(c => c.id === compId);
           if (idx < 0) return p;
           const original = p.components[idx];
-          const clone = { ...original, id: crypto.randomUUID(), settings: JSON.parse(JSON.stringify(original.settings)) };
+          const clone = { ...original, id: genId(), settings: JSON.parse(JSON.stringify(original.settings)) };
           const newComps = [...p.components];
           newComps.splice(idx + 1, 0, clone);
           return { ...p, components: newComps };
@@ -859,7 +838,7 @@ export default function KitabhWebsiteBuilder(props: any) {
 
   // ─── File upload (local preview via FileReader) ────────
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [uploadTarget, setUploadTarget] = useState<{ type: "branding_logo" | "comp_logo" | "comp_banner" | "testi_img" | "ticker_img"; compId?: string; itemIndex?: number } | null>(null);
+  const [uploadTarget, setUploadTarget] = useState<{ type: "branding_logo" | "comp_logo" | "comp_banner" | "testi_img" | "ticker_img" | "gallery_sidebar"; compId?: string; itemIndex?: number } | null>(null);
 
   const triggerUpload = (target: typeof uploadTarget) => {
     setUploadTarget(target);
@@ -1045,10 +1024,10 @@ export default function KitabhWebsiteBuilder(props: any) {
             pc += `<div class="pv-section-title"><h2>${s.title || "عنوان القسم"}</h2></div>`;
             break;
           case "text_block":
-            pc += `<div class="pv-text-block"><p>${s.text || "نص تجريبي"}</p></div>`;
+            pc += `<div class="pv-text-block"><p>${s.content || "نص تجريبي"}</p></div>`;
             break;
           case "rich_text":
-            pc += `<div class="pv-rich-text">${s.content || "<p>محتوى نصي</p>"}</div>`;
+            pc += `<div class="pv-rich-text">${s.html || "<p>محتوى نصي</p>"}</div>`;
             break;
           case "subscribe_form":
             pc += `<div class="pv-subscribe-form"><h3>${s.title || "اشترك في النشرة"}</h3><p>${s.description || ""}</p><div class="pv-form-row pv-form-center"><input type="email" placeholder="${s.placeholder || "بريدك الإلكتروني"}" class="pv-email" /><button class="pv-btn" style="background:${s.buttonColor || bc}">${s.buttonText || "اشتراك"}</button></div></div>`;
@@ -1058,7 +1037,7 @@ export default function KitabhWebsiteBuilder(props: any) {
             break;
           case "testimonials":
             const tItems = s.items || [];
-            const tHtml = tItems.map((t: any) => `<div class="pv-testi-card"><p class="pv-testi-text">"${t.text || ""}"</p><div class="pv-testi-author"><strong>${t.author || ""}</strong><span>${t.role || ""}</span></div></div>`).join("");
+            const tHtml = tItems.map((t: any) => `<div class="pv-testi-card"><p class="pv-testi-text">"${t.text || ""}"</p><div class="pv-testi-author"><strong>${t.name || ""}</strong><span>${t.role || ""}</span></div></div>`).join("");
             pc += `<div class="pv-testimonials"><div class="pv-testi-grid">${tHtml}</div></div>`;
             break;
           case "bento_grid":
@@ -3582,7 +3561,7 @@ const CSS_STYLES = `
 .kwb-p-cta h3{font-size:18px;font-weight:700;margin:0;color:var(--kwb-headline-color,#1a1a1a);}
 .kwb-p-cta p{font-size:15px;color:var(--kwb-text-color,#888);margin:2px 0 0;}
 .kwb-p-cta-form{display:flex;gap:0;flex:1;min-width:250px;}
-.kwb-p-email-input{flex:1;height:48px;padding:0 18px;border:1px solid rgba(128,128,128,0.3);border-right:none;font-family:inherit;font-size:15px;outline:none;background:var(--kwb-card-bg,#fff);color:var(--kwb-text-color,#333);min-width:180px;direction:rtl;}
+.kwb-p-email-input{flex:1;height:48px;padding:0 18px;border:1px solid rgba(128,128,128,0.3);border-left:none;font-family:inherit;font-size:15px;outline:none;background:var(--kwb-card-bg,#fff);color:var(--kwb-text-color,#333);min-width:180px;direction:rtl;}
 .kwb-p-email-input::placeholder{color:var(--kwb-text-color,#bbb);opacity:0.5;}
 
 /* Hero Subscribe */
@@ -3859,7 +3838,7 @@ const CSS_STYLES = `
 .kwb-nav-link-config{display:flex;gap:6px;margin-top:6px;}
 .kwb-nav-link-config select,.kwb-nav-link-config input{flex:1;}
 .kwb-input-sm{height:32px!important;font-size:12px!important;padding:0 8px!important;}
-.kwb-icon-btn-sm{width:24px;height:24px;border:1px solid #E0E0E0;border-radius:4px;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;color:#888;flex-shrink:0;padding:0;}
+.kwb-icon-btn-sm{width:32px;height:32px;border:1px solid #E0E0E0;border-radius:6px;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:12px;color:#888;flex-shrink:0;padding:0;}
 .kwb-icon-btn-sm:hover{background:#f0f0f0;color:#333;}
 
 /* Component row */
@@ -3872,9 +3851,9 @@ const CSS_STYLES = `
 .kwb-comp-edit-btn{width:28px;height:28px;border:none;background:none;color:#BBB;cursor:pointer;border-radius:6px;display:flex;align-items:center;justify-content:center;padding:0;}
 .kwb-comp-edit-btn:hover{background:#F0F0F0;color:#371D12;}
 .kwb-comp-actions{display:flex;gap:2px;align-items:center;flex-shrink:0;}
-.kwb-comp-move-btn{width:24px;height:24px;border:none;background:none;color:#CCC;cursor:pointer;border-radius:5px;display:flex;align-items:center;justify-content:center;padding:0;transition:all .15s;}
+.kwb-comp-move-btn{width:32px;height:32px;border:none;background:none;color:#CCC;cursor:pointer;border-radius:5px;display:flex;align-items:center;justify-content:center;padding:0;transition:all .15s;}
 .kwb-comp-move-btn:hover{background:#F0F0F0;color:#371D12;}
-.kwb-comp-delete-btn{width:24px;height:24px;border:none;background:none;color:#DDD;cursor:pointer;border-radius:5px;display:flex;align-items:center;justify-content:center;padding:0;transition:all .15s;}
+.kwb-comp-delete-btn{width:32px;height:32px;border:none;background:none;color:#DDD;cursor:pointer;border-radius:5px;display:flex;align-items:center;justify-content:center;padding:0;transition:all .15s;}
 .kwb-comp-delete-btn:hover{background:#FEF2F2;color:#E82222;}
 .kwb-comp-delete-btn svg{width:12px;height:12px;}
 .kwb-upload-preview{position:relative;border-radius:10px;overflow:hidden;border:1.5px solid #E0E0E0;}
@@ -4108,7 +4087,8 @@ const CSS_STYLES = `
 .kwb-p-insert-btn:hover{border-color:#0000FF;color:#0000FF;background:#F0F0FF;border-style:solid;}
 
 /* Insert dropdown */
-.kwb-p-insert-dropdown{position:absolute;top:32px;left:50%;transform:translateX(-50%);background:#fff;border:1px solid #E0E0E0;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,0.12);padding:8px;display:grid;grid-template-columns:repeat(3,1fr);gap:4px;z-index:20;min-width:320px;direction:rtl;}
+.kwb-p-insert-dropdown{position:absolute;top:32px;left:50%;transform:translateX(-50%);background:#fff;border:1px solid #E0E0E0;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,0.12);padding:8px;display:grid;grid-template-columns:repeat(3,1fr);gap:4px;z-index:20;min-width:280px;max-width:90vw;direction:rtl;}
+@media(max-width:480px){.kwb-p-insert-dropdown{grid-template-columns:repeat(2,1fr);min-width:200px;}}
 .kwb-p-insert-item{padding:8px 6px;border:1px solid #f0f0f0;border-radius:8px;background:#fff;font-family:inherit;font-size:12px;font-weight:600;color:#371D12;cursor:pointer;text-align:center;transition:all .1s;white-space:nowrap;}
 .kwb-p-insert-item:hover{background:#F0F0FF;border-color:#0000FF;color:#0000FF;}
 
@@ -4122,8 +4102,8 @@ const CSS_STYLES = `
 .kwb-preview-content .kwb-p-article-img{border-radius:var(--kwb-radius,0);}
 .kwb-preview-content .kwb-p-hero-side-img{border-radius:var(--kwb-radius,0);}
 .kwb-preview-content .kwb-p-hero-main-img{border-radius:var(--kwb-radius,0);}
-.kwb-preview-content .kwb-p-email-input{border-radius:var(--kwb-radius,0) 0 0 var(--kwb-radius,0);}
-.kwb-preview-content .kwb-p-footer-email{border-radius:var(--kwb-radius,0) 0 0 var(--kwb-radius,0);}
+.kwb-preview-content .kwb-p-email-input{border-radius:0 var(--kwb-radius,0) var(--kwb-radius,0) 0;}
+.kwb-preview-content .kwb-p-footer-email{border-radius:0 var(--kwb-radius,0) var(--kwb-radius,0) 0;}
 .kwb-preview-content .kwb-p-cf-input{border-radius:var(--kwb-radius,0);}
 .kwb-preview-content .kwb-p-cf-textarea{border-radius:var(--kwb-radius,0);}
 .kwb-preview-content .kwb-p-cf-btn{border-radius:var(--kwb-radius,0);}

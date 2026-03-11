@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { MOCK_NEWSLETTER, MOCK_AUTHOR } from '../mockData';
+import { MOCK_AUTHOR, MOCK_NEWSLETTER } from '../mockData';
 import { colors, icons } from './HubLayout';
 
 interface GrowPageProps {

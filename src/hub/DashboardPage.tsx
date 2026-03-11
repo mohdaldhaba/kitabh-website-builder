@@ -178,7 +178,7 @@ const DashboardPage: React.FC = () => {
       </div>
 
       {/* Two columns: Recent articles + Email performance */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: 20 }}>
+      <div className="hub-dashboard-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: 20 }}>
         {/* Recent Articles */}
         <div style={{ background: '#fff', borderRadius: 12, border: '1px solid #E5E7EB', padding: '20px 24px' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
@@ -277,8 +277,7 @@ const DashboardPage: React.FC = () => {
       {/* Responsive override */}
       <style>{`
         @media (max-width: 900px) {
-          [style*="gridTemplateColumns: '1fr 380px'"],
-          [style*="grid-template-columns"] {
+          .hub-dashboard-grid {
             grid-template-columns: 1fr !important;
           }
         }

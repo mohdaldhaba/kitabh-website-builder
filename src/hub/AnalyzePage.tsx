@@ -62,6 +62,7 @@ const NewsletterStats: React.FC = () => {
           أداء كل منشور
         </h3>
 
+        <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' as any }}>
         {/* Table header */}
         <div
           style={{
@@ -69,6 +70,7 @@ const NewsletterStats: React.FC = () => {
             gridTemplateColumns: '2fr 80px 80px 80px 80px',
             padding: '10px 0',
             borderBottom: '1px solid #E5E7EB',
+            minWidth: 520,
           }}
         >
           {['المنشور', 'أُرسل', 'فتح %', 'نقر %', 'مشاهدات'].map((h) => (
@@ -85,9 +87,10 @@ const NewsletterStats: React.FC = () => {
               padding: '14px 0',
               borderBottom: '1px solid #F3F4F6',
               alignItems: 'center',
+              minWidth: 520,
             }}
           >
-            <div style={{ fontSize: 14, fontWeight: 500, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', paddingLeft: 12, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+            <div style={{ fontSize: 14, fontWeight: 500, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', paddingRight: 12, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
               {article.title}
             </div>
             <div style={{ fontSize: 13, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>
@@ -104,6 +107,7 @@ const NewsletterStats: React.FC = () => {
             </div>
           </div>
         ))}
+        </div>{/* end scroll wrapper */}
       </div>
     </div>
   );
@@ -154,7 +158,7 @@ const WebsiteStats: React.FC = () => {
         ))}
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+      <div className="hub-analyze-charts" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
         {/* Page views */}
         <div style={{ background: '#fff', borderRadius: 12, border: '1px solid #E5E7EB', padding: 24 }}>
           <h3 style={{ fontSize: 15, fontWeight: 600, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 20px' }}>
@@ -175,6 +179,11 @@ const WebsiteStats: React.FC = () => {
           ))}
         </div>
       </div>
+      <style>{`
+        @media (max-width: 700px) {
+          .hub-analyze-charts { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
     </div>
   );
 };

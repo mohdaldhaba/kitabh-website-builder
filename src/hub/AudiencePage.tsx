@@ -105,6 +105,7 @@ const AudiencePage: React.FC = () => {
           </button>
         </div>
 
+        <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
         {/* Table header */}
         <div
           style={{
@@ -113,6 +114,7 @@ const AudiencePage: React.FC = () => {
             padding: '12px 20px',
             borderBottom: '1px solid #F3F4F6',
             background: '#FAFAFA',
+            minWidth: 600,
           }}
         >
           {['الاسم', 'البريد الإلكتروني', 'تاريخ الاشتراك', 'المصدر', 'الحالة'].map((header) => (
@@ -134,6 +136,7 @@ const AudiencePage: React.FC = () => {
               alignItems: 'center',
               cursor: 'pointer',
               transition: 'background 0.15s',
+              minWidth: 600,
             }}
             onMouseEnter={(e) => (e.currentTarget.style.background = '#FAFAFA')}
             onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
@@ -186,6 +189,7 @@ const AudiencePage: React.FC = () => {
             </span>
           </div>
         ))}
+        </div>{/* end scroll wrapper */}
       </div>
     </div>
   );

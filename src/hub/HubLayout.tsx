@@ -441,7 +441,7 @@ const HubLayout: React.FC<HubLayoutProps> = ({ children, activePage, activeSubPa
       </aside>
 
       {/* Main content area */}
-      <div style={{ flex: 1, marginRight: 260, minHeight: '100vh', background: colors.contentBg }}>
+      <div className="hub-main-content" style={{ flex: 1, marginRight: 260, minHeight: '100vh', background: colors.contentBg }}>
         {/* Top bar */}
         <header
           style={{
@@ -544,7 +544,7 @@ const HubLayout: React.FC<HubLayoutProps> = ({ children, activePage, activeSubPa
           .hub-sidebar-desktop { display: none !important; }
           .hub-sidebar-mobile { display: flex !important; }
           .hub-mobile-menu-btn { display: flex !important; }
-          [style*="marginRight: 260"] { margin-right: 0 !important; }
+          .hub-main-content { margin-right: 0 !important; }
         }
         @media (min-width: 769px) {
           .hub-sidebar-mobile { display: none !important; }
