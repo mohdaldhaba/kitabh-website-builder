@@ -55,7 +55,7 @@ const TEA_OPTIONS = [
   { id: 'large', amount: 100, image: '/images/tea-large.png', size: 52 },
 ]
 
-const COFFEE_MESSAGE = 'هذا الكاتب يحب القهوة .. بإمكانك التكّفل بفنجانه القادم ليكتب أكثر'
+const COFFEE_MESSAGE = 'هذا الكاتب يحب القهوة .. بإمكانك التكفّل بفنجانه القادم'
 const TEA_MESSAGE = 'هذا الكاتب يحب الشاي .. بإمكانك التكفّل بكوبه القادم ليكتب أكثر'
 
 // Demo supporters — in production this comes from the database
