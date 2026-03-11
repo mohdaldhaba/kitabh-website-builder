@@ -68,7 +68,7 @@ const MagicLinkSection: React.FC = () => {
         </div>
 
         <div style={{ fontSize: 13, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>
-          <strong style={{ color: colors.text }}>١٢٣</strong> مشترك جاء عبر هذا الرابط هذا الشهر
+          <strong style={{ color: colors.text }}>123</strong> مشترك جاء عبر هذا الرابط هذا الشهر
         </div>
       </div>
 
@@ -163,7 +163,7 @@ const ReferralSection: React.FC = () => (
 
       <div style={{ marginTop: 16, padding: 16, background: '#EEF2FF', borderRadius: 8, border: '1px solid #C7D2FE' }}>
         <div style={{ fontSize: 13, color: '#4338CA', fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>
-          <strong>٤٧</strong> مشترك استخدم برنامج الإحالة — <strong>١٢٣</strong> مشترك جديد عبر الإحالات
+          <strong>47</strong> مشترك استخدم برنامج الإحالة — <strong>123</strong> مشترك جديد عبر الإحالات
         </div>
       </div>
     </div>

@@ -119,8 +119,8 @@ const WebsitePage: React.FC = () => {
           { label: 'عنوان الموقع', value: websiteUrl, editable: true },
           { label: 'النطاق المخصص', value: 'لم يتم الربط بعد', editable: true, action: 'ربط نطاق' },
           { label: 'القالب', value: 'الحداثة — أزرق', editable: true },
-          { label: 'عدد الصفحات', value: '٤ صفحات', editable: false },
-          { label: 'آخر تحديث', value: 'اليوم، ٢:٣٠ م', editable: false },
+          { label: 'عدد الصفحات', value: '4 صفحات', editable: false },
+          { label: 'آخر تحديث', value: 'اليوم، 2:30 م', editable: false },
         ].map((setting, i) => (
           <div
             key={i}

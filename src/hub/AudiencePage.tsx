@@ -24,7 +24,7 @@ const AudiencePage: React.FC = () => {
     return true;
   });
 
-  const formatDate = (d: string) => new Date(d).toLocaleDateString('ar-SA', { year: 'numeric', month: 'short', day: 'numeric' });
+  const formatDate = (d: string) => new Date(d).toLocaleDateString('ar-u-nu-latn', { year: 'numeric', month: 'short', day: 'numeric' });
 
   return (
     <div style={{ maxWidth: 1100, margin: '0 auto' }}>
@@ -32,7 +32,7 @@ const AudiencePage: React.FC = () => {
       <div style={{ display: 'flex', gap: 16, marginBottom: 24, flexWrap: 'wrap' }}>
         {[
           { label: 'إجمالي المشتركين', value: stats.totalSubscribers.toLocaleString('en'), icon: icons.audience },
-          { label: 'مشتركون جدد (هذا الشهر)', value: '١٤٣', icon: icons.grow },
+          { label: 'مشتركون جدد (هذا الشهر)', value: '143', icon: icons.grow },
           { label: 'معدل إلغاء الاشتراك', value: `${((stats.totalUnsubscribes / stats.totalSubscribers) * 100).toFixed(1)}%`, icon: icons.analyze },
           { label: 'معدل الفتح', value: `${stats.avgOpenRate}%`, icon: icons.posts },
         ].map((stat, i) => (

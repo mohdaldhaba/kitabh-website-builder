@@ -58,7 +58,7 @@ const ArticleRow: React.FC<{ article: typeof MOCK_ARTICLES[0] }> = ({ article })
 
   const status = statusMap[article.status] || statusMap.draft;
   const date = new Date(article.publishedAt || article.createdAt);
-  const dateStr = date.toLocaleDateString('ar-SA', { year: 'numeric', month: 'short', day: 'numeric' });
+  const dateStr = date.toLocaleDateString('ar-u-nu-latn', { year: 'numeric', month: 'short', day: 'numeric' });
 
   return (
     <div
@@ -174,10 +174,10 @@ const DashboardPage: React.FC = () => {
 
       {/* Stats Grid */}
       <div style={{ display: 'flex', gap: 16, marginBottom: 24, flexWrap: 'wrap' }}>
-        <StatCard label="المشتركون" value={MOCK_STATS.totalSubscribers} change="١٢% هذا الشهر" positive icon={icons.audience} />
-        <StatCard label="إجمالي المشاهدات" value={MOCK_STATS.totalViews} change="٨% هذا الأسبوع" positive icon={icons.analyze} />
-        <StatCard label="معدل الفتح" value={`${MOCK_STATS.avgOpenRate}%`} change="٣% عن الشهر السابق" positive icon={icons.posts} />
-        <StatCard label="معدل النقر" value={`${MOCK_STATS.avgClickRate}%`} change="١% انخفاض" positive={false} icon={icons.magicLink} />
+        <StatCard label="المشتركون" value={MOCK_STATS.totalSubscribers} change="12% هذا الشهر" positive icon={icons.audience} />
+        <StatCard label="إجمالي المشاهدات" value={MOCK_STATS.totalViews} change="8% هذا الأسبوع" positive icon={icons.analyze} />
+        <StatCard label="معدل الفتح" value={`${MOCK_STATS.avgOpenRate}%`} change="3% عن الشهر السابق" positive icon={icons.posts} />
+        <StatCard label="معدل النقر" value={`${MOCK_STATS.avgClickRate}%`} change="1% انخفاض" positive={false} icon={icons.magicLink} />
       </div>
 
       {/* Two columns: Recent articles + Email performance */}
@@ -216,7 +216,7 @@ const DashboardPage: React.FC = () => {
             </h2>
             <MiniChart />
             <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 12 }}>
-              <span style={{ fontSize: 12, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>آخر ٧ أعداد</span>
+              <span style={{ fontSize: 12, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>آخر 7 أعداد</span>
               <span style={{ fontSize: 12, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>معدل الفتح %</span>
             </div>
 

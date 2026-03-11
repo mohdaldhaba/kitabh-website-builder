@@ -140,16 +140,16 @@ const WebsiteStats: React.FC = () => {
         إحصائيات الموقع
       </h2>
       <p style={{ fontSize: 14, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 24px' }}>
-        أداء موقعك — آخر ٣٠ يوما
+        أداء موقعك — آخر 30 يوما
       </p>
 
       {/* Overview */}
       <div style={{ display: 'flex', gap: 16, marginBottom: 24, flexWrap: 'wrap' }}>
         {[
-          { label: 'زيارات الموقع', value: '٧٬٨٠٠' },
-          { label: 'زوار فريدون', value: '٤٬٢٠٠' },
-          { label: 'متوسط مدة الزيارة', value: '٢:٣٥ د' },
-          { label: 'معدل الارتداد', value: '٣٢%' },
+          { label: 'زيارات الموقع', value: '7,800' },
+          { label: 'زوار فريدون', value: '4,200' },
+          { label: 'متوسط مدة الزيارة', value: '2:35 د' },
+          { label: 'معدل الارتداد', value: '32%' },
         ].map((item, i) => (
           <div key={i} style={{ flex: 1, minWidth: 160, background: 'rgba(255,255,255,0.6)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)', borderRadius: 12, border: '1px solid rgba(255,255,255,0.5)', padding: '16px 18px' }}>
             <div style={{ fontSize: 12, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif', marginBottom: 6 }}>{item.label}</div>
