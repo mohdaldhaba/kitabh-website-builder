@@ -4053,7 +4053,7 @@ const CSS_STYLES = `
 .kwb-comp-sticky-footer{position:relative;background:#fff;padding:10px 16px;border-top:1px solid #E8E8E8;flex-shrink:0;}
 .kwb-add-comp-dropdown{position:absolute;bottom:100%;left:0;right:0;background:#fff;border:1px solid #E8E8E8;border-bottom:none;border-radius:12px 12px 0 0;box-shadow:0 -4px 20px rgba(0,0,0,0.1);padding:8px;max-height:40vh;overflow-y:auto;z-index:10;}
 .kwb-add-comp-cards{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;}
-.kwb-add-comp-card{display:flex;flex-direction:column;align-items:center;gap:6px;border:1.5px solid #f0f0f0;border-radius:10px;background:#fafafa;cursor:pointer;transition:all .15s;overflow:hidden;text-align:center;padding:10px 4px 8px;}
+.kwb-add-comp-card{display:flex;flex-direction:column;align-items:center;gap:6px;border:1.5px solid #f0f0f0;border-radius:10px;background:#fafafa;cursor:pointer;transition:all .15s;overflow:hidden;text-align:center;padding:10px 4px 8px;font-family:"IBM Plex Sans Arabic",system-ui,sans-serif;}
 .kwb-add-comp-card:hover{border-color:#0000FF;background:#EEF0FF;box-shadow:0 2px 8px rgba(0,0,0,0.06);}
 .kwb-add-comp-icon{width:28px;height:28px;display:flex;align-items:center;justify-content:center;background:#fff;border-radius:7px;border:1px solid #e8e8e8;flex-shrink:0;}
 .kwb-add-comp-icon svg{width:16px;height:16px;}
@@ -4274,7 +4274,7 @@ const CSS_STYLES = `
 /* Insert dropdown */
 .kwb-p-insert-dropdown{position:absolute;top:32px;left:50%;transform:translateX(-50%);background:#fff;border:1px solid #E0E0E0;border-radius:14px;box-shadow:0 12px 40px rgba(0,0,0,0.15);padding:10px;display:grid;grid-template-columns:repeat(3,1fr);gap:6px;z-index:9999;min-width:340px;max-width:90vw;direction:rtl;}
 @media(max-width:480px){.kwb-p-insert-dropdown{grid-template-columns:repeat(2,1fr);min-width:240px;}}
-.kwb-p-insert-item{padding:10px 6px 8px;border:1.5px solid #f0f0f0;border-radius:10px;background:#fafafa;font-family:inherit;font-size:11px;font-weight:600;color:#555;cursor:pointer;text-align:center;transition:all .15s;white-space:nowrap;display:flex;flex-direction:column;align-items:center;gap:6px;}
+.kwb-p-insert-item{padding:10px 6px 8px;border:1.5px solid #f0f0f0;border-radius:10px;background:#fafafa;font-family:"IBM Plex Sans Arabic",system-ui,sans-serif;font-size:11px;font-weight:600;color:#555;cursor:pointer;text-align:center;transition:all .15s;white-space:nowrap;display:flex;flex-direction:column;align-items:center;gap:6px;}
 .kwb-p-insert-item:hover{background:#EEF0FF;border-color:#0000FF;color:#0000FF;}
 .kwb-p-insert-icon{width:28px;height:28px;display:flex;align-items:center;justify-content:center;background:#fff;border-radius:7px;border:1px solid #e8e8e8;}
 .kwb-p-insert-icon svg{width:16px;height:16px;}
