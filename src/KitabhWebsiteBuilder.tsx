@@ -398,6 +398,18 @@ export default function KitabhWebsiteBuilder(props: any) {
         const saved = localStorage.getItem("kb_websites");
         if (saved) {
           const parsed = JSON.parse(saved);
+          // Migrate old component types to consolidated ones
+          for (const site of parsed) {
+            for (const page of site.pages || []) {
+              for (const comp of page.components || []) {
+                if (comp.type === "hero_subscribe") { comp.type = "subscribe"; comp.settings = { ...comp.settings, layout: "hero" }; }
+                else if (comp.type === "cta_newsletter") { comp.type = "subscribe"; comp.settings = { ...comp.settings, layout: "cta" }; }
+                else if (comp.type === "subscribe_form") { comp.type = "subscribe"; comp.settings = { ...comp.settings, layout: "form" }; }
+                else if (comp.type === "gallery") { comp.type = "article_collection"; comp.settings = { ...comp.settings, layout: "gallery" }; }
+                else if (comp.type === "category_feed") { comp.type = "article_collection"; comp.settings = { ...comp.settings, layout: "category_feed", categoryLayout: comp.settings.layout || "featured_right" }; }
+              }
+            }
+          }
           setSites(parsed);
           prevSitesJson.current = JSON.stringify(parsed);
         }
@@ -464,19 +476,19 @@ export default function KitabhWebsiteBuilder(props: any) {
     const footer: SiteComponent = { id: genId(), type: "footer", enabled: true, settings: getDefaultSettings("footer") };
     switch (pageName) {
       case "مقالات":
-        return [header, { id: genId(), type: "article_collection", enabled: true, settings: { articles: MOCK_ARTICLES.map(a => a.id), title: "جميع المقالات" } }, { id: genId(), type: "cta_newsletter", enabled: true, settings: getDefaultSettings("cta_newsletter") }, footer];
+        return [header, { id: genId(), type: "article_collection", enabled: true, settings: { articles: MOCK_ARTICLES.map(a => a.id), title: "جميع المقالات" } }, { id: genId(), type: "subscribe", enabled: true, settings: { ...getDefaultSettings("subscribe"), layout: "cta" } }, footer];
       case "عن المدونة":
-        return [header, { id: genId(), type: "hero_subscribe", enabled: true, settings: { title: "من نحن", subtitle: "تعرّف على قصتنا ورؤيتنا", buttonText: "اشتراك", buttonColor: "#E82222" } }, { id: genId(), type: "banner", enabled: true, settings: getDefaultSettings("banner") }, footer];
+        return [header, { id: genId(), type: "subscribe", enabled: true, settings: { layout: "hero", title: "من نحن", subtitle: "تعرّف على قصتنا ورؤيتنا", buttonText: "اشتراك", buttonColor: "#E82222" } }, { id: genId(), type: "banner", enabled: true, settings: getDefaultSettings("banner") }, footer];
       case "اشتراك":
-        return [header, { id: genId(), type: "hero_subscribe", enabled: true, settings: getDefaultSettings("hero_subscribe") }, { id: genId(), type: "cta_newsletter", enabled: true, settings: getDefaultSettings("cta_newsletter") }, footer];
+        return [header, { id: genId(), type: "subscribe", enabled: true, settings: getDefaultSettings("subscribe") }, { id: genId(), type: "subscribe", enabled: true, settings: { ...getDefaultSettings("subscribe"), layout: "cta" } }, footer];
       case "تواصل":
-        return [header, { id: genId(), type: "hero_subscribe", enabled: true, settings: { title: "تواصل معنا", subtitle: "نسعد بتواصلك معنا عبر البريد الإلكتروني", buttonText: "أرسل", buttonColor: "#E82222" } }, footer];
+        return [header, { id: genId(), type: "subscribe", enabled: true, settings: { layout: "hero", title: "تواصل معنا", subtitle: "نسعد بتواصلك معنا عبر البريد الإلكتروني", buttonText: "أرسل", buttonColor: "#E82222" } }, footer];
       case "المتجر":
-        return [header, { id: genId(), type: "hero_subscribe", enabled: true, settings: { title: "المتجر", subtitle: "تصفح منتجاتنا الحصرية", buttonText: "تسوّق", buttonColor: "#E82222" } }, { id: genId(), type: "banner", enabled: true, settings: getDefaultSettings("banner") }, footer];
+        return [header, { id: genId(), type: "subscribe", enabled: true, settings: { layout: "hero", title: "المتجر", subtitle: "تصفح منتجاتنا الحصرية", buttonText: "تسوّق", buttonColor: "#E82222" } }, { id: genId(), type: "banner", enabled: true, settings: getDefaultSettings("banner") }, footer];
       case "عرض المقال":
-        return [header, { id: genId(), type: "article_view", enabled: true, settings: {} }, { id: genId(), type: "cta_newsletter", enabled: true, settings: getDefaultSettings("cta_newsletter") }, footer];
+        return [header, { id: genId(), type: "article_view", enabled: true, settings: {} }, { id: genId(), type: "subscribe", enabled: true, settings: { ...getDefaultSettings("subscribe"), layout: "cta" } }, footer];
       default:
-        return [header, { id: genId(), type: "hero_subscribe", enabled: true, settings: { title: pageName, subtitle: `جميع المقالات عن ${pageName}`, buttonText: "اشتراك" } }, { id: genId(), type: "article_collection", enabled: true, settings: { articles: MOCK_ARTICLES.map(a => a.id), title: `مقالات ${pageName}` } }, { id: genId(), type: "cta_newsletter", enabled: true, settings: getDefaultSettings("cta_newsletter") }, footer];
+        return [header, { id: genId(), type: "subscribe", enabled: true, settings: { layout: "hero", title: pageName, subtitle: `جميع المقالات عن ${pageName}`, buttonText: "اشتراك" } }, { id: genId(), type: "article_collection", enabled: true, settings: { ...getDefaultSettings("article_collection"), articles: MOCK_ARTICLES.map(a => a.id), title: `مقالات ${pageName}` } }, { id: genId(), type: "subscribe", enabled: true, settings: { ...getDefaultSettings("subscribe"), layout: "cta" } }, footer];
     }
   }
 
@@ -724,7 +736,7 @@ export default function KitabhWebsiteBuilder(props: any) {
     }, 100);
   };
 
-  const INSERT_TYPES: ComponentType[] = ["header", "hero_news", "hero_subscribe", "gallery", "category_feed", "banner", "cta_newsletter", "article_collection", "brands_ticker", "testimonials", "products", "podcast", "courses", "topics", "text_block", "rich_text", "image_block", "subscribe_form", "contact_form", "social_links", "divider", "footer"];
+  const INSERT_TYPES: ComponentType[] = ["header", "hero_news", "subscribe", "article_collection", "bento_grid", "banner", "brands_ticker", "testimonials", "products", "podcast", "courses", "topics", "text_block", "rich_text", "image_block", "contact_form", "social_links", "divider", "footer"];
 
   // ─── Move component up/down ────────
   const moveComponent = (compId: string, direction: "up" | "down") => {
@@ -986,19 +998,36 @@ export default function KitabhWebsiteBuilder(props: any) {
             const mainH = ma ? `<div class="pv-hero-main"><div class="pv-img" style="height:260px;min-height:260px"></div><h2>${ma.title}</h2><p class="pv-excerpt">${ma.excerpt}</p><div class="pv-meta-row"><div class="pv-author-row"><div class="pv-avatar">${ma.author.charAt(0)}</div><span class="pv-author-name">${ma.author}</span><span class="pv-date" style="margin-inline-start:8px">${ma.date}</span></div><span class="pv-eng">💬 ${ma.comments} <span style="color:var(--pv-btn)">❤ ${ma.likes}</span></span></div></div>` : "";
             pc += `<div class="pv-hero-grid"><div class="pv-hero-side pv-hero-side-r">${sideR}</div>${mainH}<div class="pv-hero-side pv-hero-side-l">${sideL}</div></div>`;
             break;
-          case "hero_subscribe":
-            pc += `<div class="pv-hero-sub"><h2>${s.title || "انضم لنشرتنا البريدية"}</h2><p>${s.subtitle || "محتوى حصري يصلك كل أسبوع"}</p><div class="pv-form-row pv-form-center"><input type="email" name="email" autocomplete="email" placeholder="أدخل بريدك الإلكتروني" class="pv-email" /><button class="pv-btn" style="background:${s.buttonColor || bc}">${s.buttonText || "اشتراك"}</button></div></div>`;
+          case "subscribe":
+            if (s.layout === "cta") {
+              pc += `<div class="pv-cta"><div class="pv-cta-inner"><div class="pv-cta-text"><div class="pv-cta-icon">${sn.charAt(0)}</div><div><h3>${s.title || "اشترك في نشرتنا"}</h3><p>${s.description || "محتوى حصري يصلك مباشرة إلى بريدك"}</p></div></div><div class="pv-form-row"><input type="email" name="email" autocomplete="email" placeholder="أدخل بريدك الإلكتروني" class="pv-email" /><button class="pv-btn" style="background:${s.buttonColor || bc}">${s.buttonText || "اشتراك"}</button></div></div></div>`;
+            } else if (s.layout === "form") {
+              pc += `<div class="pv-subscribe-form"><h3>${s.title || "اشترك في النشرة"}</h3><p>${s.description || ""}</p><div class="pv-form-row pv-form-center"><input type="email" placeholder="بريدك الإلكتروني" class="pv-email" /><button class="pv-btn" style="background:${s.buttonColor || bc}">${s.buttonText || "اشتراك"}</button></div></div>`;
+            } else {
+              pc += `<div class="pv-hero-sub"><h2>${s.title || "انضم لنشرتنا البريدية"}</h2><p>${s.subtitle || "محتوى حصري يصلك كل أسبوع"}</p><div class="pv-form-row pv-form-center"><input type="email" name="email" autocomplete="email" placeholder="أدخل بريدك الإلكتروني" class="pv-email" /><button class="pv-btn" style="background:${s.buttonColor || bc}">${s.buttonText || "اشتراك"}</button></div></div>`;
+            }
             break;
           case "brands_ticker":
             pc += `<div class="pv-ticker"><div class="pv-ticker-inner">${sn} &#x2022; مدونة ${sn} &#x2022; ${sn} &#x2022; مدونة ${sn}</div></div>`;
             break;
-          case "cta_newsletter":
-            pc += `<div class="pv-cta"><div class="pv-cta-inner"><div class="pv-cta-text"><div class="pv-cta-icon">${sn.charAt(0)}</div><div><h3>${s.title || "اشترك في نشرتنا"}</h3><p>${s.description || "محتوى حصري يصلك مباشرة إلى بريدك"}</p></div></div><div class="pv-form-row"><input type="email" name="email" autocomplete="email" placeholder="أدخل بريدك الإلكتروني" class="pv-email" /><button class="pv-btn" style="background:${s.buttonColor || bc}">${s.buttonText || "اشتراك"}</button></div></div></div>`;
-            break;
           case "article_collection":
-            const ac = (s.articles || []).map((id: string) => MOCK_ARTICLES.find(a => a.id === id)).filter(Boolean);
-            const acH = ac.map((a: any) => `<a href="/article/${a.slug}" class="pv-art-card" style="text-decoration:none;color:inherit"><div class="pv-img" style="height:260px;min-height:260px;${a.imageUrl ? `background-image:url(${a.imageUrl});background-size:cover;background-position:center` : ''}"></div><h4>${a.title}</h4><p class="pv-excerpt-sm">${a.excerpt.slice(0, 80)}...</p><div class="pv-author-row"><div class="pv-avatar">${a.author.charAt(0)}</div><span class="pv-author-name">${a.author}</span></div><div class="pv-meta-row"><span>${a.date}</span><span class="pv-eng"><span style="color:var(--pv-btn)">❤ ${a.likes}</span><span>💬 ${a.comments}</span></span></div></a>`).join("");
-            pc += `<div class="pv-articles"><div class="pv-articles-grid">${acH}</div><a class="pv-all-link">جميع المقالات &#x2197;</a></div>`;
+            if (s.layout === "gallery") {
+              const gArts = (s.articles || []).map((id: string) => MOCK_ARTICLES.find(a => a.id === id)).filter(Boolean);
+              const gCards = gArts.map((a: any) => `<div class="pv-gallery-card"><div class="pv-gallery-card-img">${a.imageUrl ? `<img src="${a.imageUrl}" alt="${a.title}"/>` : `<div class="pv-img" style="height:160px"></div>`}</div><h3>${a.title}</h3><p>${a.excerpt.slice(0, 120)}...</p><div class="pv-gallery-card-footer"><span>${a.author}</span></div></div>`).join("");
+              const gSidebar = s.showSidebar ? `<div class="pv-gallery-sidebar">${s.sidebarTitle ? `<h3>${s.sidebarTitle}</h3>` : ""}${s.sidebarImageUrl ? `<img src="${s.sidebarImageUrl}" class="pv-gallery-sidebar-img"/>` : `<div class="pv-img" style="height:300px"></div>`}${s.sidebarButtonText ? `<button class="pv-gallery-sidebar-btn">${s.sidebarButtonText}</button>` : ""}</div>` : "";
+              pc += `<div class="pv-gallery">${s.sectionTitle ? `<div class="pv-gallery-header"><h2>${s.sectionTitle}</h2></div>` : ""}<div class="pv-gallery-body ${s.showSidebar ? "pv-gallery-with-sidebar" : ""}">${gCards.length ? `<div class="pv-gallery-cards">${gCards}</div>` : ""}${gSidebar}</div></div>`;
+            } else if (s.layout === "category_feed") {
+              const cfCat = MOCK_CATEGORIES.find(c => c._id === s.categoryId);
+              const cfArts = MOCK_ARTICLES.filter(a => a.categories.includes(s.categoryId || "")).slice(0, s.maxArticles || 5);
+              const cfFeat = cfArts[0]; const cfRest = cfArts.slice(1);
+              const cfCards = cfRest.map((a: any) => `<div class="pv-catfeed-card">${a.imageUrl ? `<img src="${a.imageUrl}" class="pv-catfeed-card-img"/>` : `<div class="pv-img" style="width:120px;height:90px"></div>`}<div class="pv-catfeed-card-content"><h3>${a.title}</h3><p>${a.excerpt.slice(0, 80)}...</p><span class="pv-catfeed-author">${a.author}</span></div></div>`).join("");
+              const cfFeatH = cfFeat ? `<div class="pv-catfeed-featured">${cfFeat.imageUrl ? `<img src="${cfFeat.imageUrl}" class="pv-catfeed-featured-img"/>` : `<div class="pv-img" style="height:280px"></div>`}<h3>${cfFeat.title}</h3><p>${cfFeat.excerpt.slice(0, 140)}...</p><span class="pv-catfeed-author">${cfFeat.author}</span></div>` : "";
+              pc += `<div class="pv-catfeed"><div class="pv-catfeed-header"><h2>${cfCat?.name || ""}</h2>${s.showMoreLink ? `<span class="pv-catfeed-more">${s.moreText || `المزيد من ${cfCat?.name || ""}`} &#x25C0;</span>` : ""}</div><div class="pv-catfeed-body pv-catfeed-${s.categoryLayout || "featured_right"}">${cfCards ? `<div class="pv-catfeed-main">${cfCards}</div>` : ""}${cfFeatH}</div></div>`;
+            } else {
+              const ac = (s.articles || []).map((id: string) => MOCK_ARTICLES.find(a => a.id === id)).filter(Boolean);
+              const acH = ac.map((a: any) => `<a href="/article/${a.slug}" class="pv-art-card" style="text-decoration:none;color:inherit"><div class="pv-img" style="height:260px;min-height:260px;${a.imageUrl ? `background-image:url(${a.imageUrl});background-size:cover;background-position:center` : ''}"></div><h4>${a.title}</h4><p class="pv-excerpt-sm">${a.excerpt.slice(0, 80)}...</p><div class="pv-author-row"><div class="pv-avatar">${a.author.charAt(0)}</div><span class="pv-author-name">${a.author}</span></div><div class="pv-meta-row"><span>${a.date}</span><span class="pv-eng"><span style="color:var(--pv-btn)">❤ ${a.likes}</span><span>💬 ${a.comments}</span></span></div></a>`).join("");
+              pc += `<div class="pv-articles"><div class="pv-articles-grid">${acH}</div><a class="pv-all-link">جميع المقالات &#x2197;</a></div>`;
+            }
             break;
           case "banner":
             pc += `<div class="pv-banners"><div class="pv-banner-grid"><div class="pv-banner-card" style="background:var(--pv-btn)"><span>تصفح أرشيف ${sn}</span><a>جميع المقالات &#x2197;</a></div><div class="pv-banner-card" style="background:var(--pv-headline)"><span>قصتنا</span><a>اقرأ المزيد &#x2197;</a></div></div></div>`;
@@ -1029,9 +1058,6 @@ export default function KitabhWebsiteBuilder(props: any) {
           case "rich_text":
             pc += `<div class="pv-rich-text">${s.html || "<p>محتوى نصي</p>"}</div>`;
             break;
-          case "subscribe_form":
-            pc += `<div class="pv-subscribe-form"><h3>${s.title || "اشترك في النشرة"}</h3><p>${s.description || ""}</p><div class="pv-form-row pv-form-center"><input type="email" placeholder="${s.placeholder || "بريدك الإلكتروني"}" class="pv-email" /><button class="pv-btn" style="background:${s.buttonColor || bc}">${s.buttonText || "اشتراك"}</button></div></div>`;
-            break;
           case "contact_form":
             pc += `<div class="pv-contact-form"><h3>${s.title || "تواصل معنا"}</h3><form class="pv-contact-fields"><input type="text" placeholder="الاسم" class="pv-input" /><input type="email" placeholder="البريد الإلكتروني" class="pv-input" /><textarea placeholder="رسالتك" class="pv-textarea"></textarea><button class="pv-btn" style="background:${bc}">إرسال</button></form></div>`;
             break;
@@ -1052,23 +1078,6 @@ export default function KitabhWebsiteBuilder(props: any) {
             const platforms = s.platforms || [];
             const slHtml = platforms.filter((p: any) => p.enabled && p.url).map((p: any) => `<a href="${p.url}" target="_blank" rel="noopener" class="pv-social-link">${p.platform}</a>`).join("");
             pc += `<div class="pv-social-links">${slHtml}</div>`;
-            break;
-          }
-          case "gallery": {
-            const gArts = (s.articles || []).map((id: string) => MOCK_ARTICLES.find(a => a.id === id)).filter(Boolean);
-            const gCards = gArts.map((a: any) => `<div class="pv-gallery-card"><div class="pv-gallery-card-img">${a.imageUrl ? `<img src="${a.imageUrl}" alt="${a.title}"/>` : `<div class="pv-img" style="height:160px"></div>`}</div><h3>${a.title}</h3><p>${a.excerpt.slice(0, 120)}...</p><div class="pv-gallery-card-footer"><span>${a.author}</span></div></div>`).join("");
-            const gSidebar = s.showSidebar ? `<div class="pv-gallery-sidebar">${s.sidebarTitle ? `<h3>${s.sidebarTitle}</h3>` : ""}${s.sidebarImageUrl ? `<img src="${s.sidebarImageUrl}" class="pv-gallery-sidebar-img"/>` : `<div class="pv-img" style="height:300px"></div>`}${s.sidebarButtonText ? `<button class="pv-gallery-sidebar-btn">${s.sidebarButtonText}</button>` : ""}</div>` : "";
-            pc += `<div class="pv-gallery">${s.sectionTitle ? `<div class="pv-gallery-header"><h2>${s.sectionTitle}</h2></div>` : ""}<div class="pv-gallery-body ${s.showSidebar ? "pv-gallery-with-sidebar" : ""}">${gCards.length ? `<div class="pv-gallery-cards">${gCards}</div>` : ""}${gSidebar}</div></div>`;
-            break;
-          }
-          case "category_feed": {
-            const cfCat = MOCK_CATEGORIES.find(c => c._id === s.categoryId);
-            const cfArts = MOCK_ARTICLES.filter(a => a.categories.includes(s.categoryId || "")).slice(0, s.maxArticles || 5);
-            const cfFeat = cfArts[0];
-            const cfRest = cfArts.slice(1);
-            const cfCards = cfRest.map((a: any) => `<div class="pv-catfeed-card">${a.imageUrl ? `<img src="${a.imageUrl}" class="pv-catfeed-card-img"/>` : `<div class="pv-img" style="width:120px;height:90px"></div>`}<div class="pv-catfeed-card-content"><h3>${a.title}</h3><p>${a.excerpt.slice(0, 80)}...</p><span class="pv-catfeed-author">${a.author}</span></div></div>`).join("");
-            const cfFeatH = cfFeat ? `<div class="pv-catfeed-featured">${cfFeat.imageUrl ? `<img src="${cfFeat.imageUrl}" class="pv-catfeed-featured-img"/>` : `<div class="pv-img" style="height:280px"></div>`}<h3>${cfFeat.title}</h3><p>${cfFeat.excerpt.slice(0, 140)}...</p><span class="pv-catfeed-author">${cfFeat.author}</span></div>` : "";
-            pc += `<div class="pv-catfeed"><div class="pv-catfeed-header"><h2>${cfCat?.name || ""}</h2>${s.showMoreLink ? `<span class="pv-catfeed-more">${s.moreText || `المزيد من ${cfCat?.name || ""}`} &#x25C0;</span>` : ""}</div><div class="pv-catfeed-body pv-catfeed-${s.layout || "featured_right"}">${cfCards ? `<div class="pv-catfeed-main">${cfCards}</div>` : ""}${cfFeatH}</div></div>`;
             break;
           }
           default:
@@ -1599,19 +1608,56 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                         </div>
                       ); break;
 
-                    case "hero_subscribe":
-                      _inner = (
-                        <div className="kwb-p-hero-sub">
-                          <h2 contentEditable suppressContentEditableWarning onBlur={(e) => updateComponentSettings(comp.id, { title: e.currentTarget.textContent || "" })} className="kwb-p-editable">{comp.settings.title || "انضم لنشرتنا البريدية"}</h2>
-                          <p contentEditable suppressContentEditableWarning onBlur={(e) => updateComponentSettings(comp.id, { subtitle: e.currentTarget.textContent || "" })} className="kwb-p-editable">{comp.settings.subtitle || "محتوى حصري يصلك كل أسبوع"}</p>
-                          <div className="kwb-p-hero-sub-form">
-                            <input type="email" name="email" autoComplete="email" placeholder="أدخل بريدك الإلكتروني" className="kwb-p-email-input" />
-                            <button className="kwb-p-subscribe-btn" style={{ background: comp.settings.buttonColor || activeSite.branding.buttonColor }} onClick={() => setShowSubscribePopup(true)}>
-                              {comp.settings.buttonText || "اشتراك"}
-                            </button>
+                    case "subscribe":
+                      if (comp.settings.layout === "cta") {
+                        _inner = (
+                          <div className="kwb-p-cta">
+                            <div className="kwb-p-cta-inner">
+                              <div className="kwb-p-cta-text">
+                                <div className="kwb-p-cta-logo">{activeSite.branding.siteName.charAt(0)}</div>
+                                <div>
+                                  <h3 contentEditable suppressContentEditableWarning onBlur={(e) => updateComponentSettings(comp.id, { title: e.currentTarget.textContent || "" })} className="kwb-p-editable">{comp.settings.title || "اشترك في نشرتنا"}</h3>
+                                  <p contentEditable suppressContentEditableWarning onBlur={(e) => updateComponentSettings(comp.id, { description: e.currentTarget.textContent || "" })} className="kwb-p-editable">{comp.settings.description || "محتوى حصري يصلك مباشرة إلى بريدك"}</p>
+                                </div>
+                              </div>
+                              <div className="kwb-p-cta-form">
+                                <input type="email" name="email" autoComplete="email" placeholder="أدخل بريدك الإلكتروني" className="kwb-p-email-input" />
+                                <button className="kwb-p-subscribe-btn" style={{ background: comp.settings.buttonColor || activeSite.branding.buttonColor }} onClick={() => setShowSubscribePopup(true)}>
+                                  {comp.settings.buttonText || "اشتراك"}
+                                </button>
+                              </div>
+                            </div>
                           </div>
-                        </div>
-                      ); break;
+                        );
+                      } else if (comp.settings.layout === "form") {
+                        _inner = (
+                          <div className="kwb-p-subscribe-form">
+                            <h3 contentEditable suppressContentEditableWarning onBlur={(e) => updateComponentSettings(comp.id, { title: e.currentTarget.textContent || "" })} className="kwb-p-editable">{comp.settings.title || "اشترك في نشرتنا"}</h3>
+                            <p contentEditable suppressContentEditableWarning onBlur={(e) => updateComponentSettings(comp.id, { description: e.currentTarget.textContent || "" })} className="kwb-p-editable">{comp.settings.description || "محتوى حصري يصلك مباشرة إلى بريدك"}</p>
+                            {comp.settings.showNameField && <input type="text" placeholder="الاسم" className="kwb-p-email-input" style={{ maxWidth: 440, margin: "0 auto 8px", display: "block" }} />}
+                            <div className="kwb-p-hero-sub-form">
+                              <input type="email" name="email" autoComplete="email" placeholder="أدخل بريدك الإلكتروني" className="kwb-p-email-input" />
+                              <button className="kwb-p-subscribe-btn" style={{ background: comp.settings.buttonColor || activeSite.branding.buttonColor }} onClick={() => setShowSubscribePopup(true)}>
+                                {comp.settings.buttonText || "اشتراك"}
+                              </button>
+                            </div>
+                          </div>
+                        );
+                      } else {
+                        _inner = (
+                          <div className="kwb-p-hero-sub">
+                            <h2 contentEditable suppressContentEditableWarning onBlur={(e) => updateComponentSettings(comp.id, { title: e.currentTarget.textContent || "" })} className="kwb-p-editable">{comp.settings.title || "انضم لنشرتنا البريدية"}</h2>
+                            <p contentEditable suppressContentEditableWarning onBlur={(e) => updateComponentSettings(comp.id, { subtitle: e.currentTarget.textContent || "" })} className="kwb-p-editable">{comp.settings.subtitle || "محتوى حصري يصلك كل أسبوع"}</p>
+                            <div className="kwb-p-hero-sub-form">
+                              <input type="email" name="email" autoComplete="email" placeholder="أدخل بريدك الإلكتروني" className="kwb-p-email-input" />
+                              <button className="kwb-p-subscribe-btn" style={{ background: comp.settings.buttonColor || activeSite.branding.buttonColor }} onClick={() => setShowSubscribePopup(true)}>
+                                {comp.settings.buttonText || "اشتراك"}
+                              </button>
+                            </div>
+                          </div>
+                        );
+                      }
+                      break;
 
                     case "brands_ticker": {
                       const tickerSpeed = comp.settings.speed || 30;
@@ -1648,81 +1694,169 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                       ); break;
                     }
 
-                    case "cta_newsletter":
-                      _inner = (
-                        <div className="kwb-p-cta">
-                          <div className="kwb-p-cta-inner">
-                            <div className="kwb-p-cta-text">
-                              <div className="kwb-p-cta-logo">{activeSite.branding.siteName.charAt(0)}</div>
-                              <div>
-                                <h3 contentEditable suppressContentEditableWarning onBlur={(e) => updateComponentSettings(comp.id, { title: e.currentTarget.textContent || "" })} className="kwb-p-editable">{comp.settings.title || "اشترك في نشرتنا"}</h3>
-                                <p contentEditable suppressContentEditableWarning onBlur={(e) => updateComponentSettings(comp.id, { description: e.currentTarget.textContent || "" })} className="kwb-p-editable">{comp.settings.description || "محتوى حصري يصلك مباشرة إلى بريدك"}</p>
-                              </div>
-                            </div>
-                            <div className="kwb-p-cta-form">
-                              <input type="email" name="email" autoComplete="email" placeholder="أدخل بريدك الإلكتروني" className="kwb-p-email-input" />
-                              <button className="kwb-p-subscribe-btn" style={{ background: comp.settings.buttonColor || activeSite.branding.buttonColor }} onClick={() => setShowSubscribePopup(true)}>
-                                {comp.settings.buttonText || "اشتراك"}
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      ); break;
 
-                    case "article_collection":
-                      const collArticlesRaw = (comp.settings.articles || []).map((id: string) => MOCK_ARTICLES.find(a => a.id === id)).filter(Boolean) as Article[];
-                      const collArticles = collArticlesRaw.filter(a => {
-                        if (comp.settings.showSearch && articleFilterSearch && !a.title.includes(articleFilterSearch) && !a.excerpt.includes(articleFilterSearch)) return false;
-                        if (comp.settings.showCategories && articleFilterCategory && !a.categories.includes(articleFilterCategory)) return false;
-                        return true;
-                      });
-                      _inner = (
-                        <div className="kwb-p-articles">
-                          {(comp.settings.showSearch || comp.settings.showCategories) && (
-                            <div className="kwb-p-articles-filters">
-                              {comp.settings.showSearch && (
-                                <div className="kwb-p-articles-search-wrap">
-                                  <input className="kwb-p-articles-search" placeholder="ابحث في المقالات..." value={articleFilterSearch} onChange={e => setArticleFilterSearch(e.target.value)} />
-                                  <span className="kwb-p-articles-search-icon">{Icons.search}</span>
-                                </div>
-                              )}
-                              {comp.settings.showCategories && (
-                                <div className="kwb-p-articles-cats">
-                                  <button className={`kwb-p-cat-btn ${!articleFilterCategory ? "kwb-p-cat-active" : ""}`} onClick={() => setArticleFilterCategory(null)}>الكل</button>
-                                  {MOCK_CATEGORIES.map(cat => (
-                                    <button key={cat._id} className={`kwb-p-cat-btn ${articleFilterCategory === cat._id ? "kwb-p-cat-active" : ""}`} onClick={() => setArticleFilterCategory(articleFilterCategory === cat._id ? null : cat._id)}>{cat.name}</button>
-                                  ))}
+                    case "article_collection": {
+                      const acLayout = comp.settings.layout || "grid";
+                      if (acLayout === "gallery") {
+                        const galleryArticleIds = comp.settings.articles || [];
+                        const galleryArticles = galleryArticleIds.map((id: string) => MOCK_ARTICLES.find(a => a.id === id)).filter(Boolean);
+                        const sidebarArt = MOCK_ARTICLES.find(a => a.id === comp.settings.sidebarArticle);
+                        _inner = (
+                          <div className="kwb-p-gallery">
+                            {comp.settings.sectionTitle && (
+                              <div className="kwb-p-gallery-header">
+                                <h2 className="kwb-p-gallery-title">{comp.settings.sectionTitle}</h2>
+                              </div>
+                            )}
+                            <div className={`kwb-p-gallery-body ${comp.settings.showSidebar ? "kwb-p-gallery-with-sidebar" : ""}`}>
+                              <div className="kwb-p-gallery-cards">
+                                {galleryArticles.map((a: any, i: number) => (
+                                  <div key={i} className="kwb-p-gallery-card">
+                                    <div className="kwb-p-gallery-card-img">
+                                      {a.imageUrl ? <img src={a.imageUrl} alt={a.title} /> : <div className="kwb-p-gallery-card-img-ph" />}
+                                    </div>
+                                    <h3 className="kwb-p-gallery-card-title">{a.title}</h3>
+                                    <p className="kwb-p-gallery-card-excerpt">{a.excerpt.slice(0, 120)}...</p>
+                                    <div className="kwb-p-gallery-card-footer">
+                                      <span className="kwb-p-gallery-card-author">{a.author}</span>
+                                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#999" strokeWidth="1.5"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                              {comp.settings.showSidebar && (
+                                <div className="kwb-p-gallery-sidebar">
+                                  <h3 className="kwb-p-gallery-sidebar-title">{sidebarArt?.title || comp.settings.sidebarTitle || ""}</h3>
+                                  <div className="kwb-p-gallery-sidebar-img">
+                                    {(comp.settings.sidebarImageUrl || sidebarArt?.imageUrl) ? <img src={comp.settings.sidebarImageUrl || sidebarArt?.imageUrl} alt="" /> : <div className="kwb-p-gallery-card-img-ph" style={{ height: 320 }} />}
+                                  </div>
+                                  {comp.settings.sidebarButtonText && (
+                                    <button className="kwb-p-gallery-sidebar-btn">
+                                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="3" width="20" height="18" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/></svg>
+                                      {comp.settings.sidebarButtonText}
+                                    </button>
+                                  )}
                                 </div>
                               )}
                             </div>
-                          )}
-                          <div className={`kwb-p-articles-grid ${comp.settings.mobileLayout === "list" ? "kwb-p-articles-mobile-list" : ""}`}>
-                            {collArticles.map(a => (
-                              <a key={a.id} className="kwb-p-article-card" href={`/article/${a.slug}`} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none", color: "inherit" }}>
-                                <div className="kwb-p-article-img" style={a.imageUrl ? { backgroundImage: `url(${a.imageUrl})`, backgroundSize: "cover", backgroundPosition: "center" } : undefined} />
-                                <div className="kwb-p-article-card-text">
-                                  <h4 className="kwb-p-article-title">{a.title}</h4>
-                                  <p className="kwb-p-article-excerpt">{a.excerpt.slice(0, 80)}...</p>
-                                  <div className="kwb-p-article-author-row">
-                                    <span className="kwb-p-article-author-name">{a.author}</span>
-                                  </div>
-                                  <div className="kwb-p-article-meta">
-                                    <span>{a.date}</span>
-                                    <span className="kwb-p-article-engagement">
-                                      <span style={{ color: activeSite.branding.buttonColor || "#E82222" }}>{Icons.heart} {a.likes}</span>
-                                      <span>{Icons.comment} {a.comments}</span>
-                                    </span>
-                                  </div>
-                                </div>
-                              </a>
-                            ))}
                           </div>
-                          {collArticles.length === 0 && (comp.settings.showSearch || comp.settings.showCategories) && (
-                            <p style={{ textAlign: "center", color: "var(--kwb-text-color,#999)", fontSize: 13, padding: 20 }}>لا توجد مقالات تطابق البحث</p>
-                          )}
-                          <a className="kwb-p-all-articles">جميع المقالات &#x2197;</a>
-                        </div>
-                      ); break;
+                        );
+                      } else if (acLayout === "category_feed") {
+                        const catId = comp.settings.categoryId || "";
+                        const cat = MOCK_CATEGORIES.find(c => c._id === catId);
+                        const catName = cat?.name || "التصنيف";
+                        const catArticles = MOCK_ARTICLES.filter(a => a.categories.includes(catId)).slice(0, comp.settings.maxArticles || 5);
+                        const featured = catArticles[0];
+                        const rest = catArticles.slice(1);
+                        const cfLayout = comp.settings.categoryLayout || "featured_right";
+                        const sidebarCatId = comp.settings.sidebarCategoryId || "";
+                        const sidebarCat = MOCK_CATEGORIES.find(c => c._id === sidebarCatId);
+                        const sidebarArticles = sidebarCat ? MOCK_ARTICLES.filter(a => a.categories.includes(sidebarCatId)).slice(0, 2) : [];
+                        _inner = (
+                          <div className="kwb-p-catfeed">
+                            <div className="kwb-p-catfeed-header">
+                              <h2 className="kwb-p-catfeed-title">{catName}</h2>
+                              {comp.settings.showMoreLink && (
+                                <span className="kwb-p-catfeed-more">{comp.settings.moreText || `المزيد من ${catName}`} &#x25C0;</span>
+                              )}
+                            </div>
+                            <div className={`kwb-p-catfeed-body kwb-p-catfeed-${cfLayout}`}>
+                              <div className="kwb-p-catfeed-main">
+                                {rest.map((a: any, i: number) => (
+                                  <div key={i} className="kwb-p-catfeed-card">
+                                    <div className="kwb-p-catfeed-card-img">
+                                      {a.imageUrl ? <img src={a.imageUrl} alt={a.title} /> : <div className="kwb-p-gallery-card-img-ph" />}
+                                    </div>
+                                    <div className="kwb-p-catfeed-card-content">
+                                      <h3 className="kwb-p-catfeed-card-title">{a.title}</h3>
+                                      <p className="kwb-p-catfeed-card-excerpt">{a.excerpt.slice(0, 100)}...</p>
+                                      <span className="kwb-p-catfeed-card-author">{a.author}</span>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                              {featured && (
+                                <div className="kwb-p-catfeed-featured">
+                                  <div className="kwb-p-catfeed-featured-img">
+                                    {featured.imageUrl ? <img src={featured.imageUrl} alt={featured.title} /> : <div className="kwb-p-gallery-card-img-ph" style={{ height: "100%", minHeight: 280 }} />}
+                                  </div>
+                                  <h3 className="kwb-p-catfeed-featured-title">{featured.title}</h3>
+                                  <p className="kwb-p-catfeed-featured-excerpt">{featured.excerpt.slice(0, 140)}...</p>
+                                  <span className="kwb-p-catfeed-card-author">{featured.author}</span>
+                                </div>
+                              )}
+                              {comp.settings.showSidebar && sidebarCat && (
+                                <div className="kwb-p-catfeed-sidebar">
+                                  <h3 className="kwb-p-catfeed-sidebar-title">{comp.settings.sidebarTitle || sidebarCat.name}</h3>
+                                  {sidebarArticles.map((a: any, i: number) => (
+                                    <div key={i} className="kwb-p-catfeed-sidebar-card">
+                                      {a.imageUrl ? <img src={a.imageUrl} alt={a.title} className="kwb-p-catfeed-sidebar-img" /> : <div className="kwb-p-gallery-card-img-ph" style={{ height: 120 }} />}
+                                      <span className="kwb-p-catfeed-sidebar-label">{a.title.slice(0, 50)}</span>
+                                    </div>
+                                  ))}
+                                  <span className="kwb-p-catfeed-more" style={{ marginTop: 8 }}>المزيد من {sidebarCat.name} &#x25C0;</span>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        );
+                      } else {
+                        const collArticlesRaw = (comp.settings.articles || []).map((id: string) => MOCK_ARTICLES.find(a => a.id === id)).filter(Boolean) as Article[];
+                        const collArticles = collArticlesRaw.filter(a => {
+                          if (comp.settings.showSearch && articleFilterSearch && !a.title.includes(articleFilterSearch) && !a.excerpt.includes(articleFilterSearch)) return false;
+                          if (comp.settings.showCategories && articleFilterCategory && !a.categories.includes(articleFilterCategory)) return false;
+                          return true;
+                        });
+                        _inner = (
+                          <div className="kwb-p-articles">
+                            {(comp.settings.showSearch || comp.settings.showCategories) && (
+                              <div className="kwb-p-articles-filters">
+                                {comp.settings.showSearch && (
+                                  <div className="kwb-p-articles-search-wrap">
+                                    <input className="kwb-p-articles-search" placeholder="ابحث في المقالات..." value={articleFilterSearch} onChange={e => setArticleFilterSearch(e.target.value)} />
+                                    <span className="kwb-p-articles-search-icon">{Icons.search}</span>
+                                  </div>
+                                )}
+                                {comp.settings.showCategories && (
+                                  <div className="kwb-p-articles-cats">
+                                    <button className={`kwb-p-cat-btn ${!articleFilterCategory ? "kwb-p-cat-active" : ""}`} onClick={() => setArticleFilterCategory(null)}>الكل</button>
+                                    {MOCK_CATEGORIES.map(cat => (
+                                      <button key={cat._id} className={`kwb-p-cat-btn ${articleFilterCategory === cat._id ? "kwb-p-cat-active" : ""}`} onClick={() => setArticleFilterCategory(articleFilterCategory === cat._id ? null : cat._id)}>{cat.name}</button>
+                                    ))}
+                                  </div>
+                                )}
+                              </div>
+                            )}
+                            <div className={`kwb-p-articles-grid ${comp.settings.mobileLayout === "list" ? "kwb-p-articles-mobile-list" : ""}`}>
+                              {collArticles.map(a => (
+                                <a key={a.id} className="kwb-p-article-card" href={`/article/${a.slug}`} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none", color: "inherit" }}>
+                                  <div className="kwb-p-article-img" style={a.imageUrl ? { backgroundImage: `url(${a.imageUrl})`, backgroundSize: "cover", backgroundPosition: "center" } : undefined} />
+                                  <div className="kwb-p-article-card-text">
+                                    <h4 className="kwb-p-article-title">{a.title}</h4>
+                                    <p className="kwb-p-article-excerpt">{a.excerpt.slice(0, 80)}...</p>
+                                    <div className="kwb-p-article-author-row">
+                                      <span className="kwb-p-article-author-name">{a.author}</span>
+                                    </div>
+                                    <div className="kwb-p-article-meta">
+                                      <span>{a.date}</span>
+                                      <span className="kwb-p-article-engagement">
+                                        <span style={{ color: activeSite.branding.buttonColor || "#E82222" }}>{Icons.heart} {a.likes}</span>
+                                        <span>{Icons.comment} {a.comments}</span>
+                                      </span>
+                                    </div>
+                                  </div>
+                                </a>
+                              ))}
+                            </div>
+                            {collArticles.length === 0 && (comp.settings.showSearch || comp.settings.showCategories) && (
+                              <p style={{ textAlign: "center", color: "var(--kwb-text-color,#999)", fontSize: 13, padding: 20 }}>لا توجد مقالات تطابق البحث</p>
+                            )}
+                            <a className="kwb-p-all-articles">جميع المقالات &#x2197;</a>
+                          </div>
+                        );
+                      }
+                      break;
+                    }
 
                     case "banner":
                       _inner = (
@@ -1862,20 +1996,6 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                         </div>
                       ); break;
 
-                    case "subscribe_form":
-                      _inner = (
-                        <div className="kwb-p-subscribe-form">
-                          <h3 contentEditable suppressContentEditableWarning onBlur={(e) => updateComponentSettings(comp.id, { title: e.currentTarget.textContent || "" })} className="kwb-p-editable">{comp.settings.title || "اشترك في نشرتنا"}</h3>
-                          {comp.settings.description && <p style={{ fontSize: 14, color: "var(--kwb-text-color,#666)", marginBottom: 12 }}>{comp.settings.description}</p>}
-                          <form className="kwb-p-cf-fields" onSubmit={(e) => { e.preventDefault(); const fd = new FormData(e.currentTarget); console.log("Newsletter subscribe:", { email: fd.get("email"), name: fd.get("name"), subscribedTo: activeSite.id }); alert("شكرا لاشتراكك!"); e.currentTarget.reset(); }}>
-                            {comp.settings.showNameField && <input name="name" placeholder="الاسم" className="kwb-p-cf-input" autoComplete="name" />}
-                            <input name="email" type="email" placeholder="أدخل بريدك الإلكتروني" className="kwb-p-cf-input" required autoComplete="email" />
-                            <button type="submit" className="kwb-p-subscribe-btn kwb-p-cf-btn" style={{ background: comp.settings.buttonColor || activeSite.branding.buttonColor }}>
-                              {comp.settings.buttonText || "اشتراك"}
-                            </button>
-                          </form>
-                        </div>
-                      ); break;
 
                     case "contact_form":
                       _inner = (
@@ -2029,120 +2149,6 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                               </div>
                             </div>
                           ))}
-                        </div>
-                      ); break;
-                    }
-
-
-                    case "gallery": {
-                      const galleryArticleIds = comp.settings.articles || [];
-                      const galleryArticles = galleryArticleIds.map((id: string) => MOCK_ARTICLES.find(a => a.id === id)).filter(Boolean);
-                      const sidebarArt = MOCK_ARTICLES.find(a => a.id === comp.settings.sidebarArticle);
-                      _inner = (
-                        <div className="kwb-p-gallery">
-                          {comp.settings.sectionTitle && (
-                            <div className="kwb-p-gallery-header">
-                              <h2 className="kwb-p-gallery-title">{comp.settings.sectionTitle}</h2>
-                            </div>
-                          )}
-                          <div className={`kwb-p-gallery-body ${comp.settings.showSidebar ? "kwb-p-gallery-with-sidebar" : ""}`}>
-                            <div className="kwb-p-gallery-cards">
-                              {galleryArticles.map((a: any, i: number) => (
-                                <div key={i} className="kwb-p-gallery-card">
-                                  <div className="kwb-p-gallery-card-img">
-                                    {a.imageUrl ? <img src={a.imageUrl} alt={a.title} /> : <div className="kwb-p-gallery-card-img-ph" />}
-                                  </div>
-                                  <h3 className="kwb-p-gallery-card-title">{a.title}</h3>
-                                  <p className="kwb-p-gallery-card-excerpt">{a.excerpt.slice(0, 120)}...</p>
-                                  <div className="kwb-p-gallery-card-footer">
-                                    <span className="kwb-p-gallery-card-author">{a.author}</span>
-                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#999" strokeWidth="1.5"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
-                            {comp.settings.showSidebar && (
-                              <div className="kwb-p-gallery-sidebar">
-                                <h3 className="kwb-p-gallery-sidebar-title">{sidebarArt?.title || comp.settings.sidebarTitle || ""}</h3>
-                                <div className="kwb-p-gallery-sidebar-img">
-                                  {(comp.settings.sidebarImageUrl || sidebarArt?.imageUrl) ? <img src={comp.settings.sidebarImageUrl || sidebarArt?.imageUrl} alt="" /> : <div className="kwb-p-gallery-card-img-ph" style={{ height: 320 }} />}
-                                </div>
-                                {comp.settings.sidebarButtonText && (
-                                  <button className="kwb-p-gallery-sidebar-btn">
-                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="3" width="20" height="18" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/></svg>
-                                    {comp.settings.sidebarButtonText}
-                                  </button>
-                                )}
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      ); break;
-                    }
-
-                    case "category_feed": {
-                      const catId = comp.settings.categoryId || "";
-                      const cat = MOCK_CATEGORIES.find(c => c._id === catId);
-                      const catName = cat?.name || "التصنيف";
-                      const catArticles = MOCK_ARTICLES.filter(a => a.categories.includes(catId)).slice(0, comp.settings.maxArticles || 5);
-                      const featured = catArticles[0];
-                      const rest = catArticles.slice(1);
-                      const layout = comp.settings.layout || "featured_right";
-
-                      // Sidebar category
-                      const sidebarCatId = comp.settings.sidebarCategoryId || "";
-                      const sidebarCat = MOCK_CATEGORIES.find(c => c._id === sidebarCatId);
-                      const sidebarArticles = sidebarCat ? MOCK_ARTICLES.filter(a => a.categories.includes(sidebarCatId)).slice(0, 2) : [];
-
-                      _inner = (
-                        <div className="kwb-p-catfeed">
-                          <div className="kwb-p-catfeed-header">
-                            <h2 className="kwb-p-catfeed-title">{catName}</h2>
-                            {comp.settings.showMoreLink && (
-                              <span className="kwb-p-catfeed-more">{comp.settings.moreText || `المزيد من ${catName}`} &#x25C0;</span>
-                            )}
-                          </div>
-                          <div className={`kwb-p-catfeed-body kwb-p-catfeed-${layout}`}>
-                            {/* Main articles column */}
-                            <div className="kwb-p-catfeed-main">
-                              {rest.map((a: any, i: number) => (
-                                <div key={i} className="kwb-p-catfeed-card">
-                                  <div className="kwb-p-catfeed-card-img">
-                                    {a.imageUrl ? <img src={a.imageUrl} alt={a.title} /> : <div className="kwb-p-gallery-card-img-ph" />}
-                                  </div>
-                                  <div className="kwb-p-catfeed-card-content">
-                                    <h3 className="kwb-p-catfeed-card-title">{a.title}</h3>
-                                    <p className="kwb-p-catfeed-card-excerpt">{a.excerpt.slice(0, 100)}...</p>
-                                    <span className="kwb-p-catfeed-card-author">{a.author}</span>
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
-                            {/* Featured article */}
-                            {featured && (
-                              <div className="kwb-p-catfeed-featured">
-                                <div className="kwb-p-catfeed-featured-img">
-                                  {featured.imageUrl ? <img src={featured.imageUrl} alt={featured.title} /> : <div className="kwb-p-gallery-card-img-ph" style={{ height: "100%", minHeight: 280 }} />}
-                                </div>
-                                <h3 className="kwb-p-catfeed-featured-title">{featured.title}</h3>
-                                <p className="kwb-p-catfeed-featured-excerpt">{featured.excerpt.slice(0, 140)}...</p>
-                                <span className="kwb-p-catfeed-card-author">{featured.author}</span>
-                              </div>
-                            )}
-                            {/* Optional sidebar category */}
-                            {comp.settings.showSidebar && sidebarCat && (
-                              <div className="kwb-p-catfeed-sidebar">
-                                <h3 className="kwb-p-catfeed-sidebar-title">{comp.settings.sidebarTitle || sidebarCat.name}</h3>
-                                {sidebarArticles.map((a: any, i: number) => (
-                                  <div key={i} className="kwb-p-catfeed-sidebar-card">
-                                    {a.imageUrl ? <img src={a.imageUrl} alt={a.title} className="kwb-p-catfeed-sidebar-img" /> : <div className="kwb-p-gallery-card-img-ph" style={{ height: 120 }} />}
-                                    <span className="kwb-p-catfeed-sidebar-label">{a.title.slice(0, 50)}</span>
-                                  </div>
-                                ))}
-                                <span className="kwb-p-catfeed-more" style={{ marginTop: 8 }}>المزيد من {sidebarCat.name} &#x25C0;</span>
-                              </div>
-                            )}
-                          </div>
                         </div>
                       ); break;
                     }
@@ -2605,14 +2611,34 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                               );
                             })()}
 
-                            {(comp.type === "hero_news" || comp.type === "hero_slider" || comp.type === "article_collection") && (
+                            {(comp.type === "hero_news" || comp.type === "hero_slider") && (
                               <>
                                 <button className="kwb-btn-outline kwb-btn-full" onClick={() => openArticlePicker(comp.id)}>
                                   اختيار المقالات
                                 </button>
                                 <p className="kwb-hint">{(comp.settings.articles || []).length} مقالات مختارة</p>
-                                {comp.type === "article_collection" && (
+                              </>
+                            )}
+                            {comp.type === "article_collection" && (
+                              <>
+                                <label className="kwb-label">التخطيط</label>
+                                <div style={{ display: "flex", gap: 4 }}>
+                                  {[
+                                    { id: "grid", label: "شبكة" },
+                                    { id: "gallery", label: "معرض" },
+                                    { id: "category_feed", label: "تصنيف" },
+                                  ].map(l => (
+                                    <button key={l.id} className={`kwb-logo-layout-btn ${(comp.settings.layout || "grid") === l.id ? "kwb-logo-layout-active" : ""}`} style={{ flex: 1, padding: "6px 4px", fontSize: 11 }} onClick={() => updateComponentSettings(comp.id, { layout: l.id })}>{l.label}</button>
+                                  ))}
+                                </div>
+
+                                {/* Grid layout settings */}
+                                {(!comp.settings.layout || comp.settings.layout === "grid") && (
                                   <>
+                                    <button className="kwb-btn-outline kwb-btn-full" style={{ marginTop: 10 }} onClick={() => openArticlePicker(comp.id)}>
+                                      اختيار المقالات
+                                    </button>
+                                    <p className="kwb-hint">{(comp.settings.articles || []).length} مقالات مختارة</p>
                                     <div className="kwb-newsletter-toggle" style={{ marginTop: 12 }}>
                                       <label className="kwb-toggle">
                                         <input type="checkbox" checked={comp.settings.showSearch || false} onChange={e => updateComponentSettings(comp.id, { showSearch: e.target.checked })} />
@@ -2638,6 +2664,83 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                                       ))}
                                     </div>
                                     <p className="kwb-hint">القائمة: عنوان + صورة مصغّرة بجانب بعض (مثل NYT)</p>
+                                  </>
+                                )}
+
+                                {/* Gallery layout settings */}
+                                {comp.settings.layout === "gallery" && (
+                                  <>
+                                    <label className="kwb-label" style={{ marginTop: 10 }}>عنوان القسم</label>
+                                    <input className="kwb-input" value={comp.settings.sectionTitle || ""} onChange={e => updateComponentSettings(comp.id, { sectionTitle: e.target.value })} />
+                                    <button className="kwb-btn-outline kwb-btn-full" style={{ marginTop: 10 }} onClick={() => openArticlePicker(comp.id)}>
+                                      اختيار المقالات
+                                    </button>
+                                    <p className="kwb-hint">{(comp.settings.articles || []).length} مقالات مختارة</p>
+                                    <div className="kwb-newsletter-toggle" style={{ marginTop: 12 }}>
+                                      <label className="kwb-toggle">
+                                        <input type="checkbox" checked={comp.settings.showSidebar !== false} onChange={e => updateComponentSettings(comp.id, { showSidebar: e.target.checked })} />
+                                        <span className="kwb-toggle-track"><span className="kwb-toggle-thumb" /></span>
+                                      </label>
+                                      <span>شريط جانبي</span>
+                                    </div>
+                                    {comp.settings.showSidebar !== false && (
+                                      <>
+                                        <label className="kwb-label" style={{ marginTop: 8 }}>عنوان الشريط الجانبي</label>
+                                        <input className="kwb-input" value={comp.settings.sidebarTitle || ""} onChange={e => updateComponentSettings(comp.id, { sidebarTitle: e.target.value })} />
+                                        <label className="kwb-label" style={{ marginTop: 6 }}>نص الزر</label>
+                                        <input className="kwb-input" value={comp.settings.sidebarButtonText || ""} onChange={e => updateComponentSettings(comp.id, { sidebarButtonText: e.target.value })} />
+                                        {comp.settings.sidebarImageUrl ? (
+                                          <div className="kwb-upload-preview" style={{ marginTop: 6 }}><img src={comp.settings.sidebarImageUrl} alt="" /><button className="kwb-upload-remove" onClick={() => updateComponentSettings(comp.id, { sidebarImageUrl: "" })}>{Icons.x}</button></div>
+                                        ) : (
+                                          <button className="kwb-btn-outline kwb-btn-full" style={{ marginTop: 6, fontSize: 11 }} onClick={() => triggerUpload({ type: "gallery_sidebar", compId: comp.id })}>{Icons.image} صورة الشريط الجانبي</button>
+                                        )}
+                                      </>
+                                    )}
+                                  </>
+                                )}
+
+                                {/* Category feed layout settings */}
+                                {comp.settings.layout === "category_feed" && (
+                                  <>
+                                    <label className="kwb-label" style={{ marginTop: 10 }}>التصنيف</label>
+                                    <select className="kwb-select" value={comp.settings.categoryId || ""} onChange={e => updateComponentSettings(comp.id, { categoryId: e.target.value })}>
+                                      <option value="">اختر تصنيف</option>
+                                      {MOCK_CATEGORIES.map(c => <option key={c._id} value={c._id}>{c.name}</option>)}
+                                    </select>
+                                    <label className="kwb-label" style={{ marginTop: 10 }}>تخطيط التصنيف</label>
+                                    <div style={{ display: "flex", gap: 4 }}>
+                                      {[
+                                        { id: "featured_right", label: "بارز يمين" },
+                                        { id: "featured_left", label: "بارز يسار" },
+                                      ].map(l => (
+                                        <button key={l.id} className={`kwb-logo-layout-btn ${(comp.settings.categoryLayout || "featured_right") === l.id ? "kwb-logo-layout-active" : ""}`} style={{ flex: 1, padding: "6px 4px", fontSize: 11 }} onClick={() => updateComponentSettings(comp.id, { categoryLayout: l.id })}>{l.label}</button>
+                                      ))}
+                                    </div>
+                                    <label className="kwb-label" style={{ marginTop: 10 }}>عدد المقالات</label>
+                                    <input className="kwb-input" type="number" min={2} max={10} value={comp.settings.maxArticles || 5} onChange={e => updateComponentSettings(comp.id, { maxArticles: parseInt(e.target.value) || 5 })} />
+                                    <div className="kwb-newsletter-toggle" style={{ marginTop: 10 }}>
+                                      <label className="kwb-toggle">
+                                        <input type="checkbox" checked={comp.settings.showMoreLink !== false} onChange={e => updateComponentSettings(comp.id, { showMoreLink: e.target.checked })} />
+                                        <span className="kwb-toggle-track"><span className="kwb-toggle-thumb" /></span>
+                                      </label>
+                                      <span>رابط "المزيد"</span>
+                                    </div>
+                                    <div className="kwb-newsletter-toggle" style={{ marginTop: 8 }}>
+                                      <label className="kwb-toggle">
+                                        <input type="checkbox" checked={!!comp.settings.showSidebar} onChange={e => updateComponentSettings(comp.id, { showSidebar: e.target.checked })} />
+                                        <span className="kwb-toggle-track"><span className="kwb-toggle-thumb" /></span>
+                                      </label>
+                                      <span>تصنيف جانبي</span>
+                                    </div>
+                                    {comp.settings.showSidebar && (
+                                      <>
+                                        <select className="kwb-select" style={{ marginTop: 6 }} value={comp.settings.sidebarCategoryId || ""} onChange={e => updateComponentSettings(comp.id, { sidebarCategoryId: e.target.value })}>
+                                          <option value="">اختر تصنيف جانبي</option>
+                                          {MOCK_CATEGORIES.map(c => <option key={c._id} value={c._id}>{c.name}</option>)}
+                                        </select>
+                                        <input className="kwb-input" style={{ marginTop: 6 }} placeholder="عنوان مخصص (اختياري)" value={comp.settings.sidebarTitle || ""} onChange={e => updateComponentSettings(comp.id, { sidebarTitle: e.target.value })} />
+                                      </>
+                                    )}
                                   </>
                                 )}
                               </>
@@ -2691,12 +2794,41 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                               </>
                             )}
 
-                            {comp.type === "cta_newsletter" && (
+                            {comp.type === "subscribe" && (
                               <>
-                                <label className="kwb-label">العنوان</label>
-                                <input className="kwb-input" value={comp.settings.title || ""} onChange={e => updateComponentSettings(comp.id, { title: e.target.value })} placeholder="أدخل النص" />
+                                <label className="kwb-label">التخطيط</label>
+                                <div style={{ display: "flex", gap: 4 }}>
+                                  {[
+                                    { id: "hero", label: "بطل" },
+                                    { id: "cta", label: "شريط CTA" },
+                                    { id: "form", label: "نموذج" },
+                                  ].map(l => (
+                                    <button key={l.id} className={`kwb-logo-layout-btn ${(comp.settings.layout || "hero") === l.id ? "kwb-logo-layout-active" : ""}`} style={{ flex: 1, padding: "6px 4px", fontSize: 11 }} onClick={() => updateComponentSettings(comp.id, { layout: l.id })}>{l.label}</button>
+                                  ))}
+                                </div>
+                                <label className="kwb-label" style={{ marginTop: 12 }}>العنوان</label>
+                                <input className="kwb-input" value={comp.settings.title || ""} onChange={e => updateComponentSettings(comp.id, { title: e.target.value })} />
+                                {(comp.settings.layout === "hero" || !comp.settings.layout) && (
+                                  <>
+                                    <label className="kwb-label" style={{ marginTop: 12 }}>العنوان الفرعي</label>
+                                    <input className="kwb-input" value={comp.settings.subtitle || ""} onChange={e => updateComponentSettings(comp.id, { subtitle: e.target.value })} />
+                                  </>
+                                )}
+                                {comp.settings.layout === "form" && (
+                                  <>
+                                    <label className="kwb-label" style={{ marginTop: 12 }}>الوصف</label>
+                                    <input className="kwb-input" value={comp.settings.description || ""} placeholder="محتوى حصري يصلك مباشرة إلى بريدك" onChange={e => updateComponentSettings(comp.id, { description: e.target.value })} />
+                                    <div className="kwb-newsletter-toggle" style={{ marginTop: 12 }}>
+                                      <label className="kwb-toggle">
+                                        <input type="checkbox" checked={comp.settings.showNameField || false} onChange={e => updateComponentSettings(comp.id, { showNameField: e.target.checked })} />
+                                        <span className="kwb-toggle-track"><span className="kwb-toggle-thumb" /></span>
+                                      </label>
+                                      <span>إظهار حقل الاسم</span>
+                                    </div>
+                                  </>
+                                )}
                                 <label className="kwb-label" style={{ marginTop: 12 }}>نص الزر</label>
-                                <input className="kwb-input" value={comp.settings.buttonText || ""} onChange={e => updateComponentSettings(comp.id, { buttonText: e.target.value })} placeholder="أضف نصا" />
+                                <input className="kwb-input" value={comp.settings.buttonText || ""} onChange={e => updateComponentSettings(comp.id, { buttonText: e.target.value })} />
                                 <label className="kwb-label" style={{ marginTop: 12 }}>لون الزر</label>
                                 <div className="kwb-color-row-controls">
                                   {PRESET_COLORS.map(c => (
@@ -2752,16 +2884,6 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                               </>
                             )}
 
-                            {comp.type === "hero_subscribe" && (
-                              <>
-                                <label className="kwb-label">العنوان</label>
-                                <input className="kwb-input" value={comp.settings.title || ""} onChange={e => updateComponentSettings(comp.id, { title: e.target.value })} />
-                                <label className="kwb-label" style={{ marginTop: 12 }}>العنوان الفرعي</label>
-                                <input className="kwb-input" value={comp.settings.subtitle || ""} onChange={e => updateComponentSettings(comp.id, { subtitle: e.target.value })} />
-                                <label className="kwb-label" style={{ marginTop: 12 }}>نص الزر</label>
-                                <input className="kwb-input" value={comp.settings.buttonText || ""} onChange={e => updateComponentSettings(comp.id, { buttonText: e.target.value })} />
-                              </>
-                            )}
 
                             {comp.type === "text_block" && (
                               <>
@@ -2802,30 +2924,6 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                               </>
                             )}
 
-                            {comp.type === "subscribe_form" && (
-                              <>
-                                <label className="kwb-label">العنوان</label>
-                                <input className="kwb-input" value={comp.settings.title || ""} onChange={e => updateComponentSettings(comp.id, { title: e.target.value })} />
-                                <label className="kwb-label" style={{ marginTop: 12 }}>الوصف</label>
-                                <input className="kwb-input" value={comp.settings.description || ""} placeholder="محتوى حصري يصلك مباشرة إلى بريدك" onChange={e => updateComponentSettings(comp.id, { description: e.target.value })} />
-                                <div className="kwb-newsletter-toggle" style={{ marginTop: 12 }}>
-                                  <label className="kwb-toggle">
-                                    <input type="checkbox" checked={comp.settings.showNameField !== false} onChange={e => updateComponentSettings(comp.id, { showNameField: e.target.checked })} />
-                                    <span className="kwb-toggle-track"><span className="kwb-toggle-thumb" /></span>
-                                  </label>
-                                  <span>إظهار حقل الاسم</span>
-                                </div>
-                                <label className="kwb-label" style={{ marginTop: 12 }}>نص الزر</label>
-                                <input className="kwb-input" value={comp.settings.buttonText || ""} onChange={e => updateComponentSettings(comp.id, { buttonText: e.target.value })} />
-                                <label className="kwb-label" style={{ marginTop: 12 }}>لون الزر</label>
-                                <div className="kwb-color-row-controls">
-                                  {PRESET_COLORS.map(c => (
-                                    <button key={c} className={`kwb-color-dot ${comp.settings.buttonColor === c ? "kwb-color-dot-active" : ""}`} style={{ background: c }} onClick={() => updateComponentSettings(comp.id, { buttonColor: c })} />
-                                  ))}
-                                  <input type="color" className="kwb-color-input" value={comp.settings.buttonColor || activeSite.branding.buttonColor || "#E82222"} onChange={e => updateComponentSettings(comp.id, { buttonColor: e.target.value })} />
-                                </div>
-                              </>
-                            )}
 
                             {comp.type === "contact_form" && (
                               <>
@@ -2987,80 +3085,6 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                             )}
 
 
-                            {comp.type === "gallery" && (
-                              <>
-                                <label className="kwb-label">عنوان القسم</label>
-                                <input className="kwb-input" value={comp.settings.sectionTitle || ""} onChange={e => updateComponentSettings(comp.id, { sectionTitle: e.target.value })} />
-                                <label className="kwb-label" style={{ marginTop: 10 }}>المقالات</label>
-                                <button className="kwb-btn-outline kwb-btn-full" onClick={() => openArticlePicker(comp.id)}>
-                                  {Icons.plus} اختيار مقالات ({(comp.settings.articles || []).length})
-                                </button>
-                                <label className="kwb-label" style={{ marginTop: 14 }}>
-                                  <label className="kwb-toggle" style={{ marginLeft: 8 }}>
-                                    <input type="checkbox" checked={comp.settings.showSidebar !== false} onChange={() => updateComponentSettings(comp.id, { showSidebar: !comp.settings.showSidebar })} />
-                                    <span className="kwb-toggle-slider" />
-                                  </label>
-                                  شريط جانبي
-                                </label>
-                                {comp.settings.showSidebar !== false && (
-                                  <>
-                                    <label className="kwb-label" style={{ marginTop: 8 }}>عنوان الشريط الجانبي</label>
-                                    <input className="kwb-input" value={comp.settings.sidebarTitle || ""} onChange={e => updateComponentSettings(comp.id, { sidebarTitle: e.target.value })} />
-                                    <label className="kwb-label" style={{ marginTop: 6 }}>نص الزر</label>
-                                    <input className="kwb-input" value={comp.settings.sidebarButtonText || ""} onChange={e => updateComponentSettings(comp.id, { sidebarButtonText: e.target.value })} />
-                                    {comp.settings.sidebarImageUrl ? (
-                                      <div className="kwb-upload-preview" style={{ marginTop: 6 }}><img src={comp.settings.sidebarImageUrl} alt="" /><button className="kwb-upload-remove" onClick={() => updateComponentSettings(comp.id, { sidebarImageUrl: "" })}>{Icons.x}</button></div>
-                                    ) : (
-                                      <button className="kwb-btn-outline kwb-btn-full" style={{ marginTop: 6, fontSize: 11 }} onClick={() => triggerUpload({ type: "gallery_sidebar", compId: comp.id })}>{Icons.image} صورة الشريط الجانبي</button>
-                                    )}
-                                  </>
-                                )}
-                              </>
-                            )}
-                            {comp.type === "category_feed" && (
-                              <>
-                                <label className="kwb-label">التصنيف</label>
-                                <select className="kwb-select" value={comp.settings.categoryId || ""} onChange={e => updateComponentSettings(comp.id, { categoryId: e.target.value })}>
-                                  <option value="">اختر تصنيف</option>
-                                  {MOCK_CATEGORIES.map(c => <option key={c._id} value={c._id}>{c.name}</option>)}
-                                </select>
-                                <label className="kwb-label" style={{ marginTop: 10 }}>التخطيط</label>
-                                <div style={{ display: "flex", gap: 4 }}>
-                                  {[
-                                    { id: "featured_right", label: "بارز يمين" },
-                                    { id: "featured_left", label: "بارز يسار" },
-                                    { id: "grid", label: "شبكة" },
-                                  ].map(l => (
-                                    <button key={l.id} className={`kwb-logo-layout-btn ${(comp.settings.layout || "featured_right") === l.id ? "kwb-logo-layout-active" : ""}`} style={{ flex: 1, padding: "6px 4px", fontSize: 11 }} onClick={() => updateComponentSettings(comp.id, { layout: l.id })}>{l.label}</button>
-                                  ))}
-                                </div>
-                                <label className="kwb-label" style={{ marginTop: 10 }}>عدد المقالات</label>
-                                <input className="kwb-input" type="number" min={2} max={10} value={comp.settings.maxArticles || 5} onChange={e => updateComponentSettings(comp.id, { maxArticles: parseInt(e.target.value) || 5 })} />
-                                <label className="kwb-label" style={{ marginTop: 10 }}>
-                                  <label className="kwb-toggle" style={{ marginLeft: 8 }}>
-                                    <input type="checkbox" checked={comp.settings.showMoreLink !== false} onChange={() => updateComponentSettings(comp.id, { showMoreLink: !comp.settings.showMoreLink })} />
-                                    <span className="kwb-toggle-slider" />
-                                  </label>
-                                  رابط "المزيد"
-                                </label>
-                                <label className="kwb-label" style={{ marginTop: 10 }}>
-                                  <label className="kwb-toggle" style={{ marginLeft: 8 }}>
-                                    <input type="checkbox" checked={!!comp.settings.showSidebar} onChange={() => updateComponentSettings(comp.id, { showSidebar: !comp.settings.showSidebar })} />
-                                    <span className="kwb-toggle-slider" />
-                                  </label>
-                                  تصنيف جانبي
-                                </label>
-                                {comp.settings.showSidebar && (
-                                  <>
-                                    <select className="kwb-select" style={{ marginTop: 6 }} value={comp.settings.sidebarCategoryId || ""} onChange={e => updateComponentSettings(comp.id, { sidebarCategoryId: e.target.value })}>
-                                      <option value="">اختر تصنيف جانبي</option>
-                                      {MOCK_CATEGORIES.map(c => <option key={c._id} value={c._id}>{c.name}</option>)}
-                                    </select>
-                                    <input className="kwb-input" style={{ marginTop: 6 }} placeholder="عنوان مخصص (اختياري)" value={comp.settings.sidebarTitle || ""} onChange={e => updateComponentSettings(comp.id, { sidebarTitle: e.target.value })} />
-                                  </>
-                                )}
-                              </>
-                            )}
                             {comp.type === "social_links" && (
                               <>
                                 <label className="kwb-label">منصات التواصل</label>
@@ -3205,7 +3229,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                 {showAddComponent && (
                   <div className="kwb-add-comp-dropdown">
                     <div className="kwb-add-comp-cards">
-                      {(["header","hero_news","hero_subscribe","gallery","category_feed","bento_grid","banner","cta_newsletter","article_collection","brands_ticker","testimonials","products","podcast","courses","topics","text_block","rich_text","image_block","subscribe_form","contact_form","social_links","divider","footer"] as ComponentType[]).map(type => (
+                      {(["header","hero_news","subscribe","article_collection","bento_grid","banner","brands_ticker","testimonials","products","podcast","courses","topics","text_block","rich_text","image_block","contact_form","social_links","divider","footer"] as ComponentType[]).map(type => (
                         <button key={type} className="kwb-add-comp-card" onClick={() => { addComponentToPage(type); setShowAddComponent(false); }}>
                           <div className="kwb-add-comp-mini">
                             <div className={`kwb-mc-auto kwb-mc-${type.replace(/_/g,"-")}`} />
