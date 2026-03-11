@@ -503,20 +503,6 @@ const TipAuthorPage: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Survey notice — clearly framed as interest, not payment */}
-                <div style={{
-                  margin: '12px 28px 0', padding: '10px 14px', borderRadius: '10px',
-                  background: 'rgba(0, 0, 255, 0.04)', border: '1px solid rgba(0, 0, 255, 0.08)',
-                  textAlign: 'center' as const,
-                }}>
-                  <div style={{ fontSize: '14px', color: '#475569', lineHeight: 1.8 }}>
-                    هذا استطلاع رأي فقط — لن يتم خصم أي مبلغ.
-                  </div>
-                  <div style={{ fontSize: '13px', color: '#64748B', lineHeight: 1.7, marginTop: '2px' }}>
-                    نريد معرفة مدى اهتمامك بدعم هذا الكاتب لنقرر إطلاق هذه الميزة.
-                  </div>
-                </div>
-
                 {/* Cups */}
                 <div style={{
                   display: 'flex', alignItems: 'flex-end', justifyContent: 'center',
@@ -646,7 +632,7 @@ const TipAuthorPage: React.FC = () => {
                 </div>
 
                 {/* Submit — NO money amount on button */}
-                <div style={{ padding: '14px 28px 28px' }}>
+                <div style={{ padding: '14px 28px 8px' }}>
                   <button
                     onClick={handleSubmit}
                     disabled={isCustom && (!customAmount || Number(customAmount) <= 0)}
@@ -663,6 +649,14 @@ const TipAuthorPage: React.FC = () => {
                   >
                     أرغب بدعم هذا الكاتب
                   </button>
+                </div>
+
+                {/* Survey disclaimer — below button */}
+                <div style={{
+                  textAlign: 'center' as const, padding: '0 28px 24px',
+                  fontSize: '13px', color: '#94A3B8', lineHeight: 1.7,
+                }}>
+                  هذا استطلاع رأي فقط — لن نخصم أي مبلغ منك
                 </div>
               </div>
             ) : (
