@@ -539,7 +539,7 @@ export default function KitabhWebsiteBuilder(props: any) {
 
   function getDefaultSettings(type: ComponentType): Record<string, any> {
     switch (type) {
-      case "header": return { logoUrl: "", buttonText: "اشتراك", navLinks: [
+      case "header": return { layout: "navbar", subtitle: "", logoUrl: "", buttonText: "اشتراك", navLinks: [
         { id: genId(), label: "الرئيسية", linkType: "page", target: "", visible: true },
         { id: genId(), label: "مقالات", linkType: "page", target: "", visible: true },
         { id: genId(), label: "عن المدونة", linkType: "page", target: "", visible: true },
@@ -988,7 +988,14 @@ export default function KitabhWebsiteBuilder(props: any) {
         const s = comp.settings;
         switch (comp.type) {
           case "header":
-            if (pi === 0) pc += `<header class="pv-header"><div class="pv-header-inner"><div class="pv-logo-wrap">${logoHtml}</div><nav class="pv-nav">${navHtml}</nav><button class="pv-btn" style="background:${bc}">${s.buttonText || "اشتراك"}</button><button class="pv-darkmode-btn" onclick="document.documentElement.classList.toggle('dark');this.textContent=document.documentElement.classList.contains('dark')?'☀':'☾'" title="الوضع الداكن">${dm ? '☀' : '☾'}</button></div></header>`;
+            if (pi === 0) {
+              if (s.layout === "hero_centered") {
+                const heroLogoImg = branding.logoUrl ? `<img src="${branding.logoUrl}" alt="" class="pv-header-hero-logo"/>` : "";
+                pc += `<div class="pv-header-hero"><header class="pv-header"><div class="pv-header-inner"><div class="pv-logo-wrap">${logoHtml}</div><nav class="pv-nav">${navHtml}</nav><button class="pv-btn" style="background:${bc}">${s.buttonText || "اشتراك"}</button></div></header><div class="pv-header-hero-body">${heroLogoImg}<h1 class="pv-header-hero-title">${sn}</h1>${s.subtitle ? `<p class="pv-header-hero-subtitle">${s.subtitle}</p>` : ""}<div class="pv-header-hero-form"><div class="pv-header-hero-input-wrap"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22 6 12 13 2 6"/></svg><input type="email" name="email" autocomplete="email" placeholder="أدخل بريدك الإلكتروني" class="pv-email pv-header-hero-email"/></div><button class="pv-btn" style="background:${bc}">${s.buttonText || "اشتراك"}</button></div></div></div>`;
+              } else {
+                pc += `<header class="pv-header"><div class="pv-header-inner"><div class="pv-logo-wrap">${logoHtml}</div><nav class="pv-nav">${navHtml}</nav><button class="pv-btn" style="background:${bc}">${s.buttonText || "اشتراك"}</button><button class="pv-darkmode-btn" onclick="document.documentElement.classList.toggle('dark');this.textContent=document.documentElement.classList.contains('dark')?'☀':'☾'" title="الوضع الداكن">${dm ? '☀' : '☾'}</button></div></header>`;
+              }
+            }
             break;
           case "hero_news":
             const ha = (s.articles || []).map((id: string) => MOCK_ARTICLES.find(a => a.id === id)).filter(Boolean);
@@ -1117,6 +1124,21 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
 .pv-nav-link{font-size:14px;color:var(--pv-text);padding:4px 0;font-weight:500;}
 .pv-nav-link:hover{color:var(--pv-headline);}
 .pv-btn{padding:0 28px;height:48px;border:none;color:#fff;font-family:inherit;font-size:15px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;border-radius:var(--pv-radius);}
+/* Hero Centered Header */
+.pv-header-hero{display:flex;flex-direction:column;}
+.pv-header-hero .pv-header{border-bottom:none;position:relative;}
+.pv-header-hero-body{display:flex;flex-direction:column;align-items:center;text-align:center;padding:40px 24px 56px;background:var(--pv-bg);background-image:radial-gradient(ellipse at center,rgba(200,200,200,0.3) 0%,transparent 70%);position:relative;overflow:hidden;}
+.pv-header-hero-body::before{content:"";position:absolute;inset:0;background:repeating-conic-gradient(rgba(200,200,200,0.08) 0deg 10deg,transparent 10deg 20deg);pointer-events:none;}
+.pv-header-hero-logo{width:80px;height:80px;object-fit:contain;border-radius:12px;margin-bottom:16px;position:relative;z-index:1;}
+.pv-header-hero-title{font-size:40px;font-weight:900;color:var(--pv-headline);margin:0 0 12px;line-height:1.3;position:relative;z-index:1;}
+.pv-header-hero-subtitle{font-size:17px;color:var(--pv-text);margin:0 auto 28px;max-width:600px;line-height:1.7;position:relative;z-index:1;}
+.pv-header-hero-form{display:flex;align-items:center;border:1.5px solid rgba(128,128,128,0.25);border-radius:999px;overflow:hidden;background:var(--pv-card-bg);max-width:500px;width:100%;position:relative;z-index:1;}
+.pv-header-hero-input-wrap{display:flex;align-items:center;flex:1;gap:10px;padding:0 18px;}
+.pv-header-hero-input-wrap svg{flex-shrink:0;opacity:0.5;}
+.pv-header-hero-email{border:none;outline:none;font-size:15px;font-family:inherit;padding:15px 0;width:100%;background:transparent;color:var(--pv-text);}
+.pv-header-hero-email::placeholder{color:#aaa;}
+.pv-header-hero-form .pv-btn{border-radius:999px;margin:5px;height:42px;padding:0 32px;font-size:14px;}
+@media(max-width:768px){.pv-header-hero-title{font-size:28px;}.pv-header-hero-subtitle{font-size:15px;}.pv-header-hero-form{flex-direction:column;border-radius:12px;}.pv-header-hero-input-wrap{padding:0 12px;}.pv-header-hero-form .pv-btn{border-radius:8px;width:calc(100% - 10px);}}
 /* Hero News */
 .pv-hero-grid{display:grid;grid-template-columns:3fr 5fr 3fr;gap:1px;background:rgba(128,128,128,0.2);}
 .pv-hero-side{display:flex;flex-direction:column;gap:1px;background:rgba(128,128,128,0.2);}
@@ -1521,40 +1543,97 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                   const _realIdx = activePage.components.findIndex(c => c.id === comp.id);
                   let _inner: any = null;
                   switch (comp.type) {
-                    case "header":
+                    case "header": {
                       const logoLayout = activeSite.branding.logoLayout || "text_only";
-                      _inner = (
-                        <div className="kwb-p-header">
-                          <div className="kwb-p-header-inner">
-                            <div className="kwb-p-logo-wrap">
-                              {(logoLayout === "logo_only" || logoLayout === "logo_and_text") && activeSite.branding.logoUrl && (
-                                <img src={activeSite.branding.logoUrl} alt="" className="kwb-p-logo-img" />
-                              )}
-                              {(logoLayout === "text_only" || logoLayout === "logo_and_text") && (
-                                <span className="kwb-p-logo">{activeSite.branding.siteName}</span>
-                              )}
+                      const headerLayout = comp.settings.layout || "navbar";
+                      if (headerLayout === "hero_centered") {
+                        _inner = (
+                          <div className="kwb-p-header-hero">
+                            {/* Top navbar */}
+                            <div className="kwb-p-header">
+                              <div className="kwb-p-header-inner">
+                                <div className="kwb-p-logo-wrap">
+                                  {(logoLayout === "logo_only" || logoLayout === "logo_and_text") && activeSite.branding.logoUrl && (
+                                    <img src={activeSite.branding.logoUrl} alt="" className="kwb-p-logo-img" />
+                                  )}
+                                  {(logoLayout === "text_only" || logoLayout === "logo_and_text") && (
+                                    <span className="kwb-p-logo">{activeSite.branding.siteName}</span>
+                                  )}
+                                </div>
+                                <nav className="kwb-p-nav">
+                                  {(comp.settings.navLinks || []).filter((link: any) => typeof link === "string" ? true : link.visible).map((link: any, i: number) => {
+                                    const isNavLink = typeof link !== "string" && link.linkType === "page" && link.target;
+                                    const targetPage = isNavLink ? activeSite.pages.find(p => p.slug === link.target) : null;
+                                    return (
+                                      <a key={typeof link === "string" ? i : link.id} className={`kwb-p-nav-link ${targetPage && activePageId === targetPage.id ? "kwb-p-nav-link-active" : ""}`} onClick={targetPage ? () => { setActivePageId(targetPage.id); setExpandedComponent(null); } : undefined} style={targetPage ? { cursor: "pointer" } : {}}>{typeof link === "string" ? link : link.label}</a>
+                                    );
+                                  })}
+                                </nav>
+                                <div className="kwb-p-header-actions">
+                                  <button className="kwb-p-login-btn" onClick={() => setShowLoginModal(true)}>الدخول</button>
+                                  <button className="kwb-p-subscribe-btn" style={{ background: comp.settings.buttonColor || activeSite.branding.buttonColor }} onClick={() => setShowSubscribePopup(true)}>
+                                    {comp.settings.buttonText || "اشتراك"}
+                                  </button>
+                                </div>
+                              </div>
                             </div>
-                            <nav className="kwb-p-nav">
-                              {(comp.settings.navLinks || []).filter((link: any) => typeof link === "string" ? true : link.visible).map((link: any, i: number) => {
-                                const isNavLink = typeof link !== "string" && link.linkType === "page" && link.target;
-                                const targetPage = isNavLink ? activeSite.pages.find(p => p.slug === link.target) : null;
-                                return (
-                                  <a key={typeof link === "string" ? i : link.id} className={`kwb-p-nav-link ${targetPage && activePageId === targetPage.id ? "kwb-p-nav-link-active" : ""}`} onClick={targetPage ? () => { setActivePageId(targetPage.id); setExpandedComponent(null); } : undefined} style={targetPage ? { cursor: "pointer" } : {}}>{typeof link === "string" ? link : link.label}</a>
-                                );
-                              })}
-                            </nav>
-                            <div className="kwb-p-header-actions">
-                              <button className="kwb-p-login-btn" onClick={() => setShowLoginModal(true)}>الدخول</button>
-                              <button className="kwb-p-subscribe-btn" style={{ background: comp.settings.buttonColor || activeSite.branding.buttonColor }} onClick={() => setShowSubscribePopup(true)}>
-                                {comp.settings.buttonText || "اشتراك"}
-                              </button>
-                              <button className="kwb-p-darkmode-btn" title="الوضع الداكن">
-                                {activeSite.branding.darkMode ? "☀" : "☾"}
-                              </button>
+                            {/* Centered hero section */}
+                            <div className="kwb-p-header-hero-body">
+                              {activeSite.branding.logoUrl && (
+                                <img src={activeSite.branding.logoUrl} alt="" className="kwb-p-header-hero-logo" />
+                              )}
+                              <h1 className="kwb-p-header-hero-title">{activeSite.branding.siteName}</h1>
+                              {comp.settings.subtitle && (
+                                <p className="kwb-p-header-hero-subtitle">{comp.settings.subtitle}</p>
+                              )}
+                              <div className="kwb-p-header-hero-form">
+                                <div className="kwb-p-header-hero-input-wrap">
+                                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#999" strokeWidth="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22 6 12 13 2 6"/></svg>
+                                  <input type="email" placeholder="أدخل بريدك الإلكتروني" className="kwb-p-header-hero-email" />
+                                </div>
+                                <button className="kwb-p-subscribe-btn" style={{ background: comp.settings.buttonColor || activeSite.branding.buttonColor }} onClick={() => setShowSubscribePopup(true)}>
+                                  {comp.settings.buttonText || "اشتراك"}
+                                </button>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      ); break;
+                        );
+                      } else {
+                        _inner = (
+                          <div className="kwb-p-header">
+                            <div className="kwb-p-header-inner">
+                              <div className="kwb-p-logo-wrap">
+                                {(logoLayout === "logo_only" || logoLayout === "logo_and_text") && activeSite.branding.logoUrl && (
+                                  <img src={activeSite.branding.logoUrl} alt="" className="kwb-p-logo-img" />
+                                )}
+                                {(logoLayout === "text_only" || logoLayout === "logo_and_text") && (
+                                  <span className="kwb-p-logo">{activeSite.branding.siteName}</span>
+                                )}
+                              </div>
+                              <nav className="kwb-p-nav">
+                                {(comp.settings.navLinks || []).filter((link: any) => typeof link === "string" ? true : link.visible).map((link: any, i: number) => {
+                                  const isNavLink = typeof link !== "string" && link.linkType === "page" && link.target;
+                                  const targetPage = isNavLink ? activeSite.pages.find(p => p.slug === link.target) : null;
+                                  return (
+                                    <a key={typeof link === "string" ? i : link.id} className={`kwb-p-nav-link ${targetPage && activePageId === targetPage.id ? "kwb-p-nav-link-active" : ""}`} onClick={targetPage ? () => { setActivePageId(targetPage.id); setExpandedComponent(null); } : undefined} style={targetPage ? { cursor: "pointer" } : {}}>{typeof link === "string" ? link : link.label}</a>
+                                  );
+                                })}
+                              </nav>
+                              <div className="kwb-p-header-actions">
+                                <button className="kwb-p-login-btn" onClick={() => setShowLoginModal(true)}>الدخول</button>
+                                <button className="kwb-p-subscribe-btn" style={{ background: comp.settings.buttonColor || activeSite.branding.buttonColor }} onClick={() => setShowSubscribePopup(true)}>
+                                  {comp.settings.buttonText || "اشتراك"}
+                                </button>
+                                <button className="kwb-p-darkmode-btn" title="الوضع الداكن">
+                                  {activeSite.branding.darkMode ? "☀" : "☾"}
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      }
+                      break;
+                    }
 
                     case "hero_news":
                       const heroArticles = (comp.settings.articles || []).map((id: string) => MOCK_ARTICLES.find(a => a.id === id)).filter(Boolean) as Article[];
@@ -2544,6 +2623,21 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                               };
                               return (
                               <>
+                                <label className="kwb-label">التخطيط</label>
+                                <div style={{ display: "flex", gap: 4, marginBottom: 12 }}>
+                                  {[
+                                    { id: "navbar", label: "شريط علوي" },
+                                    { id: "hero_centered", label: "بطل مركزي" },
+                                  ].map(l => (
+                                    <button key={l.id} className={`kwb-logo-layout-btn ${(comp.settings.layout || "navbar") === l.id ? "kwb-logo-layout-active" : ""}`} style={{ flex: 1, padding: "6px 4px", fontSize: 11 }} onClick={() => updateComponentSettings(comp.id, { layout: l.id })}>{l.label}</button>
+                                  ))}
+                                </div>
+                                {comp.settings.layout === "hero_centered" && (
+                                  <>
+                                    <label className="kwb-label">النص التعريفي</label>
+                                    <textarea className="kwb-input" style={{ height: 60, paddingTop: 8, resize: "vertical" }} value={comp.settings.subtitle || ""} placeholder="وصف مختصر عن نشرتك..." onChange={e => updateComponentSettings(comp.id, { subtitle: e.target.value })} />
+                                  </>
+                                )}
                                 <label className="kwb-label">الشعار</label>
                                 {comp.settings.logoUrl ? (
                                   <div className="kwb-upload-preview"><img src={comp.settings.logoUrl} alt="" /><button className="kwb-upload-remove" onClick={() => updateComponentSettings(comp.id, { logoUrl: "" })}>{Icons.x}</button></div>
@@ -3520,6 +3614,12 @@ const CSS_STYLES = `
 .kwb-preview-mobile .kwb-p-header-inner{justify-content:space-between;}
 .kwb-preview-mobile .kwb-p-nav{display:none;}
 .kwb-preview-mobile .kwb-p-header-actions{margin-inline-start:auto;}
+.kwb-preview-mobile .kwb-p-header-hero-title{font-size:24px;}
+.kwb-preview-mobile .kwb-p-header-hero-subtitle{font-size:13px;}
+.kwb-preview-mobile .kwb-p-header-hero-body{padding:24px 16px 32px;}
+.kwb-preview-mobile .kwb-p-header-hero-form{flex-direction:column;border-radius:12px;gap:0;}
+.kwb-preview-mobile .kwb-p-header-hero-input-wrap{padding:0 12px;}
+.kwb-preview-mobile .kwb-p-header-hero-form .kwb-p-subscribe-btn{border-radius:8px;width:calc(100% - 8px);margin:4px;}
 .kwb-preview-mobile .kwb-p-articles-grid{grid-template-columns:1fr 1fr;}
 .kwb-preview-mobile .kwb-p-banner-grid{grid-template-columns:1fr;}
 .kwb-preview-mobile .kwb-p-cta-inner{flex-direction:column;}
@@ -3552,6 +3652,21 @@ const CSS_STYLES = `
 .kwb-p-nav-link-active{color:var(--kwb-headline-color,#1a1a1a)!important;font-weight:700;}
 .kwb-p-subscribe-btn{padding:0 24px;height:46px;border:none;border-radius:0;color:#fff;font-family:inherit;font-size:16px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;}
 .kwb-p-darkmode-btn{width:28px;height:28px;border:1px solid rgba(128,128,128,0.2);background:transparent;font-size:14px;cursor:default;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--kwb-text-color,#666);}
+
+/* Hero Centered Header */
+.kwb-p-header-hero{display:flex;flex-direction:column;}
+.kwb-p-header-hero .kwb-p-header{border-bottom:none;}
+.kwb-p-header-hero-body{display:flex;flex-direction:column;align-items:center;text-align:center;padding:40px 24px 48px;background:var(--kwb-bg-color,#f8f8f8);background-image:radial-gradient(ellipse at center,rgba(200,200,200,0.3) 0%,transparent 70%);position:relative;overflow:hidden;}
+.kwb-p-header-hero-body::before{content:"";position:absolute;inset:0;background:repeating-conic-gradient(rgba(200,200,200,0.08) 0deg 10deg,transparent 10deg 20deg);pointer-events:none;}
+.kwb-p-header-hero-logo{width:80px;height:80px;object-fit:contain;border-radius:12px;margin-bottom:16px;position:relative;z-index:1;}
+.kwb-p-header-hero-title{font-size:36px;font-weight:900;color:var(--kwb-headline-color,#1a1a1a);margin:0 0 12px;line-height:1.3;position:relative;z-index:1;}
+.kwb-p-header-hero-subtitle{font-size:16px;color:var(--kwb-text-color,#666);margin:0 auto 24px;max-width:560px;line-height:1.7;position:relative;z-index:1;}
+.kwb-p-header-hero-form{display:flex;align-items:center;border:1.5px solid rgba(128,128,128,0.25);border-radius:999px;overflow:hidden;background:#fff;max-width:480px;width:100%;position:relative;z-index:1;}
+.kwb-p-header-hero-input-wrap{display:flex;align-items:center;flex:1;gap:8px;padding:0 16px;}
+.kwb-p-header-hero-input-wrap svg{flex-shrink:0;opacity:0.5;}
+.kwb-p-header-hero-email{border:none;outline:none;font-size:14px;font-family:inherit;padding:14px 0;width:100%;background:transparent;color:var(--kwb-text-color,#333);}
+.kwb-p-header-hero-email::placeholder{color:#aaa;}
+.kwb-p-header-hero-form .kwb-p-subscribe-btn{border-radius:999px;margin:4px;height:40px;padding:0 28px;font-size:14px;}
 
 /* Hero News Grid */
 .kwb-p-hero-news{display:grid;grid-template-columns:3fr 5fr 3fr;gap:1px;background:rgba(128,128,128,0.2);}
