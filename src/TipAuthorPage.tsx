@@ -44,14 +44,14 @@ function recordInteraction(interaction: TipInteraction) {
 
 // ========== OPTIONS ==========
 const COFFEE_OPTIONS = [
-  { id: 'small', amount: 30, image: '/images/galao.png', size: 36 },
-  { id: 'mid', amount: 60, image: '/images/espresso.png', size: 44 },
+  { id: 'small', amount: 10, image: '/images/galao.png', size: 36 },
+  { id: 'mid', amount: 30, image: '/images/espresso.png', size: 44 },
   { id: 'large', amount: 100, image: '/images/lungo.png', size: 52 },
 ]
 
 const TEA_OPTIONS = [
-  { id: 'small', amount: 30, image: '/images/tea-small.png', size: 36 },
-  { id: 'mid', amount: 60, image: '/images/tea-mid.png', size: 44 },
+  { id: 'small', amount: 10, image: '/images/tea-small.png', size: 36 },
+  { id: 'mid', amount: 30, image: '/images/tea-mid.png', size: 44 },
   { id: 'large', amount: 100, image: '/images/tea-large.png', size: 52 },
 ]
 
@@ -194,8 +194,9 @@ const TipAuthorPage: React.FC = () => {
   }
 
   const getAmount = () => {
-    if (isCustom && customAmount) return Number(customAmount)
-    return options[selectedIndex].amount
+    if (isCustom) return customAmount ? Number(customAmount) : 0
+    if (selectedIndex >= 0 && selectedIndex < options.length) return options[selectedIndex].amount
+    return 0
   }
 
   const handleSubmit = () => {
