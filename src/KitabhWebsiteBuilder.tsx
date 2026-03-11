@@ -345,6 +345,7 @@ export default function KitabhWebsiteBuilder(props: any) {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [loginTab, setLoginTab] = useState<"signin" | "signup">("signin");
   const [showSeoModal, setShowSeoModal] = useState<string | null>(null);
+  const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [articleFilterCategory, setArticleFilterCategory] = useState<string | null>(null);
 
   // ─── Undo/Redo tracking ────────
@@ -1035,7 +1036,13 @@ export default function KitabhWebsiteBuilder(props: any) {
         switch (comp.type) {
           case "header":
             if (pi === 0) {
-              pc += `<header class="pv-header"><div class="pv-header-inner"><div class="pv-logo-wrap">${logoHtml}</div><nav class="pv-nav">${navHtml}</nav><button class="pv-btn" style="background:${bc}">${s.buttonText || "اشتراك"}</button><button class="pv-darkmode-btn" onclick="document.documentElement.classList.toggle('dark');this.textContent=document.documentElement.classList.contains('dark')?'☀':'☾'" title="الوضع الداكن">${dm ? '☀' : '☾'}</button></div></header>`;
+              const mobileNavHtml = rawNavLinks.filter((link: any) => typeof link === "string" ? true : link.visible).map((link: any) => {
+                const label = typeof link === "string" ? link : link.label;
+                const href = typeof link === "string" ? "#" : link.linkType === "external" ? link.target : link.linkType === "page" ? `#page-${link.target}` : `#${link.target}`;
+                const ext = typeof link !== "string" && link.linkType === "external" ? ' target="_blank" rel="noopener"' : '';
+                return `<a href="${href}" class="pv-mobile-nav-link"${ext}>${label}</a>`;
+              }).join("");
+              pc += `<header class="pv-header"><div class="pv-header-inner"><div class="pv-logo-wrap">${logoHtml}</div><nav class="pv-nav">${navHtml}</nav><div class="pv-header-actions"><button class="pv-login-btn" onclick="document.getElementById('pv-login-modal')?.showModal()">الدخول</button><button class="pv-btn" style="background:${bc}">${s.buttonText || "اشتراك"}</button><button class="pv-darkmode-btn" onclick="document.documentElement.classList.toggle('dark');this.textContent=document.documentElement.classList.contains('dark')?'☀':'☾'" title="الوضع الداكن">${dm ? '☀' : '☾'}</button></div><button class="pv-hamburger" onclick="document.getElementById('pv-mobile-menu').classList.toggle('pv-mobile-menu-open')" aria-label="القائمة"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button></div><div id="pv-mobile-menu" class="pv-mobile-menu"><nav class="pv-mobile-nav">${mobileNavHtml}</nav><div class="pv-mobile-menu-actions"><button class="pv-login-btn" style="width:100%">الدخول</button><button class="pv-btn" style="background:${bc};width:100%">${s.buttonText || "اشتراك"}</button><button class="pv-darkmode-btn" onclick="document.documentElement.classList.toggle('dark');this.textContent=document.documentElement.classList.contains('dark')?'☀':'☾'">${dm ? '☀' : '☾'}</button></div></div></header>`;
             }
             break;
           case "hero_news":
@@ -1179,6 +1186,16 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
 .pv-nav{display:flex;gap:24px;flex:1;}
 .pv-nav-link{font-size:14px;color:var(--pv-text);padding:4px 0;font-weight:500;}
 .pv-nav-link:hover{color:var(--pv-headline);}
+.pv-header-actions{display:flex;align-items:center;gap:10px;}
+.pv-login-btn{padding:0 16px;height:44px;border:1.5px solid var(--pv-btn);background:transparent;color:var(--pv-btn);font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap;border-radius:var(--pv-radius);}
+.pv-hamburger{display:none;width:36px;height:36px;border:none;background:transparent;cursor:pointer;align-items:center;justify-content:center;color:var(--pv-headline);flex-shrink:0;padding:0;}
+.pv-mobile-menu{display:none;border-top:1px solid rgba(128,128,128,0.15);padding:16px 24px;flex-direction:column;gap:12px;background:var(--pv-card-bg);}
+.pv-mobile-menu-open{display:flex;}
+.pv-mobile-nav{display:flex;flex-direction:column;gap:0;}
+.pv-mobile-nav-link{font-size:16px;font-weight:500;color:var(--pv-text);padding:12px 0;border-bottom:1px solid rgba(128,128,128,0.1);text-decoration:none;}
+.pv-mobile-nav-link:last-child{border-bottom:none;}
+.pv-mobile-menu-actions{display:flex;flex-direction:column;gap:8px;padding-top:8px;align-items:center;}
+.pv-mobile-menu-actions .pv-darkmode-btn{width:36px;height:36px;}
 .pv-btn{padding:0 28px;height:48px;border:none;color:#fff;font-family:inherit;font-size:15px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;border-radius:var(--pv-radius);}
 /* Hero Centered Header */
 /* Hero Centered Header — reuses .pv-hero-sub */
@@ -1330,6 +1347,8 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
   .pv-hero-side-r .pv-hero-side-card{min-width:0;flex:1;}
   .pv-hero-side-l{display:none;}
   .pv-nav{display:none;}
+  .pv-header-actions{display:none;}
+  .pv-hamburger{display:flex;}
   .pv-articles-grid{grid-template-columns:repeat(2,1fr);}
   .pv-banner-grid{grid-template-columns:1fr;}
   .pv-cta-inner{flex-direction:column;}
@@ -1601,6 +1620,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                   switch (comp.type) {
                     case "header": {
                       const logoLayout = activeSite.branding.logoLayout || "text_only";
+                      const navLinksData = (comp.settings.navLinks || []).filter((link: any) => typeof link === "string" ? true : link.visible);
                       _inner = (
                           <div className="kwb-p-header">
                             <div className="kwb-p-header-inner">
@@ -1613,7 +1633,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                                 )}
                               </div>
                               <nav className="kwb-p-nav">
-                                {(comp.settings.navLinks || []).filter((link: any) => typeof link === "string" ? true : link.visible).map((link: any, i: number) => {
+                                {navLinksData.map((link: any, i: number) => {
                                   const isNavLink = typeof link !== "string" && link.linkType === "page" && link.target;
                                   const targetPage = isNavLink ? activeSite.pages.find(p => p.slug === link.target) : null;
                                   return (
@@ -1630,7 +1650,32 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                                   {activeSite.branding.darkMode ? "☀" : "☾"}
                                 </button>
                               </div>
+                              <button className="kwb-p-hamburger" onClick={() => setShowMobileMenu(!showMobileMenu)} aria-label="القائمة">
+                                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+                              </button>
                             </div>
+                            {showMobileMenu && (
+                              <div className="kwb-p-mobile-menu">
+                                <nav className="kwb-p-mobile-nav">
+                                  {navLinksData.map((link: any, i: number) => {
+                                    const isNavLink = typeof link !== "string" && link.linkType === "page" && link.target;
+                                    const targetPage = isNavLink ? activeSite.pages.find(p => p.slug === link.target) : null;
+                                    return (
+                                      <a key={typeof link === "string" ? i : link.id} className="kwb-p-mobile-nav-link" onClick={() => { if (targetPage) { setActivePageId(targetPage.id); setExpandedComponent(null); } setShowMobileMenu(false); }} style={targetPage ? { cursor: "pointer" } : {}}>{typeof link === "string" ? link : link.label}</a>
+                                    );
+                                  })}
+                                </nav>
+                                <div className="kwb-p-mobile-menu-actions">
+                                  <button className="kwb-p-login-btn" onClick={() => { setShowLoginModal(true); setShowMobileMenu(false); }}>الدخول</button>
+                                  <button className="kwb-p-subscribe-btn" style={{ background: comp.settings.buttonColor || activeSite.branding.buttonColor }} onClick={() => { setShowSubscribePopup(true); setShowMobileMenu(false); }}>
+                                    {comp.settings.buttonText || "اشتراك"}
+                                  </button>
+                                  <button className="kwb-p-darkmode-btn" title="الوضع الداكن">
+                                    {activeSite.branding.darkMode ? "☀" : "☾"}
+                                  </button>
+                                </div>
+                              </div>
+                            )}
                           </div>
                         );
                       break;
@@ -3752,8 +3797,8 @@ const CSS_STYLES = `
 .kwb-preview-mobile .kwb-p-hero-main-img{height:300px;}
 .kwb-preview-mobile .kwb-p-nav{display:none;}
 .kwb-preview-mobile .kwb-p-header-inner{justify-content:space-between;}
-.kwb-preview-mobile .kwb-p-nav{display:none;}
-.kwb-preview-mobile .kwb-p-header-actions{margin-inline-start:auto;}
+.kwb-preview-mobile .kwb-p-header-actions{display:none;}
+.kwb-preview-mobile .kwb-p-hamburger{display:flex;}
 .kwb-preview-mobile .kwb-p-articles-grid{grid-template-columns:1fr 1fr;}
 .kwb-preview-mobile .kwb-p-banner-grid{grid-template-columns:1fr;}
 .kwb-preview-mobile .kwb-p-cta-inner{flex-direction:column;}
@@ -3786,6 +3831,17 @@ const CSS_STYLES = `
 .kwb-p-nav-link-active{color:var(--kwb-headline-color,#1a1a1a)!important;font-weight:700;}
 .kwb-p-subscribe-btn{padding:0 24px;height:46px;border:none;border-radius:0;color:#fff;font-family:inherit;font-size:16px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;}
 .kwb-p-darkmode-btn{width:28px;height:28px;border:1px solid rgba(128,128,128,0.2);background:transparent;font-size:14px;cursor:default;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--kwb-text-color,#666);}
+
+/* Hamburger & Mobile Menu */
+.kwb-p-hamburger{display:none;width:36px;height:36px;border:none;background:transparent;cursor:pointer;align-items:center;justify-content:center;color:var(--kwb-headline-color,#1a1a1a);flex-shrink:0;padding:0;}
+.kwb-p-mobile-menu{border-top:1px solid rgba(128,128,128,0.15);padding:16px;display:flex;flex-direction:column;gap:12px;background:var(--kwb-card-bg,#fff);}
+.kwb-p-mobile-nav{display:flex;flex-direction:column;gap:0;}
+.kwb-p-mobile-nav-link{font-size:16px;font-weight:500;color:var(--kwb-text-color,#666);padding:12px 0;border-bottom:1px solid rgba(128,128,128,0.1);cursor:pointer;}
+.kwb-p-mobile-nav-link:last-child{border-bottom:none;}
+.kwb-p-mobile-menu-actions{display:flex;flex-direction:column;gap:8px;padding-top:8px;}
+.kwb-p-mobile-menu-actions .kwb-p-login-btn{width:100%;height:44px;text-align:center;}
+.kwb-p-mobile-menu-actions .kwb-p-subscribe-btn{width:100%;height:44px;text-align:center;}
+.kwb-p-mobile-menu-actions .kwb-p-darkmode-btn{width:36px;height:36px;align-self:center;}
 
 /* Hero Centered Header — now reuses .kwb-p-hero-sub */
 
@@ -4316,8 +4372,8 @@ const CSS_STYLES = `
 .kwb-article-check{position:absolute;bottom:4px;left:4px;width:20px;height:20px;background:#0000FF;border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;}
 
 /* ─── BUTTONS ─── */
-.kwb-btn-primary{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:42px;padding:0 24px;border:none;border-radius:10px;background:#371D12;color:#fff;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;transition:background .2s;white-space:nowrap;}
-.kwb-btn-primary:hover{background:#4a2a1c;}
+.kwb-btn-primary{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:42px;padding:0 24px;border:none;border-radius:10px;background:#1a1a1a;color:#fff;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;transition:background .2s;white-space:nowrap;}
+.kwb-btn-primary:hover{background:#333;}
 .kwb-btn-primary:disabled{opacity:0.7;cursor:not-allowed;}
 .kwb-btn-loading{background:#555 !important;}
 .kwb-btn-success{background:#16a34a !important;}
