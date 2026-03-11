@@ -115,6 +115,7 @@ interface Site {
   subscribers: number;
   createdAt: string;
   updatedAt: string;
+  publishedAt?: string;
 }
 
 interface Template {
@@ -1012,6 +1013,40 @@ export default function KitabhWebsiteBuilder(props: any) {
             const sampleA = MOCK_ARTICLES[0];
             pc += `<div class="pv-av"><div class="pv-av-head"><span class="pv-av-cat">مقالات</span><h1>${sampleA.title}</h1><div class="pv-av-meta"><div class="pv-av-author"><div class="pv-av-avatar">${sampleA.author.charAt(0)}</div><div><strong>${sampleA.author}</strong><span class="pv-date">${sampleA.date}</span></div></div><div class="pv-av-actions"><span>❤ ${sampleA.likes}</span><span>💬 ${sampleA.comments}</span></div></div></div><div class="pv-img" style="height:300px;width:100%"></div><div class="pv-av-body"><p>هذا نص تجريبي يمثل محتوى المقال كما سيظهر للقارئ. يمكن للكاتب إضافة فقرات متعددة وتنسيقات مختلفة لإثراء المحتوى وجعله أكثر جاذبية للقراء.</p><p>يدعم المقال إضافة صور وعناوين فرعية واقتباسات وقوائم نقطية ومرقمة. كل هذه العناصر تساعد في تنظيم المحتوى وتسهيل قراءته.</p><h3>عنوان فرعي للمقال</h3><p>هنا يستمر المقال بتفاصيل إضافية حول الموضوع المطروح.</p><blockquote>الكتابة الجيدة هي إعادة الكتابة. لا تخف من تعديل نصك حتى يصل إلى أفضل صورة ممكنة.</blockquote><p>في النهاية، يُختتم المقال بملخص أو دعوة للتفاعل مع المحتوى.</p></div><div class="pv-av-tags"><span>كتابة</span><span>محتوى</span><span>نشرات بريدية</span></div></div>`;
             break;
+          case "section_title":
+            pc += `<div class="pv-section-title"><h2>${s.title || "عنوان القسم"}</h2></div>`;
+            break;
+          case "text_block":
+            pc += `<div class="pv-text-block"><p>${s.text || "نص تجريبي"}</p></div>`;
+            break;
+          case "rich_text":
+            pc += `<div class="pv-rich-text">${s.content || "<p>محتوى نصي</p>"}</div>`;
+            break;
+          case "subscribe_form":
+            pc += `<div class="pv-subscribe-form"><h3>${s.title || "اشترك في النشرة"}</h3><p>${s.description || ""}</p><div class="pv-form-row pv-form-center"><input type="email" placeholder="${s.placeholder || "بريدك الإلكتروني"}" class="pv-email" /><button class="pv-btn" style="background:${s.buttonColor || bc}">${s.buttonText || "اشتراك"}</button></div></div>`;
+            break;
+          case "contact_form":
+            pc += `<div class="pv-contact-form"><h3>${s.title || "تواصل معنا"}</h3><form class="pv-contact-fields"><input type="text" placeholder="الاسم" class="pv-input" /><input type="email" placeholder="البريد الإلكتروني" class="pv-input" /><textarea placeholder="رسالتك" class="pv-textarea"></textarea><button class="pv-btn" style="background:${bc}">إرسال</button></form></div>`;
+            break;
+          case "testimonials":
+            const tItems = s.items || [];
+            const tHtml = tItems.map((t: any) => `<div class="pv-testi-card"><p class="pv-testi-text">"${t.text || ""}"</p><div class="pv-testi-author"><strong>${t.author || ""}</strong><span>${t.role || ""}</span></div></div>`).join("");
+            pc += `<div class="pv-testimonials"><div class="pv-testi-grid">${tHtml}</div></div>`;
+            break;
+          case "bento_grid":
+            const bItems = s.items || [];
+            const bHtml = bItems.map((item: any) => {
+              const sz = item.cardSize || "square";
+              return `<div class="pv-bento-card pv-bento-${sz}">${item.imageUrl ? `<img src="${item.imageUrl}" alt="${item.title || ""}" class="pv-bento-img" />` : `<div class="pv-bento-img-ph"></div>`}<div class="pv-bento-body"><h4>${item.title || ""}</h4>${item.text ? `<p>${item.text}</p>` : ""}</div></div>`;
+            }).join("");
+            pc += `<div class="pv-bento"><div class="pv-bento-grid">${bHtml}</div></div>`;
+            break;
+          case "social_links": {
+            const platforms = s.platforms || [];
+            const slHtml = platforms.filter((p: any) => p.enabled && p.url).map((p: any) => `<a href="${p.url}" target="_blank" rel="noopener" class="pv-social-link">${p.platform}</a>`).join("");
+            pc += `<div class="pv-social-links">${slHtml}</div>`;
+            break;
+          }
           default:
             pc += `<div class="pv-placeholder">${COMPONENT_META[comp.type]?.label || comp.type}</div>`;
         }
@@ -1128,6 +1163,22 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
 .pv-av-tags span{font-size:12px;padding:6px 14px;border:1px solid rgba(128,128,128,0.2);color:var(--pv-text);background:var(--pv-card-bg);}
 /* Page separator */
 .pv-page-sep{border-top:3px solid rgba(128,128,128,0.15);}
+/* Section Title */
+.pv-section-title{padding:24px 24px 8px;}.pv-section-title h2{font-size:22px;font-weight:800;color:var(--pv-headline);margin:0;}
+/* Text Block */
+.pv-text-block{padding:16px 24px;}.pv-text-block p{font-size:16px;line-height:1.8;color:var(--pv-text);}
+/* Rich Text */
+.pv-rich-text{padding:16px 24px;font-size:16px;line-height:1.8;color:var(--pv-text);}
+/* Subscribe Form */
+.pv-subscribe-form{padding:48px 24px;text-align:center;background:var(--pv-card-bg);}.pv-subscribe-form h3{font-size:22px;font-weight:700;margin:0 0 8px;color:var(--pv-headline);}.pv-subscribe-form p{font-size:14px;color:var(--pv-text);margin:0 0 20px;}
+/* Contact Form */
+.pv-contact-form{padding:48px 24px;text-align:center;background:var(--pv-card-bg);}.pv-contact-form h3{font-size:22px;font-weight:700;margin:0 0 20px;color:var(--pv-headline);}.pv-contact-fields{max-width:480px;margin:0 auto;display:flex;flex-direction:column;gap:12px;text-align:right;}.pv-input{height:44px;padding:0 14px;border:1px solid rgba(128,128,128,0.3);font-family:inherit;font-size:14px;background:var(--pv-card-bg);color:var(--pv-text);outline:none;direction:rtl;}.pv-textarea{min-height:100px;padding:12px 14px;border:1px solid rgba(128,128,128,0.3);font-family:inherit;font-size:14px;background:var(--pv-card-bg);color:var(--pv-text);outline:none;direction:rtl;resize:vertical;}
+/* Testimonials */
+.pv-testimonials{padding:32px 24px;}.pv-testi-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px;}.pv-testi-card{padding:20px;background:var(--pv-card-bg);border:1px solid rgba(128,128,128,0.15);}.pv-testi-text{font-size:15px;line-height:1.7;color:var(--pv-text);margin:0 0 12px;font-style:italic;}.pv-testi-author strong{display:block;font-size:14px;color:var(--pv-headline);}.pv-testi-author span{font-size:12px;color:var(--pv-text);opacity:0.7;}
+/* Bento Grid */
+.pv-bento{padding:24px;}.pv-bento-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}.pv-bento-card{background:var(--pv-card-bg);border:1px solid rgba(128,128,128,0.15);overflow:hidden;display:flex;flex-direction:column;}.pv-bento-square{}.pv-bento-wide{grid-column:span 2;}.pv-bento-tall{grid-row:span 2;}.pv-bento-img{width:100%;height:200px;object-fit:cover;}.pv-bento-img-ph{width:100%;height:200px;background:rgba(128,128,128,0.1);}.pv-bento-body{padding:12px 16px;}.pv-bento-body h4{font-size:15px;font-weight:700;color:var(--pv-headline);margin:0 0 4px;}.pv-bento-body p{font-size:13px;color:var(--pv-text);margin:0;}
+/* Social Links */
+.pv-social-links{display:flex;justify-content:center;gap:16px;padding:24px;flex-wrap:wrap;}.pv-social-link{font-size:14px;font-weight:600;color:var(--pv-link);padding:8px 16px;border:1px solid rgba(128,128,128,0.2);transition:all .15s;}.pv-social-link:hover{background:var(--pv-btn);color:#fff;border-color:var(--pv-btn);}
 .pv-placeholder{padding:40px 24px;background:var(--pv-card-bg);border:2px dashed rgba(128,128,128,0.2);text-align:center;color:var(--pv-text);opacity:0.5;font-size:15px;font-weight:600;}
 /* Mobile */
 @media(max-width:768px){
@@ -1184,10 +1235,17 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
     }, 600);
   };
 
+  const [publishStatus, setPublishStatus] = useState<"idle" | "publishing" | "done">("idle");
+
   const handlePublish = () => {
-    if (!activeSiteId) return;
-    updateSite(activeSiteId, { status: "published" });
+    if (!activeSiteId || publishStatus === "publishing") return;
+    setPublishStatus("publishing");
+    updateSite(activeSiteId, { status: "published", publishedAt: new Date().toISOString() });
     handleSave();
+    setTimeout(() => {
+      setPublishStatus("done");
+      setTimeout(() => setPublishStatus("idle"), 3000);
+    }, 800);
   };
 
   const openArticlePicker = (compId: string) => {
@@ -2058,12 +2116,26 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
               </button>
               <div className="kwb-sidebar-top-btns">
                 <button className="kwb-btn-outline kwb-btn-half" onClick={openPreviewTab}>
-                  {Icons.eye} معاينة
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                  معاينة
                 </button>
-                <button className="kwb-btn-primary kwb-btn-half" onClick={handlePublish}>
-                  {saveStatus === "saving" ? "قيد النشر" : activeSite?.status === "published" ? "نُشرت التغييرات" : "نشر"}
+                <button
+                  className={`kwb-btn-primary kwb-btn-half ${publishStatus === "publishing" ? "kwb-btn-loading" : ""} ${publishStatus === "done" ? "kwb-btn-success" : ""}`}
+                  onClick={handlePublish}
+                  disabled={publishStatus === "publishing"}
+                >
+                  {publishStatus === "publishing" ? (
+                    <><svg className="kwb-spin" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> جاري النشر</>
+                  ) : publishStatus === "done" ? (
+                    <><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg> تم النشر</>
+                  ) : (
+                    <><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg> نشر</>
+                  )}
                 </button>
               </div>
+              {activeSite?.publishedAt && publishStatus === "idle" && (
+                <div className="kwb-last-published">آخر نشر: {new Date(activeSite.publishedAt).toLocaleDateString("ar-SA", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}</div>
+              )}
             </div>
 
             {/* Tabs */}
@@ -3682,6 +3754,13 @@ const CSS_STYLES = `
 /* ─── BUTTONS ─── */
 .kwb-btn-primary{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:42px;padding:0 24px;border:none;border-radius:10px;background:#371D12;color:#fff;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;transition:background .2s;white-space:nowrap;}
 .kwb-btn-primary:hover{background:#4a2a1c;}
+.kwb-btn-primary:disabled{opacity:0.7;cursor:not-allowed;}
+.kwb-btn-loading{background:#555 !important;}
+.kwb-btn-success{background:#16a34a !important;}
+.kwb-btn-success:hover{background:#16a34a !important;}
+@keyframes kwb-spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+.kwb-spin{animation:kwb-spin 1s linear infinite;}
+.kwb-last-published{font-size:11px;color:#999;text-align:center;padding:4px 0 0;font-family:'IBM Plex Sans Arabic',sans-serif;}
 .kwb-btn-outline{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:40px;padding:0 20px;border:1.5px solid #E0E0E0;border-radius:10px;background:#fff;color:#371D12;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;transition:all .15s;white-space:nowrap;}
 .kwb-btn-outline:hover{border-color:#BBB;background:#F8F8F8;}
 .kwb-btn-full{width:100%;}
