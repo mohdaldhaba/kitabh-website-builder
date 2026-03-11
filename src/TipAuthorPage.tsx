@@ -301,7 +301,7 @@ const TipAuthorPage: React.FC = () => {
                   onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = 'none' }}
                 >
                   <img
-                    src={isTea ? '/images/tea-small.png' : '/images/espresso.png'} alt=""
+                    src={isTea ? '/images/tea-large.png' : '/images/lungo.png'} alt=""
                     style={{ width: '18px', height: '18px', objectFit: 'contain', filter: authorTipEnabled ? 'none' : 'grayscale(100%)' }}
                   />
                 </button>
