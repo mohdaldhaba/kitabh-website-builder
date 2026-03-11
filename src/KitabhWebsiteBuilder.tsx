@@ -1276,6 +1276,8 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
   .pv-form-row .pv-footer-email{width:100%;}
   .pv-hero-sub h2{font-size:22px;}
   .pv-av h1{font-size:20px;}
+  .pv-gallery{display:none;}
+  .pv-catfeed{display:none;}
 }
 </style>
 </head>
@@ -3527,13 +3529,8 @@ const CSS_STYLES = `
 .kwb-preview-mobile .kwb-p-footer-form .kwb-p-footer-email{border-right:1px solid #444;width:100%;}
 .kwb-preview-mobile .kwb-p-footer-form .kwb-p-subscribe-btn{width:100%;}
 .kwb-preview-mobile .kwb-p-ticker-inner{font-size:32px;}
-.kwb-preview-mobile .kwb-p-gallery-cards{grid-template-columns:1fr;}
-.kwb-preview-mobile .kwb-p-gallery-body{flex-direction:column-reverse;}
-.kwb-preview-mobile .kwb-p-gallery-sidebar{width:100%;border-right:none;padding-right:0;margin-right:0;border-top:1px solid rgba(128,128,128,0.15);padding-top:14px;margin-top:14px;}
-.kwb-preview-mobile .kwb-p-catfeed-body{grid-template-columns:1fr !important;}
-.kwb-preview-mobile .kwb-p-catfeed-featured{border-right:none;border-left:none;border-bottom:1px solid rgba(128,128,128,0.15);padding-bottom:14px;order:-1;}
-.kwb-preview-mobile .kwb-p-catfeed-sidebar{border-right:none;padding:0;border-top:1px solid rgba(128,128,128,0.15);padding-top:14px;margin-top:14px;}
-.kwb-preview-mobile .kwb-p-catfeed-card-img{width:80px;height:60px;}
+.kwb-preview-mobile .kwb-p-gallery{display:none;}
+.kwb-preview-mobile .kwb-p-catfeed{display:none;}
 .kwb-preview-mobile .kwb-p-hero-sub-form{flex-direction:column;}
 .kwb-preview-mobile .kwb-p-hero-sub-form .kwb-p-email-input{border-right:1px solid rgba(128,128,128,0.3);width:100%;}
 .kwb-preview-mobile .kwb-p-hero-sub-form .kwb-p-subscribe-btn{width:100%;}
@@ -4281,12 +4278,8 @@ const CSS_STYLES = `
 
 /* ─── Article Mobile List Layout ─── */
 @media(max-width:768px){
-  .kwb-p-gallery-cards{grid-template-columns:1fr;}
-  .kwb-p-gallery-sidebar{width:100%;border-right:none;padding-right:0;margin-right:0;border-top:1px solid rgba(128,128,128,0.15);padding-top:16px;margin-top:16px;}
-  .kwb-p-gallery-body{flex-direction:column-reverse;}
-  .kwb-p-catfeed-featured_right,.kwb-p-catfeed-featured_left{grid-template-columns:1fr;}
-  .kwb-p-catfeed-featured{border-right:none;border-left:none;border-bottom:1px solid rgba(128,128,128,0.15);padding-bottom:16px;}
-  .kwb-p-catfeed-sidebar{border-right:none;padding:0;border-top:1px solid rgba(128,128,128,0.15);padding-top:16px;margin-top:16px;}
+  .kwb-p-gallery{display:none;}
+  .kwb-p-catfeed{display:none;}
 }
 
 /* ─── Bento Card Fix (image on top) ─── */
