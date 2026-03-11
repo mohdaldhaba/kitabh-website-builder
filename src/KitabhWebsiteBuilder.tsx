@@ -43,7 +43,8 @@ type ComponentType =
   | "contact_form"
   | "divider"
   | "rich_text"
-  | "bento_grid";
+  | "bento_grid"
+  | "social_links";
 
 interface SitePage {
   id: string;
@@ -195,6 +196,34 @@ const COMPONENT_META: Record<ComponentType, { label: string; hasSettings: boolea
   divider: { label: "فاصل", hasSettings: false },
   rich_text: { label: "محتوى منسق", hasSettings: true },
   bento_grid: { label: "شبكة بينتو", hasSettings: true },
+  social_links: { label: "روابط التواصل", hasSettings: true },
+};
+
+
+const COMPONENT_ICONS: Record<ComponentType, string> = {
+  header: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="4" rx="1"/><line x1="6" y1="11" x2="18" y2="11"/></svg>',
+  hero_news: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg>',
+  hero_subscribe: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M8 12h8"/><path d="M12 12v4"/></svg>',
+  hero_slider: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="15 12 19 12"/><polyline points="5 12 9 12"/></svg>',
+  banner: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><line x1="6" y1="10" x2="18" y2="10"/></svg>',
+  cta_newsletter: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22 6 12 13 2 6"/></svg>',
+  article_collection: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>',
+  footer: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="17" width="20" height="4" rx="1"/><line x1="6" y1="13" x2="18" y2="13"/></svg>',
+  testimonials: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>',
+  products: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg>',
+  podcast: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/></svg>',
+  courses: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>',
+  topics: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg>',
+  brands_ticker: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>',
+  article_view: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>',
+  text_block: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="17" y1="10" x2="3" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="17" y1="18" x2="3" y2="18"/></svg>',
+  image_block: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>',
+  subscribe_form: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22 6 12 13 2 6"/></svg>',
+  contact_form: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>',
+  divider: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="2" y1="12" x2="22" y2="12"/></svg>',
+  rich_text: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>',
+  bento_grid: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>',
+  social_links: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>',
 };
 
 const PRESET_COLORS = ["#E82222", "#7C3AED", "#2563EB", "#0891B2", "#10B981", "#F59E0B"];
@@ -309,6 +338,9 @@ export default function KitabhWebsiteBuilder(props: any) {
   const [articleSearch, setArticleSearch] = useState("");
   const [activePageId, setActivePageId] = useState<string | null>(null);
   const [articleFilterSearch, setArticleFilterSearch] = useState("");
+  const [showLoginModal, setShowLoginModal] = useState(false);
+  const [loginTab, setLoginTab] = useState<"signin" | "signup">("signin");
+  const [showSeoModal, setShowSeoModal] = useState<string | null>(null);
   const [articleFilterCategory, setArticleFilterCategory] = useState<string | null>(null);
 
   // ─── Undo/Redo tracking ────────
@@ -508,6 +540,16 @@ export default function KitabhWebsiteBuilder(props: any) {
       case "brands_ticker": return { speed: 30, items: [] };
       case "divider": return {};
       case "rich_text": return { html: "<h2>عنوان القسم</h2>\n<p>هذا نص تجريبي يمكنك تعديله. يدعم <strong>النص العريض</strong> و<em>المائل</em> والعناوين والقوائم.</p>\n<ul>\n<li>العنصر الأول</li>\n<li>العنصر الثاني</li>\n</ul>" };
+      case "social_links": return { platforms: [
+        { platform: "twitter", url: MOCK_AUTHOR.socials.twitter, enabled: true },
+        { platform: "instagram", url: MOCK_AUTHOR.socials.instagram, enabled: true },
+        { platform: "youtube", url: MOCK_AUTHOR.socials.youtube, enabled: true },
+        { platform: "linkedin", url: MOCK_AUTHOR.socials.linkedin, enabled: true },
+        { platform: "website", url: MOCK_AUTHOR.socials.website, enabled: true },
+        { platform: "tiktok", url: "", enabled: false },
+        { platform: "snapchat", url: "", enabled: false },
+        { platform: "facebook", url: "", enabled: false },
+      ] };
       case "bento_grid": return { layout: "2-1" as string, items: [
         { title: "عنوان البطاقة الأولى", text: "نص وصفي قصير للبطاقة", imageUrl: "", linkUrl: "" },
         { title: "عنوان البطاقة الثانية", text: "نص وصفي قصير للبطاقة", imageUrl: "", linkUrl: "" },
@@ -674,7 +716,7 @@ export default function KitabhWebsiteBuilder(props: any) {
     }, 100);
   };
 
-  const INSERT_TYPES: ComponentType[] = ["header", "hero_news", "hero_subscribe", "banner", "cta_newsletter", "article_collection", "brands_ticker", "testimonials", "products", "podcast", "courses", "topics", "text_block", "rich_text", "image_block", "subscribe_form", "contact_form", "divider", "footer"];
+  const INSERT_TYPES: ComponentType[] = ["header", "hero_news", "hero_subscribe", "banner", "cta_newsletter", "article_collection", "brands_ticker", "testimonials", "products", "podcast", "courses", "topics", "text_block", "rich_text", "image_block", "subscribe_form", "contact_form", "social_links", "divider", "footer"];
 
   // ─── Move component up/down ────────
   const moveComponent = (compId: string, direction: "up" | "down") => {
@@ -1304,6 +1346,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                               })}
                             </nav>
                             <div className="kwb-p-header-actions">
+                              <button className="kwb-p-login-btn" onClick={() => setShowLoginModal(true)}>الدخول</button>
                               <button className="kwb-p-subscribe-btn" style={{ background: comp.settings.buttonColor || activeSite.branding.buttonColor }} onClick={() => setShowSubscribePopup(true)}>
                                 {comp.settings.buttonText || "اشتراك"}
                               </button>
@@ -1784,12 +1827,40 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                       _inner = (
                         <div className={`kwb-p-bento kwb-p-bento-${bentoLayout}`}>
                           {bentoItems.map((item: any, i: number) => (
-                            <div key={i} className="kwb-p-bento-card" style={item.imageUrl ? { backgroundImage: `url(${item.imageUrl})`, backgroundSize: "cover", backgroundPosition: "center" } : {}}>
-                              <div className="kwb-p-bento-card-overlay">
+                            <div key={i} className={`kwb-p-bento-card kwb-p-bento-card-${item.cardSize || "square"}`}>
+                              {item.imageUrl ? (
+                                <img src={item.imageUrl} alt={item.title || ""} className="kwb-p-bento-card-img" />
+                              ) : (
+                                <div className="kwb-p-bento-card-img-placeholder" />
+                              )}
+                              <div className="kwb-p-bento-card-body">
                                 <h4 className="kwb-p-bento-title">{item.title}</h4>
                                 {item.text && <p className="kwb-p-bento-text">{item.text}</p>}
                               </div>
                             </div>
+                          ))}
+                        </div>
+                      ); break;
+                    }
+
+
+                    case "social_links": {
+                      const platforms = comp.settings.platforms || [];
+                      const socialSvgs: Record<string, string> = {
+                        twitter: '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>',
+                        instagram: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>',
+                        youtube: '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12z"/></svg>',
+                        linkedin: '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0z"/></svg>',
+                        tiktok: '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.11v-3.5a6.37 6.37 0 00-.79-.05A6.34 6.34 0 003.15 15.2a6.34 6.34 0 0010.86 4.46V13a8.26 8.26 0 005.58 2.17V11.7a4.83 4.83 0 01-3.77-1.24V6.69z"/></svg>',
+                        snapchat: '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12.206.793c.99 0 4.347.276 5.93 3.821.529 1.193.403 3.219.299 4.847l-.003.06c-.012.18-.022.345-.03.51.075.045.203.09.401.09.3-.016.659-.12.949-.25.147-.066.346-.097.5-.097.206 0 .395.054.5.162a.5.5 0 01.075.558c-.09.19-.222.33-.345.437-.39.321-.906.486-1.34.577a.8.8 0 00-.18.045c-.12.06-.18.18-.15.3.18.75.42 1.44.75 2.04.54.99 1.32 1.71 2.28 2.13.12.06.24.12.3.21a.44.44 0 01-.12.45c-.15.15-.39.27-.72.36-.45.12-.99.18-1.56.21-.15.015-.21.09-.24.15-.06.105-.09.21-.12.33l-.015.06c-.06.195-.135.42-.33.585-.225.195-.54.24-.78.24-.18 0-.36-.03-.51-.06a3.5 3.5 0 00-.75-.09c-.27 0-.54.03-.81.09-.75.18-1.38.51-2.07.9-.9.51-1.83 1.05-3.18 1.11h-.15c-1.35-.06-2.28-.6-3.18-1.11-.69-.39-1.32-.72-2.07-.9a4.3 4.3 0 00-.81-.09c-.24 0-.48.03-.75.09-.15.03-.33.06-.51.06-.24 0-.555-.045-.78-.24-.195-.165-.27-.39-.33-.585L3.1 18.6c-.03-.12-.06-.225-.12-.33-.03-.06-.09-.135-.24-.15-.57-.03-1.11-.09-1.56-.21-.33-.09-.57-.21-.72-.36a.44.44 0 01-.12-.45c.06-.09.18-.15.3-.21.96-.42 1.74-1.14 2.28-2.13.33-.6.57-1.29.75-2.04.03-.12-.03-.24-.15-.3a.8.8 0 00-.18-.045c-.435-.09-.95-.256-1.34-.577a1.16 1.16 0 01-.345-.437.5.5 0 01.075-.558c.105-.108.294-.162.5-.162.154 0 .353.031.5.097.29.13.649.234.949.25.198 0 .326-.045.401-.09a4.22 4.22 0 01-.03-.51l-.003-.06c-.104-1.628-.23-3.654.3-4.847C6.453 1.069 9.81.793 10.8.793h1.406z"/></svg>',
+                        facebook: '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>',
+                        website: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>',
+                      };
+                      const platformLabels: Record<string, string> = { twitter: "X / تويتر", instagram: "إنستغرام", youtube: "يوتيوب", linkedin: "لينكدإن", tiktok: "تيك توك", snapchat: "سناب شات", facebook: "فيسبوك", website: "الموقع" };
+                      _inner = (
+                        <div className="kwb-p-social-links">
+                          {platforms.filter((p: any) => p.enabled && p.url).map((p: any, i: number) => (
+                            <a key={i} href={p.url} target="_blank" rel="noopener noreferrer" className="kwb-p-social-icon" title={platformLabels[p.platform] || p.platform} dangerouslySetInnerHTML={{ __html: socialSvgs[p.platform] || '' }} />
                           ))}
                         </div>
                       ); break;
@@ -2091,6 +2162,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                           <button className="kwb-vis-btn" onClick={() => toggleComponent(comp.id)} title={comp.enabled ? "إخفاء" : "إظهار"}>
                             {comp.enabled ? Icons.eye : Icons.eyeOff}
                           </button>
+                          <span className="kwb-comp-icon" dangerouslySetInnerHTML={{ __html: COMPONENT_ICONS[comp.type] || '' }} />
                           <span className="kwb-comp-name" onClick={() => { if (!meta.hasSettings) return; const next = isExpanded ? null : comp.id; setExpandedComponent(next); if (next) setTimeout(() => { const el = document.querySelector(`[data-comp-id="${comp.id}"]`); if (el) el.scrollIntoView({ behavior: "smooth", block: "center" }); }, 100); }} style={meta.hasSettings ? { cursor: "pointer" } : {}}>{meta.label}</span>
                           <div className="kwb-comp-actions">
                             {meta.hasSettings && (
@@ -2555,6 +2627,22 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                               </>
                             )}
 
+
+                            {comp.type === "social_links" && (
+                              <>
+                                <label className="kwb-label">منصات التواصل</label>
+                                {(comp.settings.platforms || []).map((p: any, i: number) => (
+                                  <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, padding: "8px 0", borderBottom: "1px solid #f0f0f0" }}>
+                                    <label className="kwb-toggle" style={{ flexShrink: 0 }}>
+                                      <input type="checkbox" checked={p.enabled} onChange={() => { const platforms = [...(comp.settings.platforms || [])]; platforms[i] = { ...platforms[i], enabled: !platforms[i].enabled }; updateComponentSettings(comp.id, { platforms }); }} />
+                                      <span className="kwb-toggle-slider" />
+                                    </label>
+                                    <span style={{ fontSize: 12, fontWeight: 600, color: "#555", minWidth: 60 }}>{{ twitter: "X", instagram: "إنستغرام", youtube: "يوتيوب", linkedin: "لينكدإن", tiktok: "تيك توك", snapchat: "سناب شات", facebook: "فيسبوك", website: "الموقع" }[p.platform] || p.platform}</span>
+                                    <input className="kwb-input kwb-input-sm" placeholder="الرابط" value={p.url || ""} dir="ltr" onChange={e => { const platforms = [...(comp.settings.platforms || [])]; platforms[i] = { ...platforms[i], url: e.target.value }; updateComponentSettings(comp.id, { platforms }); }} style={{ flex: 1 }} />
+                                  </div>
+                                ))}
+                              </>
+                            )}
                             {comp.type === "bento_grid" && (
                               <>
                                 <label className="kwb-label">تخطيط الشبكة</label>
@@ -2583,6 +2671,12 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                                     <input className="kwb-input" placeholder="العنوان" value={item.title || ""} onChange={e => { const items = [...(comp.settings.items || [])]; items[i] = { ...items[i], title: e.target.value }; updateComponentSettings(comp.id, { items }); }} style={{ marginTop: 4 }} />
                                     <input className="kwb-input" placeholder="النص الوصفي" value={item.text || ""} onChange={e => { const items = [...(comp.settings.items || [])]; items[i] = { ...items[i], text: e.target.value }; updateComponentSettings(comp.id, { items }); }} style={{ marginTop: 4 }} />
                                     <input className="kwb-input" placeholder="رابط (اختياري)" value={item.linkUrl || ""} dir="ltr" onChange={e => { const items = [...(comp.settings.items || [])]; items[i] = { ...items[i], linkUrl: e.target.value }; updateComponentSettings(comp.id, { items }); }} style={{ marginTop: 4 }} />
+                                    <label className="kwb-label" style={{ marginTop: 6, marginBottom: 2 }}>حجم البطاقة</label>
+                                    <div style={{ display: "flex", gap: 4 }}>
+                                      {[{ id: "square", label: "مربّع" }, { id: "wide", label: "عريض" }, { id: "tall", label: "طويل" }].map(sz => (
+                                        <button key={sz.id} className={`kwb-logo-layout-btn ${(item.cardSize || "square") === sz.id ? "kwb-logo-layout-active" : ""}`} style={{ flex: 1, padding: "6px 4px" }} onClick={() => { const items = [...(comp.settings.items || [])]; items[i] = { ...items[i], cardSize: sz.id }; updateComponentSettings(comp.id, { items }); }}>{sz.label}</button>
+                                      ))}
+                                    </div>
                                     {item.imageUrl ? (
                                       <div className="kwb-upload-preview" style={{ marginTop: 4 }}><img src={item.imageUrl} alt="" /><button className="kwb-upload-remove" onClick={() => { const items = [...(comp.settings.items || [])]; items[i] = { ...items[i], imageUrl: "" }; updateComponentSettings(comp.id, { items }); }}>{Icons.x}</button></div>
                                     ) : (
@@ -2640,52 +2734,10 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                               تعديل المكونات
                             </button>
 
-                            {/* SEO Meta Settings */}
-                            <div className="kwb-seo-section">
-                              <div className="kwb-seo-header">تحسين محركات البحث (SEO)</div>
-                              <div className="kwb-field-row">
-                                <label className="kwb-label-inline">عنوان الصفحة (Meta Title)</label>
-                                <input className="kwb-input kwb-input-sm" value={p.seo?.metaTitle || ""} placeholder={p.name + " — " + activeSite.name} onChange={e => { const pages = activeSite.pages.map(pg => pg.id === p.id ? { ...pg, seo: { ...pg.seo, metaTitle: e.target.value } } : pg); updateSite(activeSite.id, { pages }); }} />
-                                <span className="kwb-char-count">{(p.seo?.metaTitle || "").length}/60</span>
-                              </div>
-                              <div className="kwb-field-row">
-                                <label className="kwb-label-inline">الوصف (Meta Description)</label>
-                                <textarea className="kwb-input kwb-input-sm" style={{ height: 60, paddingTop: 8, resize: "vertical" }} value={p.seo?.metaDescription || ""} placeholder="وصف موجز للصفحة يظهر في نتائج البحث" onChange={e => { const pages = activeSite.pages.map(pg => pg.id === p.id ? { ...pg, seo: { ...pg.seo, metaDescription: e.target.value } } : pg); updateSite(activeSite.id, { pages }); }} />
-                                <span className="kwb-char-count">{(p.seo?.metaDescription || "").length}/160</span>
-                              </div>
-                              <div className="kwb-field-row">
-                                <label className="kwb-label-inline">صورة المشاركة (OG Image)</label>
-                                <input className="kwb-input kwb-input-sm" value={p.seo?.ogImage || ""} dir="ltr" placeholder="https://example.com/image.jpg" onChange={e => { const pages = activeSite.pages.map(pg => pg.id === p.id ? { ...pg, seo: { ...pg.seo, ogImage: e.target.value } } : pg); updateSite(activeSite.id, { pages }); }} />
-                              </div>
-
-                              {/* Google Preview */}
-                              <div className="kwb-seo-preview">
-                                <div className="kwb-seo-preview-label">معاينة نتيجة البحث</div>
-                                <div className="kwb-seo-google-preview" dir="ltr">
-                                  <div className="kwb-seo-gp-url">
-                                    <span className="kwb-seo-gp-favicon">K</span>
-                                    {activeSite.customDomain || "example.com"} › {p.slug}
-                                  </div>
-                                  <div className="kwb-seo-gp-title">{p.seo?.metaTitle || p.name + " — " + activeSite.name}</div>
-                                  <div className="kwb-seo-gp-desc">{p.seo?.metaDescription || "وصف الصفحة يظهر هنا. أضف وصفا مخصصا لتحسين ظهور صفحتك في نتائج البحث."}</div>
-                                </div>
-                              </div>
-
-                              {/* Social Share Preview */}
-                              <div className="kwb-seo-preview" style={{ marginTop: 8 }}>
-                                <div className="kwb-seo-preview-label">معاينة المشاركة في السوشال</div>
-                                <div className="kwb-seo-social-preview">
-                                  <div className="kwb-seo-sp-image" style={p.seo?.ogImage ? { backgroundImage: `url(${p.seo.ogImage})`, backgroundSize: "cover", backgroundPosition: "center" } : {}}>
-                                    {!p.seo?.ogImage && <span style={{ fontSize: 11, color: "#999" }}>لم تُحدد صورة</span>}
-                                  </div>
-                                  <div className="kwb-seo-sp-text">
-                                    <div className="kwb-seo-sp-domain">{activeSite.customDomain || "example.com"}</div>
-                                    <div className="kwb-seo-sp-title">{p.seo?.metaTitle || p.name}</div>
-                                    <div className="kwb-seo-sp-desc">{(p.seo?.metaDescription || "").slice(0, 80) || "أضف وصفا..."}</div>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
+                            <button className="kwb-btn-outline kwb-btn-full" style={{ marginTop: 8, fontSize: 12 }} onClick={() => setShowSeoModal(p.id)}>
+                              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                              إعدادات SEO
+                            </button>
                           </div>
                         )}
                       </div>
@@ -2720,7 +2772,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                 {showAddComponent && (
                   <div className="kwb-add-comp-dropdown">
                     <div className="kwb-add-comp-cards">
-                      {(["header","hero_news","hero_subscribe","bento_grid","banner","cta_newsletter","article_collection","brands_ticker","testimonials","products","podcast","courses","topics","text_block","rich_text","image_block","subscribe_form","contact_form","divider","footer"] as ComponentType[]).map(type => (
+                      {(["header","hero_news","hero_subscribe","bento_grid","banner","cta_newsletter","article_collection","brands_ticker","testimonials","products","podcast","courses","topics","text_block","rich_text","image_block","subscribe_form","contact_form","social_links","divider","footer"] as ComponentType[]).map(type => (
                         <button key={type} className="kwb-add-comp-card" onClick={() => { addComponentToPage(type); setShowAddComponent(false); }}>
                           <div className="kwb-add-comp-mini">
                             <div className={`kwb-mc-auto kwb-mc-${type.replace(/_/g,"-")}`} />
@@ -2832,6 +2884,68 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
         )}
 
       </div>
+
+      {/* ─── Login Modal ─── */}
+      {showLoginModal && activeSite && (
+        <div className="kwb-subscribe-overlay" onClick={() => setShowLoginModal(false)}>
+          <div className="kwb-login-popup" onClick={e => e.stopPropagation()} style={{ fontFamily: `'${activeSite.branding.fontFamily}', system-ui, sans-serif` }}>
+            <button className="kwb-subscribe-popup-close" onClick={() => setShowLoginModal(false)}>{Icons.x}</button>
+            <div className="kwb-subscribe-popup-icon" style={{ background: activeSite.branding.buttonColor || "#E82222" }}>
+              {activeSite.branding.logoUrl ? <img src={activeSite.branding.logoUrl} alt="" style={{ width: 32, height: 32, objectFit: "contain" }} /> : (activeSite.branding.siteName?.charAt(0) || "ك")}
+            </div>
+            <div className="kwb-login-tabs">
+              <button className={`kwb-login-tab ${loginTab === "signin" ? "kwb-login-tab-active" : ""}`} style={loginTab === "signin" ? { borderColor: activeSite.branding.buttonColor || "#E82222", color: activeSite.branding.buttonColor || "#E82222" } : {}} onClick={() => setLoginTab("signin")}>تسجيل الدخول</button>
+              <button className={`kwb-login-tab ${loginTab === "signup" ? "kwb-login-tab-active" : ""}`} style={loginTab === "signup" ? { borderColor: activeSite.branding.buttonColor || "#E82222", color: activeSite.branding.buttonColor || "#E82222" } : {}} onClick={() => setLoginTab("signup")}>إنشاء حساب</button>
+            </div>
+            <form className="kwb-login-form" onSubmit={e => { e.preventDefault(); const fd = new FormData(e.currentTarget); console.log(loginTab === "signin" ? "Sign in:" : "Sign up:", Object.fromEntries(fd)); alert(loginTab === "signin" ? "تسجيل الدخول - سيتم الربط مع kitabh.com" : "تم إنشاء الحساب - سيتم الربط مع kitabh.com"); e.currentTarget.reset(); setShowLoginModal(false); }}>
+              {loginTab === "signup" && <input name="name" placeholder="الاسم الكامل" className="kwb-login-input" required autoComplete="name" style={{ borderRadius: `var(--kwb-radius, 8px)` }} />}
+              <input name="email" type="email" placeholder="البريد الإلكتروني" className="kwb-login-input" required autoComplete="email" style={{ borderRadius: `var(--kwb-radius, 8px)` }} />
+              <input name="password" type="password" placeholder="كلمة المرور" className="kwb-login-input" required autoComplete={loginTab === "signin" ? "current-password" : "new-password"} style={{ borderRadius: `var(--kwb-radius, 8px)` }} />
+              <button type="submit" className="kwb-login-submit" style={{ background: activeSite.branding.buttonColor || "#E82222", borderRadius: `var(--kwb-radius, 8px)` }}>
+                {loginTab === "signin" ? "دخول" : "إنشاء حساب"}
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* ─── SEO Modal ─── */}
+      {showSeoModal && activeSite && (() => {
+        const p = activeSite.pages.find(pg => pg.id === showSeoModal);
+        if (!p) return null;
+        return (
+          <div className="kwb-overlay" onClick={() => setShowSeoModal(null)}>
+            <div className="kwb-modal" onClick={e => e.stopPropagation()}>
+              <div className="kwb-modal-header">
+                <h2>إعدادات SEO — {p.name}</h2>
+                <button className="kwb-btn-icon" onClick={() => setShowSeoModal(null)}>{Icons.x}</button>
+              </div>
+              <div className="kwb-modal-body">
+                <label className="kwb-label">عنوان الصفحة (Meta Title)</label>
+                <input className="kwb-input" value={p.seo?.metaTitle || ""} placeholder={p.name + " — " + activeSite.name} onChange={e => { const pages = activeSite.pages.map(pg => pg.id === p.id ? { ...pg, seo: { ...pg.seo, metaTitle: e.target.value } } : pg); updateSite(activeSite.id, { pages }); }} />
+                <span className="kwb-char-count">{(p.seo?.metaTitle || "").length}/60</span>
+                <label className="kwb-label">الوصف (Meta Description)</label>
+                <textarea className="kwb-input" style={{ height: 80, paddingTop: 10, resize: "vertical" }} value={p.seo?.metaDescription || ""} placeholder="وصف موجز للصفحة يظهر في نتائج البحث" onChange={e => { const pages = activeSite.pages.map(pg => pg.id === p.id ? { ...pg, seo: { ...pg.seo, metaDescription: e.target.value } } : pg); updateSite(activeSite.id, { pages }); }} />
+                <span className="kwb-char-count">{(p.seo?.metaDescription || "").length}/160</span>
+                <label className="kwb-label">صورة المشاركة (OG Image)</label>
+                <input className="kwb-input" value={p.seo?.ogImage || ""} dir="ltr" placeholder="https://example.com/image.jpg" onChange={e => { const pages = activeSite.pages.map(pg => pg.id === p.id ? { ...pg, seo: { ...pg.seo, ogImage: e.target.value } } : pg); updateSite(activeSite.id, { pages }); }} />
+                <div className="kwb-seo-preview" style={{ marginTop: 16 }}>
+                  <div className="kwb-seo-preview-label">معاينة نتيجة البحث</div>
+                  <div className="kwb-seo-google-preview" dir="ltr">
+                    <div className="kwb-seo-gp-url"><span className="kwb-seo-gp-favicon">K</span>{activeSite.customDomain || "example.com"} &rsaquo; {p.slug}</div>
+                    <div className="kwb-seo-gp-title">{p.seo?.metaTitle || p.name + " — " + activeSite.name}</div>
+                    <div className="kwb-seo-gp-desc">{p.seo?.metaDescription || "وصف الصفحة يظهر هنا."}</div>
+                  </div>
+                </div>
+              </div>
+              <div className="kwb-modal-footer">
+                <button className="kwb-btn-primary kwb-btn-full" onClick={() => setShowSeoModal(null)}>تم</button>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+
       {/* ─── Subscribe Popup (portal-style, fixed overlay) ─── */}
       {showSubscribePopup && activeSite && (
         <div className="kwb-subscribe-overlay" onClick={() => setShowSubscribePopup(false)}>
@@ -2972,12 +3086,12 @@ const CSS_STYLES = `
 .kwb-p-header-inner{display:flex;flex-direction:row;align-items:center;gap:20px;direction:rtl;justify-content:space-between;padding:12px 16px;max-width:100%;}
 .kwb-p-logo-wrap{display:flex;align-items:center;gap:8px;flex-shrink:0;}
 .kwb-p-logo-img{height:28px;width:auto;object-fit:contain;display:block;}
-.kwb-p-logo{font-size:15px;font-weight:800;color:var(--kwb-headline-color,#1a1a1a);white-space:nowrap;letter-spacing:-0.3px;}
+.kwb-p-logo{font-size:18px;font-weight:800;color:var(--kwb-headline-color,#1a1a1a);white-space:nowrap;letter-spacing:-0.3px;}
 .kwb-p-nav{display:flex;gap:20px;flex:1;justify-content:flex-start;}
-.kwb-p-nav-link{font-size:13px;color:var(--kwb-text-color,#666);cursor:pointer;white-space:nowrap;font-weight:500;}
+.kwb-p-nav-link{font-size:16px;color:var(--kwb-text-color,#666);cursor:pointer;white-space:nowrap;font-weight:500;}
 .kwb-p-nav-link:hover{color:var(--kwb-headline-color,#1a1a1a);}
 .kwb-p-nav-link-active{color:var(--kwb-headline-color,#1a1a1a)!important;font-weight:700;}
-.kwb-p-subscribe-btn{padding:0 24px;height:46px;border:none;border-radius:0;color:#fff;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;}
+.kwb-p-subscribe-btn{padding:0 24px;height:46px;border:none;border-radius:0;color:#fff;font-family:inherit;font-size:16px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;}
 .kwb-p-darkmode-btn{width:28px;height:28px;border:1px solid rgba(128,128,128,0.2);background:transparent;font-size:14px;cursor:default;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:var(--kwb-text-color,#666);}
 
 /* Hero News Grid */
@@ -2985,19 +3099,19 @@ const CSS_STYLES = `
 .kwb-p-hero-side{display:flex;flex-direction:column;gap:1px;background:rgba(128,128,128,0.2);}
 .kwb-p-hero-side-card{background:var(--kwb-card-bg,#fff);padding:14px;display:flex;flex-direction:column;gap:6px;flex:1;}
 .kwb-p-hero-side-img{width:100%;height:220px;background:rgba(128,128,128,0.15);}
-.kwb-p-hero-side-card h4{font-size:11px;font-weight:700;margin:0;line-height:1.5;color:var(--kwb-headline-color,#1a1a1a);}
+.kwb-p-hero-side-card h4{font-size:14px;font-weight:700;margin:0;line-height:1.5;color:var(--kwb-headline-color,#1a1a1a);}
 .kwb-p-hero-date{font-size:10px;color:var(--kwb-text-color,#999);opacity:0.7;}
 .kwb-p-hero-main{background:var(--kwb-card-bg,#fff);padding:16px;display:flex;flex-direction:column;gap:8px;}
 .kwb-p-hero-main-img{width:100%;height:100%;min-height:200px;background:rgba(128,128,128,0.15);}
-.kwb-p-hero-main-title{font-size:16px;font-weight:800;margin:0;line-height:1.5;color:var(--kwb-headline-color,#1a1a1a);}
-.kwb-p-hero-main-excerpt{font-size:12px;color:var(--kwb-text-color,#666);margin:0;line-height:1.7;}
+.kwb-p-hero-main-title{font-size:24px;font-weight:800;margin:0;line-height:1.5;color:var(--kwb-headline-color,#1a1a1a);}
+.kwb-p-hero-main-excerpt{font-size:15px;color:var(--kwb-text-color,#666);margin:0;line-height:1.7;}
 .kwb-p-hero-meta{display:flex;justify-content:space-between;font-size:10px;color:var(--kwb-text-color,#999);opacity:0.7;}
 .kwb-p-hero-engagement{display:flex;gap:10px;align-items:center;}
 .kwb-p-hero-engagement span{display:flex;align-items:center;gap:3px;}
 
 /* Brands Ticker */
 .kwb-p-ticker{overflow:hidden;border-top:2px solid var(--kwb-headline-color,#1a1a1a);border-bottom:2px solid var(--kwb-headline-color,#1a1a1a);padding:20px 0;}
-.kwb-p-ticker-inner{display:flex;gap:24px;white-space:nowrap;font-size:48px;font-weight:900;color:var(--kwb-headline-color,#1a1a1a);animation:kwbTickerScroll 30s linear infinite;align-items:center;}
+.kwb-p-ticker-inner{display:flex;gap:24px;white-space:nowrap;font-size:52px;font-weight:900;color:var(--kwb-headline-color,#1a1a1a);animation:kwbTickerScroll 30s linear infinite;align-items:center;}
 .kwb-p-ticker-headline{text-align:center;font-size:16px;font-weight:700;color:var(--kwb-headline-color,#1a1a1a);margin:0 0 12px;padding:0 16px;}
 .kwb-p-ticker-brand{display:flex;align-items:center;gap:12px;flex-shrink:0;}
 .kwb-p-ticker-logo{height:40px;width:auto;max-width:120px;object-fit:contain;}
@@ -3009,16 +3123,16 @@ const CSS_STYLES = `
 .kwb-p-cta-inner{display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;}
 .kwb-p-cta-text{display:flex;align-items:center;gap:12px;}
 .kwb-p-cta-logo{width:40px;height:40px;border-radius:50%;background:var(--kwb-headline-color,#1a1a1a);color:var(--kwb-bg,#fff);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;flex-shrink:0;}
-.kwb-p-cta h3{font-size:14px;font-weight:700;margin:0;color:var(--kwb-headline-color,#1a1a1a);}
-.kwb-p-cta p{font-size:12px;color:var(--kwb-text-color,#888);margin:2px 0 0;}
+.kwb-p-cta h3{font-size:18px;font-weight:700;margin:0;color:var(--kwb-headline-color,#1a1a1a);}
+.kwb-p-cta p{font-size:15px;color:var(--kwb-text-color,#888);margin:2px 0 0;}
 .kwb-p-cta-form{display:flex;gap:0;flex:1;min-width:250px;}
 .kwb-p-email-input{flex:1;height:48px;padding:0 18px;border:1px solid rgba(128,128,128,0.3);border-right:none;font-family:inherit;font-size:15px;outline:none;background:var(--kwb-card-bg,#fff);color:var(--kwb-text-color,#333);min-width:180px;direction:rtl;}
 .kwb-p-email-input::placeholder{color:var(--kwb-text-color,#bbb);opacity:0.5;}
 
 /* Hero Subscribe */
 .kwb-p-hero-sub{padding:56px 16px;text-align:center;background:var(--kwb-card-bg,#f5f5f5);}
-.kwb-p-hero-sub h2{font-size:22px;font-weight:800;margin:0 0 8px;color:var(--kwb-headline-color,#1a1a1a);}
-.kwb-p-hero-sub p{font-size:14px;color:var(--kwb-text-color,#666);margin:0 0 24px;}
+.kwb-p-hero-sub h2{font-size:36px;font-weight:800;margin:0 0 8px;color:var(--kwb-headline-color,#1a1a1a);}
+.kwb-p-hero-sub p{font-size:18px;color:var(--kwb-text-color,#666);margin:0 0 24px;}
 .kwb-p-hero-sub-form{display:flex;gap:0;max-width:400px;margin:0 auto;}
 
 /* Article Collection */
@@ -3027,15 +3141,15 @@ const CSS_STYLES = `
 .kwb-p-article-card{display:flex;flex-direction:column;gap:6px;cursor:pointer;transition:transform .15s,box-shadow .15s;border-radius:12px;padding:8px;margin:-8px;}
 .kwb-p-article-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.08);}
 .kwb-p-article-img{width:100%;height:240px;background:rgba(128,128,128,0.15);}
-.kwb-p-article-title{font-size:12px;font-weight:700;margin:0;line-height:1.5;color:var(--kwb-headline-color,#1a1a1a);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
-.kwb-p-article-excerpt{font-size:10px;color:var(--kwb-text-color,#888);opacity:0.8;margin:0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.kwb-p-article-title{font-size:15px;font-weight:700;margin:0;line-height:1.5;color:var(--kwb-headline-color,#1a1a1a);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+.kwb-p-article-excerpt{font-size:13px;color:var(--kwb-text-color,#888);opacity:0.8;margin:0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
 .kwb-p-article-author-row{display:flex;align-items:center;gap:6px;margin-top:2px;}
-.kwb-p-article-avatar{width:18px;height:18px;border-radius:50%;background:rgba(128,128,128,0.15);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:8px;color:var(--kwb-text-color,#888);flex-shrink:0;}
-.kwb-p-article-author-name{font-size:10px;font-weight:600;color:var(--kwb-text-color,#555);}
+.kwb-p-article-avatar{width:24px;height:24px;border-radius:50%;background:rgba(128,128,128,0.15);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:10px;color:var(--kwb-text-color,#888);flex-shrink:0;}
+.kwb-p-article-author-name{font-size:13px;font-weight:600;color:var(--kwb-text-color,#555);}
 .kwb-p-article-engagement{display:flex;gap:8px;align-items:center;}
 .kwb-p-article-engagement span{display:flex;align-items:center;gap:2px;}
 .kwb-p-hero-card-footer{display:flex;flex-direction:column;gap:4px;margin-top:auto;}
-.kwb-p-article-meta{display:flex;justify-content:space-between;font-size:10px;color:var(--kwb-text-color,#999);opacity:0.7;align-items:center;}
+.kwb-p-article-meta{display:flex;justify-content:space-between;font-size:12px;color:var(--kwb-text-color,#999);opacity:0.7;align-items:center;}
 .kwb-p-article-meta span{display:flex;align-items:center;gap:3px;}
 .kwb-p-all-articles{display:block;margin-top:16px;font-size:13px;color:var(--kwb-headline-color,#1a1a1a);font-weight:600;text-decoration:none;}
 
@@ -3050,7 +3164,7 @@ const CSS_STYLES = `
 .kwb-p-footer{background:var(--kwb-headline-color,#1a1a1a);color:var(--kwb-bg,#fff);padding:40px 16px 0;}
 .kwb-p-footer-inner{display:flex;gap:40px;flex-wrap:wrap;}
 .kwb-p-footer-logo-col{flex:1;min-width:150px;}
-.kwb-p-footer-logo{font-size:48px;font-weight:900;line-height:1.1;display:block;}
+.kwb-p-footer-logo{font-size:42px;font-weight:900;line-height:1.1;display:block;}
 .kwb-p-footer-logo-img{height:60px;width:auto;object-fit:contain;display:block;margin-bottom:8px;}
 .kwb-p-footer-right{flex:1;min-width:250px;}
 .kwb-p-footer-tagline{font-size:12px;color:var(--kwb-bg,#fff);opacity:0.6;margin:0 0 14px;}
@@ -3066,19 +3180,19 @@ const CSS_STYLES = `
 .kwb-p-article-view{padding:0;}
 .kwb-p-av-header{padding:28px 16px 16px;}
 .kwb-p-av-category{font-size:12px;font-weight:700;color:var(--kwb-btn-color,#E82222);text-transform:uppercase;letter-spacing:0.5px;}
-.kwb-p-av-title{font-size:22px;font-weight:900;line-height:1.4;margin:8px 0 16px;color:var(--kwb-headline-color,#1a1a1a);}
+.kwb-p-av-title{font-size:32px;font-weight:900;line-height:1.4;margin:8px 0 16px;color:var(--kwb-headline-color,#1a1a1a);}
 .kwb-p-av-meta{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;}
 .kwb-p-av-author{display:flex;align-items:center;gap:10px;}
 .kwb-p-av-avatar{width:36px;height:36px;border-radius:50%;background:rgba(128,128,128,0.15);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:var(--kwb-text-color,#888);flex-shrink:0;}
-.kwb-p-av-author-name{font-size:13px;font-weight:700;color:var(--kwb-headline-color,#1a1a1a);display:block;}
+.kwb-p-av-author-name{font-size:16px;font-weight:700;color:var(--kwb-headline-color,#1a1a1a);display:block;}
 .kwb-p-av-date{font-size:11px;color:var(--kwb-text-color,#999);opacity:0.7;display:block;margin-top:1px;}
 .kwb-p-av-actions{display:flex;gap:12px;align-items:center;font-size:12px;color:var(--kwb-text-color,#999);opacity:0.7;}
 .kwb-p-av-actions span{display:flex;align-items:center;gap:3px;cursor:pointer;}
 .kwb-p-av-actions span:hover{color:var(--kwb-headline-color,#1a1a1a);opacity:1;}
 .kwb-p-av-cover{width:100%;height:240px;background:rgba(128,128,128,0.15);}
 .kwb-p-av-body{padding:24px 16px;max-width:600px;margin:0 auto;}
-.kwb-p-av-body p{font-size:14px;line-height:1.9;color:var(--kwb-text-color,#333);margin:0 0 16px;}
-.kwb-p-av-body h3{font-size:17px;font-weight:800;color:var(--kwb-headline-color,#1a1a1a);margin:24px 0 12px;}
+.kwb-p-av-body p{font-size:17px;line-height:1.9;color:var(--kwb-text-color,#333);margin:0 0 16px;}
+.kwb-p-av-body h3{font-size:22px;font-weight:800;color:var(--kwb-headline-color,#1a1a1a);margin:24px 0 12px;}
 .kwb-p-av-quote{border-right:3px solid var(--kwb-btn-color,#E82222);padding:12px 16px;margin:20px 0;background:var(--kwb-card-bg,#fafafa);font-size:14px;font-style:italic;color:var(--kwb-text-color,#555);line-height:1.8;}
 .kwb-p-av-footer-actions{padding:16px 16px 24px;border-top:1px solid rgba(128,128,128,0.15);}
 .kwb-p-av-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;}
@@ -3088,7 +3202,7 @@ const CSS_STYLES = `
 
 /* Text Block */
 .kwb-p-text-block{padding:20px 16px;max-width:700px;margin:0 auto;}
-.kwb-p-text-block p{font-size:14px;line-height:1.9;color:var(--kwb-text-color,#333);margin:0;white-space:pre-wrap;}
+.kwb-p-text-block p{font-size:17px;line-height:1.9;color:var(--kwb-text-color,#333);margin:0;white-space:pre-wrap;}
 /* Image Block */
 .kwb-p-image-block{padding:20px 16px;}
 .kwb-p-image-full{width:100%;display:block;}
@@ -3096,11 +3210,11 @@ const CSS_STYLES = `
 .kwb-p-image-caption{font-size:12px;color:var(--kwb-text-color,#999);opacity:0.7;text-align:center;margin:8px 0 0;}
 /* Subscribe Form */
 .kwb-p-subscribe-form{padding:40px 16px;text-align:center;background:var(--kwb-card-bg,#f5f5f5);}
-.kwb-p-subscribe-form h3{font-size:16px;font-weight:700;margin:0 0 16px;color:var(--kwb-headline-color,#1a1a1a);}
+.kwb-p-subscribe-form h3{font-size:22px;font-weight:700;margin:0 0 16px;color:var(--kwb-headline-color,#1a1a1a);}
 .kwb-p-sf-row{display:flex;gap:0;max-width:400px;margin:0 auto;}
 /* Contact Form */
 .kwb-p-contact-form{padding:40px 16px;max-width:500px;margin:0 auto;}
-.kwb-p-contact-form h3{font-size:16px;font-weight:700;margin:0 0 16px;color:var(--kwb-headline-color,#1a1a1a);text-align:center;}
+.kwb-p-contact-form h3{font-size:22px;font-weight:700;margin:0 0 16px;color:var(--kwb-headline-color,#1a1a1a);text-align:center;}
 .kwb-p-cf-fields{display:flex;flex-direction:column;gap:10px;}
 .kwb-p-cf-input{width:100%;height:42px;padding:0 14px;border:1px solid rgba(128,128,128,0.3);font-family:inherit;font-size:13px;outline:none;background:var(--kwb-card-bg,#fff);color:var(--kwb-text-color,#333);direction:rtl;}
 .kwb-p-cf-textarea{width:100%;padding:10px 14px;border:1px solid rgba(128,128,128,0.3);font-family:inherit;font-size:13px;outline:none;background:var(--kwb-card-bg,#fff);color:var(--kwb-text-color,#333);direction:rtl;resize:vertical;}
@@ -3110,7 +3224,7 @@ const CSS_STYLES = `
 
 /* Rich Text */
 .kwb-p-rich-text{padding:20px 16px;max-width:700px;margin:0 auto;}
-.kwb-p-rich-text-content{color:var(--kwb-text-color,#333);line-height:1.9;font-size:14px;}
+.kwb-p-rich-text-content{color:var(--kwb-text-color,#333);line-height:1.9;font-size:17px;}
 .kwb-p-rich-text-content h1,.kwb-p-rich-text-content h2,.kwb-p-rich-text-content h3{color:var(--kwb-headline-color,#1a1a1a);margin:20px 0 10px;font-weight:800;}
 .kwb-p-rich-text-content h1{font-size:24px;}.kwb-p-rich-text-content h2{font-size:20px;}.kwb-p-rich-text-content h3{font-size:17px;}
 .kwb-p-rich-text-content p{margin:0 0 12px;}
@@ -3155,14 +3269,14 @@ const CSS_STYLES = `
 
 /* Section shared */
 .kwb-p-section{padding:24px 16px;}
-.kwb-p-section-title{font-size:16px;font-weight:800;margin:0 0 16px;color:var(--kwb-headline-color,#1a1a1a);}
+.kwb-p-section-title{font-size:22px;font-weight:800;margin:0 0 16px;color:var(--kwb-headline-color,#1a1a1a);}
 
 /* Testimonials */
 .kwb-p-testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
 .kwb-p-testi-list{display:flex;flex-direction:column;gap:12px;}
 .kwb-p-testi-card{background:var(--kwb-card-bg,#f8f8f8);padding:16px;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;border:1px solid rgba(128,128,128,0.1);}
 .kwb-p-testi-avatar{width:36px;height:36px;border-radius:50%;background:rgba(128,128,128,0.15);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;color:var(--kwb-text-color,#888);}
-.kwb-p-testi-text{font-size:12px;color:var(--kwb-text-color,#555);line-height:1.7;margin:0;font-style:italic;}
+.kwb-p-testi-text{font-size:15px;color:var(--kwb-text-color,#555);line-height:1.7;margin:0;font-style:italic;}
 .kwb-p-testi-name{font-size:12px;font-weight:700;color:var(--kwb-headline-color,#1a1a1a);}
 .kwb-p-testi-role{font-size:10px;color:var(--kwb-text-color,#999);opacity:0.7;}
 
@@ -3207,7 +3321,7 @@ const CSS_STYLES = `
 .kwb-p-placeholder{padding:32px;background:var(--kwb-card-bg,#f8f8f8);border:2px dashed rgba(128,128,128,0.2);text-align:center;color:var(--kwb-text-color,#bbb);opacity:0.5;font-size:14px;font-weight:600;}
 
 /* ─── SIDEBAR ─── */
-.kwb-sidebar{width:340px;background:#fff;border-left:1px solid #E8E8E8;display:flex;flex-direction:column;flex-shrink:0;overflow:hidden;}
+.kwb-sidebar{width:380px;background:#fff;border-left:1px solid #E8E8E8;display:flex;flex-direction:column;flex-shrink:0;overflow:hidden;}
 .kwb-sidebar-top-btns-col{display:flex;flex-direction:column;gap:8px;padding:12px 16px 0;}
 .kwb-back-builder-btn{display:flex;align-items:center;gap:4px;border:none;background:none;font-family:inherit;font-size:13px;font-weight:500;color:#999;cursor:pointer;padding:0;transition:color .15s;}
 .kwb-back-builder-btn:hover{color:#371D12;}
@@ -3216,10 +3330,10 @@ const CSS_STYLES = `
 .kwb-stab{flex:1;padding:10px 0;border:none;background:none;font-family:inherit;font-size:13px;font-weight:600;color:#999;cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;}
 .kwb-stab:hover{color:#371D12;}
 .kwb-stab-active{color:#371D12;border-bottom-color:#371D12;}
-.kwb-sidebar-body{flex:1;overflow-y:auto;padding:16px;}
+.kwb-sidebar-body{flex:1;overflow-y:auto;padding:20px;}
 
 /* Sidebar sections */
-.kwb-sb-branding,.kwb-sb-components,.kwb-sb-pages{display:flex;flex-direction:column;gap:8px;}
+.kwb-sb-branding,.kwb-sb-components,.kwb-sb-pages{display:flex;flex-direction:column;gap:12px;}
 .kwb-upload-area,.kwb-upload-area-sm{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;border:2px dashed #E0E0E0;border-radius:10px;color:#CCC;font-size:13px;cursor:pointer;}
 .kwb-upload-area{padding:24px;}
 .kwb-upload-area-sm{padding:16px;}
@@ -3282,7 +3396,7 @@ const CSS_STYLES = `
 .kwb-icon-btn-sm:hover{background:#f0f0f0;color:#333;}
 
 /* Component row */
-.kwb-comp-row{border:1.5px solid #F0F0F0;border-radius:10px;overflow:hidden;margin-bottom:4px;transition:all .15s;}
+.kwb-comp-row{border:1.5px solid #F0F0F0;border-radius:10px;overflow:hidden;margin-bottom:6px;transition:all .15s;}
 .kwb-comp-row:hover{border-color:#E0E0E0;}
 .kwb-comp-row-disabled{opacity:0.45;}
 .kwb-comp-row-active{border-color:#0000FF;background:#F5F5FF;box-shadow:0 0 0 1px rgba(0,0,255,0.1);}
@@ -3301,7 +3415,7 @@ const CSS_STYLES = `
 .kwb-upload-remove{position:absolute;top:4px;left:4px;width:22px;height:22px;border-radius:50%;border:none;background:rgba(0,0,0,0.5);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;}
 .kwb-upload-remove svg{width:10px;height:10px;}
 .kwb-page-actions{display:flex;gap:2px;align-items:center;}
-.kwb-comp-settings{padding:0 12px 12px;border-top:1px solid #F0F0F0;margin-top:4px;padding-top:12px;animation:kwbSlideIn .15s ease-out;}
+.kwb-comp-settings{padding:0 16px 16px;border-top:1px solid #F0F0F0;margin-top:4px;padding-top:12px;animation:kwbSlideIn .15s ease-out;}
 @keyframes kwbSlideIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
 
 /* Add component */
@@ -3558,13 +3672,9 @@ const CSS_STYLES = `
 .kwb-p-bento-4-grid{grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;}
 .kwb-p-bento-card{min-height:120px;background:var(--kwb-card-bg,#f5f5f5);border:1px solid rgba(128,128,128,0.15);display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden;position:relative;transition:transform .15s,box-shadow .15s;}
 .kwb-p-bento-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.08);}
-.kwb-p-bento-card-overlay{padding:16px;background:linear-gradient(to top,rgba(0,0,0,0.6) 0%,transparent 100%);position:relative;z-index:1;}
-.kwb-p-bento-card[style*="background-image"] .kwb-p-bento-card-overlay{color:#fff;}
-.kwb-p-bento-card:not([style*="background-image"]) .kwb-p-bento-card-overlay{background:none;}
-.kwb-p-bento-title{font-size:14px;font-weight:700;margin:0;line-height:1.4;color:var(--kwb-headline-color,#1a1a1a);}
-.kwb-p-bento-card[style*="background-image"] .kwb-p-bento-title{color:#fff;}
+
+.kwb-p-bento-title{font-size:16px;font-weight:700;margin:0;line-height:1.4;color:var(--kwb-headline-color,#1a1a1a);}
 .kwb-p-bento-text{font-size:11px;margin:4px 0 0;opacity:0.8;color:var(--kwb-text-color,#666);}
-.kwb-p-bento-card[style*="background-image"] .kwb-p-bento-text{color:#fff;}
 .kwb-bento-layouts{display:flex;flex-direction:column;gap:4px;}
 .kwb-bento-layout-btn{display:flex;flex-direction:column;padding:8px 12px;border:1.5px solid #E8E8E8;border-radius:8px;background:#fff;cursor:pointer;transition:all .15s;text-align:right;font-family:inherit;}
 .kwb-bento-layout-btn:hover{border-color:#BBB;}
@@ -3602,6 +3712,46 @@ const CSS_STYLES = `
 /* ─── Editable field ─── */
 .kwb-p-editable{cursor:text;outline:none;}
 .kwb-p-editable:focus{outline:2px dashed var(--kwb-btn-color,#E82222);outline-offset:2px;}
+
+
+/* ─── Login Button ─── */
+.kwb-p-login-btn{padding:0 16px;height:46px;border:1.5px solid var(--kwb-btn-color,#E82222);background:transparent;color:var(--kwb-btn-color,#E82222);font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all .15s;border-radius:var(--kwb-radius,0);}
+.kwb-p-login-btn:hover{background:var(--kwb-btn-color,#E82222);color:#fff;}
+
+/* ─── Login Modal ─── */
+.kwb-login-popup{position:relative;background:#fff;border-radius:16px;padding:36px 32px;max-width:400px;width:90%;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.3);animation:kwbPopupIn .2s ease-out;direction:rtl;}
+.kwb-login-tabs{display:flex;gap:0;margin:20px 0 16px;border-bottom:1.5px solid #E8E8E8;}
+.kwb-login-tab{flex:1;padding:10px 0;border:none;background:none;font-family:inherit;font-size:15px;font-weight:600;color:#999;cursor:pointer;border-bottom:2px solid transparent;transition:all .15s;}
+.kwb-login-tab-active{color:#E82222;border-bottom-color:#E82222;}
+.kwb-login-form{display:flex;flex-direction:column;gap:12px;}
+.kwb-login-input{width:100%;height:48px;padding:0 16px;border:1.5px solid #E0E0E0;border-radius:10px;font-family:inherit;font-size:15px;outline:none;direction:rtl;text-align:right;background:#F8F8F8;}
+.kwb-login-input:focus{border-color:#999;background:#fff;}
+.kwb-login-submit{width:100%;height:48px;border:none;border-radius:10px;color:#fff;font-family:inherit;font-size:16px;font-weight:700;cursor:pointer;transition:opacity .15s;}
+.kwb-login-submit:hover{opacity:0.9;}
+
+/* ─── Component Icons ─── */
+.kwb-comp-icon{width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#999;opacity:0.7;}
+.kwb-comp-row-active .kwb-comp-icon{color:#0000FF;opacity:1;}
+
+/* ─── Social Links ─── */
+.kwb-p-social-links{display:flex;gap:12px;justify-content:center;padding:20px 16px;flex-wrap:wrap;}
+.kwb-p-social-icon{width:44px;height:44px;display:flex;align-items:center;justify-content:center;color:var(--kwb-text-color,#666);border:1.5px solid rgba(128,128,128,0.2);transition:all .15s;text-decoration:none;border-radius:var(--kwb-radius,0);}
+.kwb-p-social-icon:hover{color:var(--kwb-btn-color,#E82222);border-color:var(--kwb-btn-color,#E82222);transform:translateY(-2px);}
+
+/* ─── Bento Card Fix (image on top) ─── */
+.kwb-p-bento-card{display:flex;flex-direction:column;justify-content:flex-start;overflow:hidden;}
+.kwb-p-bento-card-img{width:100%;height:140px;object-fit:cover;display:block;}
+.kwb-p-bento-card-img-placeholder{width:100%;height:140px;background:rgba(128,128,128,0.12);}
+.kwb-p-bento-card-body{padding:14px 16px;display:flex;flex-direction:column;gap:4px;}
+.kwb-p-bento-card-wide{grid-column:span 2;}
+.kwb-p-bento-card-tall{grid-row:span 2;}
+.kwb-p-bento-card-tall .kwb-p-bento-card-img,.kwb-p-bento-card-tall .kwb-p-bento-card-img-placeholder{height:200px;}
+.kwb-p-bento-card-wide .kwb-p-bento-card-img,.kwb-p-bento-card-wide .kwb-p-bento-card-img-placeholder{height:120px;}
+.kwb-preview-mobile .kwb-p-bento-card-wide,.kwb-preview-mobile .kwb-p-bento-card-tall{grid-column:auto;grid-row:auto;}
+
+/* Social mini preview */
+.kwb-mc-social-links{display:flex;gap:3px;justify-content:center;align-items:center;padding:4px;}
+.kwb-mc-social-links::before,.kwb-mc-social-links::after{content:'';width:10px;height:10px;border-radius:50%;border:1.5px solid #ccc;}
 
 /* ─── RESPONSIVE ─── */
 @media(max-width:900px){
