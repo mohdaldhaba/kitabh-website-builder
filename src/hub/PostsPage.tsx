@@ -12,7 +12,7 @@ interface PostsPageProps {
 const statusConfig: Record<string, { label: string; bg: string; color: string }> = {
   published: { label: 'منشور', bg: '#ECFDF5', color: '#059669' },
   draft: { label: 'مسودة', bg: '#374151', color: '#FFFFFF' },
-  scheduled: { label: 'مجدول', bg: '#EEF2FF', color: '#4F46E5' },
+  scheduled: { label: 'مجدول', bg: '#F3F4F6', color: '#374151' },
   archived: { label: 'مؤرشف', bg: '#F3F4F6', color: '#6B7280' },
 };
 

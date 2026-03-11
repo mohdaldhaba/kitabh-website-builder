@@ -19,7 +19,7 @@ const typeIcons: Record<string, React.ReactNode> = {
 
 const typeColors: Record<string, string> = {
   subscriber: '#059669',
-  comment: '#4F46E5',
+  comment: '#374151',
   milestone: '#D97706',
   publish: '#111',
 };

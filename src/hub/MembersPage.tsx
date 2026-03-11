@@ -9,7 +9,7 @@ const mockMembers = [
 
 const roleColors: Record<string, { bg: string; color: string }> = {
   'مالك': { bg: '#111', color: '#fff' },
-  'محرر': { bg: '#EEF2FF', color: '#4F46E5' },
+  'محرر': { bg: '#F3F4F6', color: '#374151' },
   'كاتب': { bg: '#ECFDF5', color: '#059669' },
 };
 
