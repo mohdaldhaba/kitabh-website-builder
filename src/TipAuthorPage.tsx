@@ -55,21 +55,8 @@ const TEA_OPTIONS = [
   { id: 'large', amount: 100, image: '/images/tea-large.png', size: 52 },
 ]
 
-const COFFEE_MESSAGES = [
-  'خلف كل نص جميل... كاتب يحتاج قهوة',
-  'هذا الكاتب يكتب بلا مقابل. قهوتك تقول له: كمّل',
-  'فنجان قهوة منك = ابتسامة كاتب + نص جديد على الطريق',
-  'قهوتك تتحول لكلمات — وكلماته تتحول لقهوة الصباح',
-  'الكتابة الحلوة تبدأ بقهوة من قارئ يقدّر',
-]
-
-const TEA_MESSAGES = [
-  'خلف كل نص جميل... كاتب يحتاج كوب شاي',
-  'هذا الكاتب يكتب بلا مقابل. شايك يقول له: كمّل',
-  'كوب شاي منك = ابتسامة كاتب + نص جديد على الطريق',
-  'شايك يتحول لكلمات — وكلماته تتحول لشاي العصر',
-  'الكتابة الحلوة تبدأ بشاي من قارئ يقدّر',
-]
+const COFFEE_MESSAGE = 'هذا الكاتب يحب القهوة .. بإمكانك التكّفل بفنجانه القادم ليكتب أكثر'
+const TEA_MESSAGE = 'هذا الكاتب يحب الشاي .. بإمكانك التكفّل بكوبه القادم ليكتب أكثر'
 
 const DEMO_AUTHOR = {
   id: 'author_hawas55',
@@ -157,7 +144,6 @@ const TipAuthorPage: React.FC = () => {
   const [submitted, setSubmitted] = useState(false)
   const [isCustom, setIsCustom] = useState(false)
   const [customAmount, setCustomAmount] = useState('')
-  const [randomMessage, setRandomMessage] = useState(0)
   const customInputRef = useRef<HTMLInputElement>(null)
 
   // Author settings (in production these come from the author's profile)
@@ -168,7 +154,7 @@ const TipAuthorPage: React.FC = () => {
   // Drink type is determined by author preference, not visitor
   const isTea = authorPrefersTea
   const options = isTea ? TEA_OPTIONS : COFFEE_OPTIONS
-  const messages = isTea ? TEA_MESSAGES : COFFEE_MESSAGES
+  const message = isTea ? TEA_MESSAGE : COFFEE_MESSAGE
 
   useEffect(() => {
     const style = document.createElement('style')
@@ -178,7 +164,6 @@ const TipAuthorPage: React.FC = () => {
   }, [])
 
   const openDialog = () => {
-    setRandomMessage(Math.floor(Math.random() * messages.length))
     setDialogOpen(true)
     // Record popup opened
     recordInteraction({
@@ -441,7 +426,7 @@ const TipAuthorPage: React.FC = () => {
 
                 {/* Toggle: show/hide tip button */}
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '10px' }}>
-                  <span style={{ fontSize: '13px', color: '#475569' }}>إظهار زر الدعم في ملفي</span>
+                  <span style={{ fontSize: '13px', color: '#475569' }}>إظهار زر الدعم على صفحتي</span>
                   <button
                     onClick={() => setAuthorTipEnabled(!authorTipEnabled)}
                     style={{
@@ -496,7 +481,7 @@ const TipAuthorPage: React.FC = () => {
                 textAlign: 'center' as const, animation: 'fadeIn 0.2s ease',
               }}>
                 <div style={{ fontSize: '14px', fontWeight: 600, color: '#DC2626' }}>
-                  ميزة الدعم معطّلة حالياً
+                  ميزة الدعم معطّلة حاليًا
                 </div>
                 <div style={{ fontSize: '13px', color: '#991B1B', marginTop: '4px', lineHeight: 1.7 }}>
                   فعّلها من الإعدادات (⚙️) لتظهر للقرّاء
@@ -517,12 +502,12 @@ const TipAuthorPage: React.FC = () => {
                     }}
                   />
                   <div style={{ fontSize: '18px', fontWeight: 600, color: '#1E293B' }}>
-                    هل تودّ دعم {DEMO_AUTHOR.name} ليستمر في الكتابة؟
+                    هل تريد دعم {DEMO_AUTHOR.name} ليكتب أكثر؟
                   </div>
                   <div style={{
                     fontSize: '14px', color: '#64748B', marginTop: '10px', lineHeight: 1.8,
                   }}>
-                    {messages[randomMessage]}
+                    {message}
                   </div>
                 </div>
 
@@ -670,7 +655,7 @@ const TipAuthorPage: React.FC = () => {
                       boxShadow: (isCustom && (!customAmount || Number(customAmount) <= 0)) ? 'none' : '0 2px 8px rgba(0, 0, 255, 0.25)',
                     }}
                   >
-                    أرغب بدعم هذا الكاتب
+                    {isTea ? 'شاي الكاتب عليّ' : 'قهوة الكاتب عليّ'}
                   </button>
                 </div>
 
@@ -693,11 +678,10 @@ const TipAuthorPage: React.FC = () => {
                   alt="" style={{ width: '56px', height: '56px', objectFit: 'contain' as const }}
                 />
                 <div style={{ fontSize: '20px', fontWeight: 600, color: '#1E293B', marginTop: '4px' }}>
-                  شكراً لمشاركتك رأيك!
+                  شكرًا لمشاركتك معنا وإظهار نيتك لدعم الكاتب.
                 </div>
                 <div style={{ fontSize: '15px', color: '#64748B', lineHeight: 1.8, maxWidth: '300px' }}>
-                  لم يتم خصم أي مبلغ — هذا مجرد استطلاع.
-                  سنستخدم رأيك لنقرر هل نطلق ميزة الدعم على المنصة.
+                  سنعمل على دراسة الفكرة بعد انتهاء التجربة وسنعلن على قنواتنا عن أيّ تحديثات قادمة.
                 </div>
                 <button
                   onClick={handleClose}
@@ -710,7 +694,7 @@ const TipAuthorPage: React.FC = () => {
                   onMouseEnter={(e) => (e.currentTarget.style.background = '#F8FAFC')}
                   onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
                 >
-                  تمام
+                  حسنًا
                 </button>
               </div>
             )}
