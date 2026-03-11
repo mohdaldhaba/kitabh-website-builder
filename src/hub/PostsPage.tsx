@@ -179,64 +179,72 @@ const ArticlesList: React.FC<{ defaultFilter?: FilterStatus }> = ({ defaultFilte
   };
 
   return (
-    <div style={{ maxWidth: 1100, margin: '0 auto' }}>
-      {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
+    <div>
+      {/* Page header — Beehiiv style: title + subtitle + buttons */}
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 24 }}>
         <div>
+          <h1 style={{ fontSize: 24, fontWeight: 700, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 6px' }}>
+            المنشورات
+          </h1>
           <p style={{ fontSize: 14, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: 0 }}>
             عرض وتعديل المنشورات الحالية وإنشاء منشورات جديدة
           </p>
         </div>
-        <button
-          style={{
-            padding: '10px 20px',
-            background: '#111',
-            color: '#fff',
-            border: 'none',
-            borderRadius: 8,
-            fontSize: 14,
-            fontWeight: 600,
-            fontFamily: 'IBM Plex Sans Arabic, sans-serif',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 8,
-          }}
-        >
-          {icons.write}
-          ابدأ بالكتابة
-        </button>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <button
+            style={{
+              padding: '9px 16px',
+              background: '#fff',
+              color: colors.text,
+              border: '1px solid #E5E7EB',
+              borderRadius: 8,
+              fontSize: 14,
+              fontWeight: 500,
+              fontFamily: 'IBM Plex Sans Arabic, sans-serif',
+              cursor: 'pointer',
+            }}
+          >
+            إدارة التصنيفات
+          </button>
+          <button
+            style={{
+              padding: '9px 16px',
+              background: colors.primary,
+              color: '#fff',
+              border: 'none',
+              borderRadius: 8,
+              fontSize: 14,
+              fontWeight: 600,
+              fontFamily: 'IBM Plex Sans Arabic, sans-serif',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 6,
+            }}
+          >
+            {icons.write}
+            ابدأ بالكتابة
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="6 9 12 15 18 9" /></svg>
+          </button>
+        </div>
       </div>
 
-      {/* Filters bar */}
-      <div
-        style={{
-          background: '#fff',
-          borderRadius: 12,
-          border: '1px solid #E5E7EB',
-          padding: '16px 20px',
-          marginBottom: 16,
-          display: 'flex',
-          alignItems: 'center',
-          gap: 12,
-          flexWrap: 'wrap',
-        }}
-      >
-        {/* Search */}
+      {/* Search bar row — Beehiiv style */}
+      <div style={{ display: 'flex', gap: 10, marginBottom: 16, alignItems: 'center' }}>
+        {/* Search input */}
         <div
           style={{
+            flex: 1,
             display: 'flex',
             alignItems: 'center',
             gap: 8,
-            background: '#F9FAFB',
-            borderRadius: 8,
-            padding: '8px 12px',
-            flex: 1,
-            minWidth: 200,
+            padding: '9px 14px',
             border: '1px solid #E5E7EB',
+            borderRadius: 8,
+            background: '#fff',
           }}
         >
-          <span style={{ opacity: 0.4 }}>{icons.search}</span>
+          <span style={{ color: '#9CA3AF', display: 'flex' }}>{icons.search}</span>
           <input
             type="text"
             placeholder="ابحث في المنشورات..."
@@ -255,45 +263,37 @@ const ArticlesList: React.FC<{ defaultFilter?: FilterStatus }> = ({ defaultFilte
           />
         </div>
 
-        {/* Status filter tabs */}
-        <div style={{ display: 'flex', gap: 4, background: '#F3F4F6', borderRadius: 8, padding: 3 }}>
-          {([
-            { value: 'all', label: 'الكل' },
-            { value: 'published', label: 'منشور' },
-            { value: 'draft', label: 'مسودة' },
-            { value: 'scheduled', label: 'مجدول' },
-          ] as { value: FilterStatus; label: string }[]).map((tab) => (
-            <button
-              key={tab.value}
-              onClick={() => setFilter(tab.value)}
-              style={{
-                padding: '6px 14px',
-                background: filter === tab.value ? '#fff' : 'transparent',
-                border: 'none',
-                borderRadius: 6,
-                fontSize: 13,
-                fontWeight: filter === tab.value ? 600 : 400,
-                fontFamily: 'IBM Plex Sans Arabic, sans-serif',
-                color: filter === tab.value ? colors.text : colors.textMuted,
-                cursor: 'pointer',
-                boxShadow: filter === tab.value ? '0 1px 2px rgba(0,0,0,0.06)' : 'none',
-                transition: 'all 0.15s',
-              }}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
+        {/* Filters button */}
+        <button
+          style={{
+            padding: '9px 16px',
+            background: '#fff',
+            border: '1px solid #E5E7EB',
+            borderRadius: 8,
+            fontSize: 14,
+            fontWeight: 500,
+            fontFamily: 'IBM Plex Sans Arabic, sans-serif',
+            color: colors.text,
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 6,
+            whiteSpace: 'nowrap',
+          }}
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="4" y1="21" x2="4" y2="14" /><line x1="4" y1="10" x2="4" y2="3" /><line x1="12" y1="21" x2="12" y2="12" /><line x1="12" y1="8" x2="12" y2="3" /><line x1="20" y1="21" x2="20" y2="16" /><line x1="20" y1="12" x2="20" y2="3" /><line x1="1" y1="14" x2="7" y2="14" /><line x1="9" y1="8" x2="15" y2="8" /><line x1="17" y1="16" x2="23" y2="16" /></svg>
+          فلاتر
+        </button>
 
-        {/* Sort */}
+        {/* Sort dropdown */}
         <select
           value={sort}
           onChange={(e) => setSort(e.target.value as SortBy)}
           style={{
-            padding: '8px 12px',
+            padding: '9px 14px',
             border: '1px solid #E5E7EB',
             borderRadius: 8,
-            fontSize: 13,
+            fontSize: 14,
             fontFamily: 'IBM Plex Sans Arabic, sans-serif',
             color: colors.text,
             background: '#fff',
@@ -307,128 +307,117 @@ const ArticlesList: React.FC<{ defaultFilter?: FilterStatus }> = ({ defaultFilte
         </select>
       </div>
 
-      {/* Count */}
-      <div style={{ fontSize: 13, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif', marginBottom: 12, paddingRight: 4 }}>
-        عرض {filtered.length} من {allArticles.length} منشور
+      {/* Count row */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 0, padding: '10px 0', borderBottom: '1px solid #E5E7EB' }}>
+        <input type="checkbox" style={{ width: 16, height: 16, cursor: 'pointer' }} />
+        <span style={{ fontSize: 13, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>
+          عرض {filtered.length} من {allArticles.length} منشور
+        </span>
       </div>
 
-      {/* Posts list */}
-      <div style={{ background: '#fff', borderRadius: 14, border: '1px solid #E5E7EB', overflow: 'hidden' }}>
-        {filtered.map((article, index) => {
-          const status = statusConfig[article.status] || statusConfig.draft;
-          return (
-            <div
-              key={article._id}
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                padding: '16px 20px',
-                borderBottom: index < filtered.length - 1 ? '1px solid #F3F4F6' : 'none',
-                gap: 16,
-                cursor: 'pointer',
-                transition: 'background 0.15s',
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = '#FAFAFA')}
-              onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
-            >
-              {/* Checkbox */}
-              <input
-                type="checkbox"
-                style={{ width: 16, height: 16, accentColor: '#111', cursor: 'pointer', flexShrink: 0 }}
-                onClick={(e) => e.stopPropagation()}
-              />
+      {/* Post rows — flat list, no card wrapper, just borders */}
+      {filtered.map((article, index) => {
+        const status = statusConfig[article.status] || statusConfig.draft;
+        return (
+          <div
+            key={article._id}
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              padding: '18px 0',
+              borderBottom: '1px solid #E5E7EB',
+              gap: 14,
+              cursor: 'pointer',
+            }}
+          >
+            {/* Checkbox */}
+            <input
+              type="checkbox"
+              style={{ width: 16, height: 16, cursor: 'pointer', flexShrink: 0 }}
+              onClick={(e) => e.stopPropagation()}
+            />
 
-              {/* Title + meta */}
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div
+            {/* Title + meta */}
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div
+                style={{
+                  fontSize: 15,
+                  fontWeight: 500,
+                  color: colors.text,
+                  fontFamily: 'IBM Plex Sans Arabic, sans-serif',
+                  marginBottom: 6,
+                }}
+              >
+                {article.title}
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                <span
                   style={{
-                    fontSize: 15,
+                    padding: '2px 8px',
+                    borderRadius: 4,
+                    background: status.bg,
+                    color: status.color,
+                    fontSize: 12,
                     fontWeight: 600,
-                    color: colors.text,
                     fontFamily: 'IBM Plex Sans Arabic, sans-serif',
-                    marginBottom: 4,
-                    whiteSpace: 'nowrap',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
                   }}
                 >
-                  {article.title}
+                  {status.label}
+                </span>
+                <span style={{ color: '#D1D5DB', fontSize: 12 }}>&#x2022;</span>
+                <div
+                  style={{
+                    width: 20,
+                    height: 20,
+                    borderRadius: '50%',
+                    background: '#10B981',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: 10,
+                    fontWeight: 700,
+                    color: '#fff',
+                    flexShrink: 0,
+                  }}
+                >
+                  ك
                 </div>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                  <span
-                    style={{
-                      padding: '2px 8px',
-                      borderRadius: 10,
-                      background: status.bg,
-                      color: status.color,
-                      fontSize: 11,
-                      fontWeight: 600,
-                      fontFamily: 'IBM Plex Sans Arabic, sans-serif',
-                    }}
-                  >
-                    {status.label}
-                  </span>
-                  <span style={{ fontSize: 12, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>
-                    آخر تعديل: {formatDate(article.updatedAt)}
-                  </span>
-                </div>
+                <span style={{ fontSize: 13, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>
+                  آخر تعديل {formatDate(article.updatedAt)}
+                </span>
               </div>
-
-              {/* Stats (only for published) */}
-              {article.status === 'published' && (
-                <div style={{ display: 'flex', gap: 20, flexShrink: 0 }}>
-                  <div style={{ textAlign: 'center' }}>
-                    <div style={{ fontSize: 14, fontWeight: 600, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>
-                      {article.views.toLocaleString('en')}
-                    </div>
-                    <div style={{ fontSize: 11, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>مشاهدة</div>
-                  </div>
-                  <div style={{ textAlign: 'center' }}>
-                    <div style={{ fontSize: 14, fontWeight: 600, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>
-                      {article.emailStats.openRate}%
-                    </div>
-                    <div style={{ fontSize: 11, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>فتح</div>
-                  </div>
-                  <div style={{ textAlign: 'center' }}>
-                    <div style={{ fontSize: 14, fontWeight: 600, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>
-                      {article.commentCount}
-                    </div>
-                    <div style={{ fontSize: 11, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>تعليق</div>
-                  </div>
-                </div>
-              )}
-
-              {/* Three-dot menu */}
-              <button
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  cursor: 'pointer',
-                  padding: 4,
-                  fontSize: 18,
-                  color: colors.textMuted,
-                  lineHeight: 1,
-                  flexShrink: 0,
-                }}
-                onClick={(e) => e.stopPropagation()}
-              >
-                &#x22EE;
-              </button>
             </div>
-          );
-        })}
 
-        {filtered.length === 0 && (
-          <div style={{ padding: 60, textAlign: 'center' }}>
-            <div style={{ fontSize: 16, fontWeight: 600, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', marginBottom: 8 }}>
-              لا توجد منشورات
-            </div>
-            <div style={{ fontSize: 14, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>
-              ابدأ بكتابة أول منشور لك
-            </div>
+            {/* Three-dot menu */}
+            <button
+              style={{
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                padding: 8,
+                fontSize: 18,
+                color: '#9CA3AF',
+                lineHeight: 1,
+                flexShrink: 0,
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              &#x22EE;
+            </button>
           </div>
-        )}
-      </div>
+        );
+      })}
+
+      {filtered.length === 0 && (
+        <div style={{ padding: 60, textAlign: 'center' }}>
+          <div style={{ fontSize: 16, fontWeight: 600, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', marginBottom: 8 }}>
+            لا توجد منشورات
+          </div>
+          <div style={{ fontSize: 14, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>
+            ابدأ بكتابة أول منشور لك
+          </div>
+        </div>
+      )}
     </div>
   );
 };

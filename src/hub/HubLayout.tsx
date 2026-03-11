@@ -147,23 +147,24 @@ const navItems: NavItem[] = [
   { id: 'email-journeys', label: 'رحلات البريد', icon: icons.emailJourney, comingSoon: true },
 ];
 
-// ─── Styles ──────────────────────────────────────────────
+// ─── Styles — matched to Beehiiv exactly ─────────────────
 const colors = {
   sidebarBg: '#FFFFFF',
   sidebarBorder: '#E5E7EB',
-  activeItem: '#F3F4F6',
-  activeText: '#111827',
+  activeItem: '#EEF2FF',
+  activeText: '#312E81',
   text: '#111827',
   textMuted: '#6B7280',
   white: '#FFFFFF',
-  primary: '#111827',
-  primaryHover: '#1F2937',
+  primary: '#312E81',
+  primaryHover: '#3730A3',
   topBarBg: '#FFFFFF',
   topBarBorder: '#E5E7EB',
-  contentBg: '#F9FAFB',
+  contentBg: '#FFFFFF',
   hoverBg: '#F9FAFB',
   border: '#E5E7EB',
   cardBg: '#FFFFFF',
+  accent: '#E11D48',
 };
 
 const pageTitles: Record<Page, string> = {
@@ -211,46 +212,46 @@ const HubLayout: React.FC<HubLayoutProps> = ({ children, activePage, activeSubPa
   const sidebarContent = (
     <>
       {/* Logo / Newsletter Name */}
-      <div style={{ padding: '20px 20px 16px', borderBottom: `1px solid ${colors.sidebarBorder}` }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+      <div style={{ padding: '14px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
           <div
             style={{
-              width: 36,
-              height: 36,
-              borderRadius: 8,
-              background: colors.primary,
+              width: 28,
+              height: 28,
+              borderRadius: '50%',
+              background: '#E5E7EB',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: '#fff',
+              fontSize: 12,
               fontWeight: 700,
-              fontSize: 16,
+              color: colors.text,
               fontFamily: 'IBM Plex Sans Arabic, sans-serif',
             }}
           >
             ك
           </div>
-          <div>
-            <div style={{ fontWeight: 700, fontSize: 15, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>
-              رسالة السبت
-            </div>
-            <div style={{ fontSize: 12, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>
-              kitabh.com/mohdaldhabaa
-            </div>
-          </div>
+          <span style={{ fontWeight: 600, fontSize: 14, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>
+            نشرة رسالة السبت
+          </span>
         </div>
+        <button
+          style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, color: colors.textMuted, display: 'flex', alignItems: 'center' }}
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="15 18 9 12 15 6" /></svg>
+        </button>
       </div>
 
       {/* Start Writing Button */}
-      <div style={{ padding: '16px 16px 8px' }}>
+      <div style={{ padding: '8px 12px 4px' }}>
         <button
           style={{
             width: '100%',
-            padding: '11px 16px',
-            background: '#111',
+            padding: '9px 14px',
+            background: colors.primary,
             color: '#fff',
             border: 'none',
-            borderRadius: 10,
+            borderRadius: 8,
             fontSize: 14,
             fontWeight: 600,
             fontFamily: 'IBM Plex Sans Arabic, sans-serif',
@@ -259,7 +260,7 @@ const HubLayout: React.FC<HubLayoutProps> = ({ children, activePage, activeSubPa
             alignItems: 'center',
             justifyContent: 'center',
             gap: 8,
-            transition: 'background 0.2s',
+            transition: 'background 0.15s',
           }}
           onMouseEnter={(e) => (e.currentTarget.style.background = colors.primaryHover)}
           onMouseLeave={(e) => (e.currentTarget.style.background = colors.primary)}
@@ -267,11 +268,12 @@ const HubLayout: React.FC<HubLayoutProps> = ({ children, activePage, activeSubPa
         >
           {icons.write}
           ابدأ بالكتابة
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polyline points="6 9 12 15 18 9" /></svg>
         </button>
       </div>
 
       {/* Navigation */}
-      <nav style={{ padding: '8px 12px', flex: 1, overflowY: 'auto' }}>
+      <nav style={{ padding: '8px 8px', flex: 1, overflowY: 'auto' }}>
         {navItems.map((item) => {
           const isActive = activePage === item.id;
           const isExpanded = expandedItems.has(item.id);
@@ -279,7 +281,7 @@ const HubLayout: React.FC<HubLayoutProps> = ({ children, activePage, activeSubPa
           const isComingSoon = item.comingSoon;
 
           return (
-            <div key={item.id} style={{ marginBottom: 2 }}>
+            <div key={item.id} style={{ marginBottom: 1 }}>
               <button
                 onClick={() => {
                   if (isComingSoon) return;
@@ -296,19 +298,19 @@ const HubLayout: React.FC<HubLayoutProps> = ({ children, activePage, activeSubPa
                 }}
                 style={{
                   width: '100%',
-                  padding: '10px 12px',
+                  padding: '8px 12px',
                   background: isActive && !isComingSoon ? colors.activeItem : 'transparent',
                   color: isComingSoon ? '#C0C0C0' : isActive ? colors.activeText : colors.text,
                   border: 'none',
-                  borderRadius: 8,
+                  borderRadius: 6,
                   fontSize: 14,
-                  fontWeight: isActive && !isComingSoon ? 600 : 500,
+                  fontWeight: isActive && !isComingSoon ? 600 : 400,
                   fontFamily: 'IBM Plex Sans Arabic, sans-serif',
                   cursor: isComingSoon ? 'default' : 'pointer',
                   display: 'flex',
                   alignItems: 'center',
                   gap: 10,
-                  transition: 'all 0.15s',
+                  transition: 'background 0.1s',
                   textAlign: 'right',
                   opacity: isComingSoon ? 0.5 : 1,
                 }}
@@ -319,7 +321,7 @@ const HubLayout: React.FC<HubLayoutProps> = ({ children, activePage, activeSubPa
                   if (!isActive && !isComingSoon) e.currentTarget.style.background = 'transparent';
                 }}
               >
-                <span style={{ display: 'flex', alignItems: 'center', opacity: isActive ? 1 : 0.7 }}>
+                <span style={{ display: 'flex', alignItems: 'center', color: isActive ? colors.activeText : colors.textMuted }}>
                   {item.icon}
                 </span>
                 <span style={{ flex: 1, textAlign: 'right' }}>{item.label}</span>
@@ -331,7 +333,7 @@ const HubLayout: React.FC<HubLayoutProps> = ({ children, activePage, activeSubPa
                       alignItems: 'center',
                       transform: isExpanded ? 'rotate(180deg)' : 'rotate(0)',
                       transition: 'transform 0.2s',
-                      opacity: 0.5,
+                      color: colors.textMuted,
                     }}
                   >
                     {icons.chevron}
@@ -341,7 +343,7 @@ const HubLayout: React.FC<HubLayoutProps> = ({ children, activePage, activeSubPa
 
               {/* Sub-items */}
               {hasSubItems && isExpanded && !isComingSoon && (
-                <div style={{ paddingRight: 42, paddingTop: 2 }}>
+                <div style={{ paddingRight: 40, paddingTop: 2 }}>
                   {item.subItems!.map((sub) => {
                     const isSubActive = activePage === item.id && activeSubPage === sub.id;
                     const isSubComingSoon = sub.comingSoon;
@@ -355,7 +357,7 @@ const HubLayout: React.FC<HubLayoutProps> = ({ children, activePage, activeSubPa
                         }}
                         style={{
                           width: '100%',
-                          padding: '8px 12px',
+                          padding: '6px 12px',
                           background: isSubActive && !isSubComingSoon ? colors.activeItem : 'transparent',
                           color: isSubComingSoon ? '#C0C0C0' : isSubActive ? colors.activeText : colors.textMuted,
                           border: 'none',
@@ -365,7 +367,7 @@ const HubLayout: React.FC<HubLayoutProps> = ({ children, activePage, activeSubPa
                           fontFamily: 'IBM Plex Sans Arabic, sans-serif',
                           cursor: isSubComingSoon ? 'default' : 'pointer',
                           textAlign: 'right',
-                          transition: 'all 0.15s',
+                          transition: 'background 0.1s',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'space-between',
@@ -391,25 +393,28 @@ const HubLayout: React.FC<HubLayoutProps> = ({ children, activePage, activeSubPa
         })}
       </nav>
 
-      {/* Bottom: Settings, Help, Logout */}
-      <div style={{ borderTop: `1px solid ${colors.sidebarBorder}`, padding: '12px 16px' }}>
-        {/* Plan info */}
-        <div style={{ marginBottom: 12, padding: '10px 12px', background: '#F9FAFB', borderRadius: 10, border: `1px solid ${colors.border}` }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
+      {/* Bottom: Plan + Settings */}
+      <div style={{ padding: '12px 12px' }}>
+        {/* Plan info — Beehiiv style */}
+        <div style={{ marginBottom: 8 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
             <span style={{ fontSize: 13, fontWeight: 600, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>
               خطة الأعمال
             </span>
             <button
               style={{
-                padding: '3px 10px',
-                background: '#F3F4F6',
-                color: '#111',
+                padding: '2px 8px',
+                background: colors.accent,
+                color: '#fff',
                 border: 'none',
-                borderRadius: 6,
+                borderRadius: 4,
                 fontSize: 11,
                 fontWeight: 600,
                 fontFamily: 'IBM Plex Sans Arabic, sans-serif',
                 cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 4,
               }}
             >
               ترقية
@@ -418,15 +423,15 @@ const HubLayout: React.FC<HubLayoutProps> = ({ children, activePage, activeSubPa
           <div style={{ fontSize: 12, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif', marginBottom: 6 }}>
             المشتركون
           </div>
-          <div style={{ height: 3, background: '#E5E7EB', borderRadius: 2, overflow: 'hidden' }}>
-            <div style={{ height: '100%', width: '38%', background: '#111', borderRadius: 2 }} />
+          <div style={{ height: 4, background: '#E5E7EB', borderRadius: 2, overflow: 'hidden' }}>
+            <div style={{ height: '100%', width: '38%', background: colors.primary, borderRadius: 2 }} />
           </div>
           <div style={{ fontSize: 11, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif', marginTop: 4 }}>
-            1,920 / 5,000 مشترك
+            0 of 2,500 مشترك
           </div>
         </div>
 
-        {/* Settings */}
+        {/* Settings — bottom nav item */}
         <button
           onClick={() => {
             onNavigate('settings', 'account');
@@ -434,79 +439,25 @@ const HubLayout: React.FC<HubLayoutProps> = ({ children, activePage, activeSubPa
           }}
           style={{
             width: '100%',
-            padding: '10px 12px',
+            padding: '8px 12px',
             background: activePage === 'settings' ? colors.activeItem : 'transparent',
             color: activePage === 'settings' ? colors.activeText : colors.text,
             border: 'none',
-            borderRadius: 8,
+            borderRadius: 6,
             fontSize: 14,
-            fontWeight: 500,
+            fontWeight: 400,
             fontFamily: 'IBM Plex Sans Arabic, sans-serif',
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
             gap: 10,
             textAlign: 'right',
-            marginBottom: 2,
           }}
+          onMouseEnter={(e) => { if (activePage !== 'settings') e.currentTarget.style.background = colors.hoverBg; }}
+          onMouseLeave={(e) => { if (activePage !== 'settings') e.currentTarget.style.background = 'transparent'; }}
         >
-          <span style={{ display: 'flex', alignItems: 'center', opacity: 0.7 }}>{icons.settings}</span>
+          <span style={{ display: 'flex', alignItems: 'center', color: colors.textMuted }}>{icons.settings}</span>
           الإعدادات
-        </button>
-
-        {/* Help */}
-        <button
-          onClick={() => {
-            window.open('https://help.kitabh.com', '_blank');
-          }}
-          style={{
-            width: '100%',
-            padding: '10px 12px',
-            background: 'transparent',
-            color: colors.text,
-            border: 'none',
-            borderRadius: 8,
-            fontSize: 14,
-            fontWeight: 500,
-            fontFamily: 'IBM Plex Sans Arabic, sans-serif',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 10,
-            textAlign: 'right',
-            marginBottom: 2,
-          }}
-          onMouseEnter={(e) => (e.currentTarget.style.background = colors.hoverBg)}
-          onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
-        >
-          <span style={{ display: 'flex', alignItems: 'center', opacity: 0.7 }}>{icons.help}</span>
-          المساعدة
-        </button>
-
-        {/* Logout */}
-        <button
-          onClick={() => console.log('Logout')}
-          style={{
-            width: '100%',
-            padding: '10px 12px',
-            background: 'transparent',
-            color: '#DC2626',
-            border: 'none',
-            borderRadius: 8,
-            fontSize: 14,
-            fontWeight: 500,
-            fontFamily: 'IBM Plex Sans Arabic, sans-serif',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 10,
-            textAlign: 'right',
-          }}
-          onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(220,38,38,0.04)')}
-          onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
-        >
-          <span style={{ display: 'flex', alignItems: 'center', opacity: 0.7 }}>{icons.logout}</span>
-          تسجيل الخروج
         </button>
       </div>
     </>
@@ -594,62 +545,47 @@ const HubLayout: React.FC<HubLayoutProps> = ({ children, activePage, activeSubPa
             {icons.menu}
           </button>
 
-          {/* Page title */}
-          <div style={{ fontWeight: 600, fontSize: 16, color: colors.text, letterSpacing: '-0.01em' }}>
-            {pageTitles[activePage] || ''}
-          </div>
+          {/* Spacer for mobile */}
+          <div style={{ flex: 1 }} />
 
-          {/* Right side actions */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          {/* Right side: text links + icons (matches Beehiiv topbar) */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
+            {/* Text links */}
+            <button
+              onClick={() => window.open('/', '_blank')}
+              style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 14, fontWeight: 400, fontFamily: 'IBM Plex Sans Arabic, sans-serif', color: colors.text, padding: 0 }}
+            >
+              عرض الموقع
+            </button>
+            <button
+              onClick={() => window.open('https://help.kitabh.com', '_blank')}
+              style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 14, fontWeight: 400, fontFamily: 'IBM Plex Sans Arabic, sans-serif', color: colors.text, padding: 0 }}
+            >
+              المساعدة
+            </button>
+
+            {/* Separator */}
+            <div style={{ width: 1, height: 20, background: '#E5E7EB' }} />
+
+            {/* Icons */}
             <button
               onClick={() => onNavigate('notifications')}
-              style={{
-                background: activePage === 'notifications' ? 'rgba(0,0,0,0.04)' : 'none',
-                border: 'none',
-                cursor: 'pointer',
-                padding: 8,
-                borderRadius: 10,
-                color: colors.textMuted,
-                display: 'flex',
-                alignItems: 'center',
-                transition: 'background 0.15s',
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(0,0,0,0.04)')}
-              onMouseLeave={(e) => {
-                if (activePage !== 'notifications') e.currentTarget.style.background = 'none';
-              }}
+              style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, color: colors.textMuted, display: 'flex', alignItems: 'center' }}
             >
               {icons.notification}
             </button>
-            <button
-              style={{
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                padding: 8,
-                borderRadius: 10,
-                color: colors.textMuted,
-                display: 'flex',
-                alignItems: 'center',
-                transition: 'background 0.15s',
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(0,0,0,0.04)')}
-              onMouseLeave={(e) => (e.currentTarget.style.background = 'none')}
-            >
-              {icons.search}
-            </button>
             <div
               style={{
-                width: 32,
-                height: 32,
+                width: 30,
+                height: 30,
                 borderRadius: '50%',
-                background: 'linear-gradient(135deg, #333 0%, #111 100%)',
+                background: '#E5E7EB',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 fontSize: 13,
                 fontWeight: 600,
-                color: '#fff',
+                color: colors.text,
                 cursor: 'pointer',
               }}
             >
@@ -659,7 +595,7 @@ const HubLayout: React.FC<HubLayoutProps> = ({ children, activePage, activeSubPa
         </header>
 
         {/* Content */}
-        <main style={{ padding: 28 }}>{children}</main>
+        <main style={{ padding: '32px 40px' }}>{children}</main>
       </div>
 
       {/* Responsive CSS */}
