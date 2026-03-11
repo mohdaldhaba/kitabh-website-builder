@@ -484,6 +484,20 @@ const TipAuthorPage: React.FC = () => {
               </div>
             )}
 
+            {/* Author test notice — shown when feature is active */}
+            {authorTipEnabled && (
+              <div style={{
+                margin: showAuthorSettings ? '12px 20px 0' : '52px 20px 0',
+                padding: '10px 14px', borderRadius: '10px',
+                background: '#EFF6FF', border: '1px solid #DBEAFE',
+                textAlign: 'center' as const, animation: 'fadeIn 0.2s ease',
+              }}>
+                <div style={{ fontSize: '13px', color: '#1D4ED8', lineHeight: 1.7 }}>
+                  هذه تجربة فقط — لا يتم تحصيل أي مبلغ من القرّاء. نختبر مدى اهتمامهم بدعمك.
+                </div>
+              </div>
+            )}
+
             {/* Deactivated banner */}
             {!authorTipEnabled && (
               <div style={{
