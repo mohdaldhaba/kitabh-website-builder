@@ -219,7 +219,7 @@ const TipAuthorPage: React.FC = () => {
         authorName: DEMO_AUTHOR.name,
         action: 'popup_closed_without_submit',
         drinkType: isTea ? 'tea' : 'coffee',
-        selectedAmount: isCustom ? (customAmount ? Number(customAmount) : null) : options[selectedIndex].amount,
+        selectedAmount: isCustom ? (customAmount ? Number(customAmount) : null) : (selectedIndex >= 0 ? options[selectedIndex]?.amount : null),
         isCustomAmount: isCustom,
         visitorId: getVisitorId(),
       })
@@ -230,6 +230,7 @@ const TipAuthorPage: React.FC = () => {
       setSelectedIndex(0)
       setIsCustom(false)
       setCustomAmount('')
+      setShowSupporters(false)
     }, 300)
   }
 
@@ -745,6 +746,7 @@ const TipAuthorPage: React.FC = () => {
                         ))}
                       </div>
                     )}
+                  </div>
                 )}
               </div>
             ) : (
