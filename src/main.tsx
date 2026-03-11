@@ -5,7 +5,11 @@ const path = window.location.pathname
 
 const root = ReactDOM.createRoot(document.getElementById('root')!)
 
-if (path === '/tip') {
+if (path === '/hub' || path.startsWith('/hub/')) {
+  import('./hub/BusinessHub').then(({ default: BusinessHub }) => {
+    root.render(<React.StrictMode><BusinessHub /></React.StrictMode>)
+  })
+} else if (path === '/tip') {
   import('./TipAuthorPage').then(({ default: TipAuthorPage }) => {
     root.render(<React.StrictMode><TipAuthorPage /></React.StrictMode>)
   })
