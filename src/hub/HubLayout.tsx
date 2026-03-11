@@ -128,19 +128,22 @@ const navItems: NavItem[] = [
 
 // ─── Styles ──────────────────────────────────────────────
 const colors = {
-  sidebarBg: '#FAFAFA',
-  sidebarBorder: '#E5E7EB',
-  activeItem: '#EEF2FF',
-  activeText: '#0000FF',
-  text: '#371D12',
-  textMuted: '#6B7280',
+  sidebarBg: 'rgba(255,255,255,0.6)',
+  sidebarBorder: 'rgba(0,0,0,0.06)',
+  activeItem: 'rgba(0,0,0,0.06)',
+  activeText: '#000000',
+  text: '#111111',
+  textMuted: '#888888',
   white: '#FFFFFF',
-  primary: '#0000FF',
-  primaryHover: '#0000CC',
-  topBarBg: '#FFFFFF',
-  topBarBorder: '#E5E7EB',
-  contentBg: '#F3F4F6',
-  hoverBg: '#F3F4F6',
+  primary: '#000000',
+  primaryHover: '#222222',
+  topBarBg: 'rgba(255,255,255,0.7)',
+  topBarBorder: 'rgba(0,0,0,0.05)',
+  contentBg: '#F5F5F7',
+  hoverBg: 'rgba(0,0,0,0.03)',
+  glass: 'rgba(255,255,255,0.55)',
+  glassBorder: 'rgba(255,255,255,0.3)',
+  glassCard: 'rgba(255,255,255,0.7)',
 };
 
 const HubLayout: React.FC<HubLayoutProps> = ({ children, activePage, activeSubPage, onNavigate }) => {
@@ -194,12 +197,12 @@ const HubLayout: React.FC<HubLayoutProps> = ({ children, activePage, activeSubPa
         <button
           style={{
             width: '100%',
-            padding: '10px 16px',
-            background: colors.primary,
+            padding: '11px 16px',
+            background: '#111',
             color: '#fff',
             border: 'none',
-            borderRadius: 8,
-            fontSize: 15,
+            borderRadius: 10,
+            fontSize: 14,
             fontWeight: 600,
             fontFamily: 'IBM Plex Sans Arabic, sans-serif',
             cursor: 'pointer',
@@ -329,7 +332,7 @@ const HubLayout: React.FC<HubLayoutProps> = ({ children, activePage, activeSubPa
       {/* Bottom: Plan & Settings */}
       <div style={{ borderTop: `1px solid ${colors.sidebarBorder}`, padding: '12px 16px' }}>
         {/* Plan info */}
-        <div style={{ marginBottom: 12, padding: '10px 12px', background: colors.white, borderRadius: 8, border: `1px solid ${colors.sidebarBorder}` }}>
+        <div style={{ marginBottom: 12, padding: '10px 12px', background: 'rgba(255,255,255,0.5)', borderRadius: 10, border: '1px solid rgba(0,0,0,0.04)' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
             <span style={{ fontSize: 13, fontWeight: 600, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>
               خطة الأعمال
@@ -337,10 +340,10 @@ const HubLayout: React.FC<HubLayoutProps> = ({ children, activePage, activeSubPa
             <button
               style={{
                 padding: '3px 10px',
-                background: `${colors.primary}15`,
-                color: colors.primary,
+                background: 'rgba(0,0,0,0.06)',
+                color: '#111',
                 border: 'none',
-                borderRadius: 4,
+                borderRadius: 6,
                 fontSize: 11,
                 fontWeight: 600,
                 fontFamily: 'IBM Plex Sans Arabic, sans-serif',
@@ -353,11 +356,11 @@ const HubLayout: React.FC<HubLayoutProps> = ({ children, activePage, activeSubPa
           <div style={{ fontSize: 12, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif', marginBottom: 6 }}>
             المشتركون
           </div>
-          <div style={{ height: 4, background: '#E5E7EB', borderRadius: 2, overflow: 'hidden' }}>
-            <div style={{ height: '100%', width: '38%', background: colors.primary, borderRadius: 2 }} />
+          <div style={{ height: 3, background: 'rgba(0,0,0,0.06)', borderRadius: 2, overflow: 'hidden' }}>
+            <div style={{ height: '100%', width: '38%', background: '#111', borderRadius: 2 }} />
           </div>
           <div style={{ fontSize: 11, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif', marginTop: 4 }}>
-            ١٬٩٢٠ من ٥٬٠٠٠ مشترك
+            1,920 / 5,000 مشترك
           </div>
         </div>
 
@@ -391,14 +394,24 @@ const HubLayout: React.FC<HubLayoutProps> = ({ children, activePage, activeSubPa
     </>
   );
 
+  const glassStyle = {
+    background: colors.glass,
+    backdropFilter: 'blur(20px) saturate(180%)',
+    WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+    border: `1px solid ${colors.glassBorder}`,
+  };
+
   return (
-    <div style={{ direction: 'rtl', display: 'flex', minHeight: '100vh', fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>
+    <div style={{ direction: 'rtl', display: 'flex', minHeight: '100vh', fontFamily: 'IBM Plex Sans Arabic, sans-serif', background: `linear-gradient(135deg, #f5f5f7 0%, #e8e8ed 50%, #f0f0f5 100%)` }}>
       {/* Desktop Sidebar */}
       <aside
         style={{
           width: 260,
-          background: colors.sidebarBg,
+          ...glassStyle,
           borderLeft: `1px solid ${colors.sidebarBorder}`,
+          borderRight: 'none',
+          borderTop: 'none',
+          borderBottom: 'none',
           display: 'flex',
           flexDirection: 'column',
           position: 'fixed',
@@ -415,7 +428,7 @@ const HubLayout: React.FC<HubLayoutProps> = ({ children, activePage, activeSubPa
       {/* Mobile overlay */}
       {mobileMenuOpen && (
         <div
-          style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)', zIndex: 49 }}
+          style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.3)', backdropFilter: 'blur(4px)', WebkitBackdropFilter: 'blur(4px)', zIndex: 49 }}
           onClick={() => setMobileMenuOpen(false)}
         />
       )}
@@ -428,12 +441,12 @@ const HubLayout: React.FC<HubLayoutProps> = ({ children, activePage, activeSubPa
           right: mobileMenuOpen ? 0 : -280,
           bottom: 0,
           width: 270,
-          background: colors.sidebarBg,
+          ...glassStyle,
           zIndex: 50,
-          transition: 'right 0.3s ease',
+          transition: 'right 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
           display: 'flex',
           flexDirection: 'column',
-          boxShadow: mobileMenuOpen ? '-4px 0 20px rgba(0,0,0,0.1)' : 'none',
+          boxShadow: mobileMenuOpen ? '-8px 0 30px rgba(0,0,0,0.08)' : 'none',
         }}
         className="hub-sidebar-mobile"
       >
@@ -441,17 +454,19 @@ const HubLayout: React.FC<HubLayoutProps> = ({ children, activePage, activeSubPa
       </aside>
 
       {/* Main content area */}
-      <div className="hub-main-content" style={{ flex: 1, marginRight: 260, minHeight: '100vh', background: colors.contentBg }}>
+      <div className="hub-main-content" style={{ flex: 1, marginRight: 260, minHeight: '100vh' }}>
         {/* Top bar */}
         <header
           style={{
             height: 56,
-            background: colors.topBarBg,
-            borderBottom: `1px solid ${colors.topBarBorder}`,
+            ...glassStyle,
+            borderLeft: 'none',
+            borderRight: 'none',
+            borderTop: 'none',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            padding: '0 24px',
+            padding: '0 28px',
             position: 'sticky',
             top: 0,
             zIndex: 30,
@@ -474,7 +489,7 @@ const HubLayout: React.FC<HubLayoutProps> = ({ children, activePage, activeSubPa
           </button>
 
           {/* Page title */}
-          <div style={{ fontWeight: 700, fontSize: 18, color: colors.text }}>
+          <div style={{ fontWeight: 600, fontSize: 16, color: colors.text, letterSpacing: '-0.01em' }}>
             {activePage === 'dashboard' && 'لوحة التحكم'}
             {activePage === 'posts' && 'المنشورات'}
             {activePage === 'audience' && 'الجمهور'}
@@ -485,18 +500,21 @@ const HubLayout: React.FC<HubLayoutProps> = ({ children, activePage, activeSubPa
           </div>
 
           {/* Right side actions */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
             <button
               style={{
                 background: 'none',
                 border: 'none',
                 cursor: 'pointer',
-                padding: 6,
-                borderRadius: 8,
+                padding: 8,
+                borderRadius: 10,
                 color: colors.textMuted,
                 display: 'flex',
                 alignItems: 'center',
+                transition: 'background 0.15s',
               }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(0,0,0,0.04)')}
+              onMouseLeave={(e) => (e.currentTarget.style.background = 'none')}
             >
               {icons.notification}
             </button>
@@ -505,12 +523,15 @@ const HubLayout: React.FC<HubLayoutProps> = ({ children, activePage, activeSubPa
                 background: 'none',
                 border: 'none',
                 cursor: 'pointer',
-                padding: 6,
-                borderRadius: 8,
+                padding: 8,
+                borderRadius: 10,
                 color: colors.textMuted,
                 display: 'flex',
                 alignItems: 'center',
+                transition: 'background 0.15s',
               }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(0,0,0,0.04)')}
+              onMouseLeave={(e) => (e.currentTarget.style.background = 'none')}
             >
               {icons.search}
             </button>
@@ -519,13 +540,13 @@ const HubLayout: React.FC<HubLayoutProps> = ({ children, activePage, activeSubPa
                 width: 32,
                 height: 32,
                 borderRadius: '50%',
-                background: '#E5E7EB',
+                background: 'linear-gradient(135deg, #333 0%, #111 100%)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                fontSize: 14,
+                fontSize: 13,
                 fontWeight: 600,
-                color: colors.text,
+                color: '#fff',
                 cursor: 'pointer',
               }}
             >
@@ -535,7 +556,7 @@ const HubLayout: React.FC<HubLayoutProps> = ({ children, activePage, activeSubPa
         </header>
 
         {/* Content */}
-        <main style={{ padding: 24 }}>{children}</main>
+        <main style={{ padding: 28 }}>{children}</main>
       </div>
 
       {/* Responsive CSS */}

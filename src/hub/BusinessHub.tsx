@@ -41,7 +41,7 @@ const BusinessHub: React.FC = () => {
             <p style={{ fontSize: 14, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 24px' }}>
               إعدادات الحساب والنشرة البريدية والموقع
             </p>
-            <div style={{ background: '#fff', borderRadius: 12, border: '1px solid #E5E7EB', padding: 40, textAlign: 'center' }}>
+            <div style={{ background: 'rgba(255,255,255,0.6)', backdropFilter: 'blur(12px)', borderRadius: 14, border: '1px solid rgba(255,255,255,0.5)', padding: 40, textAlign: 'center' }}>
               <div style={{ fontSize: 15, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>
                 صفحة الإعدادات — قريبا
               </div>

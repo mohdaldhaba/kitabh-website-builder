@@ -2273,7 +2273,8 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                             <div className="kwb-p-insert-dropdown">
                               {INSERT_TYPES.map(t => (
                                 <button key={t} className="kwb-p-insert-item" onClick={() => insertComponentAt(t, _realIdx)}>
-                                  {COMPONENT_META[t].label}
+                                  <span className="kwb-p-insert-icon" dangerouslySetInnerHTML={{ __html: COMPONENT_ICONS[t] || '' }} />
+                                  <span className="kwb-p-insert-label">{COMPONENT_META[t].label}</span>
                                 </button>
                               ))}
                             </div>

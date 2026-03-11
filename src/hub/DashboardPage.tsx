@@ -12,10 +12,13 @@ const StatCard: React.FC<{
 }> = ({ label, value, change, positive, icon }) => (
   <div
     style={{
-      background: '#fff',
-      borderRadius: 12,
+      background: 'rgba(255,255,255,0.6)',
+      backdropFilter: 'blur(12px)',
+      WebkitBackdropFilter: 'blur(12px)',
+      borderRadius: 14,
       padding: '20px 24px',
-      border: '1px solid #E5E7EB',
+      border: '1px solid rgba(255,255,255,0.5)',
+      boxShadow: '0 1px 3px rgba(0,0,0,0.04)',
       flex: 1,
       minWidth: 180,
     }}
@@ -27,7 +30,7 @@ const StatCard: React.FC<{
       <span style={{ opacity: 0.4 }}>{icon}</span>
     </div>
     <div style={{ fontSize: 28, fontWeight: 700, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', marginBottom: 4 }}>
-      {typeof value === 'number' ? value.toLocaleString('ar-SA') : value}
+      {typeof value === 'number' ? value.toLocaleString('en') : value}
     </div>
     {change && (
       <span
@@ -117,7 +120,7 @@ const ArticleRow: React.FC<{ article: typeof MOCK_ARTICLES[0] }> = ({ article })
       {/* Stats */}
       <div style={{ display: 'flex', gap: 16, flexShrink: 0 }}>
         <span style={{ fontSize: 12, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>
-          {article.views.toLocaleString('ar-SA')} مشاهدة
+          {article.views.toLocaleString('en')} مشاهدة
         </span>
         <span style={{ fontSize: 12, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>
           {article.emailStats.openRate}% فتح
@@ -140,7 +143,7 @@ const MiniChart: React.FC = () => {
           style={{
             flex: 1,
             height: `${(val / max) * 100}%`,
-            background: i === last7.length - 1 ? colors.primary : '#E0E7FF',
+            background: i === last7.length - 1 ? '#111' : 'rgba(0,0,0,0.08)',
             borderRadius: '4px 4px 0 0',
             minHeight: 8,
             transition: 'height 0.3s',
@@ -180,7 +183,7 @@ const DashboardPage: React.FC = () => {
       {/* Two columns: Recent articles + Email performance */}
       <div className="hub-dashboard-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: 20 }}>
         {/* Recent Articles */}
-        <div style={{ background: '#fff', borderRadius: 12, border: '1px solid #E5E7EB', padding: '20px 24px' }}>
+        <div style={{ background: 'rgba(255,255,255,0.6)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)', borderRadius: 14, border: '1px solid rgba(255,255,255,0.5)', padding: '20px 24px' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
             <h2 style={{ fontSize: 16, fontWeight: 700, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: 0 }}>
               آخر المنشورات
@@ -189,7 +192,7 @@ const DashboardPage: React.FC = () => {
               style={{
                 background: 'none',
                 border: 'none',
-                color: colors.primary,
+                color: '#111',
                 fontSize: 13,
                 fontWeight: 600,
                 fontFamily: 'IBM Plex Sans Arabic, sans-serif',
@@ -207,7 +210,7 @@ const DashboardPage: React.FC = () => {
         {/* Right column */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
           {/* Email Performance */}
-          <div style={{ background: '#fff', borderRadius: 12, border: '1px solid #E5E7EB', padding: '20px 24px' }}>
+          <div style={{ background: 'rgba(255,255,255,0.6)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)', borderRadius: 14, border: '1px solid rgba(255,255,255,0.5)', padding: '20px 24px' }}>
             <h2 style={{ fontSize: 16, fontWeight: 700, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 16px' }}>
               أداء النشرة البريدية
             </h2>
@@ -221,20 +224,20 @@ const DashboardPage: React.FC = () => {
               <div style={{ padding: 12, background: '#F9FAFB', borderRadius: 8 }}>
                 <div style={{ fontSize: 11, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>أُرسل</div>
                 <div style={{ fontSize: 18, fontWeight: 700, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>
-                  {MOCK_NEWSLETTER.emailStats.totalSent.toLocaleString('ar-SA')}
+                  {MOCK_NEWSLETTER.emailStats.totalSent.toLocaleString('en')}
                 </div>
               </div>
               <div style={{ padding: 12, background: '#F9FAFB', borderRadius: 8 }}>
                 <div style={{ fontSize: 11, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>تم التسليم</div>
                 <div style={{ fontSize: 18, fontWeight: 700, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>
-                  {MOCK_NEWSLETTER.emailStats.totalDelivered.toLocaleString('ar-SA')}
+                  {MOCK_NEWSLETTER.emailStats.totalDelivered.toLocaleString('en')}
                 </div>
               </div>
             </div>
           </div>
 
           {/* Quick Actions */}
-          <div style={{ background: '#fff', borderRadius: 12, border: '1px solid #E5E7EB', padding: '20px 24px' }}>
+          <div style={{ background: 'rgba(255,255,255,0.6)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)', borderRadius: 14, border: '1px solid rgba(255,255,255,0.5)', padding: '20px 24px' }}>
             <h2 style={{ fontSize: 16, fontWeight: 700, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 12px' }}>
               إجراءات سريعة
             </h2>
@@ -248,8 +251,8 @@ const DashboardPage: React.FC = () => {
                 style={{
                   width: '100%',
                   padding: '10px 14px',
-                  background: action.primary ? `${colors.primary}08` : 'transparent',
-                  border: `1px solid ${action.primary ? `${colors.primary}30` : '#E5E7EB'}`,
+                  background: action.primary ? `#11108` : 'transparent',
+                  border: `1px solid ${action.primary ? `#11130` : '#E5E7EB'}`,
                   borderRadius: 8,
                   fontSize: 14,
                   fontWeight: 500,
@@ -263,8 +266,8 @@ const DashboardPage: React.FC = () => {
                   marginBottom: 8,
                   transition: 'background 0.15s',
                 }}
-                onMouseEnter={(e) => (e.currentTarget.style.background = action.primary ? `${colors.primary}15` : '#F9FAFB')}
-                onMouseLeave={(e) => (e.currentTarget.style.background = action.primary ? `${colors.primary}08` : 'transparent')}
+                onMouseEnter={(e) => (e.currentTarget.style.background = action.primary ? `#11115` : '#F9FAFB')}
+                onMouseLeave={(e) => (e.currentTarget.style.background = action.primary ? `#11108` : 'transparent')}
               >
                 <span style={{ display: 'flex', alignItems: 'center', opacity: 0.7 }}>{action.icon}</span>
                 {action.label}

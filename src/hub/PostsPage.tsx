@@ -73,7 +73,7 @@ const PostsPage: React.FC = () => {
         <button
           style={{
             padding: '10px 20px',
-            background: colors.primary,
+            background: '#111',
             color: '#fff',
             border: 'none',
             borderRadius: 8,
@@ -96,7 +96,7 @@ const PostsPage: React.FC = () => {
         style={{
           background: '#fff',
           borderRadius: 12,
-          border: '1px solid #E5E7EB',
+          border: '1px solid rgba(255,255,255,0.5)',
           padding: '16px 20px',
           marginBottom: 16,
           display: 'flex',
@@ -116,7 +116,7 @@ const PostsPage: React.FC = () => {
             padding: '8px 12px',
             flex: 1,
             minWidth: 200,
-            border: '1px solid #E5E7EB',
+            border: '1px solid rgba(255,255,255,0.5)',
           }}
         >
           <span style={{ opacity: 0.4 }}>{icons.search}</span>
@@ -174,7 +174,7 @@ const PostsPage: React.FC = () => {
           onChange={(e) => setSort(e.target.value as SortBy)}
           style={{
             padding: '8px 12px',
-            border: '1px solid #E5E7EB',
+            border: '1px solid rgba(255,255,255,0.5)',
             borderRadius: 8,
             fontSize: 13,
             fontFamily: 'IBM Plex Sans Arabic, sans-serif',
@@ -196,7 +196,7 @@ const PostsPage: React.FC = () => {
       </div>
 
       {/* Posts list */}
-      <div style={{ background: '#fff', borderRadius: 12, border: '1px solid #E5E7EB', overflow: 'hidden' }}>
+      <div style={{ background: 'rgba(255,255,255,0.6)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)', borderRadius: 14, border: '1px solid rgba(255,255,255,0.5)', overflow: 'hidden' }}>
         {filtered.map((article, index) => {
           const status = statusConfig[article.status] || statusConfig.draft;
           return (
@@ -217,7 +217,7 @@ const PostsPage: React.FC = () => {
               {/* Checkbox */}
               <input
                 type="checkbox"
-                style={{ width: 16, height: 16, accentColor: colors.primary, cursor: 'pointer', flexShrink: 0 }}
+                style={{ width: 16, height: 16, accentColor: '#111', cursor: 'pointer', flexShrink: 0 }}
                 onClick={(e) => e.stopPropagation()}
               />
 
@@ -262,7 +262,7 @@ const PostsPage: React.FC = () => {
                 <div style={{ display: 'flex', gap: 20, flexShrink: 0 }}>
                   <div style={{ textAlign: 'center' }}>
                     <div style={{ fontSize: 14, fontWeight: 600, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>
-                      {article.views.toLocaleString('ar-SA')}
+                      {article.views.toLocaleString('en')}
                     </div>
                     <div style={{ fontSize: 11, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>مشاهدة</div>
                   </div>

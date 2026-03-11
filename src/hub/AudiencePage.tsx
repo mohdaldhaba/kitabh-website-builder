@@ -31,7 +31,7 @@ const AudiencePage: React.FC = () => {
       {/* Stats cards */}
       <div style={{ display: 'flex', gap: 16, marginBottom: 24, flexWrap: 'wrap' }}>
         {[
-          { label: 'إجمالي المشتركين', value: stats.totalSubscribers.toLocaleString('ar-SA'), icon: icons.audience },
+          { label: 'إجمالي المشتركين', value: stats.totalSubscribers.toLocaleString('en'), icon: icons.audience },
           { label: 'مشتركون جدد (هذا الشهر)', value: '١٤٣', icon: icons.grow },
           { label: 'معدل إلغاء الاشتراك', value: `${((stats.totalUnsubscribes / stats.totalSubscribers) * 100).toFixed(1)}%`, icon: icons.analyze },
           { label: 'معدل الفتح', value: `${stats.avgOpenRate}%`, icon: icons.posts },
@@ -43,7 +43,7 @@ const AudiencePage: React.FC = () => {
               minWidth: 180,
               background: '#fff',
               borderRadius: 12,
-              border: '1px solid #E5E7EB',
+              border: '1px solid rgba(255,255,255,0.5)',
               padding: '18px 20px',
             }}
           >
@@ -59,9 +59,9 @@ const AudiencePage: React.FC = () => {
       </div>
 
       {/* Subscriber list */}
-      <div style={{ background: '#fff', borderRadius: 12, border: '1px solid #E5E7EB' }}>
+      <div style={{ background: 'rgba(255,255,255,0.6)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)', borderRadius: 14, border: '1px solid rgba(255,255,255,0.5)' }}>
         {/* Tabs + actions */}
-        <div style={{ padding: '16px 20px', borderBottom: '1px solid #E5E7EB', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
+        <div style={{ padding: '16px 20px', borderBottom: '1px solid rgba(255,255,255,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
           <div style={{ display: 'flex', gap: 4, background: '#F3F4F6', borderRadius: 8, padding: 3 }}>
             {([
               { value: 'all', label: 'الكل' },
@@ -91,7 +91,7 @@ const AudiencePage: React.FC = () => {
           <button
             style={{
               padding: '8px 16px',
-              background: colors.primary,
+              background: '#111',
               color: '#fff',
               border: 'none',
               borderRadius: 8,
@@ -153,7 +153,7 @@ const AudiencePage: React.FC = () => {
                   justifyContent: 'center',
                   fontSize: 13,
                   fontWeight: 600,
-                  color: colors.primary,
+                  color: '#111',
                   flexShrink: 0,
                 }}
               >

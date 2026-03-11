@@ -15,9 +15,9 @@ const WebsitePage: React.FC = () => {
       </p>
 
       {/* Website preview card */}
-      <div style={{ background: '#fff', borderRadius: 12, border: '1px solid #E5E7EB', overflow: 'hidden', marginBottom: 20 }}>
+      <div style={{ background: 'rgba(255,255,255,0.6)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)', borderRadius: 14, border: '1px solid rgba(255,255,255,0.5)', overflow: 'hidden', marginBottom: 20 }}>
         {/* Browser mockup */}
-        <div style={{ background: '#F3F4F6', padding: '10px 16px', borderBottom: '1px solid #E5E7EB', display: 'flex', alignItems: 'center', gap: 8 }}>
+        <div style={{ background: '#F3F4F6', padding: '10px 16px', borderBottom: '1px solid rgba(255,255,255,0.5)', display: 'flex', alignItems: 'center', gap: 8 }}>
           <div style={{ display: 'flex', gap: 6 }}>
             <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#FCA5A5' }} />
             <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#FDE68A' }} />
@@ -43,7 +43,7 @@ const WebsitePage: React.FC = () => {
         <div
           style={{
             height: 280,
-            background: `linear-gradient(135deg, ${colors.primary}10 0%, #fff 50%, ${colors.primary}05 100%)`,
+            background: `linear-gradient(135deg, #11110 0%, #fff 50%, #11105 100%)`,
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
@@ -51,7 +51,7 @@ const WebsitePage: React.FC = () => {
             gap: 12,
           }}
         >
-          <div style={{ width: 60, height: 60, borderRadius: 12, background: colors.primary, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ width: 60, height: 60, borderRadius: 12, background: '#111', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <span style={{ color: '#fff', fontSize: 28, fontWeight: 700, fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>ك</span>
           </div>
           <div style={{ fontSize: 20, fontWeight: 700, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>
@@ -69,7 +69,7 @@ const WebsitePage: React.FC = () => {
           onClick={() => window.open('/', '_blank')}
           style={{
             padding: '16px 20px',
-            background: colors.primary,
+            background: '#111',
             color: '#fff',
             border: 'none',
             borderRadius: 12,
@@ -92,7 +92,7 @@ const WebsitePage: React.FC = () => {
             padding: '16px 20px',
             background: '#fff',
             color: colors.text,
-            border: '1px solid #E5E7EB',
+            border: '1px solid rgba(255,255,255,0.5)',
             borderRadius: 12,
             fontSize: 15,
             fontWeight: 600,
@@ -110,7 +110,7 @@ const WebsitePage: React.FC = () => {
       </div>
 
       {/* Website settings summary */}
-      <div style={{ background: '#fff', borderRadius: 12, border: '1px solid #E5E7EB', padding: 24 }}>
+      <div style={{ background: 'rgba(255,255,255,0.6)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)', borderRadius: 14, border: '1px solid rgba(255,255,255,0.5)', padding: 24 }}>
         <h3 style={{ fontSize: 15, fontWeight: 600, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 16px' }}>
           إعدادات الموقع
         </h3>
@@ -144,8 +144,8 @@ const WebsitePage: React.FC = () => {
               <button
                 style={{
                   padding: '6px 14px',
-                  background: `${colors.primary}10`,
-                  color: colors.primary,
+                  background: `#11110`,
+                  color: '#111',
                   border: 'none',
                   borderRadius: 6,
                   fontSize: 13,
