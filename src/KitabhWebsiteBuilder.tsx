@@ -241,42 +241,55 @@ interface ColorTheme {
 }
 
 const COLOR_THEMES: ColorTheme[] = [
-  // ── 1. Standard (white bg, first position) ──
-  { id: "clean_light", name: "نظيف", buttonColor: "#E82222", headlineColor: "#1a1a1a", textColor: "#555555", linkColor: "#E82222", bgColor: "#ffffff", cardBg: "#ffffff" },
-  // ── 2. Dark (second position) ──
-  { id: "dark_card", name: "داكن", buttonColor: "#E82222", headlineColor: "#f5f5f5", textColor: "#9e9e9e", linkColor: "#ef5350", bgColor: "#121212", cardBg: "#1e1e1e" },
-  // ── 3. Soft tinted light themes (like the mint screenshot — light bg, dark text, strong contrast) ──
-  { id: "soft_blue", name: "أزرق ناعم", buttonColor: "#1565C0", headlineColor: "#0d47a1", textColor: "#546e7a", linkColor: "#1565C0", bgColor: "#e3f2fd", cardBg: "#bbdefb" },
-  { id: "soft_orange", name: "برتقالي ناعم", buttonColor: "#e65100", headlineColor: "#bf360c", textColor: "#8d6e63", linkColor: "#e65100", bgColor: "#fff3e0", cardBg: "#ffe0b2" },
-  { id: "soft_red", name: "أحمر ناعم", buttonColor: "#c62828", headlineColor: "#b71c1c", textColor: "#8e6565", linkColor: "#c62828", bgColor: "#ffebee", cardBg: "#ffcdd2" },
-  { id: "soft_coffee", name: "قهوة ناعم", buttonColor: "#4e342e", headlineColor: "#3e2723", textColor: "#6d4c41", linkColor: "#5d4037", bgColor: "#efebe9", cardBg: "#d7ccc8" },
-  { id: "mint", name: "نعناعي", buttonColor: "#2e7d32", headlineColor: "#1b5e20", textColor: "#4e6e50", linkColor: "#2e7d32", bgColor: "#e8f5e9", cardBg: "#c8e6c9" },
-  { id: "soft_purple", name: "بنفسجي ناعم", buttonColor: "#6a1b9a", headlineColor: "#4a148c", textColor: "#7b6b8a", linkColor: "#7b1fa2", bgColor: "#f3e5f5", cardBg: "#e1bee7" },
-  { id: "soft_teal", name: "فيروزي ناعم", buttonColor: "#00695c", headlineColor: "#004d40", textColor: "#4e7a72", linkColor: "#00796b", bgColor: "#e0f2f1", cardBg: "#b2dfdb" },
-  { id: "soft_gold", name: "ذهبي ناعم", buttonColor: "#f57f17", headlineColor: "#e65100", textColor: "#8d6e63", linkColor: "#ff8f00", bgColor: "#fffde7", cardBg: "#fff9c4" },
-  // ── 4. Deep dark themes ──
-  { id: "dark_navy", name: "بحري داكن", buttonColor: "#00BCD4", headlineColor: "#eceff1", textColor: "#90a4ae", linkColor: "#4dd0e1", bgColor: "#0d1b2a", cardBg: "#1b2838" },
-  { id: "dark_coffee", name: "قهوة داكن", buttonColor: "#ffab40", headlineColor: "#efebe9", textColor: "#bcaaa4", linkColor: "#ffcc80", bgColor: "#1a120e", cardBg: "#2c1e16" },
-  { id: "dark_red", name: "أحمر داكن", buttonColor: "#ff5252", headlineColor: "#ffebee", textColor: "#ef9a9a", linkColor: "#ff8a80", bgColor: "#1a0a0a", cardBg: "#2d1414" },
-  { id: "dark_blue", name: "أزرق داكن", buttonColor: "#448aff", headlineColor: "#e3f2fd", textColor: "#90caf9", linkColor: "#82b1ff", bgColor: "#0a1628", cardBg: "#142240" },
-  { id: "dark_orange", name: "برتقالي داكن", buttonColor: "#ff9100", headlineColor: "#fff3e0", textColor: "#ffcc80", linkColor: "#ffab40", bgColor: "#1a110a", cardBg: "#2d1e10" },
-  { id: "wine_dark", name: "خمري", buttonColor: "#f59e0b", headlineColor: "#fef3c7", textColor: "#d4d4d8", linkColor: "#fbbf24", bgColor: "#1c1917", cardBg: "#292524" },
-  { id: "forest", name: "غابة", buttonColor: "#facc15", headlineColor: "#f0fdf4", textColor: "#86efac", linkColor: "#fde047", bgColor: "#14532d", cardBg: "#166534" },
-  { id: "dark_emerald", name: "زمردي", buttonColor: "#10b981", headlineColor: "#d1fae5", textColor: "#6ee7b7", linkColor: "#34d399", bgColor: "#022c22", cardBg: "#064e3b" },
+  // ── 1. Light themes (Happy Hues curated) ──
+  // HH3 — Clean blue
+  { id: "hh_clean_blue", name: "أزرق نظيف", buttonColor: "#3da9fc", headlineColor: "#094067", textColor: "#5f6c7b", linkColor: "#ef4565", bgColor: "#fffffe", cardBg: "#d8eefe" },
+  // HH5 — Mint & gold
+  { id: "hh_mint_gold", name: "نعناع ذهبي", buttonColor: "#faae2b", headlineColor: "#00473e", textColor: "#475d5b", linkColor: "#faae2b", bgColor: "#f2f7f5", cardBg: "#fffffe" },
+  // HH6 — Lavender
+  { id: "hh_lavender", name: "لافندر", buttonColor: "#6246ea", headlineColor: "#2b2c34", textColor: "#2b2c34", linkColor: "#6246ea", bgColor: "#fffffe", cardBg: "#d1d1e9" },
+  // HH8 — Warm cream & teal
+  { id: "hh_warm_teal", name: "كريمي ودافئ", buttonColor: "#078080", headlineColor: "#232323", textColor: "#222525", linkColor: "#f45d48", bgColor: "#f8f5f2", cardBg: "#fffffe" },
+  // HH9 — Soft gray & orange
+  { id: "hh_gray_orange", name: "رمادي برتقالي", buttonColor: "#ff8e3c", headlineColor: "#0d0d0d", textColor: "#2a2a2a", linkColor: "#ff8e3c", bgColor: "#eff0f3", cardBg: "#fffffe" },
+  // HH11 — Antique cream & brown
+  { id: "hh_antique", name: "عتيق", buttonColor: "#8c7851", headlineColor: "#020826", textColor: "#716040", linkColor: "#8c7851", bgColor: "#f9f4ef", cardBg: "#fffffe" },
+  // HH14 — Yellow pop & dark navy
+  { id: "hh_yellow_pop", name: "أصفر منعش", buttonColor: "#ffd803", headlineColor: "#272343", textColor: "#2d334a", linkColor: "#272343", bgColor: "#fffffe", cardBg: "#e3f6f5" },
+  // HH15 — Peachy pink
+  { id: "hh_peachy", name: "خوخي ناعم", buttonColor: "#ff8ba7", headlineColor: "#33272a", textColor: "#594a4e", linkColor: "#ff8ba7", bgColor: "#faeee7", cardBg: "#fffffe" },
+  // HH17 — Warm cream & navy pink
+  { id: "hh_cream_navy", name: "كريمي بحري", buttonColor: "#f582ae", headlineColor: "#001858", textColor: "#172c66", linkColor: "#f582ae", bgColor: "#fef6e4", cardBg: "#f3d2c1" },
+  // Classic white & red
+  { id: "clean_light", name: "نظيف كلاسيكي", buttonColor: "#E82222", headlineColor: "#1a1a1a", textColor: "#555555", linkColor: "#E82222", bgColor: "#ffffff", cardBg: "#ffffff" },
+
+  // ── 2. Pink/rose light backgrounds ──
+  // HH7 — Soft pink & navy
+  { id: "hh_pink_navy", name: "وردي بحري", buttonColor: "#0e172c", headlineColor: "#0e172c", textColor: "#0e172c", linkColor: "#a786df", bgColor: "#fec7d7", cardBg: "#d9d4e7" },
+
+  // ── 3. Dark themes (Happy Hues curated) ──
+  // HH4 — Dark UI purple
+  { id: "hh_dark_purple", name: "داكن بنفسجي", buttonColor: "#7f5af0", headlineColor: "#fffffe", textColor: "#94a1b2", linkColor: "#7f5af0", bgColor: "#16161a", cardBg: "#242629" },
+  // HH10 — Deep teal & gold
+  { id: "hh_deep_teal", name: "فيروزي عميق", buttonColor: "#f9bc60", headlineColor: "#fffffe", textColor: "#abd1c6", linkColor: "#f9bc60", bgColor: "#004643", cardBg: "#004643" },
+  // HH12 — Navy & soft pink
+  { id: "hh_navy_blush", name: "بحري وردي", buttonColor: "#eebbc3", headlineColor: "#fffffe", textColor: "#b8c1ec", linkColor: "#eebbc3", bgColor: "#232946", cardBg: "#232946" },
+  // HH13 — Dark fire & orange
+  { id: "hh_dark_fire", name: "ناري داكن", buttonColor: "#ff8906", headlineColor: "#fffffe", textColor: "#a7a9be", linkColor: "#e53170", bgColor: "#0f0e17", cardBg: "#0f0e17" },
+  // HH16 — Warm chocolate
+  { id: "hh_chocolate", name: "شوكولاتة", buttonColor: "#ffc0ad", headlineColor: "#fffffe", textColor: "#fff3ec", linkColor: "#e78fb3", bgColor: "#55423d", cardBg: "#55423d" },
+  // Dark classic
+  { id: "dark_card", name: "داكن كلاسيكي", buttonColor: "#E82222", headlineColor: "#f5f5f5", textColor: "#9e9e9e", linkColor: "#ef5350", bgColor: "#121212", cardBg: "#1e1e1e" },
+  // Space gray
   { id: "space_gray", name: "فضائي", buttonColor: "#8b5cf6", headlineColor: "#e2e8f0", textColor: "#94a3b8", linkColor: "#a78bfa", bgColor: "#1e293b", cardBg: "#334155" },
-  { id: "royal_purple", name: "ملكي", buttonColor: "#a78bfa", headlineColor: "#f5f3ff", textColor: "#c4b5fd", linkColor: "#c084fc", bgColor: "#1e1b4b", cardBg: "#312e81" },
-  { id: "sunset_glow", name: "غروب", buttonColor: "#f43f5e", headlineColor: "#fef2f2", textColor: "#fda4af", linkColor: "#fb7185", bgColor: "#1a0a10", cardBg: "#2d1520" },
-  // ── 5. Earthy & warm ──
-  { id: "elegant_beige", name: "بيج أنيق", buttonColor: "#6d6132", headlineColor: "#3e2723", textColor: "#795548", linkColor: "#6d6132", bgColor: "#D7CCC8", cardBg: "#efebe9" },
-  { id: "natural_green", name: "أخضر طبيعي", buttonColor: "#6d7c3a", headlineColor: "#ffffff", textColor: "#c8e6c9", linkColor: "#aed581", bgColor: "#33691e", cardBg: "#3e7c23" },
-  { id: "notebook", name: "دفتر", buttonColor: "#F9A825", headlineColor: "#3e2723", textColor: "#6d4c41", linkColor: "#f57f17", bgColor: "#FFF8E1", cardBg: "#ffffff" },
-  { id: "calm_gray", name: "رمادي هادئ", buttonColor: "#1565C0", headlineColor: "#212121", textColor: "#616161", linkColor: "#1976D2", bgColor: "#ECEFF1", cardBg: "#ffffff" },
-  // ── 6. Signature & accent ──
-  { id: "kitabh_blue", name: "أزرق كتابة", buttonColor: "#1a1aaa", headlineColor: "#ffffff", textColor: "#b0c4ff", linkColor: "#90b0ff", bgColor: "#0000FF", cardBg: "#1a1aff" },
-  { id: "neon", name: "نيون", buttonColor: "#1a1a1a", headlineColor: "#1a1a1a", textColor: "#1b5e20", linkColor: "#1a1a1a", bgColor: "#00FF41", cardBg: "#69f0ae" },
-  { id: "bold_yellow", name: "أصفر جريء", buttonColor: "#E82222", headlineColor: "#212121", textColor: "#5d4037", linkColor: "#c62828", bgColor: "#FFC107", cardBg: "#ffd54f" },
-  { id: "hot_pink", name: "وردي", buttonColor: "#FFD600", headlineColor: "#ffffff", textColor: "#fce4ec", linkColor: "#FFD600", bgColor: "#E91E63", cardBg: "#f06292" },
-  { id: "ocean_deep", name: "بحري", buttonColor: "#06b6d4", headlineColor: "#f0f9ff", textColor: "#7dd3fc", linkColor: "#22d3ee", bgColor: "#0c4a6e", cardBg: "#164e63" },
+  // Dark navy
+  { id: "dark_navy", name: "بحري داكن", buttonColor: "#00BCD4", headlineColor: "#eceff1", textColor: "#90a4ae", linkColor: "#4dd0e1", bgColor: "#0d1b2a", cardBg: "#1b2838" },
+  // Forest
+  { id: "forest", name: "غابة", buttonColor: "#facc15", headlineColor: "#f0fdf4", textColor: "#86efac", linkColor: "#fde047", bgColor: "#14532d", cardBg: "#166534" },
+  // Wine
+  { id: "wine_dark", name: "خمري", buttonColor: "#f59e0b", headlineColor: "#fef3c7", textColor: "#d4d4d8", linkColor: "#fbbf24", bgColor: "#1c1917", cardBg: "#292524" },
+  // Ocean
+  { id: "ocean_deep", name: "بحري عميق", buttonColor: "#06b6d4", headlineColor: "#f0f9ff", textColor: "#7dd3fc", linkColor: "#22d3ee", bgColor: "#0c4a6e", cardBg: "#164e63" },
 ];
 
 // ─── SVG Icons ──────────────────────────────────────────
@@ -593,6 +606,11 @@ export default function KitabhWebsiteBuilder(props: any) {
         { platform: "tiktok", url: "", enabled: false },
         { platform: "snapchat", url: "", enabled: false },
         { platform: "facebook", url: "", enabled: false },
+        { platform: "threads", url: "", enabled: false },
+        { platform: "telegram", url: "", enabled: false },
+        { platform: "whatsapp", url: "", enabled: false },
+        { platform: "pinterest", url: "", enabled: false },
+        { platform: "spotify", url: "", enabled: false },
       ] };
       case "bento_grid": return { layout: "2-1" as string, items: [
         { title: "عنوان البطاقة الأولى", text: "نص وصفي قصير للبطاقة", imageUrl: "", linkUrl: "" },
@@ -1083,7 +1101,7 @@ export default function KitabhWebsiteBuilder(props: any) {
               pc += `<div class="pv-catfeed"><div class="pv-catfeed-header"><h2>${cfCat?.name || ""}</h2>${s.showMoreLink ? `<span class="pv-catfeed-more">${s.moreText || `المزيد من ${cfCat?.name || ""}`} &#x25C0;</span>` : ""}</div><div class="pv-catfeed-body pv-catfeed-${s.categoryLayout || "featured_right"}">${cfCards ? `<div class="pv-catfeed-main">${cfCards}</div>` : ""}${cfFeatH}</div></div>`;
             } else {
               const ac = (s.articles || []).map((id: string) => MOCK_ARTICLES.find(a => a.id === id)).filter(Boolean);
-              const acH = ac.map((a: any) => `<a href="/article/${a.slug}" class="pv-art-card" style="text-decoration:none;color:inherit"><div class="pv-img" style="height:260px;min-height:260px;${a.imageUrl ? `background-image:url(${a.imageUrl});background-size:cover;background-position:center` : ''}"></div><h4>${a.title}</h4><p class="pv-excerpt-sm">${a.excerpt.slice(0, 80)}...</p><div class="pv-author-row"><div class="pv-avatar">${a.author.charAt(0)}</div><span class="pv-author-name">${a.author}</span></div><div class="pv-meta-row"><span>${a.date}</span><span class="pv-eng"><span style="color:var(--pv-btn)">❤ ${a.likes}</span><span>💬 ${a.comments}</span></span></div></a>`).join("");
+              const acH = ac.map((a: any) => `<a href="/article/${a.slug}" class="pv-art-card" style="text-decoration:none;color:inherit"><div class="pv-img" style="aspect-ratio:16/9;width:100%;${a.imageUrl ? `background-image:url(${a.imageUrl});background-size:cover;background-position:center` : ''}"></div><h4>${a.title}</h4><p class="pv-excerpt-sm">${a.excerpt.slice(0, 80)}...</p><div class="pv-author-row"><div class="pv-avatar">${a.author.charAt(0)}</div><span class="pv-author-name">${a.author}</span></div><div class="pv-meta-row"><span>${a.date}</span><span class="pv-eng"><span style="color:var(--pv-btn)">❤ ${a.likes}</span><span>💬 ${a.comments}</span></span></div></a>`).join("");
               pc += `<div class="pv-articles"><div class="pv-articles-grid">${acH}</div><a class="pv-all-link">جميع المقالات &#x2197;</a></div>`;
             }
             break;
@@ -1140,7 +1158,22 @@ export default function KitabhWebsiteBuilder(props: any) {
             break;
           case "social_links": {
             const platforms = s.platforms || [];
-            const slHtml = platforms.filter((p: any) => p.enabled && p.url).map((p: any) => `<a href="${p.url}" target="_blank" rel="noopener" class="pv-social-link">${p.platform}</a>`).join("");
+            const pvSocialSvgs: Record<string, string> = {
+              twitter: '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>',
+              instagram: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>',
+              youtube: '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 00-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 00.502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 002.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 002.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12z"/></svg>',
+              linkedin: '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0z"/></svg>',
+              tiktok: '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.11v-3.5a6.37 6.37 0 00-.79-.05A6.34 6.34 0 003.15 15.2a6.34 6.34 0 0010.86 4.46V13a8.26 8.26 0 005.58 2.17V11.7a4.83 4.83 0 01-3.77-1.24V6.69z"/></svg>',
+              snapchat: '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12.206.793c.99 0 4.347.276 5.93 3.821.529 1.193.403 3.219.299 4.847l-.003.06c-.012.18-.022.345-.03.51.075.045.203.09.401.09.3-.016.659-.12.949-.25.147-.066.346-.097.5-.097.206 0 .395.054.5.162a.5.5 0 01.075.558c-.09.19-.222.33-.345.437-.39.321-.906.486-1.34.577a.8.8 0 00-.18.045c-.12.06-.18.18-.15.3.18.75.42 1.44.75 2.04.54.99 1.32 1.71 2.28 2.13.12.06.24.12.3.21a.44.44 0 01-.12.45c-.15.15-.39.27-.72.36-.45.12-.99.18-1.56.21-.15.015-.21.09-.24.15-.06.105-.09.21-.12.33l-.015.06c-.06.195-.135.42-.33.585-.225.195-.54.24-.78.24-.18 0-.36-.03-.51-.06a3.5 3.5 0 00-.75-.09c-.27 0-.54.03-.81.09-.75.18-1.38.51-2.07.9-.9.51-1.83 1.05-3.18 1.11h-.15c-1.35-.06-2.28-.6-3.18-1.11-.69-.39-1.32-.72-2.07-.9a4.3 4.3 0 00-.81-.09c-.24 0-.48.03-.75.09-.15.03-.33.06-.51.06-.24 0-.555-.045-.78-.24-.195-.165-.27-.39-.33-.585L3.1 18.6c-.03-.12-.06-.225-.12-.33-.03-.06-.09-.135-.24-.15-.57-.03-1.11-.09-1.56-.21-.33-.09-.57-.21-.72-.36a.44.44 0 01-.12-.45c.06-.09.18-.15.3-.21.96-.42 1.74-1.14 2.28-2.13.33-.6.57-1.29.75-2.04.03-.12-.03-.24-.15-.3a.8.8 0 00-.18-.045c-.435-.09-.95-.256-1.34-.577a1.16 1.16 0 01-.345-.437.5.5 0 01.075-.558c.105-.108.294-.162.5-.162.154 0 .353.031.5.097.29.13.649.234.949.25.198 0 .326-.045.401-.09a4.22 4.22 0 01-.03-.51l-.003-.06c-.104-1.628-.23-3.654.3-4.847C6.453 1.069 9.81.793 10.8.793h1.406z"/></svg>',
+              facebook: '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>',
+              website: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>',
+              threads: '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12.186 24h-.007c-3.581-.024-6.334-1.205-8.184-3.509C2.35 18.44 1.5 15.586 1.472 12.01v-.017c.03-3.579.879-6.43 2.525-8.482C5.845 1.205 8.6.024 12.18 0h.014c2.746.02 5.043.725 6.826 2.098 1.677 1.29 2.858 3.13 3.509 5.467l-2.04.569c-1.104-3.96-3.898-5.984-8.304-6.015-2.91.022-5.11.936-6.54 2.717C4.307 6.504 3.616 8.914 3.59 12c.025 3.086.718 5.496 2.057 7.164 1.432 1.781 3.632 2.695 6.54 2.717 2.623-.02 4.358-.631 5.8-2.045 1.647-1.613 1.618-3.593 1.09-4.798-.31-.71-.873-1.3-1.634-1.75-.192 1.352-.622 2.446-1.284 3.272-.886 1.102-2.14 1.704-3.73 1.79-1.202.065-2.361-.218-3.259-.801-1.063-.689-1.685-1.74-1.752-2.96-.065-1.187.408-2.228 1.33-2.93.824-.627 1.952-.998 3.267-1.073 1.107-.064 2.134.05 3.057.337.011-.583-.004-1.128-.068-1.627-.207-1.636-.869-2.39-2.396-2.463h-.086c-1.093 0-2.032.393-2.637 1.107l-1.455-1.323c.908-.998 2.253-1.57 3.694-1.57h.131c1.254.051 2.27.49 3.016 1.302.673.732 1.09 1.727 1.24 2.96.068.562.092 1.17.072 1.812.539.253 1.022.56 1.443.924 1.2 1.037 1.86 2.474 1.96 4.275.064 1.16-.197 2.478-.85 3.61-.765 1.326-1.94 2.378-3.495 3.13C17.534 23.46 15.07 24 12.186 24zm-1.118-8.086c-.988.057-1.757.282-2.293.672-.422.306-.633.696-.61 1.13.023.412.233.78.61 1.065.471.356 1.14.539 1.886.507 1.09-.052 1.94-.46 2.528-1.213.464-.594.77-1.405.907-2.406-.876-.235-1.88-.356-2.942-.355h-.086z"/></svg>',
+              telegram: '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 000 12a12 12 0 0012 12 12 12 0 0012-12A12 12 0 0012 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 01.171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.479.33-.913.492-1.302.486-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>',
+              whatsapp: '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>',
+              pinterest: '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 01.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12.017 24c6.624 0 11.99-5.367 11.99-11.988C24.007 5.367 18.641 0 12.017 0z"/></svg>',
+              spotify: '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>',
+            };
+            const slHtml = platforms.filter((p: any) => p.enabled && p.url).map((p: any) => `<a href="${p.url}" target="_blank" rel="noopener" class="pv-social-link">${pvSocialSvgs[p.platform] || p.platform}</a>`).join("");
             pc += `<div class="pv-social-links">${slHtml}</div>`;
             break;
           }
@@ -1306,7 +1339,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
 .pv-movie-info p{font-size:12px;color:var(--pv-text);margin:4px 0 0;line-height:1.5;}
 .pv-movie-btn{display:inline-block;padding:6px 16px;color:#fff;font-size:12px;font-weight:600;border-radius:var(--pv-radius);margin-top:8px;text-align:center;}
 /* Social Links */
-.pv-social-links{display:flex;justify-content:center;gap:16px;padding:24px;flex-wrap:wrap;}.pv-social-link{font-size:14px;font-weight:600;color:var(--pv-link);padding:8px 16px;border:1px solid rgba(128,128,128,0.2);transition:all .15s;border-radius:var(--pv-radius);}.pv-social-link:hover{background:var(--pv-btn);color:#fff;border-color:var(--pv-btn);}
+.pv-social-links{display:flex;justify-content:center;gap:12px;padding:24px;flex-wrap:wrap;}.pv-social-link{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;color:var(--pv-text);border:1px solid rgba(128,128,128,0.2);transition:all .15s;border-radius:50%;}.pv-social-link:hover{background:var(--pv-btn);color:#fff;border-color:var(--pv-btn);}.pv-social-link svg{display:block;}
 /* Gallery */
 .pv-gallery{padding:24px;border-top:2px solid var(--pv-headline);}
 .pv-gallery-header{padding-bottom:14px;border-bottom:1px solid rgba(128,128,128,0.15);text-align:right;}
@@ -1348,8 +1381,12 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
   .pv-hero-side-l{display:none;}
   .pv-nav{display:none;}
   .pv-header-actions{display:none;}
-  .pv-hamburger{display:flex;}
-  .pv-articles-grid{grid-template-columns:repeat(2,1fr);}
+  .pv-hamburger{display:flex;margin-inline-end:auto;}
+  .pv-articles-grid{grid-template-columns:1fr;}
+  .pv-art-card .pv-img{aspect-ratio:16/9;height:auto!important;border-radius:8px;}
+  .pv-excerpt-sm{display:none;}
+  .pv-art-card h4{font-size:18px;}
+  .pv-author-name{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.3px;}
   .pv-banner-grid{grid-template-columns:1fr;}
   .pv-cta-inner{flex-direction:column;}
   .pv-cta .pv-form-row{min-width:unset;flex-direction:column;}
@@ -2149,7 +2186,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                             <button type="button" onMouseDown={e => { e.preventDefault(); execRte("justifyLeft"); }} title="محاذاة يسار">⫢</button>
                             <span className="kwb-p-rte-sep" />
                             <button type="button" onMouseDown={e => { e.preventDefault(); execRte("insertHorizontalRule"); }} title="فاصل">—</button>
-                            <button type="button" onMouseDown={e => { e.preventDefault(); const url = prompt("رابط الصورة:", "https://"); if (url) execRte("insertImage", url); }} title="صورة">{Icons.image}</button>
+                            <button type="button" onMouseDown={e => { e.preventDefault(); const inp = document.createElement("input"); inp.type = "file"; inp.accept = "image/*"; inp.onchange = () => { const f = inp.files?.[0]; if (!f) return; const reader = new FileReader(); reader.onload = (ev) => { const dataUrl = ev.target?.result as string; if (dataUrl) execRte("insertImage", dataUrl); }; reader.readAsDataURL(f); }; inp.click(); }} title="صورة">{Icons.image}</button>
                           </div>
                           <div
                             id={rteRef}
@@ -2391,8 +2428,13 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                         snapchat: '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12.206.793c.99 0 4.347.276 5.93 3.821.529 1.193.403 3.219.299 4.847l-.003.06c-.012.18-.022.345-.03.51.075.045.203.09.401.09.3-.016.659-.12.949-.25.147-.066.346-.097.5-.097.206 0 .395.054.5.162a.5.5 0 01.075.558c-.09.19-.222.33-.345.437-.39.321-.906.486-1.34.577a.8.8 0 00-.18.045c-.12.06-.18.18-.15.3.18.75.42 1.44.75 2.04.54.99 1.32 1.71 2.28 2.13.12.06.24.12.3.21a.44.44 0 01-.12.45c-.15.15-.39.27-.72.36-.45.12-.99.18-1.56.21-.15.015-.21.09-.24.15-.06.105-.09.21-.12.33l-.015.06c-.06.195-.135.42-.33.585-.225.195-.54.24-.78.24-.18 0-.36-.03-.51-.06a3.5 3.5 0 00-.75-.09c-.27 0-.54.03-.81.09-.75.18-1.38.51-2.07.9-.9.51-1.83 1.05-3.18 1.11h-.15c-1.35-.06-2.28-.6-3.18-1.11-.69-.39-1.32-.72-2.07-.9a4.3 4.3 0 00-.81-.09c-.24 0-.48.03-.75.09-.15.03-.33.06-.51.06-.24 0-.555-.045-.78-.24-.195-.165-.27-.39-.33-.585L3.1 18.6c-.03-.12-.06-.225-.12-.33-.03-.06-.09-.135-.24-.15-.57-.03-1.11-.09-1.56-.21-.33-.09-.57-.21-.72-.36a.44.44 0 01-.12-.45c.06-.09.18-.15.3-.21.96-.42 1.74-1.14 2.28-2.13.33-.6.57-1.29.75-2.04.03-.12-.03-.24-.15-.3a.8.8 0 00-.18-.045c-.435-.09-.95-.256-1.34-.577a1.16 1.16 0 01-.345-.437.5.5 0 01.075-.558c.105-.108.294-.162.5-.162.154 0 .353.031.5.097.29.13.649.234.949.25.198 0 .326-.045.401-.09a4.22 4.22 0 01-.03-.51l-.003-.06c-.104-1.628-.23-3.654.3-4.847C6.453 1.069 9.81.793 10.8.793h1.406z"/></svg>',
                         facebook: '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>',
                         website: '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>',
+                        threads: '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12.186 24h-.007c-3.581-.024-6.334-1.205-8.184-3.509C2.35 18.44 1.5 15.586 1.472 12.01v-.017c.03-3.579.879-6.43 2.525-8.482C5.845 1.205 8.6.024 12.18 0h.014c2.746.02 5.043.725 6.826 2.098 1.677 1.29 2.858 3.13 3.509 5.467l-2.04.569c-1.104-3.96-3.898-5.984-8.304-6.015-2.91.022-5.11.936-6.54 2.717C4.307 6.504 3.616 8.914 3.59 12c.025 3.086.718 5.496 2.057 7.164 1.432 1.781 3.632 2.695 6.54 2.717 2.623-.02 4.358-.631 5.8-2.045 1.647-1.613 1.618-3.593 1.09-4.798-.31-.71-.873-1.3-1.634-1.75-.192 1.352-.622 2.446-1.284 3.272-.886 1.102-2.14 1.704-3.73 1.79-1.202.065-2.361-.218-3.259-.801-1.063-.689-1.685-1.74-1.752-2.96-.065-1.187.408-2.228 1.33-2.93.824-.627 1.952-.998 3.267-1.073 1.107-.064 2.134.05 3.057.337.011-.583-.004-1.128-.068-1.627-.207-1.636-.869-2.39-2.396-2.463h-.086c-1.093 0-2.032.393-2.637 1.107l-1.455-1.323c.908-.998 2.253-1.57 3.694-1.57h.131c1.254.051 2.27.49 3.016 1.302.673.732 1.09 1.727 1.24 2.96.068.562.092 1.17.072 1.812.539.253 1.022.56 1.443.924 1.2 1.037 1.86 2.474 1.96 4.275.064 1.16-.197 2.478-.85 3.61-.765 1.326-1.94 2.378-3.495 3.13C17.534 23.46 15.07 24 12.186 24zm-1.118-8.086c-.988.057-1.757.282-2.293.672-.422.306-.633.696-.61 1.13.023.412.233.78.61 1.065.471.356 1.14.539 1.886.507 1.09-.052 1.94-.46 2.528-1.213.464-.594.77-1.405.907-2.406-.876-.235-1.88-.356-2.942-.355h-.086z"/></svg>',
+                        telegram: '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M11.944 0A12 12 0 000 12a12 12 0 0012 12 12 12 0 0012-12A12 12 0 0012 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 01.171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.479.33-.913.492-1.302.486-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>',
+                        whatsapp: '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>',
+                        pinterest: '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 01.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24 12.017 24c6.624 0 11.99-5.367 11.99-11.988C24.007 5.367 18.641 0 12.017 0z"/></svg>',
+                        spotify: '<svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>',
                       };
-                      const platformLabels: Record<string, string> = { twitter: "X / تويتر", instagram: "إنستغرام", youtube: "يوتيوب", linkedin: "لينكدإن", tiktok: "تيك توك", snapchat: "سناب شات", facebook: "فيسبوك", website: "الموقع" };
+                      const platformLabels: Record<string, string> = { twitter: "X / تويتر", instagram: "إنستغرام", youtube: "يوتيوب", linkedin: "لينكدإن", tiktok: "تيك توك", snapchat: "سناب شات", facebook: "فيسبوك", website: "الموقع", threads: "ثريدز", telegram: "تيليغرام", whatsapp: "واتساب", pinterest: "بنترست", spotify: "سبوتيفاي" };
                       _inner = (
                         <div className="kwb-p-social-links">
                           {platforms.filter((p: any) => p.enabled && p.url).map((p: any, i: number) => (
@@ -3377,7 +3419,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                                       <input type="checkbox" checked={p.enabled} onChange={() => { const platforms = [...(comp.settings.platforms || [])]; platforms[i] = { ...platforms[i], enabled: !platforms[i].enabled }; updateComponentSettings(comp.id, { platforms }); }} />
                                       <span className="kwb-toggle-slider" />
                                     </label>
-                                    <span style={{ fontSize: 12, fontWeight: 600, color: "#555", minWidth: 60 }}>{{ twitter: "X", instagram: "إنستغرام", youtube: "يوتيوب", linkedin: "لينكدإن", tiktok: "تيك توك", snapchat: "سناب شات", facebook: "فيسبوك", website: "الموقع" }[p.platform] || p.platform}</span>
+                                    <span style={{ fontSize: 12, fontWeight: 600, color: "#555", minWidth: 60 }}>{{ twitter: "X", instagram: "إنستغرام", youtube: "يوتيوب", linkedin: "لينكدإن", tiktok: "تيك توك", snapchat: "سناب شات", facebook: "فيسبوك", website: "الموقع", threads: "ثريدز", telegram: "تيليغرام", whatsapp: "واتساب", pinterest: "بنترست", spotify: "سبوتيفاي" }[p.platform] || p.platform}</span>
                                     <input className="kwb-input kwb-input-sm" placeholder="الرابط" value={p.url || ""} dir="ltr" onChange={e => { const platforms = [...(comp.settings.platforms || [])]; platforms[i] = { ...platforms[i], url: e.target.value }; updateComponentSettings(comp.id, { platforms }); }} style={{ flex: 1 }} />
                                   </div>
                                 ))}
@@ -3798,8 +3840,13 @@ const CSS_STYLES = `
 .kwb-preview-mobile .kwb-p-nav{display:none;}
 .kwb-preview-mobile .kwb-p-header-inner{justify-content:space-between;}
 .kwb-preview-mobile .kwb-p-header-actions{display:none;}
-.kwb-preview-mobile .kwb-p-hamburger{display:flex;}
-.kwb-preview-mobile .kwb-p-articles-grid{grid-template-columns:1fr 1fr;}
+.kwb-preview-mobile .kwb-p-hamburger{display:flex;margin-inline-end:auto;}
+.kwb-preview-mobile .kwb-p-articles-grid{grid-template-columns:1fr;}
+.kwb-preview-mobile .kwb-p-article-card{border-bottom:1px solid rgba(128,128,128,0.12);padding-bottom:16px;margin-bottom:8px;border-radius:0;}
+.kwb-preview-mobile .kwb-p-article-img{aspect-ratio:16/9;border-radius:8px;}
+.kwb-preview-mobile .kwb-p-article-title{font-size:18px;-webkit-line-clamp:3;}
+.kwb-preview-mobile .kwb-p-article-excerpt{display:none;}
+.kwb-preview-mobile .kwb-p-article-author-name{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.3px;}
 .kwb-preview-mobile .kwb-p-banner-grid{grid-template-columns:1fr;}
 .kwb-preview-mobile .kwb-p-cta-inner{flex-direction:column;}
 .kwb-preview-mobile .kwb-p-cta-form{min-width:unset;flex-direction:column;}
@@ -3895,7 +3942,7 @@ const CSS_STYLES = `
 .kwb-p-article-card{display:flex;flex-direction:column;gap:6px;cursor:pointer;transition:transform .15s,box-shadow .15s;border-radius:12px;padding:8px;margin:-8px;}
 .kwb-p-article-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.08);}
 .kwb-p-article-card-text{display:contents;}
-.kwb-p-article-img{width:100%;height:240px;background:rgba(128,128,128,0.15);}
+.kwb-p-article-img{width:100%;aspect-ratio:16/9;background:rgba(128,128,128,0.15);}
 /* NYT-style list layout (works at any viewport) */
 .kwb-p-articles-mobile-list{grid-template-columns:1fr !important;}
 .kwb-p-articles-mobile-list .kwb-p-article-card{flex-direction:row-reverse;gap:14px;border-bottom:1px solid rgba(128,128,128,0.12);padding:12px 0;margin:0;border-radius:0;}
