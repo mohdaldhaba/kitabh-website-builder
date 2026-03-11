@@ -407,6 +407,15 @@ export default function KitabhWebsiteBuilder(props: any) {
                 else if (comp.type === "subscribe_form") { comp.type = "subscribe"; comp.settings = { ...comp.settings, layout: "form" }; }
                 else if (comp.type === "gallery") { comp.type = "article_collection"; comp.settings = { ...comp.settings, layout: "gallery" }; }
                 else if (comp.type === "category_feed") { comp.type = "article_collection"; comp.settings = { ...comp.settings, layout: "category_feed", categoryLayout: comp.settings.layout || "featured_right" }; }
+                // Migrate hero_centered from header to subscribe
+                if (comp.type === "header" && comp.settings.layout === "hero_centered") {
+                  comp.settings.layout = "navbar";
+                  // Create a new subscribe component with hero_centered layout after this header
+                  const newSub = { id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6), type: "subscribe", enabled: true, settings: { layout: "hero_centered", title: comp.settings.heroTitle || "", subtitle: comp.settings.subtitle || "", heroImageUrl: comp.settings.heroImageUrl || "", buttonText: comp.settings.buttonText || "اشتراك" } };
+                  const idx = page.components.indexOf(comp);
+                  page.components.splice(idx + 1, 0, newSub);
+                  delete comp.settings.heroImageUrl; delete comp.settings.heroTitle;
+                }
               }
             }
           }
@@ -539,14 +548,14 @@ export default function KitabhWebsiteBuilder(props: any) {
 
   function getDefaultSettings(type: ComponentType): Record<string, any> {
     switch (type) {
-      case "header": return { layout: "navbar", subtitle: "", logoUrl: "", heroImageUrl: "", heroTitle: "", buttonText: "اشتراك", navLinks: [
+      case "header": return { layout: "navbar", subtitle: "", logoUrl: "", buttonText: "اشتراك", navLinks: [
         { id: genId(), label: "الرئيسية", linkType: "page", target: "", visible: true },
         { id: genId(), label: "مقالات", linkType: "page", target: "", visible: true },
         { id: genId(), label: "عن المدونة", linkType: "page", target: "", visible: true },
         { id: genId(), label: "اشتراك", linkType: "anchor", target: "", visible: true },
       ] as NavLink[] };
       case "hero_news": return { articles: MOCK_ARTICLES.slice(0, 5).map(a => a.id) };
-      case "subscribe": return { layout: "hero", title: "انضم لنشرتنا البريدية", subtitle: "محتوى حصري يصلك كل أسبوع", description: "محتوى حصري يصلك مباشرة إلى بريدك", buttonText: "اشتراك", showNameField: false };
+      case "subscribe": return { layout: "hero", title: "انضم لنشرتنا البريدية", subtitle: "محتوى حصري يصلك كل أسبوع", description: "محتوى حصري يصلك مباشرة إلى بريدك", buttonText: "اشتراك", showNameField: false, heroImageUrl: "" };
       case "hero_slider": return { articles: MOCK_ARTICLES.slice(0, 3).map(a => a.id) };
       case "banner": return { imageUrl: "", title: "", linkUrl: "" };
 
@@ -1009,12 +1018,7 @@ export default function KitabhWebsiteBuilder(props: any) {
         switch (comp.type) {
           case "header":
             if (pi === 0) {
-              if (s.layout === "hero_centered") {
-                const heroImg = s.heroImageUrl ? `<div class="pv-header-hero-img-wrap"><img src="${s.heroImageUrl}" alt="" class="pv-header-hero-img"/></div>` : "";
-                pc += `<header class="pv-header"><div class="pv-header-inner"><div class="pv-logo-wrap">${logoHtml}</div><nav class="pv-nav">${navHtml}</nav><button class="pv-btn" style="background:${bc}">${s.buttonText || "اشتراك"}</button></div></header><div class="pv-hero-sub">${heroImg}<h2>${s.heroTitle || sn}</h2><p>${s.subtitle || "محتوى حصري يصلك كل أسبوع"}</p><div class="pv-form-row pv-form-center"><input type="email" name="email" autocomplete="email" placeholder="أدخل بريدك الإلكتروني" class="pv-email"/><button class="pv-btn" style="background:${bc}">${s.buttonText || "اشتراك"}</button></div></div>`;
-              } else {
-                pc += `<header class="pv-header"><div class="pv-header-inner"><div class="pv-logo-wrap">${logoHtml}</div><nav class="pv-nav">${navHtml}</nav><button class="pv-btn" style="background:${bc}">${s.buttonText || "اشتراك"}</button><button class="pv-darkmode-btn" onclick="document.documentElement.classList.toggle('dark');this.textContent=document.documentElement.classList.contains('dark')?'☀':'☾'" title="الوضع الداكن">${dm ? '☀' : '☾'}</button></div></header>`;
-              }
+              pc += `<header class="pv-header"><div class="pv-header-inner"><div class="pv-logo-wrap">${logoHtml}</div><nav class="pv-nav">${navHtml}</nav><button class="pv-btn" style="background:${bc}">${s.buttonText || "اشتراك"}</button><button class="pv-darkmode-btn" onclick="document.documentElement.classList.toggle('dark');this.textContent=document.documentElement.classList.contains('dark')?'☀':'☾'" title="الوضع الداكن">${dm ? '☀' : '☾'}</button></div></header>`;
             }
             break;
           case "hero_news":
@@ -1026,7 +1030,10 @@ export default function KitabhWebsiteBuilder(props: any) {
             pc += `<div class="pv-hero-grid"><div class="pv-hero-side pv-hero-side-r">${sideR}</div>${mainH}<div class="pv-hero-side pv-hero-side-l">${sideL}</div></div>`;
             break;
           case "subscribe":
-            if (s.layout === "cta") {
+            if (s.layout === "hero_centered") {
+              const heroImg = s.heroImageUrl ? `<div class="pv-header-hero-img-wrap"><img src="${s.heroImageUrl}" alt="" class="pv-header-hero-img"/></div>` : "";
+              pc += `<div class="pv-hero-sub">${heroImg}<h2>${s.title || sn}</h2><p>${s.subtitle || "محتوى حصري يصلك كل أسبوع"}</p><div class="pv-form-row pv-form-center"><input type="email" name="email" autocomplete="email" placeholder="أدخل بريدك الإلكتروني" class="pv-email"/><button class="pv-btn" style="background:${s.buttonColor || bc}">${s.buttonText || "اشتراك"}</button></div></div>`;
+            } else if (s.layout === "cta") {
               pc += `<div class="pv-cta"><div class="pv-cta-inner"><div class="pv-cta-text"><div class="pv-cta-icon">${sn.charAt(0)}</div><div><h3>${s.title || "اشترك في نشرتنا"}</h3><p>${s.description || "محتوى حصري يصلك مباشرة إلى بريدك"}</p></div></div><div class="pv-form-row"><input type="email" name="email" autocomplete="email" placeholder="أدخل بريدك الإلكتروني" class="pv-email" /><button class="pv-btn" style="background:${s.buttonColor || bc}">${s.buttonText || "اشتراك"}</button></div></div></div>`;
             } else if (s.layout === "form") {
               pc += `<div class="pv-subscribe-form"><h3>${s.title || "اشترك في النشرة"}</h3><p>${s.description || ""}</p><div class="pv-form-row pv-form-center"><input type="email" placeholder="بريدك الإلكتروني" class="pv-email" /><button class="pv-btn" style="background:${s.buttonColor || bc}">${s.buttonText || "اشتراك"}</button></div></div>`;
@@ -1248,7 +1255,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
 /* Bento Grid */
 .pv-bento{padding:24px;}.pv-bento-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}.pv-bento-card{background:var(--pv-card-bg);border:1px solid rgba(128,128,128,0.15);overflow:hidden;display:flex;flex-direction:column;border-radius:var(--pv-radius);}.pv-bento-square{}.pv-bento-wide{grid-column:span 2;}.pv-bento-tall{grid-row:span 2;}.pv-bento-img{width:100%;height:200px;object-fit:cover;}.pv-bento-img-ph{width:100%;height:200px;background:rgba(128,128,128,0.1);}.pv-bento-body{padding:12px 16px;}.pv-bento-body h4{font-size:15px;font-weight:700;color:var(--pv-headline);margin:0 0 4px;}.pv-bento-body p{font-size:13px;color:var(--pv-text);margin:0;}
 /* Movies */
-.pv-movies-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:16px;padding:0 24px 24px;}
+.pv-movies-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:20px;padding:0 24px 24px;}
 .pv-movie-card{display:flex;flex-direction:column;overflow:hidden;transition:transform .15s;}
 .pv-movie-card:hover{transform:translateY(-2px);}
 .pv-movie-poster{width:100%;aspect-ratio:2/3;background:rgba(128,128,128,0.12);overflow:hidden;border-radius:var(--pv-radius);}
@@ -1571,60 +1578,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                   switch (comp.type) {
                     case "header": {
                       const logoLayout = activeSite.branding.logoLayout || "text_only";
-                      const headerLayout = comp.settings.layout || "navbar";
-                      if (headerLayout === "hero_centered") {
-                        _inner = (
-                          <div>
-                            {/* Top navbar */}
-                            <div className="kwb-p-header">
-                              <div className="kwb-p-header-inner">
-                                <div className="kwb-p-logo-wrap">
-                                  {(logoLayout === "logo_only" || logoLayout === "logo_and_text") && activeSite.branding.logoUrl && (
-                                    <img src={activeSite.branding.logoUrl} alt="" className="kwb-p-logo-img" />
-                                  )}
-                                  {(logoLayout === "text_only" || logoLayout === "logo_and_text") && (
-                                    <span className="kwb-p-logo">{activeSite.branding.siteName}</span>
-                                  )}
-                                </div>
-                                <nav className="kwb-p-nav">
-                                  {(comp.settings.navLinks || []).filter((link: any) => typeof link === "string" ? true : link.visible).map((link: any, i: number) => {
-                                    const isNavLink = typeof link !== "string" && link.linkType === "page" && link.target;
-                                    const targetPage = isNavLink ? activeSite.pages.find(p => p.slug === link.target) : null;
-                                    return (
-                                      <a key={typeof link === "string" ? i : link.id} className={`kwb-p-nav-link ${targetPage && activePageId === targetPage.id ? "kwb-p-nav-link-active" : ""}`} onClick={targetPage ? () => { setActivePageId(targetPage.id); setExpandedComponent(null); } : undefined} style={targetPage ? { cursor: "pointer" } : {}}>{typeof link === "string" ? link : link.label}</a>
-                                    );
-                                  })}
-                                </nav>
-                                <div className="kwb-p-header-actions">
-                                  <button className="kwb-p-login-btn" onClick={() => setShowLoginModal(true)}>الدخول</button>
-                                  <button className="kwb-p-subscribe-btn" style={{ background: comp.settings.buttonColor || activeSite.branding.buttonColor }} onClick={() => setShowSubscribePopup(true)}>
-                                    {comp.settings.buttonText || "اشتراك"}
-                                  </button>
-                                </div>
-                              </div>
-                            </div>
-                            {/* Hero subscribe section with image */}
-                            <div className="kwb-p-hero-sub">
-                              <div className="kwb-p-header-hero-img-wrap">
-                                {comp.settings.heroImageUrl ? (
-                                  <img src={comp.settings.heroImageUrl} alt="" className="kwb-p-header-hero-img" />
-                                ) : (
-                                  <div className="kwb-p-header-hero-img-ph">{Icons.image}</div>
-                                )}
-                              </div>
-                              <h2 contentEditable suppressContentEditableWarning onBlur={(e) => updateComponentSettings(comp.id, { heroTitle: e.currentTarget.textContent || "" })} className="kwb-p-editable">{comp.settings.heroTitle || activeSite.branding.siteName}</h2>
-                              <p contentEditable suppressContentEditableWarning onBlur={(e) => updateComponentSettings(comp.id, { subtitle: e.currentTarget.textContent || "" })} className="kwb-p-editable">{comp.settings.subtitle || "محتوى حصري يصلك كل أسبوع"}</p>
-                              <div className="kwb-p-hero-sub-form">
-                                <input type="email" name="email" autoComplete="email" placeholder="أدخل بريدك الإلكتروني" className="kwb-p-email-input" />
-                                <button className="kwb-p-subscribe-btn" style={{ background: comp.settings.buttonColor || activeSite.branding.buttonColor }} onClick={() => setShowSubscribePopup(true)}>
-                                  {comp.settings.buttonText || "اشتراك"}
-                                </button>
-                              </div>
-                            </div>
-                          </div>
-                        );
-                      } else {
-                        _inner = (
+                      _inner = (
                           <div className="kwb-p-header">
                             <div className="kwb-p-header-inner">
                               <div className="kwb-p-logo-wrap">
@@ -1656,7 +1610,6 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                             </div>
                           </div>
                         );
-                      }
                       break;
                     }
 
@@ -1713,7 +1666,27 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                       ); break;
 
                     case "subscribe":
-                      if (comp.settings.layout === "cta") {
+                      if (comp.settings.layout === "hero_centered") {
+                        _inner = (
+                          <div className="kwb-p-hero-sub">
+                            <div className="kwb-p-header-hero-img-wrap">
+                              {comp.settings.heroImageUrl ? (
+                                <img src={comp.settings.heroImageUrl} alt="" className="kwb-p-header-hero-img" />
+                              ) : (
+                                <div className="kwb-p-header-hero-img-ph">{Icons.image}</div>
+                              )}
+                            </div>
+                            <h2 contentEditable suppressContentEditableWarning onBlur={(e) => updateComponentSettings(comp.id, { title: e.currentTarget.textContent || "" })} className="kwb-p-editable">{comp.settings.title || activeSite.branding.siteName}</h2>
+                            <p contentEditable suppressContentEditableWarning onBlur={(e) => updateComponentSettings(comp.id, { subtitle: e.currentTarget.textContent || "" })} className="kwb-p-editable">{comp.settings.subtitle || "محتوى حصري يصلك كل أسبوع"}</p>
+                            <div className="kwb-p-hero-sub-form">
+                              <input type="email" name="email" autoComplete="email" placeholder="أدخل بريدك الإلكتروني" className="kwb-p-email-input" />
+                              <button className="kwb-p-subscribe-btn" style={{ background: comp.settings.buttonColor || activeSite.branding.buttonColor }} onClick={() => setShowSubscribePopup(true)}>
+                                {comp.settings.buttonText || "اشتراك"}
+                              </button>
+                            </div>
+                          </div>
+                        );
+                      } else if (comp.settings.layout === "cta") {
                         _inner = (
                           <div className="kwb-p-cta">
                             <div className="kwb-p-cta-inner">
@@ -2731,30 +2704,6 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                               };
                               return (
                               <>
-                                <label className="kwb-label">التخطيط</label>
-                                <div style={{ display: "flex", gap: 4, marginBottom: 12 }}>
-                                  {[
-                                    { id: "navbar", label: "شريط علوي" },
-                                    { id: "hero_centered", label: "بطل مركزي" },
-                                  ].map(l => (
-                                    <button key={l.id} className={`kwb-logo-layout-btn ${(comp.settings.layout || "navbar") === l.id ? "kwb-logo-layout-active" : ""}`} style={{ flex: 1, padding: "6px 4px", fontSize: 11 }} onClick={() => updateComponentSettings(comp.id, { layout: l.id })}>{l.label}</button>
-                                  ))}
-                                </div>
-                                {comp.settings.layout === "hero_centered" && (
-                                  <>
-                                    <label className="kwb-label">صورة البطل</label>
-                                    {comp.settings.heroImageUrl ? (
-                                      <div className="kwb-upload-preview"><img src={comp.settings.heroImageUrl} alt="" /><button className="kwb-upload-remove" onClick={() => updateComponentSettings(comp.id, { heroImageUrl: "" })}>{Icons.x}</button></div>
-                                    ) : (
-                                      <div className="kwb-upload-area-sm">{Icons.image}<span>لم يتم اختيار صورة</span></div>
-                                    )}
-                                    <button className="kwb-btn-outline kwb-btn-full" onClick={() => triggerUpload({ type: "header_hero_img", compId: comp.id })}>رفع صورة</button>
-                                    <label className="kwb-label" style={{ marginTop: 12 }}>عنوان البطل</label>
-                                    <input className="kwb-input" value={comp.settings.heroTitle || ""} placeholder={activeSite.branding.siteName} onChange={e => updateComponentSettings(comp.id, { heroTitle: e.target.value })} />
-                                    <label className="kwb-label" style={{ marginTop: 12 }}>النص التعريفي</label>
-                                    <textarea className="kwb-input" style={{ height: 60, paddingTop: 8, resize: "vertical" }} value={comp.settings.subtitle || ""} placeholder="وصف مختصر عن نشرتك..." onChange={e => updateComponentSettings(comp.id, { subtitle: e.target.value })} />
-                                  </>
-                                )}
                                 <label className="kwb-label">الشعار</label>
                                 {comp.settings.logoUrl ? (
                                   <div className="kwb-upload-preview"><img src={comp.settings.logoUrl} alt="" /><button className="kwb-upload-remove" onClick={() => updateComponentSettings(comp.id, { logoUrl: "" })}>{Icons.x}</button></div>
@@ -3008,18 +2957,30 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                             {comp.type === "subscribe" && (
                               <>
                                 <label className="kwb-label">التخطيط</label>
-                                <div style={{ display: "flex", gap: 4 }}>
+                                <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
                                   {[
                                     { id: "hero", label: "بطل" },
+                                    { id: "hero_centered", label: "بطل مركزي" },
                                     { id: "cta", label: "شريط CTA" },
                                     { id: "form", label: "نموذج" },
                                   ].map(l => (
                                     <button key={l.id} className={`kwb-logo-layout-btn ${(comp.settings.layout || "hero") === l.id ? "kwb-logo-layout-active" : ""}`} style={{ flex: 1, padding: "6px 4px", fontSize: 11 }} onClick={() => updateComponentSettings(comp.id, { layout: l.id })}>{l.label}</button>
                                   ))}
                                 </div>
+                                {comp.settings.layout === "hero_centered" && (
+                                  <>
+                                    <label className="kwb-label" style={{ marginTop: 12 }}>صورة البطل</label>
+                                    {comp.settings.heroImageUrl ? (
+                                      <div className="kwb-upload-preview"><img src={comp.settings.heroImageUrl} alt="" /><button className="kwb-upload-remove" onClick={() => updateComponentSettings(comp.id, { heroImageUrl: "" })}>{Icons.x}</button></div>
+                                    ) : (
+                                      <div className="kwb-upload-area-sm">{Icons.image}<span>لم يتم اختيار صورة</span></div>
+                                    )}
+                                    <button className="kwb-btn-outline kwb-btn-full" onClick={() => triggerUpload({ type: "header_hero_img", compId: comp.id })}>رفع صورة</button>
+                                  </>
+                                )}
                                 <label className="kwb-label" style={{ marginTop: 12 }}>العنوان</label>
                                 <input className="kwb-input" value={comp.settings.title || ""} onChange={e => updateComponentSettings(comp.id, { title: e.target.value })} />
-                                {(comp.settings.layout === "hero" || !comp.settings.layout) && (
+                                {(comp.settings.layout === "hero" || comp.settings.layout === "hero_centered" || !comp.settings.layout) && (
                                   <>
                                     <label className="kwb-label" style={{ marginTop: 12 }}>العنوان الفرعي</label>
                                     <input className="kwb-input" value={comp.settings.subtitle || ""} onChange={e => updateComponentSettings(comp.id, { subtitle: e.target.value })} />
@@ -3994,7 +3955,7 @@ const CSS_STYLES = `
 .kwb-p-product-price{font-size:14px;font-weight:800;color:var(--kwb-headline-color,#1a1a1a);}
 
 /* Movies */
-.kwb-p-movies-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:16px;}
+.kwb-p-movies-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:20px;}
 .kwb-p-movie-card{display:flex;flex-direction:column;gap:0;overflow:hidden;transition:transform .15s;cursor:pointer;}
 .kwb-p-movie-card:hover{transform:translateY(-2px);}
 .kwb-p-movie-poster{width:100%;aspect-ratio:2/3;background:rgba(128,128,128,0.12);overflow:hidden;border-radius:var(--kwb-radius,0);}
