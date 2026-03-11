@@ -407,6 +407,13 @@ export default function KitabhWebsiteBuilder(props: any) {
                 else if (comp.type === "subscribe_form") { comp.type = "subscribe"; comp.settings = { ...comp.settings, layout: "form" }; }
                 else if (comp.type === "gallery") { comp.type = "article_collection"; comp.settings = { ...comp.settings, layout: "gallery" }; }
                 else if (comp.type === "category_feed") { comp.type = "article_collection"; comp.settings = { ...comp.settings, layout: "category_feed", categoryLayout: comp.settings.layout || "featured_right" }; }
+                // Migrate old banner format to cards
+                if (comp.type === "banner" && !comp.settings.cards) {
+                  comp.settings.cards = [
+                    { title: comp.settings.title || "تصفح أرشيف نشرتنا", linkText: "جميع المقالات", linkUrl: comp.settings.linkUrl || "", color: "#E82222", imageUrl: comp.settings.imageUrl || "" },
+                    { title: "قصتنا", linkText: "اقرأ المزيد", linkUrl: "", color: "#371D12", imageUrl: "" },
+                  ];
+                }
                 // Migrate hero_centered from header to subscribe
                 if (comp.type === "header" && comp.settings.layout === "hero_centered") {
                   comp.settings.layout = "navbar";
@@ -557,7 +564,10 @@ export default function KitabhWebsiteBuilder(props: any) {
       case "hero_news": return { articles: MOCK_ARTICLES.slice(0, 5).map(a => a.id) };
       case "subscribe": return { layout: "hero", title: "انضم لنشرتنا البريدية", subtitle: "محتوى حصري يصلك كل أسبوع", description: "محتوى حصري يصلك مباشرة إلى بريدك", buttonText: "اشتراك", showNameField: false, heroImageUrl: "" };
       case "hero_slider": return { articles: MOCK_ARTICLES.slice(0, 3).map(a => a.id) };
-      case "banner": return { imageUrl: "", title: "", linkUrl: "" };
+      case "banner": return { cards: [
+        { title: "تصفح أرشيف نشرتنا", linkText: "جميع المقالات", linkUrl: "", color: "#E82222", imageUrl: "" },
+        { title: "قصتنا", linkText: "اقرأ المزيد", linkUrl: "", color: "#371D12", imageUrl: "" },
+      ] };
 
       case "article_collection": return { layout: "grid", articles: MOCK_ARTICLES.slice(0, 4).map(a => a.id), title: "", showSearch: false, showCategories: false };
       case "footer": return { logoUrl: "", title: "", buttonText: "اشتراك", links: [], customText: "", customLinks: [] as { label: string; url: string }[], showKitabhBadge: true };
@@ -863,7 +873,7 @@ export default function KitabhWebsiteBuilder(props: any) {
 
   // ─── File upload (local preview via FileReader) ────────
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [uploadTarget, setUploadTarget] = useState<{ type: "branding_logo" | "comp_logo" | "comp_banner" | "testi_img" | "ticker_img" | "gallery_sidebar" | "podcast_cover" | "header_hero_img" | "movie_poster"; compId?: string; itemIndex?: number } | null>(null);
+  const [uploadTarget, setUploadTarget] = useState<{ type: "branding_logo" | "comp_logo" | "comp_banner" | "testi_img" | "ticker_img" | "gallery_sidebar" | "podcast_cover" | "header_hero_img" | "movie_poster" | "banner_card_img"; compId?: string; itemIndex?: number } | null>(null);
 
   const triggerUpload = (target: typeof uploadTarget) => {
     setUploadTarget(target);
@@ -907,6 +917,13 @@ export default function KitabhWebsiteBuilder(props: any) {
           const items = [...(comp.settings.items || [])];
           items[uploadTarget.itemIndex] = { ...items[uploadTarget.itemIndex], imageUrl: dataUrl };
           updateComponentSettings(uploadTarget.compId, { items });
+        }
+      } else if (uploadTarget.type === "banner_card_img" && uploadTarget.compId && uploadTarget.itemIndex !== undefined) {
+        const comp = activeSite!.pages.flatMap(p => p.components).find(c => c.id === uploadTarget.compId);
+        if (comp) {
+          const cards = [...(comp.settings.cards || [])];
+          cards[uploadTarget.itemIndex] = { ...cards[uploadTarget.itemIndex], imageUrl: dataUrl };
+          updateComponentSettings(uploadTarget.compId, { cards });
         }
       }
       setUploadTarget(null);
@@ -1063,9 +1080,15 @@ export default function KitabhWebsiteBuilder(props: any) {
               pc += `<div class="pv-articles"><div class="pv-articles-grid">${acH}</div><a class="pv-all-link">جميع المقالات &#x2197;</a></div>`;
             }
             break;
-          case "banner":
-            pc += `<div class="pv-banners"><div class="pv-banner-grid"><div class="pv-banner-card" style="background:var(--pv-btn)"><span>تصفح أرشيف ${sn}</span><a>جميع المقالات &#x2197;</a></div><div class="pv-banner-card" style="background:var(--pv-headline)"><span>قصتنا</span><a>اقرأ المزيد &#x2197;</a></div></div></div>`;
+          case "banner": {
+            const bCards = (s.cards || []).map((card: any) => {
+              const bg = card.imageUrl ? `background:url(${card.imageUrl}) center/cover` : `background:${card.color || "var(--pv-btn)"}`;
+              const overlay = card.imageUrl ? `<div style="position:absolute;inset:0;background:rgba(0,0,0,0.4);pointer-events:none"></div>` : "";
+              return `<div class="pv-banner-card" style="${bg};position:relative">${overlay}<span style="position:relative;z-index:1">${card.title || ""}</span><a href="${card.linkUrl || "#"}" style="position:relative;z-index:1"${card.linkUrl ? ' target="_blank"' : ""}>${card.linkText || "اقرأ المزيد"} &#x2197;</a></div>`;
+            }).join("");
+            pc += `<div class="pv-banners"><div class="pv-banner-grid">${bCards}</div></div>`;
             break;
+          }
           case "footer":
             let fl = "";
             if ((ll === "logo_only" || ll === "logo_and_text") && lu) fl += `<img src="${lu}" alt="" class="pv-footer-logo-img" />`;
@@ -1077,7 +1100,7 @@ export default function KitabhWebsiteBuilder(props: any) {
                 const label = typeof link === "string" ? link : link.label;
                 return `<a class="pv-footer-link">${label}</a>`;
               }).join("");
-            pc += `<footer class="pv-footer"><div class="pv-footer-inner"><div class="pv-footer-logo-col">${fl}</div><div class="pv-footer-right"><p class="pv-footer-tagline">محتوى حصري يصلك مباشرة إلى بريدك</p><div class="pv-form-row"><input type="email" name="email" autocomplete="email" placeholder="أدخل بريدك الإلكتروني" class="pv-footer-email" /><button class="pv-btn" style="background:${s.buttonColor || bc}">${s.buttonText || "اشتراك"}</button></div><nav class="pv-footer-nav">${fLinks}</nav></div></div><div class="pv-footer-bottom">جميع الحقوق محفوظة ${new Date().getFullYear()} ${sn}</div></footer>`;
+            pc += `<footer class="pv-footer"><div class="pv-footer-inner"><div class="pv-footer-logo-col">${fl}</div><div class="pv-footer-right"><p class="pv-footer-tagline">${s.tagline || "محتوى حصري يصلك مباشرة إلى بريدك"}</p><div class="pv-form-row"><input type="email" name="email" autocomplete="email" placeholder="أدخل بريدك الإلكتروني" class="pv-footer-email" /><button class="pv-btn" style="background:${s.buttonColor || bc}">${s.buttonText || "اشتراك"}</button></div><nav class="pv-footer-nav">${fLinks}</nav></div></div><div class="pv-footer-bottom">جميع الحقوق محفوظة ${new Date().getFullYear()} ${sn}</div></footer>`;
             break;
           case "article_view":
             const sampleA = MOCK_ARTICLES[0];
@@ -1935,21 +1958,22 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                       break;
                     }
 
-                    case "banner":
+                    case "banner": {
+                      const bannerCards = comp.settings.cards || [];
                       _inner = (
                         <div className="kwb-p-banners">
                           <div className="kwb-p-banner-grid">
-                            <div className="kwb-p-banner-card" style={{ background: activeSite.branding.buttonColor || "#E82222" }}>
-                              <span>تصفح أرشيف {activeSite.branding.siteName}</span>
-                              <a>جميع المقالات &#x2197;</a>
-                            </div>
-                            <div className="kwb-p-banner-card" style={{ background: activeSite.branding.headlineColor || "#371D12" }}>
-                              <span>قصتنا</span>
-                              <a>اقرأ المزيد &#x2197;</a>
-                            </div>
+                            {bannerCards.map((card: any, ci: number) => (
+                              <div key={ci} className="kwb-p-banner-card" style={{ background: card.imageUrl ? `url(${card.imageUrl}) center/cover` : (card.color || activeSite.branding.buttonColor || "#E82222") }}>
+                                {card.imageUrl && <div className="kwb-p-banner-card-overlay" />}
+                                <span contentEditable suppressContentEditableWarning onBlur={(e) => { const cards = [...(comp.settings.cards || [])]; cards[ci] = { ...cards[ci], title: e.currentTarget.textContent || "" }; updateComponentSettings(comp.id, { cards }); }} className="kwb-p-editable">{card.title || "عنوان البانر"}</span>
+                                <a href={card.linkUrl || "#"} target={card.linkUrl ? "_blank" : undefined} rel="noopener">{card.linkText || "اقرأ المزيد"} &#x2197;</a>
+                              </div>
+                            ))}
                           </div>
                         </div>
                       ); break;
+                    }
 
                     case "footer":
                       const footerLogoLayout = activeSite.branding.logoLayout || "text_only";
@@ -1973,7 +1997,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                               )}
                             </div>
                             <div className="kwb-p-footer-right">
-                              <p className="kwb-p-footer-tagline">محتوى حصري يصلك مباشرة إلى بريدك</p>
+                              <p className="kwb-p-footer-tagline kwb-p-editable" contentEditable suppressContentEditableWarning onBlur={(e) => updateComponentSettings(comp.id, { tagline: e.currentTarget.textContent || "" })}>{comp.settings.tagline || "محتوى حصري يصلك مباشرة إلى بريدك"}</p>
                               <div className="kwb-p-footer-form">
                                 <input type="email" name="email" autoComplete="email" placeholder="أدخل بريدك الإلكتروني" className="kwb-p-footer-email" />
                                 <button className="kwb-p-subscribe-btn" style={{ background: comp.settings.buttonColor || activeSite.branding.buttonColor }} onClick={() => setShowSubscribePopup(true)}>
@@ -2908,13 +2932,31 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
 
                             {comp.type === "banner" && (
                               <>
-                                <label className="kwb-label">البانر</label>
-                                {comp.settings.imageUrl ? (
-                                  <div className="kwb-upload-preview"><img src={comp.settings.imageUrl} alt="" /><button className="kwb-upload-remove" onClick={() => updateComponentSettings(comp.id, { imageUrl: "" })}>{Icons.x}</button></div>
-                                ) : (
-                                  <div className="kwb-upload-area-sm">{Icons.image}<span>لم يتم اختيار صورة</span></div>
-                                )}
-                                <button className="kwb-btn-outline kwb-btn-full" onClick={() => triggerUpload({ type: "comp_banner", compId: comp.id })}>رفع صورة</button>
+                                {(comp.settings.cards || []).map((card: any, ci: number) => (
+                                  <div key={ci} style={{ borderTop: ci > 0 ? "1px solid #f0f0f0" : "none", paddingTop: ci > 0 ? 10 : 0, marginTop: ci > 0 ? 10 : 0 }}>
+                                    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                                      <span style={{ fontSize: 12, fontWeight: 600, color: "#888" }}>بطاقة {ci + 1}</span>
+                                      <button className="kwb-comp-delete-btn" onClick={() => { const cards = [...(comp.settings.cards || [])]; cards.splice(ci, 1); updateComponentSettings(comp.id, { cards }); }}>{Icons.x}</button>
+                                    </div>
+                                    <input className="kwb-input" placeholder="العنوان" value={card.title || ""} onChange={e => { const cards = [...(comp.settings.cards || [])]; cards[ci] = { ...cards[ci], title: e.target.value }; updateComponentSettings(comp.id, { cards }); }} style={{ marginTop: 6 }} />
+                                    <input className="kwb-input" placeholder="نص الرابط" value={card.linkText || ""} onChange={e => { const cards = [...(comp.settings.cards || [])]; cards[ci] = { ...cards[ci], linkText: e.target.value }; updateComponentSettings(comp.id, { cards }); }} style={{ marginTop: 6 }} />
+                                    <input className="kwb-input" placeholder="الرابط (URL)" value={card.linkUrl || ""} dir="ltr" onChange={e => { const cards = [...(comp.settings.cards || [])]; cards[ci] = { ...cards[ci], linkUrl: e.target.value }; updateComponentSettings(comp.id, { cards }); }} style={{ marginTop: 6 }} />
+                                    <label className="kwb-label" style={{ marginTop: 8 }}>لون الخلفية</label>
+                                    <div className="kwb-color-row-controls">
+                                      {PRESET_COLORS.map(c => (
+                                        <button key={c} className={`kwb-color-dot ${card.color === c ? "kwb-color-dot-active" : ""}`} style={{ background: c }} onClick={() => { const cards = [...(comp.settings.cards || [])]; cards[ci] = { ...cards[ci], color: c }; updateComponentSettings(comp.id, { cards }); }} />
+                                      ))}
+                                      <input type="color" className="kwb-color-input" value={card.color || "#E82222"} onChange={e => { const cards = [...(comp.settings.cards || [])]; cards[ci] = { ...cards[ci], color: e.target.value }; updateComponentSettings(comp.id, { cards }); }} />
+                                    </div>
+                                    <label className="kwb-label" style={{ marginTop: 8 }}>صورة خلفية (اختياري)</label>
+                                    {card.imageUrl ? (
+                                      <div className="kwb-upload-preview" style={{ marginTop: 4 }}><img src={card.imageUrl} alt="" /><button className="kwb-upload-remove" onClick={() => { const cards = [...(comp.settings.cards || [])]; cards[ci] = { ...cards[ci], imageUrl: "" }; updateComponentSettings(comp.id, { cards }); }}>{Icons.x}</button></div>
+                                    ) : (
+                                      <button className="kwb-btn-outline kwb-btn-full" style={{ marginTop: 4, fontSize: 11 }} onClick={() => triggerUpload({ type: "banner_card_img", compId: comp.id, itemIndex: ci })}>{Icons.image} رفع صورة</button>
+                                    )}
+                                  </div>
+                                ))}
+                                <button className="kwb-btn-outline kwb-btn-full" style={{ marginTop: 10 }} onClick={() => { const cards = [...(comp.settings.cards || []), { title: "", linkText: "اقرأ المزيد", linkUrl: "", color: "#E82222", imageUrl: "" }]; updateComponentSettings(comp.id, { cards }); }}>{Icons.plus} إضافة بطاقة</button>
                               </>
                             )}
 
@@ -3022,6 +3064,8 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                                 <button className="kwb-btn-outline kwb-btn-full" onClick={() => triggerUpload({ type: "comp_logo", compId: comp.id })}>رفع صورة</button>
                                 <label className="kwb-label" style={{ marginTop: 12 }}>العنوان</label>
                                 <input className="kwb-input" value={comp.settings.title || ""} onChange={e => updateComponentSettings(comp.id, { title: e.target.value })} placeholder="أدخل النص" />
+                                <label className="kwb-label" style={{ marginTop: 12 }}>نص الوصف</label>
+                                <input className="kwb-input" value={comp.settings.tagline || ""} onChange={e => updateComponentSettings(comp.id, { tagline: e.target.value })} placeholder="محتوى حصري يصلك مباشرة إلى بريدك" />
                                 <label className="kwb-label" style={{ marginTop: 12 }}>نص الزر</label>
                                 <input className="kwb-input" value={comp.settings.buttonText || ""} onChange={e => updateComponentSettings(comp.id, { buttonText: e.target.value })} placeholder="أضف نصا" />
                                 <label className="kwb-label" style={{ marginTop: 12 }}>لون الزر</label>
@@ -3821,9 +3865,10 @@ const CSS_STYLES = `
 /* Banners */
 .kwb-p-banners{padding:0;}
 .kwb-p-banner-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(128,128,128,0.2);}
-.kwb-p-banner-card{padding:28px 20px;color:#fff;display:flex;flex-direction:column;gap:8px;min-height:140px;justify-content:flex-end;}
-.kwb-p-banner-card span{font-size:15px;font-weight:700;}
-.kwb-p-banner-card a{font-size:12px;color:rgba(255,255,255,0.8);text-decoration:underline;cursor:pointer;}
+.kwb-p-banner-card{padding:28px 20px;color:#fff;display:flex;flex-direction:column;gap:8px;min-height:140px;justify-content:flex-end;position:relative;}
+.kwb-p-banner-card-overlay{position:absolute;inset:0;background:rgba(0,0,0,0.4);pointer-events:none;}
+.kwb-p-banner-card span{font-size:15px;font-weight:700;position:relative;z-index:1;}
+.kwb-p-banner-card a{font-size:12px;color:rgba(255,255,255,0.8);text-decoration:underline;cursor:pointer;position:relative;z-index:1;}
 
 /* Footer */
 .kwb-p-footer{background:var(--kwb-headline-color,#1a1a1a);color:var(--kwb-bg,#fff);padding:40px 16px 0;}
