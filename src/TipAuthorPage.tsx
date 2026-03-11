@@ -304,7 +304,7 @@ const TipAuthorPage: React.FC = () => {
                 >
                   <img
                     src={isTea ? '/images/tea-large.png' : '/images/lungo.png'} alt=""
-                    style={{ width: '18px', height: '18px', objectFit: 'contain', filter: authorTipEnabled ? 'none' : 'grayscale(100%)' }}
+                    style={{ width: '22px', height: '22px', objectFit: 'contain', filter: authorTipEnabled ? 'none' : 'grayscale(100%)' }}
                   />
                 </button>
               </div>
