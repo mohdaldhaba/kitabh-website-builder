@@ -201,30 +201,27 @@ const COMPONENT_META: Record<ComponentType, { label: string; hasSettings: boolea
 
 
 const COMPONENT_ICONS: Record<ComponentType, string> = {
-  header: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="4" rx="1"/><line x1="6" y1="11" x2="18" y2="11"/></svg>',
-  hero_news: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg>',
-
-  hero_slider: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="15 12 19 12"/><polyline points="5 12 9 12"/></svg>',
-  banner: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><line x1="6" y1="10" x2="18" y2="10"/></svg>',
-  subscribe: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22 6 12 13 2 6"/></svg>',
-  article_collection: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>',
-  footer: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="17" width="20" height="4" rx="1"/><line x1="6" y1="13" x2="18" y2="13"/></svg>',
-  testimonials: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>',
-  products: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg>',
-  podcast: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/></svg>',
-  courses: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>',
-  topics: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg>',
-  brands_ticker: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>',
-  article_view: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>',
-  text_block: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="17" y1="10" x2="3" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="17" y1="18" x2="3" y2="18"/></svg>',
-  image_block: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>',
-
-  contact_form: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>',
-  divider: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="2" y1="12" x2="22" y2="12"/></svg>',
-  rich_text: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>',
-  bento_grid: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>',
-  social_links: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>',
-
+  header: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6366F1" stroke-width="2"><rect x="2" y="3" width="20" height="4" rx="1"/><line x1="6" y1="11" x2="18" y2="11"/></svg>',
+  hero_news: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#EC4899" stroke-width="2"><rect x="2" y="3" width="20" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg>',
+  hero_slider: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="15 12 19 12"/><polyline points="5 12 9 12"/></svg>',
+  banner: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><line x1="6" y1="10" x2="18" y2="10"/></svg>',
+  subscribe: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22 6 12 13 2 6"/></svg>',
+  article_collection: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>',
+  footer: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B7280" stroke-width="2"><rect x="2" y="17" width="20" height="4" rx="1"/><line x1="6" y1="13" x2="18" y2="13"/></svg>',
+  testimonials: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>',
+  products: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F97316" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg>',
+  podcast: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" stroke-width="2"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/></svg>',
+  courses: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0891B2" stroke-width="2"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>',
+  topics: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#14B8A6" stroke-width="2"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg>',
+  brands_ticker: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#FBBF24" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>',
+  article_view: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#64748B" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>',
+  text_block: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2"><line x1="17" y1="10" x2="3" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="17" y1="18" x2="3" y2="18"/></svg>',
+  image_block: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#06B6D4" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>',
+  contact_form: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>',
+  divider: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2"><line x1="2" y1="12" x2="22" y2="12"/></svg>',
+  rich_text: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7C3AED" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>',
+  bento_grid: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D946EF" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>',
+  social_links: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>',
 };
 
 const PRESET_COLORS = ["#E82222", "#0000FF", "#2563EB", "#0891B2", "#10B981", "#F59E0B"];
@@ -585,7 +582,7 @@ export default function KitabhWebsiteBuilder(props: any) {
         { title: "دورة الكتابة", subtitle: "تعلم أساسيات الكتابة الإبداعية", price: "١٩٩ ر.س", imageUrl: "", url: "", buttonText: "سجّل الآن" },
       ] };
       case "podcast": return { sectionTitle: "البودكاست", layout: "list", programs: [
-        { name: "بودكاست الكتابة", description: "نصائح عملية للكتّاب", imageUrl: "", episodes: [
+        { name: "بودكاست الكتابة", description: "نصائح عملية للكتّاب", imageUrl: "", url: "", episodes: [
           { title: "كيف تبدأ نشرتك البريدية", subtitle: "نصائح عملية للمبتدئين", duration: "٤٥ دقيقة", url: "" },
           { title: "أسرار كتابة عنوان جذاب", subtitle: "تقنيات مجرّبة لزيادة معدل الفتح", duration: "٣٠ دقيقة", url: "" },
         ]},
@@ -850,7 +847,7 @@ export default function KitabhWebsiteBuilder(props: any) {
 
   // ─── File upload (local preview via FileReader) ────────
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [uploadTarget, setUploadTarget] = useState<{ type: "branding_logo" | "comp_logo" | "comp_banner" | "testi_img" | "ticker_img" | "gallery_sidebar"; compId?: string; itemIndex?: number } | null>(null);
+  const [uploadTarget, setUploadTarget] = useState<{ type: "branding_logo" | "comp_logo" | "comp_banner" | "testi_img" | "ticker_img" | "gallery_sidebar" | "podcast_cover"; compId?: string; itemIndex?: number } | null>(null);
 
   const triggerUpload = (target: typeof uploadTarget) => {
     setUploadTarget(target);
@@ -878,6 +875,13 @@ export default function KitabhWebsiteBuilder(props: any) {
           const items = [...(comp.settings.items || [])];
           items[uploadTarget.itemIndex] = { ...items[uploadTarget.itemIndex], imageUrl: dataUrl };
           updateComponentSettings(uploadTarget.compId, { items });
+        }
+      } else if (uploadTarget.type === "podcast_cover" && uploadTarget.compId && uploadTarget.itemIndex !== undefined) {
+        const comp = activeSite!.pages.flatMap(p => p.components).find(c => c.id === uploadTarget.compId);
+        if (comp) {
+          const programs = [...(comp.settings.programs || [])];
+          programs[uploadTarget.itemIndex] = { ...programs[uploadTarget.itemIndex], imageUrl: dataUrl };
+          updateComponentSettings(uploadTarget.compId, { programs });
         }
       }
       setUploadTarget(null);
@@ -2141,35 +2145,59 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
 
                     case "podcast": {
                       const programs = comp.settings.programs || [];
-                      const podIsGrid = (comp.settings.layout || "list") === "grid";
-                      _inner = (
-                        <div className="kwb-p-section">
-                          <h3 className="kwb-p-section-title kwb-p-editable" contentEditable suppressContentEditableWarning onBlur={(e) => updateComponentSettings(comp.id, { sectionTitle: e.currentTarget.textContent || "" })}>{comp.settings.sectionTitle || "البودكاست"}</h3>
-                          {programs.map((prog: any, pi: number) => (
-                            <div key={pi} style={{ marginBottom: pi < programs.length - 1 ? 20 : 0 }}>
-                              <div className="kwb-p-podcast-program">
-                                {prog.imageUrl ? <img src={prog.imageUrl} alt="" className="kwb-p-podcast-prog-img" style={{ objectFit: "cover" }} /> : <div className="kwb-p-podcast-prog-img">{Icons.image}</div>}
-                                <div>
-                                  <h4 className="kwb-p-podcast-prog-name">{prog.name}</h4>
-                                  <p className="kwb-p-podcast-prog-desc">{prog.description}</p>
+                      const podLayout = comp.settings.layout || "list";
+                      if (podLayout === "featured") {
+                        _inner = (
+                          <div className="kwb-p-section">
+                            <h3 className="kwb-p-section-title kwb-p-editable" contentEditable suppressContentEditableWarning onBlur={(e) => updateComponentSettings(comp.id, { sectionTitle: e.currentTarget.textContent || "" })}>{comp.settings.sectionTitle || "البودكاست"}</h3>
+                            <div className="kwb-p-podcast-featured-grid">
+                              {programs.map((prog: any, pi: number) => (
+                                <a key={pi} className="kwb-p-podcast-featured-card" href={prog.url || "#"} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none", color: "inherit" }}>
+                                  <div className="kwb-p-podcast-featured-cover">
+                                    {prog.imageUrl ? <img src={prog.imageUrl} alt={prog.name} /> : <div className="kwb-p-podcast-featured-cover-ph"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/></svg></div>}
+                                  </div>
+                                  <div className="kwb-p-podcast-featured-info">
+                                    <h4 className="kwb-p-podcast-featured-name">{prog.name}</h4>
+                                    <p className="kwb-p-podcast-featured-desc">{prog.description}</p>
+                                    <span className="kwb-p-podcast-featured-eps">{(prog.episodes || []).length} حلقة</span>
+                                  </div>
+                                </a>
+                              ))}
+                            </div>
+                          </div>
+                        );
+                      } else {
+                        const podIsGrid = podLayout === "grid";
+                        _inner = (
+                          <div className="kwb-p-section">
+                            <h3 className="kwb-p-section-title kwb-p-editable" contentEditable suppressContentEditableWarning onBlur={(e) => updateComponentSettings(comp.id, { sectionTitle: e.currentTarget.textContent || "" })}>{comp.settings.sectionTitle || "البودكاست"}</h3>
+                            {programs.map((prog: any, pi: number) => (
+                              <div key={pi} style={{ marginBottom: pi < programs.length - 1 ? 20 : 0 }}>
+                                <div className="kwb-p-podcast-program">
+                                  {prog.imageUrl ? <img src={prog.imageUrl} alt="" className="kwb-p-podcast-prog-img" style={{ objectFit: "cover" }} /> : <div className="kwb-p-podcast-prog-img">{Icons.image}</div>}
+                                  <div>
+                                    <h4 className="kwb-p-podcast-prog-name">{prog.name}</h4>
+                                    <p className="kwb-p-podcast-prog-desc">{prog.description}</p>
+                                  </div>
+                                </div>
+                                <div className={podIsGrid ? "kwb-p-podcast-grid" : "kwb-p-podcast-list"}>
+                                  {(prog.episodes || []).map((ep: any, ei: number) => (
+                                    <div key={ei} className="kwb-p-podcast-card">
+                                      <div className="kwb-p-podcast-ep-num">{ei + 1}</div>
+                                      <div className="kwb-p-podcast-info">
+                                        <h4 className="kwb-p-podcast-title">{ep.title}</h4>
+                                        <p className="kwb-p-podcast-subtitle">{ep.subtitle}</p>
+                                        <span className="kwb-p-podcast-duration">{ep.duration}</span>
+                                      </div>
+                                    </div>
+                                  ))}
                                 </div>
                               </div>
-                              <div className={podIsGrid ? "kwb-p-podcast-grid" : "kwb-p-podcast-list"}>
-                                {(prog.episodes || []).map((ep: any, ei: number) => (
-                                  <div key={ei} className="kwb-p-podcast-card">
-                                    <div className="kwb-p-podcast-ep-num">{ei + 1}</div>
-                                    <div className="kwb-p-podcast-info">
-                                      <h4 className="kwb-p-podcast-title">{ep.title}</h4>
-                                      <p className="kwb-p-podcast-subtitle">{ep.subtitle}</p>
-                                      <span className="kwb-p-podcast-duration">{ep.duration}</span>
-                                    </div>
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      ); break;
+                            ))}
+                          </div>
+                        );
+                      }
+                      break;
                     }
 
                     case "courses": {
@@ -3097,9 +3125,10 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                                 <label className="kwb-label">عنوان القسم</label>
                                 <input className="kwb-input" value={comp.settings.sectionTitle || ""} onChange={e => updateComponentSettings(comp.id, { sectionTitle: e.target.value })} placeholder="عنوان القسم" />
                                 <label className="kwb-label">التخطيط</label>
-                                <div style={{ display: "flex", gap: 6 }}>
-                                  <button className={`kwb-logo-layout-btn ${(comp.settings.layout || "list") === "list" ? "kwb-logo-layout-active" : ""}`} onClick={() => updateComponentSettings(comp.id, { layout: "list" })} style={{ flex: 1 }}>قائمة</button>
-                                  <button className={`kwb-logo-layout-btn ${comp.settings.layout === "grid" ? "kwb-logo-layout-active" : ""}`} onClick={() => updateComponentSettings(comp.id, { layout: "grid" })} style={{ flex: 1 }}>شبكة</button>
+                                <div style={{ display: "flex", gap: 4 }}>
+                                  <button className={`kwb-logo-layout-btn ${(comp.settings.layout || "list") === "list" ? "kwb-logo-layout-active" : ""}`} onClick={() => updateComponentSettings(comp.id, { layout: "list" })} style={{ flex: 1, padding: "6px 4px", fontSize: 11 }}>قائمة</button>
+                                  <button className={`kwb-logo-layout-btn ${comp.settings.layout === "grid" ? "kwb-logo-layout-active" : ""}`} onClick={() => updateComponentSettings(comp.id, { layout: "grid" })} style={{ flex: 1, padding: "6px 4px", fontSize: 11 }}>شبكة</button>
+                                  <button className={`kwb-logo-layout-btn ${comp.settings.layout === "featured" ? "kwb-logo-layout-active" : ""}`} onClick={() => updateComponentSettings(comp.id, { layout: "featured" })} style={{ flex: 1, padding: "6px 4px", fontSize: 11 }}>بطاقات</button>
                                 </div>
                                 {(comp.settings.programs || []).map((prog: any, pi: number) => (
                                   <div key={pi} style={{ borderTop: "2px solid #e0e0e0", paddingTop: 12, marginTop: 14 }}>
@@ -3109,6 +3138,13 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                                     </div>
                                     <input className="kwb-input" placeholder="اسم البرنامج" value={prog.name || ""} onChange={e => { const programs = [...(comp.settings.programs || [])]; programs[pi] = { ...programs[pi], name: e.target.value }; updateComponentSettings(comp.id, { programs }); }} />
                                     <input className="kwb-input" placeholder="وصف البرنامج" value={prog.description || ""} onChange={e => { const programs = [...(comp.settings.programs || [])]; programs[pi] = { ...programs[pi], description: e.target.value }; updateComponentSettings(comp.id, { programs }); }} style={{ marginTop: 6 }} />
+                                    <input className="kwb-input" placeholder="رابط البودكاست (Apple/Spotify...)" value={prog.url || ""} dir="ltr" onChange={e => { const programs = [...(comp.settings.programs || [])]; programs[pi] = { ...programs[pi], url: e.target.value }; updateComponentSettings(comp.id, { programs }); }} style={{ marginTop: 6 }} />
+                                    <label className="kwb-label" style={{ marginTop: 8 }}>غلاف البرنامج</label>
+                                    {prog.imageUrl ? (
+                                      <div className="kwb-upload-preview" style={{ marginTop: 4 }}><img src={prog.imageUrl} alt="" /><button className="kwb-upload-remove" onClick={() => { const programs = [...(comp.settings.programs || [])]; programs[pi] = { ...programs[pi], imageUrl: "" }; updateComponentSettings(comp.id, { programs }); }}>{Icons.x}</button></div>
+                                    ) : (
+                                      <button className="kwb-btn-outline kwb-btn-full" style={{ marginTop: 4, fontSize: 11 }} onClick={() => triggerUpload({ type: "podcast_cover", compId: comp.id, itemIndex: pi })}>{Icons.image} رفع غلاف</button>
+                                    )}
                                     <label className="kwb-label" style={{ marginTop: 10 }}>الحلقات</label>
                                     {(prog.episodes || []).map((ep: any, ei: number) => (
                                       <div key={ei} style={{ borderTop: "1px solid #f0f0f0", paddingTop: 8, marginTop: 8 }}>
@@ -3327,12 +3363,8 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                     <div className="kwb-add-comp-cards">
                       {(["header","hero_news","subscribe","article_collection","bento_grid","banner","brands_ticker","testimonials","products","podcast","courses","topics","text_block","rich_text","image_block","contact_form","social_links","divider","footer"] as ComponentType[]).map(type => (
                         <button key={type} className="kwb-add-comp-card" onClick={() => { addComponentToPage(type); setShowAddComponent(false); }}>
-                          <div className="kwb-add-comp-mini">
-                            <div className={`kwb-mc-auto kwb-mc-${type.replace(/_/g,"-")}`} />
-                          </div>
-                          <div className="kwb-add-comp-label-row">
-                            <span className="kwb-add-comp-name">{COMPONENT_META[type].label}</span>
-                          </div>
+                          <span className="kwb-add-comp-icon" dangerouslySetInnerHTML={{ __html: COMPONENT_ICONS[type] || '' }} />
+                          <span className="kwb-add-comp-name">{COMPONENT_META[type].label}</span>
                         </button>
                       ))}
                     </div>
@@ -3890,6 +3922,17 @@ const CSS_STYLES = `
 .kwb-p-podcast-prog-img{width:48px;height:48px;background:rgba(128,128,128,0.15);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:var(--kwb-text-color,#ccc);border-radius:50%;}
 .kwb-p-podcast-prog-name{font-size:14px;font-weight:700;margin:0;color:var(--kwb-headline-color,#1a1a1a);}
 .kwb-p-podcast-prog-desc{font-size:11px;color:var(--kwb-text-color,#888);margin:2px 0 0;}
+/* Podcast Featured Layout */
+.kwb-p-podcast-featured-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px;}
+.kwb-p-podcast-featured-card{display:flex;flex-direction:column;border:1px solid rgba(128,128,128,0.15);background:var(--kwb-card-bg,#fff);overflow:hidden;transition:all .15s;}
+.kwb-p-podcast-featured-card:hover{box-shadow:0 4px 16px rgba(0,0,0,0.08);transform:translateY(-2px);}
+.kwb-p-podcast-featured-cover{width:100%;aspect-ratio:1;overflow:hidden;background:rgba(128,128,128,0.08);}
+.kwb-p-podcast-featured-cover img{width:100%;height:100%;object-fit:cover;}
+.kwb-p-podcast-featured-cover-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:var(--kwb-text-color,#ccc);opacity:0.4;background:linear-gradient(135deg,rgba(139,92,246,0.08),rgba(139,92,246,0.02));}
+.kwb-p-podcast-featured-info{padding:14px;display:flex;flex-direction:column;gap:4px;}
+.kwb-p-podcast-featured-name{font-size:15px;font-weight:700;margin:0;color:var(--kwb-headline-color,#1a1a1a);line-height:1.4;}
+.kwb-p-podcast-featured-desc{font-size:12px;color:var(--kwb-text-color,#888);margin:0;line-height:1.5;}
+.kwb-p-podcast-featured-eps{font-size:11px;color:var(--kwb-text-color,#999);font-weight:600;margin-top:4px;opacity:0.7;}
 .kwb-p-podcast-ep-num{width:28px;height:28px;background:rgba(128,128,128,0.1);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;color:var(--kwb-text-color,#888);flex-shrink:0;}
 
 /* Courses */
@@ -4009,13 +4052,14 @@ const CSS_STYLES = `
 .kwb-add-comp-section{margin-top:16px;padding-top:16px;border-top:1px solid #F0F0F0;}
 .kwb-comp-sticky-footer{position:relative;background:#fff;padding:10px 16px;border-top:1px solid #E8E8E8;flex-shrink:0;}
 .kwb-add-comp-dropdown{position:absolute;bottom:100%;left:0;right:0;background:#fff;border:1px solid #E8E8E8;border-bottom:none;border-radius:12px 12px 0 0;box-shadow:0 -4px 20px rgba(0,0,0,0.1);padding:8px;max-height:40vh;overflow-y:auto;z-index:10;}
-.kwb-add-comp-cards{display:grid;grid-template-columns:1fr 1fr 1fr;gap:4px;}
-.kwb-add-comp-card{display:flex;flex-direction:column;border:1.5px solid #E8E8E8;border-radius:8px;background:#fff;cursor:pointer;transition:all .15s;overflow:hidden;text-align:center;}
-.kwb-add-comp-card:hover{border-color:#371D12;box-shadow:0 2px 8px rgba(0,0,0,0.06);}
-.kwb-add-comp-mini{display:none;}
-.kwb-add-comp-label-row{display:flex;align-items:center;justify-content:center;gap:4px;padding:8px 4px;direction:rtl;}
-.kwb-add-comp-name{font-family:inherit;font-size:11px;font-weight:600;color:#555;}
-.kwb-add-comp-card:hover .kwb-add-comp-name{color:#371D12;}
+.kwb-add-comp-cards{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;}
+.kwb-add-comp-card{display:flex;flex-direction:column;align-items:center;gap:6px;border:1.5px solid #f0f0f0;border-radius:10px;background:#fafafa;cursor:pointer;transition:all .15s;overflow:hidden;text-align:center;padding:10px 4px 8px;}
+.kwb-add-comp-card:hover{border-color:#0000FF;background:#EEF0FF;box-shadow:0 2px 8px rgba(0,0,0,0.06);}
+.kwb-add-comp-icon{width:28px;height:28px;display:flex;align-items:center;justify-content:center;background:#fff;border-radius:7px;border:1px solid #e8e8e8;flex-shrink:0;}
+.kwb-add-comp-icon svg{width:16px;height:16px;}
+.kwb-add-comp-card:hover .kwb-add-comp-icon{border-color:#c7d2fe;background:#fff;}
+.kwb-add-comp-name{font-family:inherit;font-size:10px;font-weight:600;color:#555;line-height:1.2;}
+.kwb-add-comp-card:hover .kwb-add-comp-name{color:#0000FF;}
 
 /* CSS-only mini layout previews */
 .kwb-mc-auto{width:100%;height:100%;position:relative;}
@@ -4232,9 +4276,8 @@ const CSS_STYLES = `
 @media(max-width:480px){.kwb-p-insert-dropdown{grid-template-columns:repeat(2,1fr);min-width:240px;}}
 .kwb-p-insert-item{padding:10px 6px 8px;border:1.5px solid #f0f0f0;border-radius:10px;background:#fafafa;font-family:inherit;font-size:11px;font-weight:600;color:#555;cursor:pointer;text-align:center;transition:all .15s;white-space:nowrap;display:flex;flex-direction:column;align-items:center;gap:6px;}
 .kwb-p-insert-item:hover{background:#EEF0FF;border-color:#0000FF;color:#0000FF;}
-.kwb-p-insert-item:hover .kwb-p-insert-icon svg{stroke:#0000FF;}
 .kwb-p-insert-icon{width:28px;height:28px;display:flex;align-items:center;justify-content:center;background:#fff;border-radius:7px;border:1px solid #e8e8e8;}
-.kwb-p-insert-icon svg{width:16px;height:16px;stroke:#888;}
+.kwb-p-insert-icon svg{width:16px;height:16px;}
 .kwb-p-insert-label{font-size:11px;line-height:1.2;}
 
 /* Inline editable text */
@@ -4287,6 +4330,9 @@ const CSS_STYLES = `
 .kwb-preview-content .kwb-p-slider-img{border-radius:var(--kwb-radius,0);overflow:hidden;}
 .kwb-preview-content .kwb-p-slider-img img{border-radius:var(--kwb-radius,0);}
 .kwb-preview-content .kwb-p-podcast-card{border-radius:var(--kwb-radius,0);overflow:hidden;}
+.kwb-preview-content .kwb-p-podcast-featured-card{border-radius:var(--kwb-radius,0);overflow:hidden;}
+.kwb-preview-content .kwb-p-podcast-featured-cover{border-radius:var(--kwb-radius,0) var(--kwb-radius,0) 0 0;overflow:hidden;}
+.kwb-preview-content .kwb-p-podcast-prog-img{border-radius:var(--kwb-radius,0);overflow:hidden;}
 .kwb-preview-content .kwb-p-podcast-img{border-radius:var(--kwb-radius,0);overflow:hidden;}
 .kwb-preview-content .kwb-p-cta-form{border-radius:var(--kwb-radius,0);}
 .kwb-preview-content .kwb-p-sub-form{border-radius:var(--kwb-radius,0);}
@@ -4369,8 +4415,8 @@ const CSS_STYLES = `
 .kwb-login-submit:hover{opacity:0.9;}
 
 /* ─── Component Icons ─── */
-.kwb-comp-icon{width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:#999;opacity:0.7;}
-.kwb-comp-row-active .kwb-comp-icon{color:#0000FF;opacity:1;}
+.kwb-comp-icon{width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;opacity:0.85;}
+.kwb-comp-row-active .kwb-comp-icon{opacity:1;}
 
 /* ─── Social Links ─── */
 .kwb-p-social-links{display:flex;gap:12px;justify-content:center;padding:20px 16px;flex-wrap:wrap;}
