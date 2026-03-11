@@ -12,6 +12,7 @@ interface TipInteraction {
   drinkType: 'coffee' | 'tea'
   selectedAmount: number | null
   isCustomAmount: boolean
+  isAnonymous?: boolean
   visitorId: string
 }
 
@@ -160,6 +161,7 @@ const TipAuthorPage: React.FC = () => {
   const [authorPrefersTea, setAuthorPrefersTea] = useState(DEMO_AUTHOR.prefersTea)
   const [showAuthorSettings, setShowAuthorSettings] = useState(false)
   const [showSupporters, setShowSupporters] = useState(false)
+  const [isAnonymous, setIsAnonymous] = useState(false)
 
   // Drink type is determined by author preference, not visitor
   const isTea = authorPrefersTea
@@ -205,6 +207,7 @@ const TipAuthorPage: React.FC = () => {
       drinkType: isTea ? 'tea' : 'coffee',
       selectedAmount: getAmount(),
       isCustomAmount: isCustom,
+      isAnonymous,
       visitorId: getVisitorId(),
     })
     setSubmitted(true)
@@ -231,6 +234,7 @@ const TipAuthorPage: React.FC = () => {
       setIsCustom(false)
       setCustomAmount('')
       setShowSupporters(false)
+      setIsAnonymous(false)
     }, 300)
   }
 
@@ -651,8 +655,34 @@ const TipAuthorPage: React.FC = () => {
                   {getAmount() || '—'} <span style={{ fontSize: '16px', fontWeight: 500, color: '#64748B' }}>ر.س</span>
                 </div>
 
-                {/* Submit — NO money amount on button */}
-                <div style={{ padding: '14px 28px 8px' }}>
+                {/* Anonymous toggle */}
+                <div style={{
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  gap: '8px', padding: '4px 28px 0',
+                }}>
+                  <button
+                    onClick={() => setIsAnonymous(!isAnonymous)}
+                    style={{
+                      width: '36px', height: '20px', borderRadius: '10px', border: 'none',
+                      background: isAnonymous ? '#0000FF' : '#E2E8F0',
+                      cursor: 'pointer', position: 'relative', transition: 'background 0.3s',
+                      flexShrink: 0,
+                    }}
+                  >
+                    <div style={{
+                      width: '14px', height: '14px', borderRadius: '50%', background: '#fff',
+                      position: 'absolute', top: '3px',
+                      transition: 'all 0.3s ease',
+                      ...(isAnonymous ? { right: '3px' } : { left: '3px' }),
+                    }} />
+                  </button>
+                  <span style={{ fontSize: '13px', color: '#64748B' }}>
+                    {isAnonymous ? 'سيظهر اسمك كـ "مجهول"' : 'سيظهر اسمك في قائمة الداعمين'}
+                  </span>
+                </div>
+
+                {/* Submit */}
+                <div style={{ padding: '12px 28px 8px' }}>
                   <button
                     onClick={handleSubmit}
                     disabled={isCustom && (!customAmount || Number(customAmount) <= 0)}
