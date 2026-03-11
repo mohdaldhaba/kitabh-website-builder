@@ -44,7 +44,9 @@ type ComponentType =
   | "divider"
   | "rich_text"
   | "bento_grid"
-  | "social_links";
+  | "social_links"
+  | "gallery"
+  | "category_feed";
 
 interface SitePage {
   id: string;
@@ -198,6 +200,8 @@ const COMPONENT_META: Record<ComponentType, { label: string; hasSettings: boolea
   rich_text: { label: "محتوى منسق", hasSettings: true },
   bento_grid: { label: "شبكة بينتو", hasSettings: true },
   social_links: { label: "روابط التواصل", hasSettings: true },
+  gallery: { label: "معرض المقالات", hasSettings: true },
+  category_feed: { label: "تصنيف مقالات", hasSettings: true },
 };
 
 
@@ -225,6 +229,8 @@ const COMPONENT_ICONS: Record<ComponentType, string> = {
   rich_text: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>',
   bento_grid: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>',
   social_links: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>',
+  gallery: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="18" rx="2"/><rect x="14" y="3" width="8" height="18" rx="0"/><line x1="2" y1="12" x2="14" y2="12"/></svg>',
+  category_feed: '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4z"/><line x1="14" y1="17" x2="20" y2="17"/><line x1="14" y1="14" x2="20" y2="14"/><line x1="14" y1="20" x2="18" y2="20"/></svg>',
 };
 
 const PRESET_COLORS = ["#E82222", "#7C3AED", "#2563EB", "#0891B2", "#10B981", "#F59E0B"];
@@ -554,6 +560,25 @@ export default function KitabhWebsiteBuilder(props: any) {
         { platform: "snapchat", url: "", enabled: false },
         { platform: "facebook", url: "", enabled: false },
       ] };
+      case "gallery": return {
+        sectionTitle: "في هذا العدد",
+        showSidebar: true,
+        sidebarTitle: "العدد الأخير",
+        sidebarButtonText: "النسخة الإلكترونية",
+        articles: MOCK_ARTICLES.slice(0, 3).map(a => a.id),
+        sidebarArticle: MOCK_ARTICLES[0]?.id || "",
+        sidebarImageUrl: "",
+      };
+      case "category_feed": return {
+        categoryId: MOCK_CATEGORIES[0]?._id || "",
+        layout: "featured_right",
+        maxArticles: 5,
+        showMoreLink: true,
+        moreText: "",
+        showSidebar: true,
+        sidebarCategoryId: "",
+        sidebarTitle: "",
+      };
       case "bento_grid": return { layout: "2-1" as string, items: [
         { title: "عنوان البطاقة الأولى", text: "نص وصفي قصير للبطاقة", imageUrl: "", linkUrl: "" },
         { title: "عنوان البطاقة الثانية", text: "نص وصفي قصير للبطاقة", imageUrl: "", linkUrl: "" },
@@ -720,7 +745,7 @@ export default function KitabhWebsiteBuilder(props: any) {
     }, 100);
   };
 
-  const INSERT_TYPES: ComponentType[] = ["header", "hero_news", "hero_subscribe", "banner", "cta_newsletter", "article_collection", "brands_ticker", "testimonials", "products", "podcast", "courses", "topics", "text_block", "rich_text", "image_block", "subscribe_form", "contact_form", "social_links", "divider", "footer"];
+  const INSERT_TYPES: ComponentType[] = ["header", "hero_news", "hero_subscribe", "gallery", "category_feed", "banner", "cta_newsletter", "article_collection", "brands_ticker", "testimonials", "products", "podcast", "courses", "topics", "text_block", "rich_text", "image_block", "subscribe_form", "contact_form", "social_links", "divider", "footer"];
 
   // ─── Move component up/down ────────
   const moveComponent = (compId: string, direction: "up" | "down") => {
@@ -854,6 +879,8 @@ export default function KitabhWebsiteBuilder(props: any) {
         updateComponentSettings(uploadTarget.compId, { logoUrl: dataUrl });
       } else if (uploadTarget.type === "comp_banner" && uploadTarget.compId) {
         updateComponentSettings(uploadTarget.compId, { imageUrl: dataUrl });
+      } else if (uploadTarget.type === "gallery_sidebar" && uploadTarget.compId) {
+        updateComponentSettings(uploadTarget.compId, { sidebarImageUrl: dataUrl });
       } else if ((uploadTarget.type === "testi_img" || uploadTarget.type === "ticker_img") && uploadTarget.compId && uploadTarget.itemIndex !== undefined) {
         const comp = activeSite!.pages.flatMap(p => p.components).find(c => c.id === uploadTarget.compId);
         if (comp) {
@@ -1047,6 +1074,23 @@ export default function KitabhWebsiteBuilder(props: any) {
             pc += `<div class="pv-social-links">${slHtml}</div>`;
             break;
           }
+          case "gallery": {
+            const gArts = (s.articles || []).map((id: string) => MOCK_ARTICLES.find(a => a.id === id)).filter(Boolean);
+            const gCards = gArts.map((a: any) => `<div class="pv-gallery-card"><div class="pv-gallery-card-img">${a.imageUrl ? `<img src="${a.imageUrl}" alt="${a.title}"/>` : `<div class="pv-img" style="height:160px"></div>`}</div><h3>${a.title}</h3><p>${a.excerpt.slice(0, 120)}...</p><div class="pv-gallery-card-footer"><span>${a.author}</span></div></div>`).join("");
+            const gSidebar = s.showSidebar ? `<div class="pv-gallery-sidebar">${s.sidebarTitle ? `<h3>${s.sidebarTitle}</h3>` : ""}${s.sidebarImageUrl ? `<img src="${s.sidebarImageUrl}" class="pv-gallery-sidebar-img"/>` : `<div class="pv-img" style="height:300px"></div>`}${s.sidebarButtonText ? `<button class="pv-gallery-sidebar-btn">${s.sidebarButtonText}</button>` : ""}</div>` : "";
+            pc += `<div class="pv-gallery">${s.sectionTitle ? `<div class="pv-gallery-header"><h2>${s.sectionTitle}</h2></div>` : ""}<div class="pv-gallery-body ${s.showSidebar ? "pv-gallery-with-sidebar" : ""}">${gCards.length ? `<div class="pv-gallery-cards">${gCards}</div>` : ""}${gSidebar}</div></div>`;
+            break;
+          }
+          case "category_feed": {
+            const cfCat = MOCK_CATEGORIES.find(c => c._id === s.categoryId);
+            const cfArts = MOCK_ARTICLES.filter(a => a.categories.includes(s.categoryId || "")).slice(0, s.maxArticles || 5);
+            const cfFeat = cfArts[0];
+            const cfRest = cfArts.slice(1);
+            const cfCards = cfRest.map((a: any) => `<div class="pv-catfeed-card">${a.imageUrl ? `<img src="${a.imageUrl}" class="pv-catfeed-card-img"/>` : `<div class="pv-img" style="width:120px;height:90px"></div>`}<div class="pv-catfeed-card-content"><h3>${a.title}</h3><p>${a.excerpt.slice(0, 80)}...</p><span class="pv-catfeed-author">${a.author}</span></div></div>`).join("");
+            const cfFeatH = cfFeat ? `<div class="pv-catfeed-featured">${cfFeat.imageUrl ? `<img src="${cfFeat.imageUrl}" class="pv-catfeed-featured-img"/>` : `<div class="pv-img" style="height:280px"></div>`}<h3>${cfFeat.title}</h3><p>${cfFeat.excerpt.slice(0, 140)}...</p><span class="pv-catfeed-author">${cfFeat.author}</span></div>` : "";
+            pc += `<div class="pv-catfeed"><div class="pv-catfeed-header"><h2>${cfCat?.name || ""}</h2>${s.showMoreLink ? `<span class="pv-catfeed-more">${s.moreText || `المزيد من ${cfCat?.name || ""}`} &#x25C0;</span>` : ""}</div><div class="pv-catfeed-body pv-catfeed-${s.layout || "featured_right"}">${cfCards ? `<div class="pv-catfeed-main">${cfCards}</div>` : ""}${cfFeatH}</div></div>`;
+            break;
+          }
           default:
             pc += `<div class="pv-placeholder">${COMPONENT_META[comp.type]?.label || comp.type}</div>`;
         }
@@ -1179,6 +1223,37 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
 .pv-bento{padding:24px;}.pv-bento-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;}.pv-bento-card{background:var(--pv-card-bg);border:1px solid rgba(128,128,128,0.15);overflow:hidden;display:flex;flex-direction:column;}.pv-bento-square{}.pv-bento-wide{grid-column:span 2;}.pv-bento-tall{grid-row:span 2;}.pv-bento-img{width:100%;height:200px;object-fit:cover;}.pv-bento-img-ph{width:100%;height:200px;background:rgba(128,128,128,0.1);}.pv-bento-body{padding:12px 16px;}.pv-bento-body h4{font-size:15px;font-weight:700;color:var(--pv-headline);margin:0 0 4px;}.pv-bento-body p{font-size:13px;color:var(--pv-text);margin:0;}
 /* Social Links */
 .pv-social-links{display:flex;justify-content:center;gap:16px;padding:24px;flex-wrap:wrap;}.pv-social-link{font-size:14px;font-weight:600;color:var(--pv-link);padding:8px 16px;border:1px solid rgba(128,128,128,0.2);transition:all .15s;}.pv-social-link:hover{background:var(--pv-btn);color:#fff;border-color:var(--pv-btn);}
+/* Gallery */
+.pv-gallery{padding:24px;border-top:2px solid var(--pv-headline);}
+.pv-gallery-header{padding-bottom:14px;border-bottom:1px solid rgba(128,128,128,0.15);text-align:right;}
+.pv-gallery-header h2{font-size:20px;font-weight:800;color:var(--pv-btn);margin:0;}
+.pv-gallery-body{display:flex;gap:0;margin-top:16px;}
+.pv-gallery-with-sidebar .pv-gallery-cards{flex:1;}
+.pv-gallery-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.pv-gallery-card{display:flex;flex-direction:column;gap:8px;}.pv-gallery-card h3{font-size:15px;font-weight:700;line-height:1.5;color:var(--pv-headline);margin:0;}.pv-gallery-card p{font-size:13px;color:var(--pv-text);margin:0;line-height:1.6;}
+.pv-gallery-card-img{width:100%;aspect-ratio:4/3;overflow:hidden;background:rgba(128,128,128,0.08);}.pv-gallery-card-img img{width:100%;height:100%;object-fit:cover;}
+.pv-gallery-card-footer{font-size:12px;color:var(--pv-text);opacity:0.7;margin-top:auto;}
+.pv-gallery-sidebar{width:280px;flex-shrink:0;border-right:1px solid rgba(128,128,128,0.15);padding-right:20px;margin-right:20px;display:flex;flex-direction:column;gap:10px;}.pv-gallery-sidebar h3{font-size:17px;font-weight:800;line-height:1.5;color:var(--pv-headline);margin:0;}
+.pv-gallery-sidebar-img{width:100%;object-fit:cover;flex:1;}
+.pv-gallery-sidebar-btn{display:flex;align-items:center;gap:6px;justify-content:center;padding:8px 14px;border:1.5px solid rgba(128,128,128,0.3);background:transparent;color:var(--pv-headline);font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;}
+/* Category Feed */
+.pv-catfeed{padding:24px;border-top:2px solid var(--pv-headline);}
+.pv-catfeed-header{display:flex;justify-content:space-between;align-items:baseline;padding-bottom:14px;border-bottom:1px solid rgba(128,128,128,0.15);}
+.pv-catfeed-header h2{font-size:20px;font-weight:800;color:var(--pv-btn);margin:0;}
+.pv-catfeed-more{font-size:13px;font-weight:600;color:var(--pv-text);opacity:0.7;cursor:pointer;}
+.pv-catfeed-body{display:grid;gap:0;margin-top:16px;}
+.pv-catfeed-featured_right{grid-template-columns:1fr 1fr 1.3fr;}
+.pv-catfeed-featured_left{grid-template-columns:1.3fr 1fr 1fr;}
+.pv-catfeed-grid{grid-template-columns:repeat(3,1fr);gap:20px;}
+.pv-catfeed-main{display:flex;flex-direction:column;}
+.pv-catfeed-card{display:flex;gap:12px;padding:14px 16px;border-bottom:1px solid rgba(128,128,128,0.1);}
+.pv-catfeed-card-img{width:120px;height:90px;object-fit:cover;flex-shrink:0;}
+.pv-catfeed-card-content{flex:1;display:flex;flex-direction:column;gap:4px;}.pv-catfeed-card-content h3{font-size:14px;font-weight:700;line-height:1.5;color:var(--pv-headline);margin:0;}.pv-catfeed-card-content p{font-size:12px;color:var(--pv-text);margin:0;line-height:1.5;}
+.pv-catfeed-author{font-size:11px;font-weight:600;color:var(--pv-text);opacity:0.7;margin-top:auto;}
+.pv-catfeed-featured{padding:16px;border-right:1px solid rgba(128,128,128,0.15);display:flex;flex-direction:column;gap:10px;}
+.pv-catfeed-featured-img{width:100%;aspect-ratio:4/3;object-fit:cover;}
+.pv-catfeed-featured h3{font-size:17px;font-weight:800;line-height:1.5;color:var(--pv-headline);margin:0;}
+.pv-catfeed-featured p{font-size:13px;color:var(--pv-text);margin:0;line-height:1.6;}
 .pv-placeholder{padding:40px 24px;background:var(--pv-card-bg);border:2px dashed rgba(128,128,128,0.2);text-align:center;color:var(--pv-text);opacity:0.5;font-size:15px;font-weight:600;}
 /* Mobile */
 @media(max-width:768px){
@@ -1639,22 +1714,23 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                               )}
                             </div>
                           )}
-                          <div className="kwb-p-articles-grid">
+                          <div className={`kwb-p-articles-grid ${comp.settings.mobileLayout === "list" ? "kwb-p-articles-mobile-list" : ""}`}>
                             {collArticles.map(a => (
                               <a key={a.id} className="kwb-p-article-card" href={`/article/${a.slug}`} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none", color: "inherit" }}>
                                 <div className="kwb-p-article-img" style={a.imageUrl ? { backgroundImage: `url(${a.imageUrl})`, backgroundSize: "cover", backgroundPosition: "center" } : undefined} />
-                                <h4 className="kwb-p-article-title">{a.title}</h4>
-                                <p className="kwb-p-article-excerpt">{a.excerpt.slice(0, 80)}...</p>
-                                <div className="kwb-p-article-author-row">
-                                  <div className="kwb-p-article-avatar">{a.author.charAt(0)}</div>
-                                  <span className="kwb-p-article-author-name">{a.author}</span>
-                                </div>
-                                <div className="kwb-p-article-meta">
-                                  <span>{a.date}</span>
-                                  <span className="kwb-p-article-engagement">
-                                    <span style={{ color: activeSite.branding.buttonColor || "#E82222" }}>{Icons.heart} {a.likes}</span>
-                                    <span>{Icons.comment} {a.comments}</span>
-                                  </span>
+                                <div className="kwb-p-article-card-text">
+                                  <h4 className="kwb-p-article-title">{a.title}</h4>
+                                  <p className="kwb-p-article-excerpt">{a.excerpt.slice(0, 80)}...</p>
+                                  <div className="kwb-p-article-author-row">
+                                    <span className="kwb-p-article-author-name">{a.author}</span>
+                                  </div>
+                                  <div className="kwb-p-article-meta">
+                                    <span>{a.date}</span>
+                                    <span className="kwb-p-article-engagement">
+                                      <span style={{ color: activeSite.branding.buttonColor || "#E82222" }}>{Icons.heart} {a.likes}</span>
+                                      <span>{Icons.comment} {a.comments}</span>
+                                    </span>
+                                  </div>
                                 </div>
                               </a>
                             ))}
@@ -1975,6 +2051,119 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                       ); break;
                     }
 
+
+                    case "gallery": {
+                      const galleryArticleIds = comp.settings.articles || [];
+                      const galleryArticles = galleryArticleIds.map((id: string) => MOCK_ARTICLES.find(a => a.id === id)).filter(Boolean);
+                      const sidebarArt = MOCK_ARTICLES.find(a => a.id === comp.settings.sidebarArticle);
+                      _inner = (
+                        <div className="kwb-p-gallery">
+                          {comp.settings.sectionTitle && (
+                            <div className="kwb-p-gallery-header">
+                              <h2 className="kwb-p-gallery-title">{comp.settings.sectionTitle}</h2>
+                            </div>
+                          )}
+                          <div className={`kwb-p-gallery-body ${comp.settings.showSidebar ? "kwb-p-gallery-with-sidebar" : ""}`}>
+                            <div className="kwb-p-gallery-cards">
+                              {galleryArticles.map((a: any, i: number) => (
+                                <div key={i} className="kwb-p-gallery-card">
+                                  <div className="kwb-p-gallery-card-img">
+                                    {a.imageUrl ? <img src={a.imageUrl} alt={a.title} /> : <div className="kwb-p-gallery-card-img-ph" />}
+                                  </div>
+                                  <h3 className="kwb-p-gallery-card-title">{a.title}</h3>
+                                  <p className="kwb-p-gallery-card-excerpt">{a.excerpt.slice(0, 120)}...</p>
+                                  <div className="kwb-p-gallery-card-footer">
+                                    <span className="kwb-p-gallery-card-author">{a.author}</span>
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#999" strokeWidth="1.5"><path d="M19 21l-7-5-7 5V5a2 2 0 012-2h10a2 2 0 012 2z"/></svg>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                            {comp.settings.showSidebar && (
+                              <div className="kwb-p-gallery-sidebar">
+                                <h3 className="kwb-p-gallery-sidebar-title">{sidebarArt?.title || comp.settings.sidebarTitle || ""}</h3>
+                                <div className="kwb-p-gallery-sidebar-img">
+                                  {(comp.settings.sidebarImageUrl || sidebarArt?.imageUrl) ? <img src={comp.settings.sidebarImageUrl || sidebarArt?.imageUrl} alt="" /> : <div className="kwb-p-gallery-card-img-ph" style={{ height: 320 }} />}
+                                </div>
+                                {comp.settings.sidebarButtonText && (
+                                  <button className="kwb-p-gallery-sidebar-btn">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="2" y="3" width="20" height="18" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/></svg>
+                                    {comp.settings.sidebarButtonText}
+                                  </button>
+                                )}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      ); break;
+                    }
+
+                    case "category_feed": {
+                      const catId = comp.settings.categoryId || "";
+                      const cat = MOCK_CATEGORIES.find(c => c._id === catId);
+                      const catName = cat?.name || "التصنيف";
+                      const catArticles = MOCK_ARTICLES.filter(a => a.categories.includes(catId)).slice(0, comp.settings.maxArticles || 5);
+                      const featured = catArticles[0];
+                      const rest = catArticles.slice(1);
+                      const layout = comp.settings.layout || "featured_right";
+
+                      // Sidebar category
+                      const sidebarCatId = comp.settings.sidebarCategoryId || "";
+                      const sidebarCat = MOCK_CATEGORIES.find(c => c._id === sidebarCatId);
+                      const sidebarArticles = sidebarCat ? MOCK_ARTICLES.filter(a => a.categories.includes(sidebarCatId)).slice(0, 2) : [];
+
+                      _inner = (
+                        <div className="kwb-p-catfeed">
+                          <div className="kwb-p-catfeed-header">
+                            <h2 className="kwb-p-catfeed-title">{catName}</h2>
+                            {comp.settings.showMoreLink && (
+                              <span className="kwb-p-catfeed-more">{comp.settings.moreText || `المزيد من ${catName}`} &#x25C0;</span>
+                            )}
+                          </div>
+                          <div className={`kwb-p-catfeed-body kwb-p-catfeed-${layout}`}>
+                            {/* Main articles column */}
+                            <div className="kwb-p-catfeed-main">
+                              {rest.map((a: any, i: number) => (
+                                <div key={i} className="kwb-p-catfeed-card">
+                                  <div className="kwb-p-catfeed-card-img">
+                                    {a.imageUrl ? <img src={a.imageUrl} alt={a.title} /> : <div className="kwb-p-gallery-card-img-ph" />}
+                                  </div>
+                                  <div className="kwb-p-catfeed-card-content">
+                                    <h3 className="kwb-p-catfeed-card-title">{a.title}</h3>
+                                    <p className="kwb-p-catfeed-card-excerpt">{a.excerpt.slice(0, 100)}...</p>
+                                    <span className="kwb-p-catfeed-card-author">{a.author}</span>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                            {/* Featured article */}
+                            {featured && (
+                              <div className="kwb-p-catfeed-featured">
+                                <div className="kwb-p-catfeed-featured-img">
+                                  {featured.imageUrl ? <img src={featured.imageUrl} alt={featured.title} /> : <div className="kwb-p-gallery-card-img-ph" style={{ height: "100%", minHeight: 280 }} />}
+                                </div>
+                                <h3 className="kwb-p-catfeed-featured-title">{featured.title}</h3>
+                                <p className="kwb-p-catfeed-featured-excerpt">{featured.excerpt.slice(0, 140)}...</p>
+                                <span className="kwb-p-catfeed-card-author">{featured.author}</span>
+                              </div>
+                            )}
+                            {/* Optional sidebar category */}
+                            {comp.settings.showSidebar && sidebarCat && (
+                              <div className="kwb-p-catfeed-sidebar">
+                                <h3 className="kwb-p-catfeed-sidebar-title">{comp.settings.sidebarTitle || sidebarCat.name}</h3>
+                                {sidebarArticles.map((a: any, i: number) => (
+                                  <div key={i} className="kwb-p-catfeed-sidebar-card">
+                                    {a.imageUrl ? <img src={a.imageUrl} alt={a.title} className="kwb-p-catfeed-sidebar-img" /> : <div className="kwb-p-gallery-card-img-ph" style={{ height: 120 }} />}
+                                    <span className="kwb-p-catfeed-sidebar-label">{a.title.slice(0, 50)}</span>
+                                  </div>
+                                ))}
+                                <span className="kwb-p-catfeed-more" style={{ marginTop: 8 }}>المزيد من {sidebarCat.name} &#x25C0;</span>
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      ); break;
+                    }
 
                     case "social_links": {
                       const platforms = comp.settings.platforms || [];
@@ -2457,6 +2646,16 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                                       <span>فلاتر التصنيفات</span>
                                     </div>
                                     <p className="kwb-hint">التصنيفات متصلة بقاعدة بيانات كتابة (categories)</p>
+                                    <label className="kwb-label" style={{ marginTop: 12 }}>تخطيط الجوال</label>
+                                    <div style={{ display: "flex", gap: 4 }}>
+                                      {[
+                                        { id: "grid", label: "شبكة" },
+                                        { id: "list", label: "قائمة" },
+                                      ].map(l => (
+                                        <button key={l.id} className={`kwb-logo-layout-btn ${(comp.settings.mobileLayout || "grid") === l.id ? "kwb-logo-layout-active" : ""}`} style={{ flex: 1, padding: "6px 4px", fontSize: 11 }} onClick={() => updateComponentSettings(comp.id, { mobileLayout: l.id })}>{l.label}</button>
+                                      ))}
+                                    </div>
+                                    <p className="kwb-hint">القائمة: عنوان + صورة مصغّرة بجانب بعض (مثل NYT)</p>
                                   </>
                                 )}
                               </>
@@ -2806,6 +3005,80 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                             )}
 
 
+                            {comp.type === "gallery" && (
+                              <>
+                                <label className="kwb-label">عنوان القسم</label>
+                                <input className="kwb-input" value={comp.settings.sectionTitle || ""} onChange={e => updateComponentSettings(comp.id, { sectionTitle: e.target.value })} />
+                                <label className="kwb-label" style={{ marginTop: 10 }}>المقالات</label>
+                                <button className="kwb-btn-outline kwb-btn-full" onClick={() => openArticlePicker(comp.id)}>
+                                  {Icons.plus} اختيار مقالات ({(comp.settings.articles || []).length})
+                                </button>
+                                <label className="kwb-label" style={{ marginTop: 14 }}>
+                                  <label className="kwb-toggle" style={{ marginLeft: 8 }}>
+                                    <input type="checkbox" checked={comp.settings.showSidebar !== false} onChange={() => updateComponentSettings(comp.id, { showSidebar: !comp.settings.showSidebar })} />
+                                    <span className="kwb-toggle-slider" />
+                                  </label>
+                                  شريط جانبي
+                                </label>
+                                {comp.settings.showSidebar !== false && (
+                                  <>
+                                    <label className="kwb-label" style={{ marginTop: 8 }}>عنوان الشريط الجانبي</label>
+                                    <input className="kwb-input" value={comp.settings.sidebarTitle || ""} onChange={e => updateComponentSettings(comp.id, { sidebarTitle: e.target.value })} />
+                                    <label className="kwb-label" style={{ marginTop: 6 }}>نص الزر</label>
+                                    <input className="kwb-input" value={comp.settings.sidebarButtonText || ""} onChange={e => updateComponentSettings(comp.id, { sidebarButtonText: e.target.value })} />
+                                    {comp.settings.sidebarImageUrl ? (
+                                      <div className="kwb-upload-preview" style={{ marginTop: 6 }}><img src={comp.settings.sidebarImageUrl} alt="" /><button className="kwb-upload-remove" onClick={() => updateComponentSettings(comp.id, { sidebarImageUrl: "" })}>{Icons.x}</button></div>
+                                    ) : (
+                                      <button className="kwb-btn-outline kwb-btn-full" style={{ marginTop: 6, fontSize: 11 }} onClick={() => triggerUpload({ type: "gallery_sidebar", compId: comp.id })}>{Icons.image} صورة الشريط الجانبي</button>
+                                    )}
+                                  </>
+                                )}
+                              </>
+                            )}
+                            {comp.type === "category_feed" && (
+                              <>
+                                <label className="kwb-label">التصنيف</label>
+                                <select className="kwb-select" value={comp.settings.categoryId || ""} onChange={e => updateComponentSettings(comp.id, { categoryId: e.target.value })}>
+                                  <option value="">اختر تصنيف</option>
+                                  {MOCK_CATEGORIES.map(c => <option key={c._id} value={c._id}>{c.name}</option>)}
+                                </select>
+                                <label className="kwb-label" style={{ marginTop: 10 }}>التخطيط</label>
+                                <div style={{ display: "flex", gap: 4 }}>
+                                  {[
+                                    { id: "featured_right", label: "بارز يمين" },
+                                    { id: "featured_left", label: "بارز يسار" },
+                                    { id: "grid", label: "شبكة" },
+                                  ].map(l => (
+                                    <button key={l.id} className={`kwb-logo-layout-btn ${(comp.settings.layout || "featured_right") === l.id ? "kwb-logo-layout-active" : ""}`} style={{ flex: 1, padding: "6px 4px", fontSize: 11 }} onClick={() => updateComponentSettings(comp.id, { layout: l.id })}>{l.label}</button>
+                                  ))}
+                                </div>
+                                <label className="kwb-label" style={{ marginTop: 10 }}>عدد المقالات</label>
+                                <input className="kwb-input" type="number" min={2} max={10} value={comp.settings.maxArticles || 5} onChange={e => updateComponentSettings(comp.id, { maxArticles: parseInt(e.target.value) || 5 })} />
+                                <label className="kwb-label" style={{ marginTop: 10 }}>
+                                  <label className="kwb-toggle" style={{ marginLeft: 8 }}>
+                                    <input type="checkbox" checked={comp.settings.showMoreLink !== false} onChange={() => updateComponentSettings(comp.id, { showMoreLink: !comp.settings.showMoreLink })} />
+                                    <span className="kwb-toggle-slider" />
+                                  </label>
+                                  رابط "المزيد"
+                                </label>
+                                <label className="kwb-label" style={{ marginTop: 10 }}>
+                                  <label className="kwb-toggle" style={{ marginLeft: 8 }}>
+                                    <input type="checkbox" checked={!!comp.settings.showSidebar} onChange={() => updateComponentSettings(comp.id, { showSidebar: !comp.settings.showSidebar })} />
+                                    <span className="kwb-toggle-slider" />
+                                  </label>
+                                  تصنيف جانبي
+                                </label>
+                                {comp.settings.showSidebar && (
+                                  <>
+                                    <select className="kwb-select" style={{ marginTop: 6 }} value={comp.settings.sidebarCategoryId || ""} onChange={e => updateComponentSettings(comp.id, { sidebarCategoryId: e.target.value })}>
+                                      <option value="">اختر تصنيف جانبي</option>
+                                      {MOCK_CATEGORIES.map(c => <option key={c._id} value={c._id}>{c.name}</option>)}
+                                    </select>
+                                    <input className="kwb-input" style={{ marginTop: 6 }} placeholder="عنوان مخصص (اختياري)" value={comp.settings.sidebarTitle || ""} onChange={e => updateComponentSettings(comp.id, { sidebarTitle: e.target.value })} />
+                                  </>
+                                )}
+                              </>
+                            )}
                             {comp.type === "social_links" && (
                               <>
                                 <label className="kwb-label">منصات التواصل</label>
@@ -3773,6 +4046,8 @@ const CSS_STYLES = `
 .kwb-input{width:100%;height:42px;padding:0 14px;border:1.5px solid #E8E8E8;border-radius:10px;font-family:inherit;font-size:14px;color:#371D12;outline:none;background:#F8F8F8;transition:border .15s;}
 .kwb-input:focus{border-color:#0000FF;background:#fff;}
 .kwb-input::placeholder{color:#CCC;}
+.kwb-select{width:100%;height:42px;padding:0 14px;border:1.5px solid #E8E8E8;border-radius:10px;font-family:inherit;font-size:14px;color:#371D12;outline:none;background:#F8F8F8;transition:border .15s;cursor:pointer;appearance:auto;}
+.kwb-select:focus{border-color:#0000FF;background:#fff;}
 
 /* Font picker */
 .kwb-font-picker{display:flex;flex-direction:column;gap:4px;max-height:280px;overflow-y:auto;border:1.5px solid #E8E8E8;border-radius:10px;padding:4px;background:#F8F8F8;}
@@ -3930,6 +4205,75 @@ const CSS_STYLES = `
 .kwb-p-social-links{display:flex;gap:12px;justify-content:center;padding:20px 16px;flex-wrap:wrap;}
 .kwb-p-social-icon{width:44px;height:44px;display:flex;align-items:center;justify-content:center;color:var(--kwb-text-color,#666);border:1.5px solid rgba(128,128,128,0.2);transition:all .15s;text-decoration:none;border-radius:var(--kwb-radius,0);}
 .kwb-p-social-icon:hover{color:var(--kwb-btn-color,#E82222);border-color:var(--kwb-btn-color,#E82222);transform:translateY(-2px);}
+
+/* ─── Gallery (magazine-style) ─── */
+.kwb-p-gallery{padding:24px 20px;border-top:2px solid var(--kwb-headline-color,#1a1a1a);}
+.kwb-p-gallery-header{display:flex;justify-content:flex-end;padding-bottom:16px;border-bottom:1px solid rgba(128,128,128,0.15);}
+.kwb-p-gallery-title{font-size:20px;font-weight:800;color:var(--kwb-btn-color,#E82222);margin:0;}
+.kwb-p-gallery-body{display:flex;gap:0;margin-top:16px;}
+.kwb-p-gallery-with-sidebar .kwb-p-gallery-cards{flex:1;min-width:0;}
+.kwb-p-gallery-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;}
+.kwb-p-gallery-card{display:flex;flex-direction:column;gap:8px;border-bottom:1px solid rgba(128,128,128,0.1);padding-bottom:12px;}
+.kwb-p-gallery-card-img{width:100%;aspect-ratio:4/3;overflow:hidden;background:rgba(128,128,128,0.08);}
+.kwb-p-gallery-card-img img{width:100%;height:100%;object-fit:cover;display:block;}
+.kwb-p-gallery-card-img-ph{width:100%;height:100%;min-height:160px;background:rgba(128,128,128,0.1);}
+.kwb-p-gallery-card-title{font-size:15px;font-weight:700;line-height:1.5;color:var(--kwb-headline-color,#1a1a1a);margin:0;}
+.kwb-p-gallery-card-excerpt{font-size:13px;line-height:1.6;color:var(--kwb-text-color,#666);margin:0;}
+.kwb-p-gallery-card-footer{display:flex;justify-content:space-between;align-items:center;margin-top:auto;}
+.kwb-p-gallery-card-author{font-size:12px;font-weight:600;color:var(--kwb-text-color,#888);}
+.kwb-p-gallery-sidebar{width:280px;flex-shrink:0;border-right:1px solid rgba(128,128,128,0.15);padding-right:20px;margin-right:20px;display:flex;flex-direction:column;gap:10px;}
+.kwb-p-gallery-sidebar-title{font-size:17px;font-weight:800;line-height:1.5;color:var(--kwb-headline-color,#1a1a1a);margin:0;}
+.kwb-p-gallery-sidebar-img{width:100%;overflow:hidden;background:rgba(128,128,128,0.08);flex:1;}
+.kwb-p-gallery-sidebar-img img{width:100%;height:100%;object-fit:cover;display:block;}
+.kwb-p-gallery-sidebar-btn{display:flex;align-items:center;gap:6px;justify-content:center;padding:8px 14px;border:1.5px solid rgba(128,128,128,0.3);background:#fff;color:var(--kwb-headline-color,#1a1a1a);font-family:inherit;font-size:12px;font-weight:600;cursor:pointer;transition:all .15s;}
+.kwb-p-gallery-sidebar-btn:hover{border-color:var(--kwb-btn-color,#E82222);color:var(--kwb-btn-color,#E82222);}
+
+/* ─── Category Feed ─── */
+.kwb-p-catfeed{padding:24px 20px;border-top:2px solid var(--kwb-headline-color,#1a1a1a);}
+.kwb-p-catfeed-header{display:flex;justify-content:space-between;align-items:baseline;padding-bottom:14px;border-bottom:1px solid rgba(128,128,128,0.15);}
+.kwb-p-catfeed-title{font-size:20px;font-weight:800;color:var(--kwb-btn-color,#E82222);margin:0;}
+.kwb-p-catfeed-more{font-size:13px;font-weight:600;color:var(--kwb-text-color,#888);cursor:pointer;white-space:nowrap;}
+.kwb-p-catfeed-more:hover{color:var(--kwb-btn-color,#E82222);}
+.kwb-p-catfeed-body{display:grid;gap:0;margin-top:16px;}
+.kwb-p-catfeed-featured_right{grid-template-columns:1fr 1fr 1.3fr;}
+.kwb-p-catfeed-featured_left{grid-template-columns:1.3fr 1fr 1fr;}
+.kwb-p-catfeed-grid{grid-template-columns:repeat(3,1fr);gap:20px;}
+.kwb-p-catfeed-main{display:flex;flex-direction:column;gap:0;}
+.kwb-p-catfeed-card{display:flex;gap:12px;padding:14px 16px;border-bottom:1px solid rgba(128,128,128,0.1);}
+.kwb-p-catfeed-card-img{width:120px;height:90px;flex-shrink:0;overflow:hidden;background:rgba(128,128,128,0.08);}
+.kwb-p-catfeed-card-img img{width:100%;height:100%;object-fit:cover;display:block;}
+.kwb-p-catfeed-card-content{flex:1;display:flex;flex-direction:column;gap:4px;min-width:0;}
+.kwb-p-catfeed-card-title{font-size:14px;font-weight:700;line-height:1.5;color:var(--kwb-headline-color,#1a1a1a);margin:0;}
+.kwb-p-catfeed-card-excerpt{font-size:12px;line-height:1.5;color:var(--kwb-text-color,#666);margin:0;}
+.kwb-p-catfeed-card-author{font-size:11px;font-weight:600;color:var(--kwb-text-color,#888);margin-top:auto;}
+.kwb-p-catfeed-featured{padding:16px;border-right:1px solid rgba(128,128,128,0.15);display:flex;flex-direction:column;gap:10px;}
+.kwb-p-catfeed-featured_left .kwb-p-catfeed-featured{border-right:none;border-left:1px solid rgba(128,128,128,0.15);order:-1;}
+.kwb-p-catfeed-featured-img{width:100%;aspect-ratio:4/3;overflow:hidden;background:rgba(128,128,128,0.08);}
+.kwb-p-catfeed-featured-img img{width:100%;height:100%;object-fit:cover;display:block;}
+.kwb-p-catfeed-featured-title{font-size:17px;font-weight:800;line-height:1.5;color:var(--kwb-headline-color,#1a1a1a);margin:0;}
+.kwb-p-catfeed-featured-excerpt{font-size:13px;line-height:1.6;color:var(--kwb-text-color,#666);margin:0;}
+.kwb-p-catfeed-sidebar{width:auto;padding:0 16px;border-right:1px solid rgba(128,128,128,0.15);display:flex;flex-direction:column;gap:8px;}
+.kwb-p-catfeed-sidebar-title{font-size:15px;font-weight:800;color:var(--kwb-headline-color,#1a1a1a);margin:0;padding-bottom:8px;border-bottom:2px solid var(--kwb-headline-color,#1a1a1a);}
+.kwb-p-catfeed-sidebar-card{display:flex;flex-direction:column;gap:6px;}
+.kwb-p-catfeed-sidebar-img{width:100%;height:120px;object-fit:cover;display:block;}
+.kwb-p-catfeed-sidebar-label{font-size:12px;font-weight:600;color:var(--kwb-headline-color,#1a1a1a);line-height:1.4;}
+
+/* ─── Article Mobile List Layout ─── */
+@media(max-width:768px){
+  .kwb-p-articles-mobile-list{grid-template-columns:1fr !important;}
+  .kwb-p-articles-mobile-list .kwb-p-article-card{flex-direction:row-reverse;gap:12px;border-bottom:1px solid rgba(128,128,128,0.12);padding-bottom:14px;}
+  .kwb-p-articles-mobile-list .kwb-p-article-img{width:100px;height:100px;min-height:unset;flex-shrink:0;aspect-ratio:1;}
+  .kwb-p-articles-mobile-list .kwb-p-article-card-text{flex:1;display:flex;flex-direction:column;gap:4px;min-width:0;}
+  .kwb-p-articles-mobile-list .kwb-p-article-title{font-size:15px;font-weight:700;}
+  .kwb-p-articles-mobile-list .kwb-p-article-excerpt{display:none;}
+  .kwb-p-articles-mobile-list .kwb-p-article-author-name{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;}
+  .kwb-p-gallery-cards{grid-template-columns:1fr;}
+  .kwb-p-gallery-sidebar{width:100%;border-right:none;padding-right:0;margin-right:0;border-top:1px solid rgba(128,128,128,0.15);padding-top:16px;margin-top:16px;}
+  .kwb-p-gallery-body{flex-direction:column-reverse;}
+  .kwb-p-catfeed-featured_right,.kwb-p-catfeed-featured_left{grid-template-columns:1fr;}
+  .kwb-p-catfeed-featured{border-right:none;border-left:none;border-bottom:1px solid rgba(128,128,128,0.15);padding-bottom:16px;}
+  .kwb-p-catfeed-sidebar{border-right:none;padding:0;border-top:1px solid rgba(128,128,128,0.15);padding-top:16px;margin-top:16px;}
+}
 
 /* ─── Bento Card Fix (image on top) ─── */
 .kwb-p-bento-card{display:flex;flex-direction:column;justify-content:flex-start;overflow:hidden;}
