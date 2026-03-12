@@ -847,7 +847,7 @@ export default function KitabhWebsiteBuilder(props: any) {
 
   function getDefaultSettings(type: ComponentType): Record<string, any> {
     switch (type) {
-      case "header": return { layout: "navbar", subtitle: "", logoUrl: "", buttonText: "اشتراك", navLinks: [
+      case "header": return { layout: "navbar", subtitle: "", logoUrl: "", buttonText: "اشتراك", buttonAction: "subscribe", buttonUrl: "", navLinks: [
         { id: genId(), label: "الرئيسية", linkType: "page", target: "الرئيسية", visible: true },
         { id: genId(), label: "مقالات", linkType: "page", target: "مقالات", visible: true },
         { id: genId(), label: "عن المدونة", linkType: "page", target: "عن-المدونة", visible: true },
@@ -1348,7 +1348,10 @@ export default function KitabhWebsiteBuilder(props: any) {
                 const ext = typeof link !== "string" && link.linkType === "external" ? ' target="_blank" rel="noopener"' : '';
                 return `<a href="${href}" class="pv-mobile-nav-link"${ext}>${label}</a>`;
               }).join("");
-              pc += `<header class="pv-header"><div class="pv-header-inner"><a href="#page-${allPages[0]?.slug || ''}" class="pv-logo-wrap" style="text-decoration:none;color:inherit;cursor:pointer">${logoHtml}</a><nav class="pv-nav">${navHtml}</nav><div class="pv-header-actions"><button class="pv-login-btn" onclick="document.getElementById('pv-login-modal')?.showModal()">الدخول</button><button class="pv-btn" style="background:${bc}">${s.buttonText || "اشتراك"}</button><button class="pv-darkmode-btn" onclick="document.documentElement.classList.toggle('dark');this.textContent=document.documentElement.classList.contains('dark')?'☀':'☾'" title="الوضع الداكن">${dm ? '☀' : '☾'}</button></div><button class="pv-hamburger" onclick="document.getElementById('pv-mobile-menu').classList.toggle('pv-mobile-menu-open')" aria-label="القائمة"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button></div><div id="pv-mobile-menu" class="pv-mobile-menu"><nav class="pv-mobile-nav">${mobileNavHtml}</nav><div class="pv-mobile-menu-actions"><button class="pv-login-btn" style="width:100%">الدخول</button><button class="pv-btn" style="background:${bc};width:100%">${s.buttonText || "اشتراك"}</button><button class="pv-darkmode-btn" onclick="document.documentElement.classList.toggle('dark');this.textContent=document.documentElement.classList.contains('dark')?'☀':'☾'">${dm ? '☀' : '☾'}</button></div></div></header>`;
+              const headerBtnHtml = s.buttonAction === "url" && s.buttonUrl
+                ? `<a href="${s.buttonUrl}" target="_blank" rel="noopener" class="pv-btn" style="background:${bc};text-decoration:none;display:inline-block">${s.buttonText || "اشتراك"}</a>`
+                : `<button class="pv-btn" style="background:${bc}">${s.buttonText || "اشتراك"}</button>`;
+              pc += `<header class="pv-header"><div class="pv-header-inner"><a href="#page-${allPages[0]?.slug || ''}" class="pv-logo-wrap" style="text-decoration:none;color:inherit;cursor:pointer">${logoHtml}</a><nav class="pv-nav">${navHtml}</nav><div class="pv-header-actions"><button class="pv-login-btn" onclick="document.getElementById('pv-login-modal')?.showModal()">الدخول</button>${headerBtnHtml}<button class="pv-darkmode-btn" onclick="document.documentElement.classList.toggle('dark');this.textContent=document.documentElement.classList.contains('dark')?'☀':'☾'" title="الوضع الداكن">${dm ? '☀' : '☾'}</button></div><button class="pv-hamburger" onclick="document.getElementById('pv-mobile-menu').classList.toggle('pv-mobile-menu-open')" aria-label="القائمة"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button></div><div id="pv-mobile-menu" class="pv-mobile-menu"><nav class="pv-mobile-nav">${mobileNavHtml}</nav><div class="pv-mobile-menu-actions"><button class="pv-login-btn" style="width:100%">الدخول</button>${headerBtnHtml.replace('display:inline-block"', 'display:inline-block;width:100%"')}<button class="pv-darkmode-btn" onclick="document.documentElement.classList.toggle('dark');this.textContent=document.documentElement.classList.contains('dark')?'☀':'☾'">${dm ? '☀' : '☾'}</button></div></div></header>`;
             }
             break;
           case "hero_news":
@@ -2307,7 +2310,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                               </nav>
                               <div className="kwb-p-header-actions">
                                 <button className="kwb-p-login-btn" onClick={() => setShowLoginModal(true)}>الدخول</button>
-                                <button className="kwb-p-subscribe-btn" style={{ background: activeSite.branding.buttonColor }} onClick={() => setShowSubscribePopup(true)}>
+                                <button className="kwb-p-subscribe-btn" style={{ background: activeSite.branding.buttonColor }} onClick={() => { if (comp.settings.buttonAction === "url" && comp.settings.buttonUrl) { window.open(comp.settings.buttonUrl, "_blank", "noopener"); } else { setShowSubscribePopup(true); } }}>
                                   {comp.settings.buttonText || "اشتراك"}
                                 </button>
                                 <button className="kwb-p-darkmode-btn" title="الوضع الداكن" onClick={() => updateSite(activeSite.id, { branding: { ...activeSite.branding, darkMode: !activeSite.branding.darkMode } })}>
@@ -2331,7 +2334,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                                 </nav>
                                 <div className="kwb-p-mobile-menu-actions">
                                   <button className="kwb-p-login-btn" onClick={() => { setShowLoginModal(true); setShowMobileMenu(false); }}>الدخول</button>
-                                  <button className="kwb-p-subscribe-btn" style={{ background: activeSite.branding.buttonColor }} onClick={() => { setShowSubscribePopup(true); setShowMobileMenu(false); }}>
+                                  <button className="kwb-p-subscribe-btn" style={{ background: activeSite.branding.buttonColor }} onClick={() => { setShowMobileMenu(false); if (comp.settings.buttonAction === "url" && comp.settings.buttonUrl) { window.open(comp.settings.buttonUrl, "_blank", "noopener"); } else { setShowSubscribePopup(true); } }}>
                                     {comp.settings.buttonText || "اشتراك"}
                                   </button>
                                   <button className="kwb-p-darkmode-btn" title="الوضع الداكن" onClick={() => updateSite(activeSite.id, { branding: { ...activeSite.branding, darkMode: !activeSite.branding.darkMode } })}>
@@ -3506,6 +3509,17 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                                   <div className="kwb-upload-area-sm">{Icons.image}<span>لا توجد صورة</span></div>
                                 )}
                                 <button className="kwb-btn-outline kwb-btn-full" onClick={() => triggerUpload({ type: "comp_logo", compId: comp.id })}>رفع صورة</button>
+                                <label className="kwb-label" style={{ marginTop: 12 }}>وظيفة الزر</label>
+                                <select className="kwb-input" value={comp.settings.buttonAction || "subscribe"} onChange={e => updateComponentSettings(comp.id, { buttonAction: e.target.value })}>
+                                  <option value="subscribe">اشتراك في النشرة</option>
+                                  <option value="url">رابط مخصص</option>
+                                </select>
+                                {(comp.settings.buttonAction === "url") && (
+                                  <>
+                                    <label className="kwb-label" style={{ marginTop: 8 }}>رابط الزر</label>
+                                    <input className="kwb-input" dir="ltr" placeholder="https://example.com" value={comp.settings.buttonUrl || ""} onChange={e => updateComponentSettings(comp.id, { buttonUrl: e.target.value })} />
+                                  </>
+                                )}
                                 <label className="kwb-label" style={{ marginTop: 12 }}>نص الزر</label>
                                 <input className="kwb-input" value={comp.settings.buttonText || ""} onChange={e => updateComponentSettings(comp.id, { buttonText: e.target.value })} />
                                 <label className="kwb-label" style={{ marginTop: 12 }}>لون الزر</label>
