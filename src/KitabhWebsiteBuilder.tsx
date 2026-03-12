@@ -83,6 +83,9 @@ interface SiteBranding {
   layoutWidth: "compact" | "full";
   darkMode: boolean;
   borderRadius: number; // 0-100 scale
+  popupTitle?: string;
+  popupDesc?: string;
+  popupButtonText?: string;
 }
 
 interface Article {
@@ -1379,7 +1382,8 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
   .pv-hero-side-l{display:none;}
   .pv-nav{display:none;}
   .pv-header-actions{display:none;}
-  .pv-hamburger{display:flex;margin-inline-end:auto;}
+  .pv-header-inner{position:relative;}
+  .pv-hamburger{display:flex;position:absolute;left:16px;top:50%;transform:translateY(-50%);}
   .pv-articles-grid{grid-template-columns:1fr;}
   .pv-art-card .pv-img{aspect-ratio:16/9;height:auto!important;border-radius:8px;}
   .pv-excerpt-sm{display:none;}
@@ -2622,6 +2626,11 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                   <label className="kwb-label" style={{ marginTop: 16 }}>اسم الموقع</label>
                   <input className="kwb-input" value={activeSite.branding.siteName} onChange={e => updateSite(activeSite.id, { branding: { ...activeSite.branding, siteName: e.target.value } })} />
 
+                  <label className="kwb-label" style={{ marginTop: 16 }}>نافذة الاشتراك</label>
+                  <input className="kwb-input" placeholder="عنوان النافذة" value={activeSite.branding.popupTitle || ""} onChange={e => updateSite(activeSite.id, { branding: { ...activeSite.branding, popupTitle: e.target.value } })} style={{ marginBottom: 6 }} />
+                  <input className="kwb-input" placeholder="وصف النافذة" value={activeSite.branding.popupDesc || ""} onChange={e => updateSite(activeSite.id, { branding: { ...activeSite.branding, popupDesc: e.target.value } })} style={{ marginBottom: 6 }} />
+                  <input className="kwb-input" placeholder="نص الزر (مثال: اشتراك)" value={activeSite.branding.popupButtonText || ""} onChange={e => updateSite(activeSite.id, { branding: { ...activeSite.branding, popupButtonText: e.target.value } })} />
+
                   <label className="kwb-label" style={{ marginTop: 16 }}>الخط</label>
                   <div className="kwb-font-picker">
                     {[
@@ -3730,11 +3739,11 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
             <div className="kwb-subscribe-popup-icon" style={{ background: activeSite.branding.buttonColor || "#E82222" }}>
               {activeSite.branding.siteName?.charAt(0) || "ك"}
             </div>
-            <h3 className="kwb-subscribe-popup-title">اشترك في {activeSite.branding.siteName || "نشرتنا"}</h3>
-            <p className="kwb-subscribe-popup-desc">احصل على أحدث المقالات والمحتوى الحصري مباشرة إلى بريدك الإلكتروني</p>
+            <h3 className="kwb-subscribe-popup-title">{activeSite.branding.popupTitle || `اشترك في ${activeSite.branding.siteName || "نشرتنا"}`}</h3>
+            <p className="kwb-subscribe-popup-desc">{activeSite.branding.popupDesc || "احصل على أحدث المقالات والمحتوى الحصري مباشرة إلى بريدك الإلكتروني"}</p>
             <div className="kwb-subscribe-popup-form">
               <input type="email" className="kwb-subscribe-popup-email" placeholder="أدخل بريدك الإلكتروني" dir="rtl" />
-              <button className="kwb-subscribe-popup-btn" style={{ background: activeSite.branding.buttonColor || "#E82222" }}>اشتراك</button>
+              <button className="kwb-subscribe-popup-btn" style={{ background: activeSite.branding.buttonColor || "#E82222" }}>{activeSite.branding.popupButtonText || "اشتراك"}</button>
             </div>
           </div>
         </div>
@@ -3836,9 +3845,9 @@ const CSS_STYLES = `
 .kwb-preview-mobile .kwb-p-hero-side-l{display:none;}
 .kwb-preview-mobile .kwb-p-hero-main-img{height:300px;}
 .kwb-preview-mobile .kwb-p-nav{display:none;}
-.kwb-preview-mobile .kwb-p-header-inner{justify-content:space-between;}
+.kwb-preview-mobile .kwb-p-header-inner{justify-content:space-between;position:relative;}
 .kwb-preview-mobile .kwb-p-header-actions{display:none;}
-.kwb-preview-mobile .kwb-p-hamburger{display:flex;margin-inline-end:auto;}
+.kwb-preview-mobile .kwb-p-hamburger{display:flex;margin-inline-end:auto;position:absolute;left:16px;top:50%;transform:translateY(-50%);}
 .kwb-preview-mobile .kwb-p-articles-grid{grid-template-columns:1fr;}
 .kwb-preview-mobile .kwb-p-article-card{border-bottom:1px solid rgba(128,128,128,0.12);padding-bottom:16px;margin-bottom:8px;border-radius:0;}
 .kwb-preview-mobile .kwb-p-article-img{aspect-ratio:16/9;border-radius:8px;}
