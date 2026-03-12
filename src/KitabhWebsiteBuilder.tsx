@@ -163,17 +163,17 @@ const TEMPLATES: Template[] = [
 
 // ─── Image pool (shuffled on each page load) ──────
 const IMAGE_POOL = [
-  "/images/articles/blue-tiles.jpg", "/images/articles/red-light.jpg", "/images/articles/colorful-windows.jpg",
-  "/images/articles/abstract-warm.jpg", "/images/articles/yellow-blur.jpg", "/images/articles/underwater.jpg",
-  "/images/articles/stained-glass.jpg", "/images/articles/fish.jpg", "/images/articles/red-corridor.jpg",
-  "/images/articles/valley.jpg", "/images/articles/red-glass.jpg", "/images/articles/rainbow.jpg",
-  "/images/articles/pink-fabric.jpg", "/images/articles/blue-glass.jpg", "/images/articles/prism.jpg",
-  "/images/articles/basketball.jpg", "/images/articles/coral.jpg", "/images/articles/bird.jpg",
-  "/images/articles/ocean-wave.jpg", "/images/articles/sunset.jpg", "/images/articles/forest.jpg",
-  "/images/articles/mountain.jpg", "/images/articles/hourglass.jpg", "/images/articles/calligraphy.jpg",
-  "/images/articles/desert-dunes.jpg", "/images/articles/vinyl.jpg", "/images/articles/gradient.jpg",
-  "/images/articles/headphones.jpg", "/images/articles/bokeh.jpg", "/images/articles/paper-art.jpg",
-  "/images/articles/textile.jpg", "/images/articles/pattern.jpg",
+  "/images/articles/thumbs/blue-tiles.jpg", "/images/articles/thumbs/red-light.jpg", "/images/articles/thumbs/colorful-windows.jpg",
+  "/images/articles/thumbs/abstract-warm.jpg", "/images/articles/thumbs/yellow-blur.jpg", "/images/articles/thumbs/underwater.jpg",
+  "/images/articles/thumbs/stained-glass.jpg", "/images/articles/thumbs/fish.jpg", "/images/articles/thumbs/red-corridor.jpg",
+  "/images/articles/thumbs/valley.jpg", "/images/articles/thumbs/red-glass.jpg", "/images/articles/thumbs/rainbow.jpg",
+  "/images/articles/thumbs/pink-fabric.jpg", "/images/articles/thumbs/blue-glass.jpg", "/images/articles/thumbs/prism.jpg",
+  "/images/articles/thumbs/basketball.jpg", "/images/articles/thumbs/coral.jpg", "/images/articles/thumbs/bird.jpg",
+  "/images/articles/thumbs/ocean-wave.jpg", "/images/articles/thumbs/sunset.jpg", "/images/articles/thumbs/forest.jpg",
+  "/images/articles/thumbs/mountain.jpg", "/images/articles/thumbs/hourglass.jpg", "/images/articles/thumbs/calligraphy.jpg",
+  "/images/articles/thumbs/desert-dunes.jpg", "/images/articles/thumbs/vinyl.jpg", "/images/articles/thumbs/gradient.jpg",
+  "/images/articles/thumbs/headphones.jpg", "/images/articles/thumbs/bokeh.jpg", "/images/articles/thumbs/paper-art.jpg",
+  "/images/articles/thumbs/textile.jpg", "/images/articles/thumbs/pattern.jpg",
 ];
 function shuffleArray<T>(arr: T[]): T[] {
   const a = [...arr];
