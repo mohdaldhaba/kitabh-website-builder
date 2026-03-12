@@ -164,6 +164,56 @@ const TEMPLATES: Template[] = [
     name: "مؤسسة إعلامية",
     description: "مثالي للناشرين وصنّاع المحتوى",
   },
+  {
+    id: "writer",
+    name: "كاتب مستقل",
+    description: "بسيط وأنيق لنشرة بريدية شخصية",
+    defaultBranding: {
+      accentColor: "#1a1a1a", buttonColor: "#1a1a1a", headlineColor: "#1a1a1a",
+      textColor: "#555555", linkColor: "#1a1a1a", bgColor: "#FAF9F6", cardBg: "#FFFFFF",
+      fontFamily: "IBM Plex Sans Arabic", borderRadius: 8,
+    },
+  },
+  {
+    id: "business",
+    name: "شركة ومشروع",
+    description: "احترافي ورسمي لمحتوى الأعمال",
+    defaultBranding: {
+      accentColor: "#0A66C2", buttonColor: "#0A66C2", headlineColor: "#0F172A",
+      textColor: "#64748B", linkColor: "#0A66C2", bgColor: "#FFFFFF", cardBg: "#F8FAFC",
+      fontFamily: "IBM Plex Sans Arabic", borderRadius: 12,
+    },
+  },
+  {
+    id: "magazine",
+    name: "مجلة رقمية",
+    description: "جريء وملفت لمحتوى غني بالصور",
+    defaultBranding: {
+      accentColor: "#F97316", buttonColor: "#F97316", headlineColor: "#1F2937",
+      textColor: "#6B7280", linkColor: "#EF4444", bgColor: "#FFF7ED", cardBg: "#FFFFFF",
+      fontFamily: "Alyamama", borderRadius: 16,
+    },
+  },
+  {
+    id: "dark",
+    name: "داكن عصري",
+    description: "أنيق وداكن لمحتوى مميز",
+    defaultBranding: {
+      accentColor: "#8B5CF6", buttonColor: "#8B5CF6", headlineColor: "#F9FAFB",
+      textColor: "#9CA3AF", linkColor: "#A78BFA", bgColor: "#0F172A", cardBg: "#1E293B",
+      fontFamily: "IBM Plex Sans Arabic", darkMode: true, borderRadius: 12,
+    },
+  },
+  {
+    id: "minimal",
+    name: "بسيط وهادئ",
+    description: "تصميم نظيف يركّز على المحتوى",
+    defaultBranding: {
+      accentColor: "#166534", buttonColor: "#166534", headlineColor: "#052E16",
+      textColor: "#6B7280", linkColor: "#10B981", bgColor: "#F0FDF4", cardBg: "#FFFFFF",
+      fontFamily: "IBM Plex Sans Arabic", borderRadius: 10,
+    },
+  },
 ];
 
 // ─── Kitabh icons — one per badge style ──────
@@ -1793,43 +1843,55 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
           <button className="kwb-back-link" onClick={() => setView("sites")}>رجوع</button>
           <h1 className="kwb-title">اختر قالبا</h1>
           <div className="kwb-templates-grid">
-            {TEMPLATES.map(t => (
+            {TEMPLATES.map(t => {
+              const b = { ...SKELETON.defaultBranding, ...(t.defaultBranding || {}) };
+              const isDark = b.darkMode || ["#0","#1","#2"].some(p => (b.bgColor||"").toLowerCase().startsWith(p));
+              const barColor = isDark ? "rgba(255,255,255,.15)" : "#e0e0e0";
+              const imgColor = isDark ? "rgba(255,255,255,.08)" : "#e5e5e5";
+              const footBg = isDark ? "rgba(0,0,0,.3)" : "#1a1a1a";
+              const footBar = isDark ? "rgba(255,255,255,.3)" : "#666";
+              const headerBg = isDark ? "rgba(255,255,255,.05)" : "#fff";
+              const headerBorder = isDark ? "rgba(255,255,255,.08)" : "#eee";
+              return (
               <div key={t.id} className="kwb-template-card">
                 <div className="kwb-template-thumb">
-                  <div className="kwb-template-thumb-inner kwb-skeleton-preview">
+                  <div className="kwb-template-thumb-inner kwb-skeleton-preview" style={{background:b.bgColor}}>
                     {/* Skeleton header */}
-                    <div className="kwb-skel-header">
-                      <div className="kwb-skel-bar" style={{width:50,height:8,borderRadius:4}} />
+                    <div className="kwb-skel-header" style={{background:headerBg,borderBottomColor:headerBorder}}>
+                      <div className="kwb-skel-bar" style={{width:50,height:8,borderRadius:4,background:barColor}} />
                       <div style={{display:"flex",gap:6,flex:1,justifyContent:"flex-start"}}>
-                        <div className="kwb-skel-bar" style={{width:24,height:6,borderRadius:3}} />
-                        <div className="kwb-skel-bar" style={{width:24,height:6,borderRadius:3}} />
-                        <div className="kwb-skel-bar" style={{width:24,height:6,borderRadius:3}} />
+                        <div className="kwb-skel-bar" style={{width:24,height:6,borderRadius:3,background:barColor}} />
+                        <div className="kwb-skel-bar" style={{width:24,height:6,borderRadius:3,background:barColor}} />
+                        <div className="kwb-skel-bar" style={{width:24,height:6,borderRadius:3,background:barColor}} />
                       </div>
-                      <div className="kwb-skel-btn" style={{width:36,height:10,borderRadius:2}} />
+                      <div className="kwb-skel-btn" style={{width:36,height:10,borderRadius:b.borderRadius?Math.min(b.borderRadius/4,4):2,background:b.buttonColor}} />
                     </div>
                     {/* Skeleton hero grid */}
                     <div className="kwb-skel-hero">
                       <div className="kwb-skel-hero-side">
-                        <div className="kwb-skel-img" style={{flex:1}} />
-                        <div className="kwb-skel-img" style={{flex:1}} />
+                        <div className="kwb-skel-img" style={{flex:1,background:imgColor,borderRadius:b.borderRadius?Math.min(b.borderRadius/4,4):2}} />
+                        <div className="kwb-skel-img" style={{flex:1,background:imgColor,borderRadius:b.borderRadius?Math.min(b.borderRadius/4,4):2}} />
                       </div>
-                      <div className="kwb-skel-img kwb-skel-hero-main" />
+                      <div className="kwb-skel-img kwb-skel-hero-main" style={{background:imgColor,borderRadius:b.borderRadius?Math.min(b.borderRadius/4,4):2}} />
                       <div className="kwb-skel-hero-side">
-                        <div className="kwb-skel-img" style={{flex:1}} />
-                        <div className="kwb-skel-img" style={{flex:1}} />
+                        <div className="kwb-skel-img" style={{flex:1,background:imgColor,borderRadius:b.borderRadius?Math.min(b.borderRadius/4,4):2}} />
+                        <div className="kwb-skel-img" style={{flex:1,background:imgColor,borderRadius:b.borderRadius?Math.min(b.borderRadius/4,4):2}} />
                       </div>
                     </div>
                     {/* Skeleton article cards */}
                     <div className="kwb-skel-articles">
-                      <div className="kwb-skel-article"><div className="kwb-skel-img" style={{height:24}} /><div className="kwb-skel-bar" style={{width:"70%",height:5,borderRadius:3}} /><div className="kwb-skel-bar" style={{width:"50%",height:4,borderRadius:2}} /></div>
-                      <div className="kwb-skel-article"><div className="kwb-skel-img" style={{height:24}} /><div className="kwb-skel-bar" style={{width:"60%",height:5,borderRadius:3}} /><div className="kwb-skel-bar" style={{width:"40%",height:4,borderRadius:2}} /></div>
-                      <div className="kwb-skel-article"><div className="kwb-skel-img" style={{height:24}} /><div className="kwb-skel-bar" style={{width:"80%",height:5,borderRadius:3}} /><div className="kwb-skel-bar" style={{width:"55%",height:4,borderRadius:2}} /></div>
-                      <div className="kwb-skel-article"><div className="kwb-skel-img" style={{height:24}} /><div className="kwb-skel-bar" style={{width:"65%",height:5,borderRadius:3}} /><div className="kwb-skel-bar" style={{width:"45%",height:4,borderRadius:2}} /></div>
+                      {[70,60,80,65].map((w,i) => (
+                        <div key={i} className="kwb-skel-article" style={{background:b.cardBg,borderRadius:b.borderRadius?Math.min(b.borderRadius/4,4):2}}>
+                          <div className="kwb-skel-img" style={{height:24,background:imgColor,borderRadius:b.borderRadius?Math.min(b.borderRadius/5,3):2}} />
+                          <div className="kwb-skel-bar" style={{width:`${w}%`,height:5,borderRadius:3,background:barColor}} />
+                          <div className="kwb-skel-bar" style={{width:`${w-20}%`,height:4,borderRadius:2,background:barColor}} />
+                        </div>
+                      ))}
                     </div>
                     {/* Skeleton footer */}
-                    <div className="kwb-skel-footer">
-                      <div className="kwb-skel-bar" style={{width:40,height:7,borderRadius:3,background:"#666"}} />
-                      <div className="kwb-skel-bar" style={{width:60,height:4,borderRadius:2,background:"#555"}} />
+                    <div className="kwb-skel-footer" style={{background:footBg}}>
+                      <div className="kwb-skel-bar" style={{width:40,height:7,borderRadius:3,background:footBar}} />
+                      <div className="kwb-skel-bar" style={{width:60,height:4,borderRadius:2,background:footBar,opacity:.7}} />
                     </div>
                   </div>
                 </div>
@@ -1842,7 +1904,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                   <button className="kwb-btn-primary kwb-btn-full" onClick={() => createFromTemplate(t.id)}>ابدأ بهذا القالب</button>
                 </div>
               </div>
-            ))}
+              )})}
           </div>
         </div>
       </div>
