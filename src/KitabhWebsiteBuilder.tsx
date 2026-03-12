@@ -131,6 +131,7 @@ interface Template {
   defaultBranding?: Partial<SiteBranding>;
   componentOverrides?: Partial<Record<ComponentType, Record<string, any>>>;
   homeComponents?: { type: ComponentType; settings?: Record<string, any> }[];
+  tags?: string[];
 }
 
 // ─── Helpers ────────────────────────────────────────────
@@ -165,12 +166,14 @@ const TEMPLATES: Template[] = [
     id: "media",
     name: "مؤسسة إعلامية",
     description: "مثالي للناشرين وصنّاع المحتوى",
+    tags: ["أخبار", "تقارير", "مقالات رأي", "تحقيقات"],
   },
   // ── 2. Newsletter Writer: subscribe hero with image → articles → CTA ──
   {
     id: "newsletter",
     name: "نشرة بريدية",
     description: "صفحة هبوط أنيقة لنشرتك البريدية",
+    tags: ["نشرة أسبوعية", "اشتراكات", "مقالات", "شهادات"],
     defaultBranding: {
       accentColor: "#7C2D12", buttonColor: "#7C2D12", headlineColor: "#292524",
       textColor: "#78716C", linkColor: "#B45309", bgColor: "#FAF7F2", cardBg: "#FFFFFF",
@@ -194,6 +197,7 @@ const TEMPLATES: Template[] = [
     id: "blog",
     name: "مدونة شخصية",
     description: "بسيط ونظيف — المحتوى هو البطل",
+    tags: ["مقالات", "تصنيفات", "تواصل اجتماعي"],
     defaultBranding: {
       accentColor: "#1a1a1a", buttonColor: "#1a1a1a", headlineColor: "#1a1a1a",
       textColor: "#555555", linkColor: "#1a1a1a", bgColor: "#FFFFFF", cardBg: "#F9FAFB",
@@ -216,6 +220,7 @@ const TEMPLATES: Template[] = [
     id: "podcast",
     name: "بودكاست",
     description: "لصنّاع المحتوى الصوتي والبودكاست",
+    tags: ["حلقات", "برامج صوتية", "اشتراك", "مقالات مرافقة"],
     defaultBranding: {
       accentColor: "#8B5CF6", buttonColor: "#8B5CF6", headlineColor: "#F9FAFB",
       textColor: "#9CA3AF", linkColor: "#A78BFA", bgColor: "#0F172A", cardBg: "#1E293B",
@@ -244,6 +249,7 @@ const TEMPLATES: Template[] = [
     id: "cinema",
     name: "سينما ومراجعات",
     description: "لعشّاق الأفلام والمسلسلات والمراجعات",
+    tags: ["أفلام", "مسلسلات", "مراجعات", "تقييمات"],
     defaultBranding: {
       accentColor: "#EF4444", buttonColor: "#EF4444", headlineColor: "#FAFAFA",
       textColor: "#A1A1AA", linkColor: "#FB7185", bgColor: "#0A0A0A", cardBg: "#18181B",
@@ -268,6 +274,7 @@ const TEMPLATES: Template[] = [
     id: "education",
     name: "تعليم ودورات",
     description: "لصنّاع المحتوى التعليمي والدورات",
+    tags: ["دورات", "مواضيع", "شهادات", "مقالات تعليمية"],
     defaultBranding: {
       accentColor: "#0A66C2", buttonColor: "#0A66C2", headlineColor: "#0F172A",
       textColor: "#64748B", linkColor: "#2563EB", bgColor: "#F8FAFC", cardBg: "#FFFFFF",
@@ -302,6 +309,7 @@ const TEMPLATES: Template[] = [
     id: "store",
     name: "متجر إلكتروني",
     description: "لبيع الكتب والمنتجات الرقمية",
+    tags: ["منتجات", "كتب", "أدوات رقمية", "خصومات"],
     defaultBranding: {
       accentColor: "#E82222", buttonColor: "#E82222", headlineColor: "#1a1a1a",
       textColor: "#555555", linkColor: "#E82222", bgColor: "#FFFFFF", cardBg: "#F9FAFB",
@@ -334,6 +342,7 @@ const TEMPLATES: Template[] = [
     id: "coach",
     name: "مدرب وخبير",
     description: "لبناء علامتك الشخصية كخبير ومدرب",
+    tags: ["تدريب", "استشارات", "برامج", "شهادات"],
     defaultBranding: {
       accentColor: "#166534", buttonColor: "#166534", headlineColor: "#052E16",
       textColor: "#6B7280", linkColor: "#10B981", bgColor: "#F0FDF4", cardBg: "#FFFFFF",
@@ -368,6 +377,7 @@ const TEMPLATES: Template[] = [
     id: "portfolio",
     name: "ملف أعمال",
     description: "لعرض أعمالك ومشاريعك بشكل احترافي",
+    tags: ["أعمال", "عملاء", "مشاريع", "تواصل"],
     defaultBranding: {
       accentColor: "#1a1a1a", buttonColor: "#1a1a1a", headlineColor: "#0F172A",
       textColor: "#64748B", linkColor: "#1a1a1a", bgColor: "#FAFAFA", cardBg: "#FFFFFF",
@@ -2030,52 +2040,179 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
             {TEMPLATES.map(t => {
               const b = { ...SKELETON.defaultBranding, ...(t.defaultBranding || {}) };
               const isDark = b.darkMode || ["#0","#1","#2"].some(p => (b.bgColor||"").toLowerCase().startsWith(p));
-              const barColor = isDark ? "rgba(255,255,255,.15)" : "#e0e0e0";
-              const imgColor = isDark ? "rgba(255,255,255,.08)" : "#e5e5e5";
+              const bar = isDark ? "rgba(255,255,255,.15)" : "#e0e0e0";
+              const img = isDark ? "rgba(255,255,255,.08)" : "#e5e5e5";
               const footBg = isDark ? "rgba(0,0,0,.3)" : "#1a1a1a";
               const footBar = isDark ? "rgba(255,255,255,.3)" : "#666";
               const headerBg = isDark ? "rgba(255,255,255,.05)" : "#fff";
               const headerBorder = isDark ? "rgba(255,255,255,.08)" : "#eee";
+              const rad = b.borderRadius ? Math.min(b.borderRadius/4,4) : 2;
+              const btn = b.buttonColor || "#E82222";
+              const card = b.cardBg || "#fff";
+              const accent = b.accentColor || btn;
+
+              // Build skeleton blocks from homeComponents
+              const comps = (t.homeComponents || SKELETON.defaultComponents.map(c=>({type:c}))).filter(c=>c.type!=="header"&&c.type!=="footer");
+
+              const renderSkelBlock = (comp:{type:string;settings?:Record<string,any>},i:number) => {
+                const s = comp.settings || {};
+                switch(comp.type) {
+                  case "hero_news": {
+                    const newsColors = [`${accent}22`,`${accent}15`,`${btn}18`,`${accent}12`,`${btn}15`];
+                    return (
+                    <div key={i} style={{display:"grid",gridTemplateColumns:"2fr 3fr 2fr",gap:3}}>
+                      <div style={{display:"flex",flexDirection:"column",gap:3}}>
+                        <div style={{flex:1,background:newsColors[0],borderRadius:rad,minHeight:20,border:`1px solid ${accent}11`}} />
+                        <div style={{flex:1,background:newsColors[1],borderRadius:rad,minHeight:20,border:`1px solid ${accent}11`}} />
+                      </div>
+                      <div style={{background:`linear-gradient(135deg, ${newsColors[2]}, ${newsColors[3]})`,borderRadius:rad,minHeight:50,border:`1px solid ${accent}11`}} />
+                      <div style={{display:"flex",flexDirection:"column",gap:3}}>
+                        <div style={{flex:1,background:newsColors[3],borderRadius:rad,minHeight:20,border:`1px solid ${accent}11`}} />
+                        <div style={{flex:1,background:newsColors[4],borderRadius:rad,minHeight:20,border:`1px solid ${accent}11`}} />
+                      </div>
+                    </div>);}
+                  case "subscribe": return s.layout==="cta" ? (
+                    <div key={i} style={{background:isDark?"rgba(255,255,255,.04)":accent+"11",padding:"6px 8px",display:"flex",alignItems:"center",justifyContent:"space-between",borderRadius:rad,gap:4}}>
+                      <div style={{width:32,height:9,borderRadius:rad,background:btn}} />
+                      <div style={{flex:1,display:"flex",flexDirection:"column",gap:3,alignItems:"flex-end"}}>
+                        <div style={{width:"60%",height:5,borderRadius:2,background:bar}} />
+                        <div style={{width:"40%",height:4,borderRadius:2,background:bar,opacity:.6}} />
+                      </div>
+                    </div>
+                  ) : (
+                    <div key={i} style={{display:"flex",gap:4,alignItems:"stretch",padding:"2px 0"}}>
+                      <div style={{flex:1,background:`linear-gradient(135deg, ${accent}33, ${btn}22)`,borderRadius:rad,minHeight:50,border:`1px solid ${accent}22`}} />
+                      <div style={{flex:1,display:"flex",flexDirection:"column",alignItems:"flex-end",justifyContent:"center",gap:4,padding:"4px 0"}}>
+                        <div style={{width:"80%",height:6,borderRadius:3,background:bar}} />
+                        <div style={{width:"60%",height:4,borderRadius:2,background:bar,opacity:.6}} />
+                        <div style={{width:36,height:10,borderRadius:rad,background:btn,marginTop:2}} />
+                      </div>
+                    </div>);
+                  case "article_collection": return (
+                    <div key={i} style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:4,padding:"2px 0"}}>
+                      {[70,60,80,65].map((w,j)=>(
+                        <div key={j} style={{background:card,borderRadius:rad,padding:3,display:"flex",flexDirection:"column",gap:3}}>
+                          <div style={{height:20,background:img,borderRadius:Math.max(rad-1,1)}} />
+                          <div style={{width:`${w}%`,height:4,borderRadius:2,background:bar}} />
+                          <div style={{width:`${w-20}%`,height:3,borderRadius:2,background:bar,opacity:.6}} />
+                        </div>))}
+                    </div>);
+                  case "podcast": {
+                    const podColors = [accent,btn,"#6366F1","#EC4899"];
+                    return (
+                    <div key={i} style={{display:"flex",flexDirection:"column",gap:3}}>
+                      {[0,1].map(j=>(
+                        <div key={j} style={{display:"flex",gap:4,alignItems:"center",background:card,borderRadius:rad,padding:4}}>
+                          <div style={{flex:1,display:"flex",flexDirection:"column",gap:3,alignItems:"flex-end"}}>
+                            <div style={{width:"70%",height:4,borderRadius:2,background:bar}} />
+                            <div style={{width:"50%",height:3,borderRadius:2,background:bar,opacity:.5}} />
+                          </div>
+                          <div style={{width:28,height:28,borderRadius:rad,background:`linear-gradient(135deg, ${podColors[j]}, ${podColors[j+1]})`,flexShrink:0}} />
+                        </div>))}
+                    </div>);}
+                  case "movies": {
+                    const posterColors = ["#1a1a2e","#16213e","#0f3460","#533483","#2b2d42","#3d405b","#1b2838","#2d1b4e"];
+                    return (
+                    <div key={i} style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:3}}>
+                      {[0,1,2,3].map(j=>(
+                        <div key={j} style={{background:`linear-gradient(180deg, ${posterColors[j*2]} 0%, ${posterColors[j*2+1]} 100%)`,borderRadius:rad,height:48,position:"relative",overflow:"hidden"}}>
+                          <div style={{position:"absolute",top:4,right:4,width:8,height:3,borderRadius:1,background:btn,opacity:.9}} />
+                          <div style={{position:"absolute",bottom:3,right:3,left:3,display:"flex",flexDirection:"column",gap:2,alignItems:"flex-end"}}>
+                            <div style={{width:"70%",height:4,borderRadius:2,background:"rgba(255,255,255,.5)"}} />
+                            <div style={{width:"40%",height:3,borderRadius:2,background:"rgba(255,255,255,.25)"}} />
+                          </div>
+                        </div>))}
+                    </div>);}
+                  case "hero_slider": return (
+                    <div key={i} style={{background:img,borderRadius:rad,height:30,position:"relative"}}>
+                      <div style={{position:"absolute",bottom:4,left:"50%",transform:"translateX(-50%)",display:"flex",gap:3}}>
+                        {[1,2,3].map(j=><div key={j} style={{width:5,height:5,borderRadius:"50%",background:j===1?btn:"rgba(255,255,255,.4)"}} />)}
+                      </div>
+                    </div>);
+                  case "testimonials": return (
+                    <div key={i} style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:3}}>
+                      {[1,2,3].map(j=>(
+                        <div key={j} style={{background:card,borderRadius:rad,padding:4,display:"flex",flexDirection:"column",alignItems:"center",gap:3}}>
+                          <div style={{width:14,height:14,borderRadius:"50%",background:img}} />
+                          <div style={{width:"70%",height:3,borderRadius:2,background:bar}} />
+                          <div style={{width:"90%",height:2,borderRadius:1,background:bar,opacity:.4}} />
+                        </div>))}
+                    </div>);
+                  case "courses": return (
+                    <div key={i} style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:3}}>
+                      {[1,2,3].map(j=>(
+                        <div key={j} style={{background:card,borderRadius:rad,padding:3,display:"flex",flexDirection:"column",gap:3}}>
+                          <div style={{height:22,background:img,borderRadius:Math.max(rad-1,1)}} />
+                          <div style={{width:"60%",height:4,borderRadius:2,background:bar,marginRight:"auto"}} />
+                          <div style={{width:28,height:8,borderRadius:rad,background:btn,alignSelf:"flex-end"}} />
+                        </div>))}
+                    </div>);
+                  case "topics": return (
+                    <div key={i} style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:3}}>
+                      {[1,2,3,4,5,6].map(j=>(
+                        <div key={j} style={{background:accent+"18",borderRadius:rad,padding:"4px 6px",display:"flex",alignItems:"center",justifyContent:"center"}}>
+                          <div style={{width:"60%",height:4,borderRadius:2,background:bar}} />
+                        </div>))}
+                    </div>);
+                  case "banner": return (
+                    <div key={i} style={{display:"grid",gridTemplateColumns:"repeat(2,1fr)",gap:3}}>
+                      {[1,2].map(j=>(
+                        <div key={j} style={{background:card,borderRadius:rad,padding:5,display:"flex",flexDirection:"column",gap:3,alignItems:"flex-end"}}>
+                          <div style={{width:"60%",height:5,borderRadius:2,background:bar}} />
+                          <div style={{width:24,height:7,borderRadius:rad,background:btn}} />
+                        </div>))}
+                    </div>);
+                  case "social_links": return (
+                    <div key={i} style={{display:"flex",gap:4,justifyContent:"center",padding:"3px 0"}}>
+                      {[1,2,3,4].map(j=><div key={j} style={{width:12,height:12,borderRadius:"50%",background:bar}} />)}
+                    </div>);
+                  case "products": return (
+                    <div key={i} style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:3}}>
+                      {[1,2,3,4].map(j=>(
+                        <div key={j} style={{background:card,borderRadius:rad,padding:3,display:"flex",flexDirection:"column",gap:3}}>
+                          <div style={{height:22,background:img,borderRadius:Math.max(rad-1,1)}} />
+                          <div style={{width:"50%",height:4,borderRadius:2,background:bar}} />
+                          <div style={{width:24,height:7,borderRadius:rad,background:btn,alignSelf:"flex-end"}} />
+                        </div>))}
+                    </div>);
+                  case "bento_grid": return (
+                    <div key={i} style={{display:"grid",gridTemplateColumns:s.layout==="3-col"?"repeat(3,1fr)":"2fr 1fr",gap:3}}>
+                      {(s.layout==="3-col"?[1,2,3]:[1,2,3]).map(j=>(
+                        <div key={j} style={{background:card,borderRadius:rad,padding:5,minHeight:24,display:"flex",flexDirection:"column",gap:2,justifyContent:"center",alignItems:"flex-end"}}>
+                          <div style={{width:"60%",height:4,borderRadius:2,background:bar}} />
+                          <div style={{width:"80%",height:3,borderRadius:1,background:bar,opacity:.4}} />
+                        </div>))}
+                    </div>);
+                  case "brands_ticker": return (
+                    <div key={i} style={{display:"flex",gap:8,justifyContent:"center",alignItems:"center",padding:"4px 0"}}>
+                      {[1,2,3,4,5].map(j=><div key={j} style={{width:24,height:8,borderRadius:2,background:bar,opacity:.5}} />)}
+                    </div>);
+                  default: return null;
+                }
+              };
+
               return (
               <div key={t.id} className="kwb-template-card">
                 <div className="kwb-template-thumb">
-                  <div className="kwb-template-thumb-inner kwb-skeleton-preview" style={{background:b.bgColor}}>
+                  <div className="kwb-template-thumb-inner kwb-skeleton-preview" style={{background:b.bgColor,display:"flex",flexDirection:"column"}}>
                     {/* Skeleton header */}
                     <div className="kwb-skel-header" style={{background:headerBg,borderBottomColor:headerBorder}}>
-                      <div className="kwb-skel-bar" style={{width:50,height:8,borderRadius:4,background:barColor}} />
+                      <div style={{width:50,height:8,borderRadius:4,background:bar}} />
                       <div style={{display:"flex",gap:6,flex:1,justifyContent:"flex-start"}}>
-                        <div className="kwb-skel-bar" style={{width:24,height:6,borderRadius:3,background:barColor}} />
-                        <div className="kwb-skel-bar" style={{width:24,height:6,borderRadius:3,background:barColor}} />
-                        <div className="kwb-skel-bar" style={{width:24,height:6,borderRadius:3,background:barColor}} />
+                        <div style={{width:24,height:6,borderRadius:3,background:bar}} />
+                        <div style={{width:24,height:6,borderRadius:3,background:bar}} />
+                        <div style={{width:24,height:6,borderRadius:3,background:bar}} />
                       </div>
-                      <div className="kwb-skel-btn" style={{width:36,height:10,borderRadius:b.borderRadius?Math.min(b.borderRadius/4,4):2,background:b.buttonColor}} />
+                      <div style={{width:36,height:10,borderRadius:rad,background:btn}} />
                     </div>
-                    {/* Skeleton hero grid */}
-                    <div className="kwb-skel-hero">
-                      <div className="kwb-skel-hero-side">
-                        <div className="kwb-skel-img" style={{flex:1,background:imgColor,borderRadius:b.borderRadius?Math.min(b.borderRadius/4,4):2}} />
-                        <div className="kwb-skel-img" style={{flex:1,background:imgColor,borderRadius:b.borderRadius?Math.min(b.borderRadius/4,4):2}} />
-                      </div>
-                      <div className="kwb-skel-img kwb-skel-hero-main" style={{background:imgColor,borderRadius:b.borderRadius?Math.min(b.borderRadius/4,4):2}} />
-                      <div className="kwb-skel-hero-side">
-                        <div className="kwb-skel-img" style={{flex:1,background:imgColor,borderRadius:b.borderRadius?Math.min(b.borderRadius/4,4):2}} />
-                        <div className="kwb-skel-img" style={{flex:1,background:imgColor,borderRadius:b.borderRadius?Math.min(b.borderRadius/4,4):2}} />
-                      </div>
-                    </div>
-                    {/* Skeleton article cards */}
-                    <div className="kwb-skel-articles">
-                      {[70,60,80,65].map((w,i) => (
-                        <div key={i} className="kwb-skel-article" style={{background:b.cardBg,borderRadius:b.borderRadius?Math.min(b.borderRadius/4,4):2}}>
-                          <div className="kwb-skel-img" style={{height:24,background:imgColor,borderRadius:b.borderRadius?Math.min(b.borderRadius/5,3):2}} />
-                          <div className="kwb-skel-bar" style={{width:`${w}%`,height:5,borderRadius:3,background:barColor}} />
-                          <div className="kwb-skel-bar" style={{width:`${w-20}%`,height:4,borderRadius:2,background:barColor}} />
-                        </div>
-                      ))}
+                    {/* Dynamic skeleton body from homeComponents */}
+                    <div style={{flex:1,display:"flex",flexDirection:"column",gap:4,padding:"4px 6px",overflow:"hidden"}}>
+                      {comps.map(renderSkelBlock)}
                     </div>
                     {/* Skeleton footer */}
                     <div className="kwb-skel-footer" style={{background:footBg}}>
-                      <div className="kwb-skel-bar" style={{width:40,height:7,borderRadius:3,background:footBar}} />
-                      <div className="kwb-skel-bar" style={{width:60,height:4,borderRadius:2,background:footBar,opacity:.7}} />
+                      <div style={{width:40,height:7,borderRadius:3,background:footBar}} />
+                      <div style={{width:60,height:4,borderRadius:2,background:footBar,opacity:.7}} />
                     </div>
                   </div>
                 </div>
@@ -2083,9 +2220,9 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                   <h3 className="kwb-template-name">{t.name}</h3>
                   <p className="kwb-template-desc">{t.description}</p>
                   <div className="kwb-template-pages">
-                    {SKELETON.pages.map(p => <span key={p} className="kwb-template-page-badge">{p}</span>)}
+                    {(t.tags||[]).map(tag => <span key={tag} className="kwb-template-page-badge" style={{borderColor:accent+"44",color:isDark?"#999":"#666"}}>{tag}</span>)}
                   </div>
-                  <button className="kwb-btn-primary kwb-btn-full" onClick={() => createFromTemplate(t.id)}>ابدأ بهذا القالب</button>
+                  <button className="kwb-btn-primary kwb-btn-full" style={{background:btn,borderColor:btn}} onClick={() => createFromTemplate(t.id)}>ابدأ بهذا القالب</button>
                 </div>
               </div>
               )})}
@@ -4342,20 +4479,12 @@ const CSS_STYLES = `
 .kwb-template-thumb-inner{height:100%;background:#f8f8f8;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;color:#BBB;}
 .kwb-skeleton-preview{flex-direction:column;align-items:stretch;padding:8px;gap:6px;direction:rtl;}
 .kwb-skel-header{display:flex;align-items:center;gap:6px;direction:rtl;padding:4px 6px;background:#fff;border-bottom:1px solid #eee;}
-.kwb-skel-bar{background:#e0e0e0;}
-.kwb-skel-btn{background:#E82222;}
-.kwb-skel-img{background:#e5e5e5;border-radius:2px;min-height:10px;}
-.kwb-skel-hero{display:grid;grid-template-columns:2fr 3fr 2fr;gap:3px;}
-.kwb-skel-hero-side{display:flex;flex-direction:column;gap:3px;}
-.kwb-skel-hero-main{min-height:60px;}
-.kwb-skel-articles{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;padding:2px 0;}
-.kwb-skel-article{display:flex;flex-direction:column;gap:3px;background:#fff;padding:3px;border-radius:2px;}
 .kwb-skel-footer{background:#1a1a1a;padding:8px 10px;display:flex;flex-direction:column;align-items:center;gap:4px;border-radius:0 0 2px 2px;}
 .kwb-template-info{padding:16px;text-align:right;}
 .kwb-template-name{font-size:18px;font-weight:700;margin:0 0 4px;color:#371D12;}
 .kwb-template-desc{font-size:13px;color:#888;margin:0 0 12px;}
-.kwb-template-pages{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;justify-content:flex-end;}
-.kwb-template-page-badge{font-size:12px;padding:4px 12px;border:1px solid #E0E0E0;border-radius:9999px;color:#555;}
+.kwb-template-pages{display:flex;flex-wrap:wrap-reverse;gap:6px;margin-bottom:16px;justify-content:flex-end;direction:rtl;}
+.kwb-template-page-badge{font-size:11px;padding:3px 10px;border:1px solid #E0E0E0;border-radius:9999px;color:#666;}
 
 /* ─── BUILDER ─── */
 .kwb-builder{position:absolute;top:0;left:0;right:0;bottom:0;background:#F2F2F2;display:flex;flex-direction:column;z-index:50;}
