@@ -2003,7 +2003,7 @@ export default function KitabhChecker() {
                 <div>
                   <div className="kb-load-title">جاري التحليل...</div>
                   <div className="kb-load-sub">
-                    {tool==="article"?"نحلّل مقالتك على الأركان العشرة":tool==="story"?"نحدد شكل قصتك ومنحناها العاطفي":"نقرأ نصك على معايير الأدب العربي"}
+                    {tool==="article"?"نحلّل مقالتك على الأركان العشرة لكتابة نصوص مؤثرة":tool==="story"?"نحدد شكل قصتك ومنحناها العاطفي":"نقرأ نصك على معايير الأدب العربي"}
                   </div>
                 </div>
               </div>
@@ -2231,7 +2231,7 @@ export default function KitabhChecker() {
 
                 {result.pillars?.length > 0 && (
                   <>
-                    <SectionHead icon="book" label={tool==="literary" ? "أركان النص الأدبي" : "الأركان العشرة"} />
+                    <SectionHead icon="book" label={tool==="literary" ? "أركان النص الأدبي" : "الأركان العشرة لكتابة نصوص مؤثرة"} />
                     <Pillars pillars={result.pillars} title="اضغط على أي ركن لتفاصيل تقييمه"/>
                   </>
                 )}
@@ -2404,7 +2404,7 @@ export default function KitabhChecker() {
             {/* Pillars */}
             {result.pillars?.length > 0 && (
               <div style={{padding:"16px 32px",borderBottom:"1px solid #F2F2F2"}}>
-                <div style={{fontSize:10,fontWeight:700,color:"#818181",marginBottom:10,textTransform:"uppercase" as const,letterSpacing:".5px"}}>الأركان العشرة</div>
+                <div style={{fontSize:10,fontWeight:700,color:"#818181",marginBottom:10,textTransform:"uppercase" as const,letterSpacing:".5px"}}>الأركان العشرة لكتابة نصوص مؤثرة</div>
                 <div style={{display:"grid",gridTemplateColumns:"repeat(5,1fr)",gap:6}}>
                   {result.pillars.map((p:any)=>{
                     const s=parseFloat(p.score),c=s>=8.5?"#12B76A":s>=7?"#0000FF":s>=5.5?"#DFB300":"#E82222"
