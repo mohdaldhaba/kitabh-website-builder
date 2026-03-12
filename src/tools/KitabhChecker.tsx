@@ -2175,11 +2175,11 @@ export default function KitabhChecker() {
                   {/* Grade scale */}
                   {(() => {
                     const grades = [
-                      { label: "استثنائي", range: "9-10", color: "#059669", bg: "#ECFDF5", min: 9, max: 10 },
-                      { label: "ممتاز", range: "8-8.9", color: "#12B76A", bg: "#F0FDF4", min: 8, max: 8.9 },
-                      { label: "جيد جداً", range: "7-7.9", color: "#0000FF", bg: "#EBEBFF", min: 7, max: 7.9 },
-                      { label: "جيد", range: "5.5-6.9", color: "#DFB300", bg: "#FFFBEB", min: 5.5, max: 6.9 },
                       { label: "يحتاج تطوير", range: "1-5.4", color: "#E82222", bg: "#FEF2F2", min: 1, max: 5.4 },
+                      { label: "جيد", range: "5.5-6.9", color: "#DFB300", bg: "#FFFBEB", min: 5.5, max: 6.9 },
+                      { label: "جيد جداً", range: "7-7.9", color: "#0000FF", bg: "#EBEBFF", min: 7, max: 7.9 },
+                      { label: "ممتاز", range: "8-8.9", color: "#12B76A", bg: "#F0FDF4", min: 8, max: 8.9 },
+                      { label: "استثنائي", range: "9-10", color: "#059669", bg: "#ECFDF5", min: 9, max: 10 },
                     ]
                     const activeIdx = grades.findIndex(g => sc >= g.min && sc <= g.max)
                     return (
@@ -2187,7 +2187,7 @@ export default function KitabhChecker() {
                         {grades.map((g, i) => {
                           const isActive = i === activeIdx
                           return (
-                            <div key={i} style={{flex: i === 4 ? 1.8 : i === 3 ? 1.4 : 1, display:"flex",flexDirection:"column",alignItems:"center",gap:4}}>
+                            <div key={i} style={{flex: i === 0 ? 1.8 : i === 1 ? 1.4 : 1, display:"flex",flexDirection:"column",alignItems:"center",gap:4}}>
                               <div style={{
                                 width:"100%",height:6,borderRadius:3,
                                 background: isActive ? g.color : "#E5E5E5",
