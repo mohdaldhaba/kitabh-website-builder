@@ -245,7 +245,18 @@ const COLOR_THEMES: ColorTheme[] = [
   { id: "clean_light", name: "نظيف", buttonColor: "#E82222", headlineColor: "#1a1a1a", textColor: "#555555", linkColor: "#E82222", bgColor: "#ffffff", cardBg: "#ffffff" },
   // ── 2. Dark (second position) ──
   { id: "dark_card", name: "داكن", buttonColor: "#E82222", headlineColor: "#f5f5f5", textColor: "#9e9e9e", linkColor: "#ef5350", bgColor: "#121212", cardBg: "#1e1e1e" },
-  // ── 3. Soft tinted light themes (like the mint screenshot — light bg, dark text, strong contrast) ──
+  // ── Designer themes ──
+  { id: "midnight_neon", name: "نيون متوهّج منتصف الليل", buttonColor: "#EC4899", headlineColor: "#F9FAFB", textColor: "#9CA3AF", linkColor: "#6366F1", bgColor: "#0B0F19", cardBg: "#111827" },
+  { id: "arctic_glass", name: "زجاج قطبي", buttonColor: "#2563EB", headlineColor: "#0F172A", textColor: "#64748B", linkColor: "#8B5CF6", bgColor: "#F8FAFC", cardBg: "#FFFFFF" },
+  { id: "sunset_editorial", name: "غروب تحريري", buttonColor: "#F97316", headlineColor: "#1F2937", textColor: "#6B7280", linkColor: "#EF4444", bgColor: "#FFF7ED", cardBg: "#FFFFFF" },
+  { id: "forest_journal", name: "يوميات الغابة", buttonColor: "#166534", headlineColor: "#052E16", textColor: "#6B7280", linkColor: "#10B981", bgColor: "#F0FDF4", cardBg: "#FFFFFF" },
+  { id: "royal_editorial", name: "ملكي تحريري", buttonColor: "#7C3AED", headlineColor: "#F8FAFC", textColor: "#94A3B8", linkColor: "#FBBF24", bgColor: "#0F172A", cardBg: "#1E293B" },
+  { id: "retro_wave", name: "موجة ريترو", buttonColor: "#D946EF", headlineColor: "#FAFAFA", textColor: "#A1A1AA", linkColor: "#22D3EE", bgColor: "#0A0A0A", cardBg: "#18181B" },
+  { id: "minimal_editorial", name: "تحريري بسيط", buttonColor: "#3B82F6", headlineColor: "#0F172A", textColor: "#94A3B8", linkColor: "#3B82F6", bgColor: "#FFFFFF", cardBg: "#F8FAFC" },
+  { id: "cyber_teal", name: "فيروزي رقمي", buttonColor: "#14B8A6", headlineColor: "#E2E8F0", textColor: "#64748B", linkColor: "#22D3EE", bgColor: "#020617", cardBg: "#0F172A" },
+  { id: "coffee_magazine", name: "مجلة القهوة", buttonColor: "#7C2D12", headlineColor: "#292524", textColor: "#78716C", linkColor: "#B45309", bgColor: "#FAF7F2", cardBg: "#FFFFFF" },
+  { id: "electric_pop", name: "ألوان كهربائية نابضة", buttonColor: "#C026D3", headlineColor: "#1E1B4B", textColor: "#6B7280", linkColor: "#F43F5E", bgColor: "#FDF4FF", cardBg: "#FFFFFF" },
+  // ── 3. Soft tinted light themes ──
   { id: "soft_blue", name: "أزرق ناعم", buttonColor: "#1565C0", headlineColor: "#0d47a1", textColor: "#546e7a", linkColor: "#1565C0", bgColor: "#e3f2fd", cardBg: "#bbdefb" },
   { id: "soft_orange", name: "برتقالي ناعم", buttonColor: "#e65100", headlineColor: "#bf360c", textColor: "#8d6e63", linkColor: "#e65100", bgColor: "#fff3e0", cardBg: "#ffe0b2" },
   { id: "soft_red", name: "أحمر ناعم", buttonColor: "#c62828", headlineColor: "#b71c1c", textColor: "#8e6565", linkColor: "#c62828", bgColor: "#ffebee", cardBg: "#ffcdd2" },
@@ -277,17 +288,6 @@ const COLOR_THEMES: ColorTheme[] = [
   { id: "bold_yellow", name: "أصفر جريء", buttonColor: "#E82222", headlineColor: "#212121", textColor: "#5d4037", linkColor: "#c62828", bgColor: "#FFC107", cardBg: "#ffd54f" },
   { id: "hot_pink", name: "وردي", buttonColor: "#FFD600", headlineColor: "#ffffff", textColor: "#fce4ec", linkColor: "#FFD600", bgColor: "#E91E63", cardBg: "#f06292" },
   { id: "ocean_deep", name: "بحري", buttonColor: "#06b6d4", headlineColor: "#f0f9ff", textColor: "#7dd3fc", linkColor: "#22d3ee", bgColor: "#0c4a6e", cardBg: "#164e63" },
-  // ── 7. Designer themes ──
-  { id: "midnight_neon", name: "نيون متوهّج منتصف الليل", buttonColor: "#EC4899", headlineColor: "#F9FAFB", textColor: "#9CA3AF", linkColor: "#6366F1", bgColor: "#0B0F19", cardBg: "#111827" },
-  { id: "arctic_glass", name: "زجاج قطبي", buttonColor: "#2563EB", headlineColor: "#0F172A", textColor: "#64748B", linkColor: "#8B5CF6", bgColor: "#F8FAFC", cardBg: "#FFFFFF" },
-  { id: "sunset_editorial", name: "غروب تحريري", buttonColor: "#F97316", headlineColor: "#1F2937", textColor: "#6B7280", linkColor: "#EF4444", bgColor: "#FFF7ED", cardBg: "#FFFFFF" },
-  { id: "forest_journal", name: "يوميات الغابة", buttonColor: "#166534", headlineColor: "#052E16", textColor: "#6B7280", linkColor: "#10B981", bgColor: "#F0FDF4", cardBg: "#FFFFFF" },
-  { id: "royal_editorial", name: "ملكي تحريري", buttonColor: "#7C3AED", headlineColor: "#F8FAFC", textColor: "#94A3B8", linkColor: "#FBBF24", bgColor: "#0F172A", cardBg: "#1E293B" },
-  { id: "retro_wave", name: "موجة ريترو", buttonColor: "#D946EF", headlineColor: "#FAFAFA", textColor: "#A1A1AA", linkColor: "#22D3EE", bgColor: "#0A0A0A", cardBg: "#18181B" },
-  { id: "minimal_editorial", name: "تحريري بسيط", buttonColor: "#3B82F6", headlineColor: "#0F172A", textColor: "#94A3B8", linkColor: "#3B82F6", bgColor: "#FFFFFF", cardBg: "#F8FAFC" },
-  { id: "cyber_teal", name: "فيروزي رقمي", buttonColor: "#14B8A6", headlineColor: "#E2E8F0", textColor: "#64748B", linkColor: "#22D3EE", bgColor: "#020617", cardBg: "#0F172A" },
-  { id: "coffee_magazine", name: "مجلة القهوة", buttonColor: "#7C2D12", headlineColor: "#292524", textColor: "#78716C", linkColor: "#B45309", bgColor: "#FAF7F2", cardBg: "#FFFFFF" },
-  { id: "electric_pop", name: "ألوان كهربائية نابضة", buttonColor: "#C026D3", headlineColor: "#1E1B4B", textColor: "#6B7280", linkColor: "#F43F5E", bgColor: "#FDF4FF", cardBg: "#FFFFFF" },
 ];
 
 // ─── SVG Icons ──────────────────────────────────────────
