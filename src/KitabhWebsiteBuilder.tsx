@@ -2033,202 +2033,206 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
   //  RENDER: TEMPLATE PICKER
   // ═══════════════════════════════════════════════════════
   if (view === "templates") {
+    const skelBlock = (t: Template) => {
+      const b = { ...SKELETON.defaultBranding, ...(t.defaultBranding || {}) };
+      const isDark = b.darkMode || ["#0","#1","#2"].some(p => (b.bgColor||"").toLowerCase().startsWith(p));
+      const bar = isDark ? "rgba(255,255,255,.18)" : "#ddd";
+      const img = isDark ? "rgba(255,255,255,.10)" : "#e8e8e8";
+      const btn = b.buttonColor || "#E82222";
+      const card = b.cardBg || "#fff";
+      const accent = b.accentColor || btn;
+      const rad = b.borderRadius ? Math.min(b.borderRadius/3,6) : 3;
+      const comps = (t.homeComponents || SKELETON.defaultComponents.map(c=>({type:c}))).filter(c=>c.type!=="header"&&c.type!=="footer");
+
+      const R = (comp:{type:string;settings?:Record<string,any>},i:number) => {
+        const s = comp.settings || {};
+        switch(comp.type) {
+          case "hero_news": return (
+            <div key={i} style={{display:"grid",gridTemplateColumns:"2fr 3fr 2fr",gap:4}}>
+              <div style={{display:"flex",flexDirection:"column",gap:4}}>
+                <div style={{flex:1,background:`${accent}22`,borderRadius:rad,minHeight:32}} />
+                <div style={{flex:1,background:`${accent}15`,borderRadius:rad,minHeight:32}} />
+              </div>
+              <div style={{background:`linear-gradient(135deg, ${accent}25, ${btn}18)`,borderRadius:rad,minHeight:70}} />
+              <div style={{display:"flex",flexDirection:"column",gap:4}}>
+                <div style={{flex:1,background:`${accent}12`,borderRadius:rad,minHeight:32}} />
+                <div style={{flex:1,background:`${btn}15`,borderRadius:rad,minHeight:32}} />
+              </div>
+            </div>);
+          case "subscribe": return s.layout==="cta" ? (
+            <div key={i} style={{background:isDark?"rgba(255,255,255,.04)":accent+"0a",padding:"10px 14px",display:"flex",alignItems:"center",justifyContent:"space-between",borderRadius:rad,gap:6}}>
+              <div style={{width:44,height:13,borderRadius:rad,background:btn}} />
+              <div style={{flex:1,display:"flex",flexDirection:"column",gap:4,alignItems:"flex-end"}}>
+                <div style={{width:"55%",height:6,borderRadius:3,background:bar}} />
+                <div style={{width:"35%",height:5,borderRadius:2,background:bar,opacity:.5}} />
+              </div>
+            </div>
+          ) : (
+            <div key={i} style={{display:"flex",gap:6,alignItems:"stretch",minHeight:80}}>
+              <div style={{flex:1,background:`linear-gradient(135deg, ${accent}30, ${btn}18)`,borderRadius:rad}} />
+              <div style={{flex:1,display:"flex",flexDirection:"column",alignItems:"flex-end",justifyContent:"center",gap:6,padding:"6px 0"}}>
+                <div style={{width:"85%",height:8,borderRadius:3,background:bar}} />
+                <div style={{width:"60%",height:6,borderRadius:2,background:bar,opacity:.5}} />
+                <div style={{width:48,height:14,borderRadius:rad,background:btn,marginTop:4}} />
+              </div>
+            </div>);
+          case "article_collection": return (
+            <div key={i} style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:5}}>
+              {[70,60,80,65].map((w,j)=>(
+                <div key={j} style={{background:card,borderRadius:rad,padding:4,display:"flex",flexDirection:"column",gap:4}}>
+                  <div style={{height:32,background:img,borderRadius:Math.max(rad-1,2)}} />
+                  <div style={{width:`${w}%`,height:5,borderRadius:3,background:bar}} />
+                  <div style={{width:`${w-20}%`,height:4,borderRadius:2,background:bar,opacity:.5}} />
+                </div>))}
+            </div>);
+          case "podcast": {
+            const pc = [accent,btn,"#6366F1","#EC4899"];
+            return (
+            <div key={i} style={{display:"flex",flexDirection:"column",gap:4}}>
+              {[0,1].map(j=>(
+                <div key={j} style={{display:"flex",gap:6,alignItems:"center",background:card,borderRadius:rad,padding:6}}>
+                  <div style={{flex:1,display:"flex",flexDirection:"column",gap:4,alignItems:"flex-end"}}>
+                    <div style={{width:"75%",height:6,borderRadius:3,background:bar}} />
+                    <div style={{width:"50%",height:4,borderRadius:2,background:bar,opacity:.4}} />
+                  </div>
+                  <div style={{width:38,height:38,borderRadius:rad,background:`linear-gradient(135deg, ${pc[j]}, ${pc[j+1]})`,flexShrink:0}} />
+                </div>))}
+            </div>);}
+          case "movies": {
+            const colors = ["#1a1a2e","#16213e","#0f3460","#533483","#2b2d42","#3d405b","#1b2838","#2d1b4e"];
+            return (
+            <div key={i} style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:4}}>
+              {[0,1,2,3].map(j=>(
+                <div key={j} style={{background:`linear-gradient(180deg, ${colors[j*2]}, ${colors[j*2+1]})`,borderRadius:rad,height:64,position:"relative",overflow:"hidden"}}>
+                  <div style={{position:"absolute",top:5,right:5,width:10,height:4,borderRadius:2,background:btn,opacity:.9}} />
+                  <div style={{position:"absolute",bottom:5,right:5,left:5,display:"flex",flexDirection:"column",gap:3,alignItems:"flex-end"}}>
+                    <div style={{width:"70%",height:5,borderRadius:2,background:"rgba(255,255,255,.5)"}} />
+                    <div style={{width:"40%",height:4,borderRadius:2,background:"rgba(255,255,255,.2)"}} />
+                  </div>
+                </div>))}
+            </div>);}
+          case "hero_slider": return (
+            <div key={i} style={{background:img,borderRadius:rad,height:40,position:"relative"}}>
+              <div style={{position:"absolute",bottom:6,left:"50%",transform:"translateX(-50%)",display:"flex",gap:4}}>
+                {[1,2,3].map(j=><div key={j} style={{width:6,height:6,borderRadius:"50%",background:j===1?btn:"rgba(255,255,255,.4)"}} />)}
+              </div>
+            </div>);
+          case "testimonials": return (
+            <div key={i} style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:4}}>
+              {[1,2,3].map(j=>(
+                <div key={j} style={{background:card,borderRadius:rad,padding:6,display:"flex",flexDirection:"column",alignItems:"center",gap:4}}>
+                  <div style={{width:18,height:18,borderRadius:"50%",background:img}} />
+                  <div style={{width:"70%",height:4,borderRadius:2,background:bar}} />
+                  <div style={{width:"90%",height:3,borderRadius:2,background:bar,opacity:.3}} />
+                </div>))}
+            </div>);
+          case "courses": return (
+            <div key={i} style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:4}}>
+              {[1,2,3].map(j=>(
+                <div key={j} style={{background:card,borderRadius:rad,padding:4,display:"flex",flexDirection:"column",gap:4}}>
+                  <div style={{height:28,background:img,borderRadius:Math.max(rad-1,2)}} />
+                  <div style={{width:"60%",height:5,borderRadius:3,background:bar}} />
+                  <div style={{width:36,height:10,borderRadius:rad,background:btn,alignSelf:"flex-end"}} />
+                </div>))}
+            </div>);
+          case "topics": return (
+            <div key={i} style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:4}}>
+              {[1,2,3,4,5,6].map(j=>(
+                <div key={j} style={{background:accent+"15",borderRadius:rad,padding:"5px 8px",display:"flex",alignItems:"center",justifyContent:"center"}}>
+                  <div style={{width:"60%",height:5,borderRadius:3,background:bar}} />
+                </div>))}
+            </div>);
+          case "banner": return (
+            <div key={i} style={{display:"grid",gridTemplateColumns:"repeat(2,1fr)",gap:4}}>
+              {[1,2].map(j=>(
+                <div key={j} style={{background:card,borderRadius:rad,padding:8,display:"flex",flexDirection:"column",gap:4,alignItems:"flex-end"}}>
+                  <div style={{width:"65%",height:6,borderRadius:3,background:bar}} />
+                  <div style={{width:32,height:10,borderRadius:rad,background:btn}} />
+                </div>))}
+            </div>);
+          case "social_links": return (
+            <div key={i} style={{display:"flex",gap:6,justifyContent:"center",padding:"4px 0"}}>
+              {[1,2,3,4].map(j=><div key={j} style={{width:16,height:16,borderRadius:"50%",background:bar}} />)}
+            </div>);
+          case "products": return (
+            <div key={i} style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:4}}>
+              {[1,2,3,4].map(j=>(
+                <div key={j} style={{background:card,borderRadius:rad,padding:4,display:"flex",flexDirection:"column",gap:4}}>
+                  <div style={{height:28,background:img,borderRadius:Math.max(rad-1,2)}} />
+                  <div style={{width:"55%",height:5,borderRadius:3,background:bar}} />
+                  <div style={{width:30,height:9,borderRadius:rad,background:btn,alignSelf:"flex-end"}} />
+                </div>))}
+            </div>);
+          case "bento_grid": return (
+            <div key={i} style={{display:"grid",gridTemplateColumns:s.layout==="3-col"?"repeat(3,1fr)":"2fr 1fr",gap:4}}>
+              {(s.layout==="3-col"?[1,2,3]:[1,2,3]).map(j=>(
+                <div key={j} style={{background:card,borderRadius:rad,padding:8,minHeight:30,display:"flex",flexDirection:"column",gap:3,justifyContent:"center",alignItems:"flex-end"}}>
+                  <div style={{width:"60%",height:5,borderRadius:3,background:bar}} />
+                  <div style={{width:"80%",height:4,borderRadius:2,background:bar,opacity:.35}} />
+                </div>))}
+            </div>);
+          case "brands_ticker": return (
+            <div key={i} style={{display:"flex",gap:10,justifyContent:"center",alignItems:"center",padding:"6px 0"}}>
+              {[1,2,3,4,5].map(j=><div key={j} style={{width:30,height:10,borderRadius:3,background:bar,opacity:.45}} />)}
+            </div>);
+          default: return null;
+        }
+      };
+
+      const headerBg = isDark ? "rgba(255,255,255,.05)" : "#fff";
+      const headerBorder = isDark ? "rgba(255,255,255,.08)" : "#eee";
+      const footBg = isDark ? "rgba(0,0,0,.3)" : "#1a1a1a";
+      const footBar = isDark ? "rgba(255,255,255,.3)" : "#666";
+
+      return (
+        <div style={{background:b.bgColor,display:"flex",flexDirection:"column",minHeight:"100%"}}>
+          <div className="kwb-skel-header" style={{background:headerBg,borderBottomColor:headerBorder}}>
+            <div style={{width:50,height:8,borderRadius:4,background:bar}} />
+            <div style={{display:"flex",gap:8,flex:1,justifyContent:"flex-start"}}>
+              <div style={{width:28,height:6,borderRadius:3,background:bar}} />
+              <div style={{width:28,height:6,borderRadius:3,background:bar}} />
+              <div style={{width:28,height:6,borderRadius:3,background:bar}} />
+            </div>
+            <div style={{width:42,height:12,borderRadius:rad,background:btn}} />
+          </div>
+          <div style={{flex:1,display:"flex",flexDirection:"column",gap:6,padding:"6px 8px",overflow:"hidden"}}>
+            {comps.map(R)}
+          </div>
+          <div className="kwb-skel-footer" style={{background:footBg}}>
+            <div style={{width:44,height:7,borderRadius:3,background:footBar}} />
+            <div style={{width:64,height:5,borderRadius:2,background:footBar,opacity:.6}} />
+          </div>
+        </div>
+      );
+    };
+
     return (
-      <div style={{ ...props.style, width: "100%", height: "100%", overflow: "auto" }}>
+      <div style={{ ...props.style, width: "100%", height: "100%", overflow: "auto", background: "#FAFAFA" }}>
         <style>{CSS_STYLES}</style>
-        <div className="kwb">
-          <button className="kwb-back-link" onClick={() => setView("sites")}>رجوع</button>
-          <h1 className="kwb-title">اختر قالبا</h1>
-          <div className="kwb-templates-grid">
+        <div className="kwb-tpl-picker">
+          <div className="kwb-tpl-picker-header">
+            <button className="kwb-back-link" onClick={() => setView("sites")}>رجوع</button>
+            <h1 className="kwb-tpl-picker-title">ابدأ بقالب جاهز</h1>
+            <p className="kwb-tpl-picker-subtitle">اختر قالبًا وخصّصه كما تشاء — الألوان والخطوط والمحتوى كلها قابلة للتعديل</p>
+          </div>
+          <div className="kwb-tpl-grid">
             {TEMPLATES.map(t => {
               const b = { ...SKELETON.defaultBranding, ...(t.defaultBranding || {}) };
-              const isDark = b.darkMode || ["#0","#1","#2"].some(p => (b.bgColor||"").toLowerCase().startsWith(p));
-              const bar = isDark ? "rgba(255,255,255,.15)" : "#e0e0e0";
-              const img = isDark ? "rgba(255,255,255,.08)" : "#e5e5e5";
-              const footBg = isDark ? "rgba(0,0,0,.3)" : "#1a1a1a";
-              const footBar = isDark ? "rgba(255,255,255,.3)" : "#666";
-              const headerBg = isDark ? "rgba(255,255,255,.05)" : "#fff";
-              const headerBorder = isDark ? "rgba(255,255,255,.08)" : "#eee";
-              const rad = b.borderRadius ? Math.min(b.borderRadius/4,4) : 2;
               const btn = b.buttonColor || "#E82222";
-              const card = b.cardBg || "#fff";
-              const accent = b.accentColor || btn;
-
-              // Build skeleton blocks from homeComponents
-              const comps = (t.homeComponents || SKELETON.defaultComponents.map(c=>({type:c}))).filter(c=>c.type!=="header"&&c.type!=="footer");
-
-              const renderSkelBlock = (comp:{type:string;settings?:Record<string,any>},i:number) => {
-                const s = comp.settings || {};
-                switch(comp.type) {
-                  case "hero_news": {
-                    const newsColors = [`${accent}22`,`${accent}15`,`${btn}18`,`${accent}12`,`${btn}15`];
-                    return (
-                    <div key={i} style={{display:"grid",gridTemplateColumns:"2fr 3fr 2fr",gap:3}}>
-                      <div style={{display:"flex",flexDirection:"column",gap:3}}>
-                        <div style={{flex:1,background:newsColors[0],borderRadius:rad,minHeight:20,border:`1px solid ${accent}11`}} />
-                        <div style={{flex:1,background:newsColors[1],borderRadius:rad,minHeight:20,border:`1px solid ${accent}11`}} />
-                      </div>
-                      <div style={{background:`linear-gradient(135deg, ${newsColors[2]}, ${newsColors[3]})`,borderRadius:rad,minHeight:50,border:`1px solid ${accent}11`}} />
-                      <div style={{display:"flex",flexDirection:"column",gap:3}}>
-                        <div style={{flex:1,background:newsColors[3],borderRadius:rad,minHeight:20,border:`1px solid ${accent}11`}} />
-                        <div style={{flex:1,background:newsColors[4],borderRadius:rad,minHeight:20,border:`1px solid ${accent}11`}} />
-                      </div>
-                    </div>);}
-                  case "subscribe": return s.layout==="cta" ? (
-                    <div key={i} style={{background:isDark?"rgba(255,255,255,.04)":accent+"11",padding:"6px 8px",display:"flex",alignItems:"center",justifyContent:"space-between",borderRadius:rad,gap:4}}>
-                      <div style={{width:32,height:9,borderRadius:rad,background:btn}} />
-                      <div style={{flex:1,display:"flex",flexDirection:"column",gap:3,alignItems:"flex-end"}}>
-                        <div style={{width:"60%",height:5,borderRadius:2,background:bar}} />
-                        <div style={{width:"40%",height:4,borderRadius:2,background:bar,opacity:.6}} />
-                      </div>
-                    </div>
-                  ) : (
-                    <div key={i} style={{display:"flex",gap:4,alignItems:"stretch",padding:"2px 0"}}>
-                      <div style={{flex:1,background:`linear-gradient(135deg, ${accent}33, ${btn}22)`,borderRadius:rad,minHeight:50,border:`1px solid ${accent}22`}} />
-                      <div style={{flex:1,display:"flex",flexDirection:"column",alignItems:"flex-end",justifyContent:"center",gap:4,padding:"4px 0"}}>
-                        <div style={{width:"80%",height:6,borderRadius:3,background:bar}} />
-                        <div style={{width:"60%",height:4,borderRadius:2,background:bar,opacity:.6}} />
-                        <div style={{width:36,height:10,borderRadius:rad,background:btn,marginTop:2}} />
-                      </div>
-                    </div>);
-                  case "article_collection": return (
-                    <div key={i} style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:4,padding:"2px 0"}}>
-                      {[70,60,80,65].map((w,j)=>(
-                        <div key={j} style={{background:card,borderRadius:rad,padding:3,display:"flex",flexDirection:"column",gap:3}}>
-                          <div style={{height:20,background:img,borderRadius:Math.max(rad-1,1)}} />
-                          <div style={{width:`${w}%`,height:4,borderRadius:2,background:bar}} />
-                          <div style={{width:`${w-20}%`,height:3,borderRadius:2,background:bar,opacity:.6}} />
-                        </div>))}
-                    </div>);
-                  case "podcast": {
-                    const podColors = [accent,btn,"#6366F1","#EC4899"];
-                    return (
-                    <div key={i} style={{display:"flex",flexDirection:"column",gap:3}}>
-                      {[0,1].map(j=>(
-                        <div key={j} style={{display:"flex",gap:4,alignItems:"center",background:card,borderRadius:rad,padding:4}}>
-                          <div style={{flex:1,display:"flex",flexDirection:"column",gap:3,alignItems:"flex-end"}}>
-                            <div style={{width:"70%",height:4,borderRadius:2,background:bar}} />
-                            <div style={{width:"50%",height:3,borderRadius:2,background:bar,opacity:.5}} />
-                          </div>
-                          <div style={{width:28,height:28,borderRadius:rad,background:`linear-gradient(135deg, ${podColors[j]}, ${podColors[j+1]})`,flexShrink:0}} />
-                        </div>))}
-                    </div>);}
-                  case "movies": {
-                    const posterColors = ["#1a1a2e","#16213e","#0f3460","#533483","#2b2d42","#3d405b","#1b2838","#2d1b4e"];
-                    return (
-                    <div key={i} style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:3}}>
-                      {[0,1,2,3].map(j=>(
-                        <div key={j} style={{background:`linear-gradient(180deg, ${posterColors[j*2]} 0%, ${posterColors[j*2+1]} 100%)`,borderRadius:rad,height:48,position:"relative",overflow:"hidden"}}>
-                          <div style={{position:"absolute",top:4,right:4,width:8,height:3,borderRadius:1,background:btn,opacity:.9}} />
-                          <div style={{position:"absolute",bottom:3,right:3,left:3,display:"flex",flexDirection:"column",gap:2,alignItems:"flex-end"}}>
-                            <div style={{width:"70%",height:4,borderRadius:2,background:"rgba(255,255,255,.5)"}} />
-                            <div style={{width:"40%",height:3,borderRadius:2,background:"rgba(255,255,255,.25)"}} />
-                          </div>
-                        </div>))}
-                    </div>);}
-                  case "hero_slider": return (
-                    <div key={i} style={{background:img,borderRadius:rad,height:30,position:"relative"}}>
-                      <div style={{position:"absolute",bottom:4,left:"50%",transform:"translateX(-50%)",display:"flex",gap:3}}>
-                        {[1,2,3].map(j=><div key={j} style={{width:5,height:5,borderRadius:"50%",background:j===1?btn:"rgba(255,255,255,.4)"}} />)}
-                      </div>
-                    </div>);
-                  case "testimonials": return (
-                    <div key={i} style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:3}}>
-                      {[1,2,3].map(j=>(
-                        <div key={j} style={{background:card,borderRadius:rad,padding:4,display:"flex",flexDirection:"column",alignItems:"center",gap:3}}>
-                          <div style={{width:14,height:14,borderRadius:"50%",background:img}} />
-                          <div style={{width:"70%",height:3,borderRadius:2,background:bar}} />
-                          <div style={{width:"90%",height:2,borderRadius:1,background:bar,opacity:.4}} />
-                        </div>))}
-                    </div>);
-                  case "courses": return (
-                    <div key={i} style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:3}}>
-                      {[1,2,3].map(j=>(
-                        <div key={j} style={{background:card,borderRadius:rad,padding:3,display:"flex",flexDirection:"column",gap:3}}>
-                          <div style={{height:22,background:img,borderRadius:Math.max(rad-1,1)}} />
-                          <div style={{width:"60%",height:4,borderRadius:2,background:bar,marginRight:"auto"}} />
-                          <div style={{width:28,height:8,borderRadius:rad,background:btn,alignSelf:"flex-end"}} />
-                        </div>))}
-                    </div>);
-                  case "topics": return (
-                    <div key={i} style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:3}}>
-                      {[1,2,3,4,5,6].map(j=>(
-                        <div key={j} style={{background:accent+"18",borderRadius:rad,padding:"4px 6px",display:"flex",alignItems:"center",justifyContent:"center"}}>
-                          <div style={{width:"60%",height:4,borderRadius:2,background:bar}} />
-                        </div>))}
-                    </div>);
-                  case "banner": return (
-                    <div key={i} style={{display:"grid",gridTemplateColumns:"repeat(2,1fr)",gap:3}}>
-                      {[1,2].map(j=>(
-                        <div key={j} style={{background:card,borderRadius:rad,padding:5,display:"flex",flexDirection:"column",gap:3,alignItems:"flex-end"}}>
-                          <div style={{width:"60%",height:5,borderRadius:2,background:bar}} />
-                          <div style={{width:24,height:7,borderRadius:rad,background:btn}} />
-                        </div>))}
-                    </div>);
-                  case "social_links": return (
-                    <div key={i} style={{display:"flex",gap:4,justifyContent:"center",padding:"3px 0"}}>
-                      {[1,2,3,4].map(j=><div key={j} style={{width:12,height:12,borderRadius:"50%",background:bar}} />)}
-                    </div>);
-                  case "products": return (
-                    <div key={i} style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:3}}>
-                      {[1,2,3,4].map(j=>(
-                        <div key={j} style={{background:card,borderRadius:rad,padding:3,display:"flex",flexDirection:"column",gap:3}}>
-                          <div style={{height:22,background:img,borderRadius:Math.max(rad-1,1)}} />
-                          <div style={{width:"50%",height:4,borderRadius:2,background:bar}} />
-                          <div style={{width:24,height:7,borderRadius:rad,background:btn,alignSelf:"flex-end"}} />
-                        </div>))}
-                    </div>);
-                  case "bento_grid": return (
-                    <div key={i} style={{display:"grid",gridTemplateColumns:s.layout==="3-col"?"repeat(3,1fr)":"2fr 1fr",gap:3}}>
-                      {(s.layout==="3-col"?[1,2,3]:[1,2,3]).map(j=>(
-                        <div key={j} style={{background:card,borderRadius:rad,padding:5,minHeight:24,display:"flex",flexDirection:"column",gap:2,justifyContent:"center",alignItems:"flex-end"}}>
-                          <div style={{width:"60%",height:4,borderRadius:2,background:bar}} />
-                          <div style={{width:"80%",height:3,borderRadius:1,background:bar,opacity:.4}} />
-                        </div>))}
-                    </div>);
-                  case "brands_ticker": return (
-                    <div key={i} style={{display:"flex",gap:8,justifyContent:"center",alignItems:"center",padding:"4px 0"}}>
-                      {[1,2,3,4,5].map(j=><div key={j} style={{width:24,height:8,borderRadius:2,background:bar,opacity:.5}} />)}
-                    </div>);
-                  default: return null;
-                }
-              };
-
               return (
-              <div key={t.id} className="kwb-template-card">
-                <div className="kwb-template-thumb">
-                  <div className="kwb-template-thumb-inner kwb-skeleton-preview" style={{background:b.bgColor,display:"flex",flexDirection:"column"}}>
-                    {/* Skeleton header */}
-                    <div className="kwb-skel-header" style={{background:headerBg,borderBottomColor:headerBorder}}>
-                      <div style={{width:50,height:8,borderRadius:4,background:bar}} />
-                      <div style={{display:"flex",gap:6,flex:1,justifyContent:"flex-start"}}>
-                        <div style={{width:24,height:6,borderRadius:3,background:bar}} />
-                        <div style={{width:24,height:6,borderRadius:3,background:bar}} />
-                        <div style={{width:24,height:6,borderRadius:3,background:bar}} />
-                      </div>
-                      <div style={{width:36,height:10,borderRadius:rad,background:btn}} />
-                    </div>
-                    {/* Dynamic skeleton body from homeComponents */}
-                    <div style={{flex:1,display:"flex",flexDirection:"column",gap:4,padding:"4px 6px",overflow:"hidden"}}>
-                      {comps.map(renderSkelBlock)}
-                    </div>
-                    {/* Skeleton footer */}
-                    <div className="kwb-skel-footer" style={{background:footBg}}>
-                      <div style={{width:40,height:7,borderRadius:3,background:footBar}} />
-                      <div style={{width:60,height:4,borderRadius:2,background:footBar,opacity:.7}} />
-                    </div>
-                  </div>
+              <div key={t.id} className="kwb-tpl-card" onClick={() => createFromTemplate(t.id)}>
+                <div className="kwb-tpl-preview">
+                  {skelBlock(t)}
                 </div>
-                <div className="kwb-template-info">
-                  <h3 className="kwb-template-name">{t.name}</h3>
-                  <p className="kwb-template-desc">{t.description}</p>
-                  <div className="kwb-template-pages">
-                    {(t.tags||[]).map(tag => <span key={tag} className="kwb-template-page-badge" style={{borderColor:accent+"44",color:isDark?"#999":"#666"}}>{tag}</span>)}
-                  </div>
-                  <button className="kwb-btn-primary kwb-btn-full" style={{background:btn,borderColor:btn}} onClick={() => createFromTemplate(t.id)}>ابدأ بهذا القالب</button>
+                <div className="kwb-tpl-overlay">
+                  <button className="kwb-tpl-use-btn" style={{background:btn}}>ابدأ بهذا القالب</button>
+                </div>
+                <div className="kwb-tpl-meta">
+                  <h3 className="kwb-tpl-name">{t.name}</h3>
+                  <p className="kwb-tpl-desc">{t.description}</p>
                 </div>
               </div>
-              )})}
+              );})}
           </div>
         </div>
       </div>
@@ -4486,19 +4490,26 @@ const CSS_STYLES = `
 .kwb-dropdown-item:hover{background:#F5F5F5;}
 .kwb-dropdown-danger{color:#E82222;}
 
-/* ─── TEMPLATES ─── */
-.kwb-templates-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px;}
-.kwb-template-card{border:1.5px solid #E8E8E8;border-radius:14px;overflow:hidden;background:#fff;}
-.kwb-template-thumb{height:180px;overflow:hidden;}
-.kwb-template-thumb-inner{height:100%;background:#f8f8f8;display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;color:#BBB;}
-.kwb-skeleton-preview{flex-direction:column;align-items:stretch;padding:8px;gap:6px;direction:rtl;}
-.kwb-skel-header{display:flex;align-items:center;gap:6px;direction:rtl;padding:4px 6px;background:#fff;border-bottom:1px solid #eee;}
-.kwb-skel-footer{background:#1a1a1a;padding:8px 10px;display:flex;flex-direction:column;align-items:center;gap:4px;border-radius:0 0 2px 2px;}
-.kwb-template-info{padding:16px;text-align:right;}
-.kwb-template-name{font-size:18px;font-weight:700;margin:0 0 4px;color:#371D12;}
-.kwb-template-desc{font-size:13px;color:#888;margin:0 0 12px;}
-.kwb-template-pages{display:flex;flex-wrap:wrap-reverse;gap:6px;margin-bottom:16px;justify-content:flex-end;direction:rtl;}
-.kwb-template-page-badge{font-size:11px;padding:3px 10px;border:1px solid #E0E0E0;border-radius:9999px;color:#666;}
+/* ─── TEMPLATE PICKER (Premium) ─── */
+.kwb-tpl-picker{max-width:1200px;margin:0 auto;padding:40px 32px 60px;direction:rtl;}
+.kwb-tpl-picker-header{text-align:center;margin-bottom:48px;}
+.kwb-tpl-picker-header .kwb-back-link{margin-bottom:16px;}
+.kwb-tpl-picker-title{font-size:32px;font-weight:800;color:#1a1a1a;margin:0 0 8px;letter-spacing:-.02em;}
+.kwb-tpl-picker-subtitle{font-size:15px;color:#999;margin:0;font-weight:400;}
+.kwb-tpl-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;}
+.kwb-tpl-card{position:relative;cursor:pointer;border-radius:16px;overflow:hidden;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.06);transition:transform .25s ease,box-shadow .25s ease;}
+.kwb-tpl-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,.12);}
+.kwb-tpl-preview{height:380px;overflow:hidden;position:relative;}
+.kwb-tpl-preview>div{transform-origin:top center;}
+.kwb-tpl-overlay{position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0);display:flex;align-items:center;justify-content:center;transition:background .25s ease;pointer-events:none;z-index:2;}
+.kwb-tpl-card:hover .kwb-tpl-overlay{background:rgba(0,0,0,.35);pointer-events:auto;}
+.kwb-tpl-use-btn{color:#fff;font-size:14px;font-weight:600;padding:12px 28px;border:none;border-radius:10px;cursor:pointer;opacity:0;transform:translateY(8px);transition:opacity .25s ease,transform .25s ease;font-family:inherit;}
+.kwb-tpl-card:hover .kwb-tpl-use-btn{opacity:1;transform:translateY(0);}
+.kwb-tpl-meta{padding:16px 18px 18px;text-align:right;background:#fff;position:relative;z-index:1;}
+.kwb-tpl-name{font-size:16px;font-weight:700;margin:0 0 2px;color:#1a1a1a;}
+.kwb-tpl-desc{font-size:13px;color:#999;margin:0;line-height:1.4;}
+.kwb-skel-header{display:flex;align-items:center;gap:8px;direction:rtl;padding:6px 8px;background:#fff;border-bottom:1px solid #eee;}
+.kwb-skel-footer{background:#1a1a1a;padding:10px 12px;display:flex;flex-direction:column;align-items:center;gap:5px;}
 
 /* ─── BUILDER ─── */
 .kwb-builder{position:absolute;top:0;left:0;right:0;bottom:0;background:#F2F2F2;display:flex;flex-direction:column;z-index:50;}
@@ -5430,6 +5441,8 @@ const CSS_STYLES = `
 
 /* ─── RESPONSIVE ─── */
 @media(max-width:900px){
+  .kwb-tpl-grid{grid-template-columns:repeat(2,1fr);gap:20px;}
+  .kwb-tpl-preview{height:320px;}
   .kwb-builder-body{flex-direction:column-reverse;}
   .kwb-sidebar{width:100%;max-height:50vh;border-left:none;border-top:1px solid #E8E8E8;}
   .kwb-preview-area{padding:0 8px 20px;}
@@ -5447,7 +5460,13 @@ const CSS_STYLES = `
 @media(max-width:600px){
   .kwb{padding:16px 12px 40px;}
   .kwb-sites-grid{grid-template-columns:1fr;}
-  .kwb-templates-grid{grid-template-columns:1fr;}
+  .kwb-tpl-grid{grid-template-columns:1fr;gap:20px;}
+  .kwb-tpl-picker{padding:24px 16px 40px;}
+  .kwb-tpl-picker-title{font-size:24px;}
+  .kwb-tpl-picker-header{margin-bottom:28px;}
+  .kwb-tpl-preview{height:300px;}
+  .kwb-tpl-overlay{background:rgba(0,0,0,.25)!important;pointer-events:auto!important;}
+  .kwb-tpl-use-btn{opacity:1!important;transform:none!important;}
   .kwb-p-hero-sub-form{flex-direction:column;}
   .kwb-p-cta-form{flex-direction:column;}
   .kwb-p-footer-form{flex-direction:column;}
