@@ -88,6 +88,7 @@ interface SiteBranding {
   popupButtonText?: string;
   showKitabhBadge?: boolean;
   badgeStyle?: "black" | "blue" | "white";
+  badgeScale?: number; // 0-100, default 100
 }
 
 interface Article {
@@ -163,6 +164,9 @@ const TEMPLATES: Template[] = [
     description: "مثالي للناشرين وصنّاع المحتوى",
   },
 ];
+
+// ─── Kitabh icon (base64 PNG) ──────
+const KITABH_ICON = "data:image/png;base64,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";
 
 // ─── Image pool (shuffled on each page load) ──────
 const IMAGE_POOL = [
@@ -1333,16 +1337,16 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
 .pv-kitabh-badge-wrap{text-align:center;padding:24px 0;background:var(--pv-bg);}
 .pv-kitabh-badge{display:inline-flex;align-items:center;gap:10px;font-size:15px;font-weight:700;direction:rtl;padding:12px 24px;border-radius:50px;text-decoration:none;transition:all .2s ease;position:relative;z-index:10;isolation:isolate;}
 .pv-kitabh-badge:hover{transform:translateY(-1px);}
-.pv-kitabh-badge svg{flex-shrink:0;width:24px;height:24px;}
+.pv-kitabh-badge img{flex-shrink:0;width:24px;height:auto;display:block;}
 .pv-badge-black{background:#000;color:#fff;border:1px solid #000;}
 .pv-badge-black:hover{background:#222;}
-.pv-badge-black svg{fill:#fff;}
+.pv-badge-black img{filter:brightness(0) invert(1);}
 .pv-badge-blue{background:#0000FF;color:#fff;border:1px solid #0000FF;}
 .pv-badge-blue:hover{background:#0000dd;}
-.pv-badge-blue svg{fill:#fff;}
+.pv-badge-blue img{filter:brightness(0) invert(1);}
 .pv-badge-white{background:#fff;color:#000;border:1px solid #e0e0e0;}
 .pv-badge-white:hover{background:#f5f5f5;}
-.pv-badge-white svg{fill:#0000FF;}
+.pv-badge-white img{filter:none;}
 /* Breadcrumb */
 .pv-breadcrumb{display:flex;align-items:center;gap:8px;padding:16px 24px 0;max-width:800px;margin:0 auto;font-size:13px;direction:rtl;}
 .pv-breadcrumb a{color:var(--pv-text);opacity:0.7;cursor:pointer;text-decoration:none;font-weight:500;}
@@ -1487,7 +1491,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
 }
 </style>
 </head>
-<body><div class="pv-site-wrapper" id="pv-main">${pagesHtml}</div>${activeSite.branding.showKitabhBadge !== false ? `<div class="pv-kitabh-badge-wrap"><a href="https://kitabh.com" target="_blank" rel="noopener noreferrer" class="pv-kitabh-badge pv-badge-${activeSite.branding.badgeStyle || "black"}"><svg width="24" height="24" viewBox="0 0 100 100"><path d="M25 5h20c0 11-9 20-20 20H5V5h20z"/><path d="M55 5h20v20H55c-11 0-20-9-20-20h20z"/><path d="M25 55h-20v20h20c11 0 20 9 20 20H25V55z"/><path d="M75 55v20H55c0 11 9 20 20 20h20V55H75z"/><path d="M45 25c0 16.6-13.4 30-30 30v-5c13.8 0 25-11.2 25-25h5z"/><path d="M55 75c0-16.6 13.4-30 30-30v5c-13.8 0-25 11.2-25 25h-5z"/></svg>صُمّم باستخدام كتابة</a></div>` : ''}
+<body><div class="pv-site-wrapper" id="pv-main">${pagesHtml}</div>${activeSite.branding.showKitabhBadge !== false ? `<div class="pv-kitabh-badge-wrap"><a href="https://kitabh.com" target="_blank" rel="noopener noreferrer" class="pv-kitabh-badge pv-badge-${activeSite.branding.badgeStyle || "black"}" style="transform:scale(${(activeSite.branding.badgeScale ?? 100) / 100})"><img src="${KITABH_ICON}" alt="كتابة" />صُمّم باستخدام كتابة</a></div>` : ''}
 <div id="pv-article-overlay" class="pv-article-overlay" style="display:none"></div>
 <script>
 (function(){
@@ -2691,8 +2695,8 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                 {/* Kitabh Badge — standalone element below all components */}
                 {activeSite.branding.showKitabhBadge !== false && (
                   <div className="kwb-p-kitabh-badge-wrap">
-                    <a href="https://kitabh.com" target="_blank" rel="noopener noreferrer" className={`kwb-p-footer-kitabh-badge kwb-badge-${activeSite.branding.badgeStyle || "black"}`}>
-                      <svg width="24" height="24" viewBox="0 0 100 100"><path d="M25 5h20c0 11-9 20-20 20H5V5h20z"/><path d="M55 5h20v20H55c-11 0-20-9-20-20h20z"/><path d="M25 55h-20v20h20c11 0 20 9 20 20H25V55z"/><path d="M75 55v20H55c0 11 9 20 20 20h20V55H75z"/><path d="M45 25c0 16.6-13.4 30-30 30v-5c13.8 0 25-11.2 25-25h5z"/><path d="M55 75c0-16.6 13.4-30 30-30v5c-13.8 0-25 11.2-25 25h-5z"/></svg>
+                    <a href="https://kitabh.com" target="_blank" rel="noopener noreferrer" className={`kwb-p-footer-kitabh-badge kwb-badge-${activeSite.branding.badgeStyle || "black"}`} style={{ transform: `scale(${(activeSite.branding.badgeScale ?? 100) / 100})` }}>
+                      <img src={KITABH_ICON} alt="كتابة" />
                       صُمّم باستخدام كتابة
                     </a>
                   </div>
@@ -2924,22 +2928,28 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                       <div className="kwb-badge-style-picker">
                         <button className={`kwb-badge-style-opt ${(activeSite.branding.badgeStyle || "black") === "black" ? "kwb-badge-style-active" : ""}`} onClick={() => updateSite(activeSite.id, { branding: { ...activeSite.branding, badgeStyle: "black" } })} title="أسود">
                           <span className="kwb-badge-preview kwb-badge-preview-black">
-                            <svg width="12" height="12" viewBox="0 0 100 100" fill="#fff"><path d="M25 5h20c0 11-9 20-20 20H5V5h20z"/><path d="M55 5h20v20H55c-11 0-20-9-20-20h20z"/><path d="M25 55h-20v20h20c11 0 20 9 20 20H25V55z"/><path d="M75 55v20H55c0 11 9 20 20 20h20V55H75z"/><path d="M45 25c0 16.6-13.4 30-30 30v-5c13.8 0 25-11.2 25-25h5z"/><path d="M55 75c0-16.6 13.4-30 30-30v5c-13.8 0-25 11.2-25 25h-5z"/></svg>
+                            <img src={KITABH_ICON} alt="" style={{ width: 12, height: "auto", filter: "brightness(0) invert(1)" }} />
                             <span>صُمّم باستخدام كتابة</span>
                           </span>
                         </button>
                         <button className={`kwb-badge-style-opt ${activeSite.branding.badgeStyle === "blue" ? "kwb-badge-style-active" : ""}`} onClick={() => updateSite(activeSite.id, { branding: { ...activeSite.branding, badgeStyle: "blue" } })} title="أزرق">
                           <span className="kwb-badge-preview kwb-badge-preview-blue">
-                            <svg width="12" height="12" viewBox="0 0 100 100" fill="#fff"><path d="M25 5h20c0 11-9 20-20 20H5V5h20z"/><path d="M55 5h20v20H55c-11 0-20-9-20-20h20z"/><path d="M25 55h-20v20h20c11 0 20 9 20 20H25V55z"/><path d="M75 55v20H55c0 11 9 20 20 20h20V55H75z"/><path d="M45 25c0 16.6-13.4 30-30 30v-5c13.8 0 25-11.2 25-25h5z"/><path d="M55 75c0-16.6 13.4-30 30-30v5c-13.8 0-25 11.2-25 25h-5z"/></svg>
+                            <img src={KITABH_ICON} alt="" style={{ width: 12, height: "auto", filter: "brightness(0) invert(1)" }} />
                             <span>صُمّم باستخدام كتابة</span>
                           </span>
                         </button>
                         <button className={`kwb-badge-style-opt ${activeSite.branding.badgeStyle === "white" ? "kwb-badge-style-active" : ""}`} onClick={() => updateSite(activeSite.id, { branding: { ...activeSite.branding, badgeStyle: "white" } })} title="أبيض">
                           <span className="kwb-badge-preview kwb-badge-preview-white">
-                            <svg width="12" height="12" viewBox="0 0 100 100" fill="#0000FF"><path d="M25 5h20c0 11-9 20-20 20H5V5h20z"/><path d="M55 5h20v20H55c-11 0-20-9-20-20h20z"/><path d="M25 55h-20v20h20c11 0 20 9 20 20H25V55z"/><path d="M75 55v20H55c0 11 9 20 20 20h20V55H75z"/><path d="M45 25c0 16.6-13.4 30-30 30v-5c13.8 0 25-11.2 25-25h5z"/><path d="M55 75c0-16.6 13.4-30 30-30v5c-13.8 0-25 11.2-25 25h-5z"/></svg>
+                            <img src={KITABH_ICON} alt="" style={{ width: 12, height: "auto" }} />
                             <span>صُمّم باستخدام كتابة</span>
                           </span>
                         </button>
+                      </div>
+                      <label className="kwb-label" style={{ marginTop: 10 }}>حجم الشارة</label>
+                      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                        <span style={{ fontSize: 11, color: "#999" }}>صغير</span>
+                        <input type="range" min="40" max="100" value={activeSite.branding.badgeScale ?? 100} onChange={e => updateSite(activeSite.id, { branding: { ...activeSite.branding, badgeScale: parseInt(e.target.value) } })} style={{ flex: 1, accentColor: activeSite.branding.buttonColor || "#E82222" }} />
+                        <span style={{ fontSize: 11, color: "#999" }}>كبير</span>
                       </div>
                     </>
                   )}
@@ -4780,16 +4790,16 @@ const CSS_STYLES = `
 .kwb-p-kitabh-badge-wrap{text-align:center;padding:24px 0;background:var(--kwb-bg,#fff);}
 .kwb-p-footer-kitabh-badge{display:inline-flex;align-items:center;gap:10px;font-size:15px;font-weight:700;direction:rtl;padding:12px 24px;border-radius:50px;text-decoration:none;transition:all .2s ease;cursor:pointer;letter-spacing:0.3px;opacity:1 !important;position:relative;z-index:10;isolation:isolate;}
 .kwb-p-footer-kitabh-badge:hover{transform:translateY(-1px);}
-.kwb-p-footer-kitabh-badge svg{flex-shrink:0;width:24px;height:24px;}
+.kwb-p-footer-kitabh-badge img{flex-shrink:0;width:24px;height:auto;display:block;}
 .kwb-badge-black{background:#000;color:#fff;border:1px solid #000;}
 .kwb-badge-black:hover{background:#1a1a1a;}
-.kwb-badge-black svg{fill:#fff;}
+.kwb-badge-black img{filter:brightness(0) invert(1);}
 .kwb-badge-blue{background:#0000FF;color:#fff;border:1px solid #0000FF;}
 .kwb-badge-blue:hover{background:#0000dd;}
-.kwb-badge-blue svg{fill:#fff;}
+.kwb-badge-blue img{filter:brightness(0) invert(1);}
 .kwb-badge-white{background:#fff;color:#000;border:1px solid #e0e0e0;}
 .kwb-badge-white:hover{background:#f5f5f5;}
-.kwb-badge-white svg{fill:#0000FF;}
+.kwb-badge-white img{filter:none;}
 .kwb-badge-style-picker{display:flex;gap:8px;flex-wrap:wrap;}
 .kwb-badge-style-opt{border:2px solid transparent;border-radius:8px;padding:4px;cursor:pointer;background:none;transition:border-color .2s;}
 .kwb-badge-style-active{border-color:#0000FF;}
