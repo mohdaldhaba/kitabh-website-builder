@@ -1343,7 +1343,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
 .pv-footer-bottom{border-top:1px solid rgba(255,255,255,0.15);padding:20px 0;text-align:center;font-size:12px;color:var(--pv-bg);margin-top:28px;display:flex;flex-direction:column;align-items:center;gap:12px;}
 .pv-footer-bottom > span{opacity:0.4;}
 .pv-kitabh-badge-wrap{text-align:center;padding:24px 0;background:var(--pv-bg);}
-.pv-kitabh-badge{display:inline-flex;align-items:center;gap:10px;font-size:15px;font-weight:700;direction:rtl;padding:12px 24px;border-radius:50px;text-decoration:none;transition:all .2s ease;position:relative;z-index:10;isolation:isolate;}
+.pv-kitabh-badge{display:inline-flex;align-items:center;gap:10px;font-size:15px;font-weight:700;direction:rtl;padding:12px 24px;border-radius:var(--pv-radius);text-decoration:none;transition:all .2s ease;position:relative;z-index:10;isolation:isolate;}
 .pv-kitabh-badge:hover{transform:translateY(-1px);}
 .pv-kitabh-badge img{flex-shrink:0;width:24px;height:auto;display:block;}
 .pv-badge-black{background:#000;color:#fff;border:1px solid #000;}
@@ -1499,7 +1499,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
 }
 </style>
 </head>
-<body><div class="pv-site-wrapper" id="pv-main">${pagesHtml}</div>${activeSite.branding.showKitabhBadge !== false ? `<div class="pv-kitabh-badge-wrap"><a href="https://kitabh.com" target="_blank" rel="noopener noreferrer" class="pv-kitabh-badge pv-badge-${activeSite.branding.badgeStyle || "black"}" style="transform:scale(${(activeSite.branding.badgeScale ?? 85) / 100})"><img src="${KITABH_ICONS[activeSite.branding.badgeStyle || "black"]}" alt="كتابة" />صُمّم باستخدام كتابة</a></div>` : ''}
+<body><div class="pv-site-wrapper" id="pv-main">${pagesHtml}</div>${activeSite.branding.showKitabhBadge !== false ? `<div class="pv-kitabh-badge-wrap"><a href="https://kitabh.com" target="_blank" rel="noopener noreferrer" class="pv-kitabh-badge pv-badge-${activeSite.branding.badgeStyle || "black"}" style="transform:scale(${(activeSite.branding.badgeScale ?? 85) / 100})"><img src="${KITABH_ICONS[activeSite.branding.badgeStyle || "black"]}" alt="كتابة" />صُمّم على منصة كتابة</a></div>` : ''}
 <div id="pv-article-overlay" class="pv-article-overlay" style="display:none"></div>
 <script>
 (function(){
@@ -2703,9 +2703,9 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                 {/* Kitabh Badge — standalone element below all components */}
                 {activeSite.branding.showKitabhBadge !== false && (
                   <div className="kwb-p-kitabh-badge-wrap">
-                    <a href="https://kitabh.com" target="_blank" rel="noopener noreferrer" className={`kwb-p-footer-kitabh-badge kwb-badge-${activeSite.branding.badgeStyle || "black"}`} style={{ transform: `scale(${(activeSite.branding.badgeScale ?? 85) / 100})` }}>
+                    <a href="https://kitabh.com" target="_blank" rel="noopener noreferrer" className={`kwb-p-footer-kitabh-badge kwb-badge-${activeSite.branding.badgeStyle || "black"}`} style={{ transform: `scale(${(activeSite.branding.badgeScale ?? 85) / 100})`, borderRadius: `${Math.round((activeSite.branding.borderRadius || 0) * 0.24)}px` }}>
                       <img src={KITABH_ICONS[activeSite.branding.badgeStyle || "black"]} alt="كتابة" />
-                      صُمّم باستخدام كتابة
+                      صُمّم على منصة كتابة
                     </a>
                   </div>
                 )}
@@ -2939,7 +2939,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                       <input type="checkbox" checked={activeSite.branding.showKitabhBadge !== false} onChange={e => updateSite(activeSite.id, { branding: { ...activeSite.branding, showKitabhBadge: e.target.checked } })} />
                       <span className="kwb-toggle-track"><span className="kwb-toggle-thumb" /></span>
                     </label>
-                    <span>إظهار شارة "صُمّم باستخدام كتابة"</span>
+                    <span>إظهار شارة "صُمّم على منصة كتابة"</span>
                   </div>
                   {activeSite.branding.showKitabhBadge !== false && (
                     <>
@@ -2948,19 +2948,19 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                         <button className={`kwb-badge-style-opt ${(activeSite.branding.badgeStyle || "black") === "black" ? "kwb-badge-style-active" : ""}`} onClick={() => updateSite(activeSite.id, { branding: { ...activeSite.branding, badgeStyle: "black" } })} title="أسود">
                           <span className="kwb-badge-preview kwb-badge-preview-black">
                             <img src={KITABH_ICON_WHITE} alt="" style={{ width: 12, height: "auto" }} />
-                            <span>صُمّم باستخدام كتابة</span>
+                            <span>صُمّم على منصة كتابة</span>
                           </span>
                         </button>
                         <button className={`kwb-badge-style-opt ${activeSite.branding.badgeStyle === "blue" ? "kwb-badge-style-active" : ""}`} onClick={() => updateSite(activeSite.id, { branding: { ...activeSite.branding, badgeStyle: "blue" } })} title="أزرق">
                           <span className="kwb-badge-preview kwb-badge-preview-blue">
                             <img src={KITABH_ICON_WHITE} alt="" style={{ width: 12, height: "auto" }} />
-                            <span>صُمّم باستخدام كتابة</span>
+                            <span>صُمّم على منصة كتابة</span>
                           </span>
                         </button>
                         <button className={`kwb-badge-style-opt ${activeSite.branding.badgeStyle === "white" ? "kwb-badge-style-active" : ""}`} onClick={() => updateSite(activeSite.id, { branding: { ...activeSite.branding, badgeStyle: "white" } })} title="أبيض">
                           <span className="kwb-badge-preview kwb-badge-preview-white">
                             <img src={KITABH_ICON_BLACK} alt="" style={{ width: 12, height: "auto" }} />
-                            <span>صُمّم باستخدام كتابة</span>
+                            <span>صُمّم على منصة كتابة</span>
                           </span>
                         </button>
                       </div>
@@ -4807,7 +4807,7 @@ const CSS_STYLES = `
 .kwb-p-footer-bottom{border-top:1px solid rgba(255,255,255,0.15);padding:20px 0;text-align:center;font-size:11px;color:var(--kwb-bg,#fff);display:flex;flex-direction:column;align-items:center;gap:12px;}
 .kwb-p-footer-bottom > span{opacity:0.4;}
 .kwb-p-kitabh-badge-wrap{text-align:center;padding:24px 0;background:var(--kwb-bg,#fff);}
-.kwb-p-footer-kitabh-badge{display:inline-flex;align-items:center;gap:10px;font-size:15px;font-weight:700;direction:rtl;padding:12px 24px;border-radius:50px;text-decoration:none;transition:all .2s ease;cursor:pointer;letter-spacing:0.3px;opacity:1 !important;position:relative;z-index:10;isolation:isolate;}
+.kwb-p-footer-kitabh-badge{display:inline-flex;align-items:center;gap:10px;font-size:15px;font-weight:700;direction:rtl;padding:12px 24px;text-decoration:none;transition:all .2s ease;cursor:pointer;letter-spacing:0.3px;opacity:1 !important;position:relative;z-index:10;isolation:isolate;}
 .kwb-p-footer-kitabh-badge:hover{transform:translateY(-1px);}
 .kwb-p-footer-kitabh-badge img{flex-shrink:0;width:24px;height:auto;display:block;}
 .kwb-badge-black{background:#000;color:#fff;border:1px solid #000;}
