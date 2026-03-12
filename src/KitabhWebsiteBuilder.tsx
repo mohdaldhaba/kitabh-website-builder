@@ -1355,8 +1355,6 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
 .pv-av-engagement{padding:12px 24px 36px;display:flex;gap:16px;font-size:13px;color:var(--pv-text);opacity:0.8;}
 /* Article view overlay */
 .pv-article-overlay{position:fixed;inset:0;background:var(--pv-bg);z-index:100;overflow-y:auto;}
-.pv-article-back{position:sticky;top:0;z-index:101;background:var(--pv-card-bg);border-bottom:1px solid rgba(128,128,128,0.2);padding:12px 24px;display:flex;align-items:center;gap:8px;cursor:pointer;font-family:inherit;font-size:14px;font-weight:600;color:var(--pv-headline);border:none;width:100%;}
-.pv-article-back:hover{background:rgba(128,128,128,0.05);}
 /* Page separator */
 .pv-page-sep{border-top:3px solid rgba(128,128,128,0.15);}
 /* Section Title */
@@ -1468,11 +1466,26 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
   var articleMap={};articles.forEach(function(a){articleMap[a.id]=a;});
   var overlay=document.getElementById('pv-article-overlay');
   var main=document.getElementById('pv-main');
+  // Capture header and footer HTML from main page
+  var headerEl=main.querySelector('.pv-header');
+  var footerEl=main.querySelector('.pv-footer');
+  var headerHtml=headerEl?headerEl.outerHTML:'';
+  var footerHtml=footerEl?footerEl.outerHTML:'';
   function openArticle(id){
     var a=articleMap[id];if(!a)return;
     var cover=a.imageUrl?'<img src="'+a.imageUrl+'" alt="" class="pv-av-cover"/>':'<div class="pv-av-cover" style="background:rgba(128,128,128,0.15)"></div>';
-    overlay.innerHTML='<button class="pv-article-back" onclick="closeArticle()">&#x2192; العودة للرئيسية</button><div class="pv-site-wrapper"><div class="pv-av"><div class="pv-av-head"><span class="pv-av-cat">مقالات</span><h1>'+a.title+'</h1><div class="pv-av-meta"><div class="pv-av-author"><div class="pv-av-avatar">'+a.author.charAt(0)+'</div><div><strong>'+a.author+'</strong><span class="pv-date">'+a.date+'</span></div></div><div class="pv-av-actions"><span style="color:var(--pv-btn)">❤ '+a.likes+'</span><span>💬 '+a.comments+'</span><span>↗ مشاركة</span><span>🔖</span></div></div></div>'+cover+'<div class="pv-av-body"><p>'+a.excerpt+'</p><p>هذا نص تجريبي يمثل محتوى المقال كما سيظهر للقارئ. يمكن للكاتب إضافة فقرات متعددة وتنسيقات مختلفة لإثراء المحتوى وجعله أكثر جاذبية للقراء.</p><h3>عنوان فرعي للمقال</h3><p>هنا يستمر المقال بتفاصيل إضافية حول الموضوع المطروح. يمكن للكاتب التوسع في الشرح وإضافة أمثلة عملية تساعد القارئ على فهم الموضوع بشكل أفضل.</p><blockquote>الكتابة الجيدة هي إعادة الكتابة. لا تخف من تعديل نصك حتى يصل إلى أفضل صورة ممكنة.</blockquote><p>في النهاية، يُختتم المقال بملخص أو دعوة للتفاعل مع المحتوى من خلال التعليقات أو مشاركة المقال مع الآخرين.</p></div><div class="pv-av-tags"><span>كتابة</span><span>محتوى</span><span>نشرات بريدية</span></div><div class="pv-av-engagement"><span style="color:var(--pv-btn)">❤ '+a.likes+'</span><span>💬 '+a.comments+'</span><span>↗ مشاركة</span></div></div></div>';
+    overlay.innerHTML='<div class="pv-site-wrapper">'+headerHtml+'<div class="pv-av"><div class="pv-av-head"><span class="pv-av-cat">مقالات</span><h1>'+a.title+'</h1><div class="pv-av-meta"><div class="pv-av-author"><div class="pv-av-avatar">'+a.author.charAt(0)+'</div><div><strong>'+a.author+'</strong><span class="pv-date">'+a.date+'</span></div></div><div class="pv-av-actions"><span style="color:var(--pv-btn)">❤ '+a.likes+'</span><span>💬 '+a.comments+'</span><span>↗ مشاركة</span><span>🔖</span></div></div></div>'+cover+'<div class="pv-av-body"><p>'+a.excerpt+'</p><p>هذا نص تجريبي يمثل محتوى المقال كما سيظهر للقارئ. يمكن للكاتب إضافة فقرات متعددة وتنسيقات مختلفة لإثراء المحتوى وجعله أكثر جاذبية للقراء.</p><h3>عنوان فرعي للمقال</h3><p>هنا يستمر المقال بتفاصيل إضافية حول الموضوع المطروح. يمكن للكاتب التوسع في الشرح وإضافة أمثلة عملية تساعد القارئ على فهم الموضوع بشكل أفضل.</p><blockquote>الكتابة الجيدة هي إعادة الكتابة. لا تخف من تعديل نصك حتى يصل إلى أفضل صورة ممكنة.</blockquote><p>في النهاية، يُختتم المقال بملخص أو دعوة للتفاعل مع المحتوى من خلال التعليقات أو مشاركة المقال مع الآخرين.</p></div><div class="pv-av-tags"><span>كتابة</span><span>محتوى</span><span>نشرات بريدية</span></div><div class="pv-av-engagement"><span style="color:var(--pv-btn)">❤ '+a.likes+'</span><span>💬 '+a.comments+'</span><span>↗ مشاركة</span></div></div>'+footerHtml+'</div>';
     overlay.style.display='block';main.style.display='none';overlay.scrollTop=0;
+    // Re-attach hamburger handler in overlay header
+    var hb=overlay.querySelector('.pv-hamburger');
+    var mm=overlay.querySelector('.pv-mobile-menu');
+    if(hb&&mm){hb.onclick=function(){mm.classList.toggle('pv-mobile-menu-open');};}
+    // Re-attach darkmode button in overlay
+    var dmBtn=overlay.querySelector('.pv-darkmode-btn');
+    if(dmBtn){dmBtn.onclick=function(){document.documentElement.classList.toggle('dark');this.textContent=document.documentElement.classList.contains('dark')?'☀':'☾';};}
+    // Make logo clickable to go back
+    var logoWrap=overlay.querySelector('.pv-logo-wrap');
+    if(logoWrap){logoWrap.style.cursor='pointer';logoWrap.onclick=function(){closeArticle();};}
   }
   window.closeArticle=function(){overlay.style.display='none';main.style.display='block';};
   window.openArticle=openArticle;
@@ -1481,18 +1494,20 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
     var el=e.target.closest('[data-article-id]');
     if(el){e.preventDefault();openArticle(el.getAttribute('data-article-id'));}
   });
-  // Handle page navigation from nav links
-  document.querySelectorAll('.pv-nav-link, .pv-mobile-nav-link').forEach(function(link){
-    link.addEventListener('click',function(e){
-      var href=link.getAttribute('href');
-      if(href&&href.startsWith('#page-')){
-        e.preventDefault();
-        if(overlay.style.display==='block')closeArticle();
-        var target=document.getElementById(href.slice(1));
-        if(target)target.scrollIntoView({behavior:'smooth'});
-        var mm=document.getElementById('pv-mobile-menu');if(mm)mm.classList.remove('pv-mobile-menu-open');
-      }
-    });
+  // Handle page navigation from nav links (delegated to handle overlay nav too)
+  document.addEventListener('click',function(e2){
+    var link=e2.target.closest('.pv-nav-link, .pv-mobile-nav-link');
+    if(!link)return;
+    var href=link.getAttribute('href');
+    if(href&&href.startsWith('#page-')){
+      e2.preventDefault();
+      if(overlay.style.display==='block')closeArticle();
+      setTimeout(function(){var target=document.getElementById(href.slice(1));if(target)target.scrollIntoView({behavior:'smooth'});},50);
+      document.querySelectorAll('.pv-mobile-menu').forEach(function(mm){mm.classList.remove('pv-mobile-menu-open');});
+    } else if(href==='#'){
+      e2.preventDefault();
+      if(overlay.style.display==='block')closeArticle();
+    }
   });
 })();
 </script>
