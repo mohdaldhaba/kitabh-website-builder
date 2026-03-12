@@ -2135,7 +2135,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                 <div className="kwb-tpl-preview" style={{background:bgColor}}>
                   {patternFn(accent, btn, bgColor)}
                   <div className="kwb-tpl-preview-label" style={{fontFamily:`'${font}', sans-serif`}}>
-                    <span className="kwb-tpl-preview-name" style={{color:isDark?"#fff":"#000",textShadow:isDark?"0 2px 8px rgba(0,0,0,.7), 0 0 2px rgba(0,0,0,.5)":"0 2px 8px rgba(255,255,255,.9), 0 0 2px rgba(255,255,255,.7)"}}>{t.name}</span>
+                    <span className="kwb-tpl-preview-name" style={{color:isDark?"#fff":"#000"}}>{t.name}</span>
                   </div>
                 </div>
                 <div className="kwb-tpl-overlay">
