@@ -1745,7 +1745,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                           <div className="kwb-p-hero-side kwb-p-hero-side-r">
                             {sideArticles.slice(0, 2).map(a => (
                               <div key={a.id} className="kwb-p-hero-side-card">
-                                <div className="kwb-p-hero-side-img" />
+                                {a.imageUrl ? <img src={a.imageUrl} alt={a.title} className="kwb-p-hero-side-img" /> : <div className="kwb-p-hero-side-img" />}
                                 <h4>{a.title.slice(0, 60)}...</h4>
                                 <div className="kwb-p-hero-card-footer">
                                   <div className="kwb-p-article-author-row"><div className="kwb-p-article-avatar">{a.author.charAt(0)}</div><span className="kwb-p-article-author-name">{a.author}</span></div>
@@ -1756,7 +1756,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                           </div>
                           {/* Center main */}
                           <div className="kwb-p-hero-main">
-                            <div className="kwb-p-hero-main-img" />
+                            {mainArticle?.imageUrl ? <img src={mainArticle.imageUrl} alt={mainArticle.title} className="kwb-p-hero-main-img" /> : <div className="kwb-p-hero-main-img" />}
                             {mainArticle && (
                               <>
                                 <h2 className="kwb-p-hero-main-title">{mainArticle.title}</h2>
@@ -1775,7 +1775,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                           <div className="kwb-p-hero-side kwb-p-hero-side-l">
                             {sideArticles.slice(2, 4).map(a => (
                               <div key={a.id} className="kwb-p-hero-side-card">
-                                <div className="kwb-p-hero-side-img" />
+                                {a.imageUrl ? <img src={a.imageUrl} alt={a.title} className="kwb-p-hero-side-img" /> : <div className="kwb-p-hero-side-img" />}
                                 <h4>{a.title.slice(0, 60)}...</h4>
                                 <div className="kwb-p-hero-card-footer">
                                   <div className="kwb-p-article-author-row"><div className="kwb-p-article-avatar">{a.author.charAt(0)}</div><span className="kwb-p-article-author-name">{a.author}</span></div>
@@ -3944,11 +3944,11 @@ const CSS_STYLES = `
 .kwb-p-hero-news{display:grid;grid-template-columns:3fr 5fr 3fr;gap:1px;background:rgba(128,128,128,0.2);}
 .kwb-p-hero-side{display:flex;flex-direction:column;gap:1px;background:rgba(128,128,128,0.2);}
 .kwb-p-hero-side-card{background:var(--kwb-card-bg,#fff);padding:14px;display:flex;flex-direction:column;gap:6px;flex:1;}
-.kwb-p-hero-side-img{width:100%;height:220px;background:rgba(128,128,128,0.15);}
+.kwb-p-hero-side-img{width:100%;height:220px;background:rgba(128,128,128,0.15);object-fit:cover;display:block;}
 .kwb-p-hero-side-card h4{font-size:14px;font-weight:700;margin:0;line-height:1.5;color:var(--kwb-headline-color,#1a1a1a);}
 .kwb-p-hero-date{font-size:10px;color:var(--kwb-text-color,#999);opacity:0.7;}
 .kwb-p-hero-main{background:var(--kwb-card-bg,#fff);padding:16px;display:flex;flex-direction:column;gap:8px;}
-.kwb-p-hero-main-img{width:100%;height:100%;min-height:200px;background:rgba(128,128,128,0.15);}
+.kwb-p-hero-main-img{width:100%;height:100%;min-height:200px;background:rgba(128,128,128,0.15);object-fit:cover;display:block;}
 .kwb-p-hero-main-title{font-size:24px;font-weight:800;margin:0;line-height:1.5;color:var(--kwb-headline-color,#1a1a1a);}
 .kwb-p-hero-main-excerpt{font-size:15px;color:var(--kwb-text-color,#666);margin:0;line-height:1.7;}
 .kwb-p-hero-meta{display:flex;justify-content:space-between;font-size:10px;color:var(--kwb-text-color,#999);opacity:0.7;}
