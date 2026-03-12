@@ -2212,7 +2212,7 @@ export default function KitabhChecker() {
             {/* ── Report content ── */}
             {tool !== "story" ? (
               <>
-                <SectionHead icon="trophy" label="التقييم العام" first />
+                <SectionHead icon="trophy" label="التقييم العام للنص" first />
                 <div className="kb-sc">
                   <ScoreRing score={parseFloat(result.overall_score)}/>
                   <div className="kb-sc-info">
@@ -2286,7 +2286,7 @@ export default function KitabhChecker() {
 
                 {result.overall_score && (
                   <>
-                    <SectionHead icon="trophy" label="التقييم العام" />
+                    <SectionHead icon="trophy" label="التقييم العام للنص" />
                     <div className="kb-sc">
                       <ScoreRing score={parseFloat(result.overall_score)}/>
                       <div className="kb-sc-info">
