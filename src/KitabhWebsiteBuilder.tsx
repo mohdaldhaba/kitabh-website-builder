@@ -242,52 +242,52 @@ interface ColorTheme {
 
 const COLOR_THEMES: ColorTheme[] = [
   // ── 1. Standard (white bg, first position) ──
-  { id: "clean_light", name: "نظيف", buttonColor: "#E82222", headlineColor: "#1a1a1a", textColor: "#555555", linkColor: "#E82222", bgColor: "#ffffff", cardBg: "#ffffff" },
+  { id: "clean_light", name: "فاتح بسيط", buttonColor: "#E82222", headlineColor: "#1a1a1a", textColor: "#555555", linkColor: "#E82222", bgColor: "#ffffff", cardBg: "#ffffff" },
   // ── 2. Dark (second position) ──
-  { id: "dark_card", name: "داكن", buttonColor: "#E82222", headlineColor: "#f5f5f5", textColor: "#9e9e9e", linkColor: "#ef5350", bgColor: "#121212", cardBg: "#1e1e1e" },
+  { id: "dark_card", name: "داكن كلاسيكي", buttonColor: "#E82222", headlineColor: "#f5f5f5", textColor: "#9e9e9e", linkColor: "#ef5350", bgColor: "#121212", cardBg: "#1e1e1e" },
   // ── Designer themes ──
-  { id: "midnight_neon", name: "نيون متوهّج منتصف الليل", buttonColor: "#EC4899", headlineColor: "#F9FAFB", textColor: "#9CA3AF", linkColor: "#6366F1", bgColor: "#0B0F19", cardBg: "#111827" },
-  { id: "arctic_glass", name: "زجاج قطبي", buttonColor: "#2563EB", headlineColor: "#0F172A", textColor: "#64748B", linkColor: "#8B5CF6", bgColor: "#F8FAFC", cardBg: "#FFFFFF" },
-  { id: "sunset_editorial", name: "غروب تحريري", buttonColor: "#F97316", headlineColor: "#1F2937", textColor: "#6B7280", linkColor: "#EF4444", bgColor: "#FFF7ED", cardBg: "#FFFFFF" },
-  { id: "forest_journal", name: "يوميات الغابة", buttonColor: "#166534", headlineColor: "#052E16", textColor: "#6B7280", linkColor: "#10B981", bgColor: "#F0FDF4", cardBg: "#FFFFFF" },
-  { id: "royal_editorial", name: "ملكي تحريري", buttonColor: "#7C3AED", headlineColor: "#F8FAFC", textColor: "#94A3B8", linkColor: "#FBBF24", bgColor: "#0F172A", cardBg: "#1E293B" },
-  { id: "retro_wave", name: "موجة ريترو", buttonColor: "#D946EF", headlineColor: "#FAFAFA", textColor: "#A1A1AA", linkColor: "#22D3EE", bgColor: "#0A0A0A", cardBg: "#18181B" },
-  { id: "minimal_editorial", name: "تحريري بسيط", buttonColor: "#3B82F6", headlineColor: "#0F172A", textColor: "#94A3B8", linkColor: "#3B82F6", bgColor: "#FFFFFF", cardBg: "#F8FAFC" },
-  { id: "cyber_teal", name: "فيروزي رقمي", buttonColor: "#14B8A6", headlineColor: "#E2E8F0", textColor: "#64748B", linkColor: "#22D3EE", bgColor: "#020617", cardBg: "#0F172A" },
-  { id: "coffee_magazine", name: "مجلة القهوة", buttonColor: "#7C2D12", headlineColor: "#292524", textColor: "#78716C", linkColor: "#B45309", bgColor: "#FAF7F2", cardBg: "#FFFFFF" },
-  { id: "electric_pop", name: "ألوان كهربائية نابضة", buttonColor: "#C026D3", headlineColor: "#1E1B4B", textColor: "#6B7280", linkColor: "#F43F5E", bgColor: "#FDF4FF", cardBg: "#FFFFFF" },
+  { id: "midnight_neon", name: "نيون ليلي", buttonColor: "#EC4899", headlineColor: "#F9FAFB", textColor: "#9CA3AF", linkColor: "#6366F1", bgColor: "#0B0F19", cardBg: "#111827" },
+  { id: "arctic_glass", name: "زجاج جليدي", buttonColor: "#2563EB", headlineColor: "#0F172A", textColor: "#64748B", linkColor: "#8B5CF6", bgColor: "#F8FAFC", cardBg: "#FFFFFF" },
+  { id: "sunset_editorial", name: "غروب دافئ", buttonColor: "#F97316", headlineColor: "#1F2937", textColor: "#6B7280", linkColor: "#EF4444", bgColor: "#FFF7ED", cardBg: "#FFFFFF" },
+  { id: "forest_journal", name: "أخضر الغابة", buttonColor: "#166534", headlineColor: "#052E16", textColor: "#6B7280", linkColor: "#10B981", bgColor: "#F0FDF4", cardBg: "#FFFFFF" },
+  { id: "royal_editorial", name: "بنفسجي ملكي", buttonColor: "#7C3AED", headlineColor: "#F8FAFC", textColor: "#94A3B8", linkColor: "#FBBF24", bgColor: "#0F172A", cardBg: "#1E293B" },
+  { id: "retro_wave", name: "ريترو", buttonColor: "#D946EF", headlineColor: "#FAFAFA", textColor: "#A1A1AA", linkColor: "#22D3EE", bgColor: "#0A0A0A", cardBg: "#18181B" },
+  { id: "minimal_editorial", name: "بسيط", buttonColor: "#3B82F6", headlineColor: "#0F172A", textColor: "#94A3B8", linkColor: "#3B82F6", bgColor: "#FFFFFF", cardBg: "#F8FAFC" },
+  { id: "cyber_teal", name: "فيروزي", buttonColor: "#14B8A6", headlineColor: "#E2E8F0", textColor: "#64748B", linkColor: "#22D3EE", bgColor: "#020617", cardBg: "#0F172A" },
+  { id: "coffee_magazine", name: "قهوة دافئة", buttonColor: "#7C2D12", headlineColor: "#292524", textColor: "#78716C", linkColor: "#B45309", bgColor: "#FAF7F2", cardBg: "#FFFFFF" },
+  { id: "electric_pop", name: "ألوان كهربائية", buttonColor: "#C026D3", headlineColor: "#1E1B4B", textColor: "#6B7280", linkColor: "#F43F5E", bgColor: "#FDF4FF", cardBg: "#FFFFFF" },
   // ── 3. Soft tinted light themes ──
-  { id: "soft_blue", name: "أزرق ناعم", buttonColor: "#1565C0", headlineColor: "#0d47a1", textColor: "#546e7a", linkColor: "#1565C0", bgColor: "#e3f2fd", cardBg: "#bbdefb" },
-  { id: "soft_orange", name: "برتقالي ناعم", buttonColor: "#e65100", headlineColor: "#bf360c", textColor: "#8d6e63", linkColor: "#e65100", bgColor: "#fff3e0", cardBg: "#ffe0b2" },
-  { id: "soft_red", name: "أحمر ناعم", buttonColor: "#c62828", headlineColor: "#b71c1c", textColor: "#8e6565", linkColor: "#c62828", bgColor: "#ffebee", cardBg: "#ffcdd2" },
-  { id: "soft_coffee", name: "قهوة ناعم", buttonColor: "#4e342e", headlineColor: "#3e2723", textColor: "#6d4c41", linkColor: "#5d4037", bgColor: "#efebe9", cardBg: "#d7ccc8" },
-  { id: "mint", name: "نعناعي", buttonColor: "#2e7d32", headlineColor: "#1b5e20", textColor: "#4e6e50", linkColor: "#2e7d32", bgColor: "#e8f5e9", cardBg: "#c8e6c9" },
-  { id: "soft_purple", name: "بنفسجي ناعم", buttonColor: "#6a1b9a", headlineColor: "#4a148c", textColor: "#7b6b8a", linkColor: "#7b1fa2", bgColor: "#f3e5f5", cardBg: "#e1bee7" },
-  { id: "soft_teal", name: "فيروزي ناعم", buttonColor: "#00695c", headlineColor: "#004d40", textColor: "#4e7a72", linkColor: "#00796b", bgColor: "#e0f2f1", cardBg: "#b2dfdb" },
-  { id: "soft_gold", name: "ذهبي ناعم", buttonColor: "#f57f17", headlineColor: "#e65100", textColor: "#8d6e63", linkColor: "#ff8f00", bgColor: "#fffde7", cardBg: "#fff9c4" },
+  { id: "soft_blue", name: "أزرق فاتح", buttonColor: "#1565C0", headlineColor: "#0d47a1", textColor: "#546e7a", linkColor: "#1565C0", bgColor: "#e3f2fd", cardBg: "#bbdefb" },
+  { id: "soft_orange", name: "برتقالي فاتح", buttonColor: "#e65100", headlineColor: "#bf360c", textColor: "#8d6e63", linkColor: "#e65100", bgColor: "#fff3e0", cardBg: "#ffe0b2" },
+  { id: "soft_red", name: "أحمر فاتح", buttonColor: "#c62828", headlineColor: "#b71c1c", textColor: "#8e6565", linkColor: "#c62828", bgColor: "#ffebee", cardBg: "#ffcdd2" },
+  { id: "soft_coffee", name: "بني قهوة", buttonColor: "#4e342e", headlineColor: "#3e2723", textColor: "#6d4c41", linkColor: "#5d4037", bgColor: "#efebe9", cardBg: "#d7ccc8" },
+  { id: "mint", name: "أخضر نعناعي", buttonColor: "#2e7d32", headlineColor: "#1b5e20", textColor: "#4e6e50", linkColor: "#2e7d32", bgColor: "#e8f5e9", cardBg: "#c8e6c9" },
+  { id: "soft_purple", name: "بنفسجي فاتح", buttonColor: "#6a1b9a", headlineColor: "#4a148c", textColor: "#7b6b8a", linkColor: "#7b1fa2", bgColor: "#f3e5f5", cardBg: "#e1bee7" },
+  { id: "soft_teal", name: "فيروزي فاتح", buttonColor: "#00695c", headlineColor: "#004d40", textColor: "#4e7a72", linkColor: "#00796b", bgColor: "#e0f2f1", cardBg: "#b2dfdb" },
+  { id: "soft_gold", name: "ذهبي فاتح", buttonColor: "#f57f17", headlineColor: "#e65100", textColor: "#8d6e63", linkColor: "#ff8f00", bgColor: "#fffde7", cardBg: "#fff9c4" },
   // ── 4. Deep dark themes ──
-  { id: "dark_navy", name: "بحري داكن", buttonColor: "#00BCD4", headlineColor: "#eceff1", textColor: "#90a4ae", linkColor: "#4dd0e1", bgColor: "#0d1b2a", cardBg: "#1b2838" },
-  { id: "dark_coffee", name: "قهوة داكن", buttonColor: "#ffab40", headlineColor: "#efebe9", textColor: "#bcaaa4", linkColor: "#ffcc80", bgColor: "#1a120e", cardBg: "#2c1e16" },
-  { id: "dark_red", name: "أحمر داكن", buttonColor: "#ff5252", headlineColor: "#ffebee", textColor: "#ef9a9a", linkColor: "#ff8a80", bgColor: "#1a0a0a", cardBg: "#2d1414" },
-  { id: "dark_blue", name: "أزرق داكن", buttonColor: "#448aff", headlineColor: "#e3f2fd", textColor: "#90caf9", linkColor: "#82b1ff", bgColor: "#0a1628", cardBg: "#142240" },
-  { id: "dark_orange", name: "برتقالي داكن", buttonColor: "#ff9100", headlineColor: "#fff3e0", textColor: "#ffcc80", linkColor: "#ffab40", bgColor: "#1a110a", cardBg: "#2d1e10" },
-  { id: "wine_dark", name: "خمري", buttonColor: "#f59e0b", headlineColor: "#fef3c7", textColor: "#d4d4d8", linkColor: "#fbbf24", bgColor: "#1c1917", cardBg: "#292524" },
-  { id: "forest", name: "غابة", buttonColor: "#facc15", headlineColor: "#f0fdf4", textColor: "#86efac", linkColor: "#fde047", bgColor: "#14532d", cardBg: "#166534" },
-  { id: "dark_emerald", name: "زمردي", buttonColor: "#10b981", headlineColor: "#d1fae5", textColor: "#6ee7b7", linkColor: "#34d399", bgColor: "#022c22", cardBg: "#064e3b" },
-  { id: "space_gray", name: "فضائي", buttonColor: "#8b5cf6", headlineColor: "#e2e8f0", textColor: "#94a3b8", linkColor: "#a78bfa", bgColor: "#1e293b", cardBg: "#334155" },
-  { id: "royal_purple", name: "ملكي", buttonColor: "#a78bfa", headlineColor: "#f5f3ff", textColor: "#c4b5fd", linkColor: "#c084fc", bgColor: "#1e1b4b", cardBg: "#312e81" },
-  { id: "sunset_glow", name: "غروب", buttonColor: "#f43f5e", headlineColor: "#fef2f2", textColor: "#fda4af", linkColor: "#fb7185", bgColor: "#1a0a10", cardBg: "#2d1520" },
+  { id: "dark_navy", name: "أزرق بحري داكن", buttonColor: "#00BCD4", headlineColor: "#eceff1", textColor: "#90a4ae", linkColor: "#4dd0e1", bgColor: "#0d1b2a", cardBg: "#1b2838" },
+  { id: "dark_coffee", name: "بني داكن", buttonColor: "#ffab40", headlineColor: "#efebe9", textColor: "#bcaaa4", linkColor: "#ffcc80", bgColor: "#1a120e", cardBg: "#2c1e16" },
+  { id: "dark_red", name: "أحمر عميق", buttonColor: "#ff5252", headlineColor: "#ffebee", textColor: "#ef9a9a", linkColor: "#ff8a80", bgColor: "#1a0a0a", cardBg: "#2d1414" },
+  { id: "dark_blue", name: "أزرق عميق", buttonColor: "#448aff", headlineColor: "#e3f2fd", textColor: "#90caf9", linkColor: "#82b1ff", bgColor: "#0a1628", cardBg: "#142240" },
+  { id: "dark_orange", name: "برتقالي عميق", buttonColor: "#ff9100", headlineColor: "#fff3e0", textColor: "#ffcc80", linkColor: "#ffab40", bgColor: "#1a110a", cardBg: "#2d1e10" },
+  { id: "wine_dark", name: "أحمر خمري", buttonColor: "#f59e0b", headlineColor: "#fef3c7", textColor: "#d4d4d8", linkColor: "#fbbf24", bgColor: "#1c1917", cardBg: "#292524" },
+  { id: "forest", name: "أخضر غابة", buttonColor: "#facc15", headlineColor: "#f0fdf4", textColor: "#86efac", linkColor: "#fde047", bgColor: "#14532d", cardBg: "#166534" },
+  { id: "dark_emerald", name: "أخضر زمردي", buttonColor: "#10b981", headlineColor: "#d1fae5", textColor: "#6ee7b7", linkColor: "#34d399", bgColor: "#022c22", cardBg: "#064e3b" },
+  { id: "space_gray", name: "أزرق فضائي", buttonColor: "#8b5cf6", headlineColor: "#e2e8f0", textColor: "#94a3b8", linkColor: "#a78bfa", bgColor: "#1e293b", cardBg: "#334155" },
+  { id: "royal_purple", name: "بنفسجي داكن", buttonColor: "#a78bfa", headlineColor: "#f5f3ff", textColor: "#c4b5fd", linkColor: "#c084fc", bgColor: "#1e1b4b", cardBg: "#312e81" },
+  { id: "sunset_glow", name: "برتقالي الغروب", buttonColor: "#f43f5e", headlineColor: "#fef2f2", textColor: "#fda4af", linkColor: "#fb7185", bgColor: "#1a0a10", cardBg: "#2d1520" },
   // ── 5. Earthy & warm ──
-  { id: "elegant_beige", name: "عاجي أنيق", buttonColor: "#6d6132", headlineColor: "#3e2723", textColor: "#795548", linkColor: "#6d6132", bgColor: "#D7CCC8", cardBg: "#efebe9" },
+  { id: "elegant_beige", name: "عاجي دافئ", buttonColor: "#6d6132", headlineColor: "#3e2723", textColor: "#795548", linkColor: "#6d6132", bgColor: "#D7CCC8", cardBg: "#efebe9" },
   { id: "natural_green", name: "أخضر طبيعي", buttonColor: "#6d7c3a", headlineColor: "#ffffff", textColor: "#c8e6c9", linkColor: "#aed581", bgColor: "#33691e", cardBg: "#3e7c23" },
-  { id: "notebook", name: "دفتر", buttonColor: "#F9A825", headlineColor: "#3e2723", textColor: "#6d4c41", linkColor: "#f57f17", bgColor: "#FFF8E1", cardBg: "#ffffff" },
-  { id: "calm_gray", name: "رمادي هادئ", buttonColor: "#1565C0", headlineColor: "#212121", textColor: "#616161", linkColor: "#1976D2", bgColor: "#ECEFF1", cardBg: "#ffffff" },
+  { id: "notebook", name: "ورق دفتر", buttonColor: "#F9A825", headlineColor: "#3e2723", textColor: "#6d4c41", linkColor: "#f57f17", bgColor: "#FFF8E1", cardBg: "#ffffff" },
+  { id: "calm_gray", name: "رمادي ناعم", buttonColor: "#1565C0", headlineColor: "#212121", textColor: "#616161", linkColor: "#1976D2", bgColor: "#ECEFF1", cardBg: "#ffffff" },
   // ── 6. Signature & accent ──
-  { id: "kitabh_blue", name: "أزرق كتابة", buttonColor: "#1a1aaa", headlineColor: "#ffffff", textColor: "#b0c4ff", linkColor: "#90b0ff", bgColor: "#0000FF", cardBg: "#1a1aff" },
-  { id: "neon", name: "نيون متوهّج", buttonColor: "#1a1a1a", headlineColor: "#1a1a1a", textColor: "#1b5e20", linkColor: "#1a1a1a", bgColor: "#00FF41", cardBg: "#69f0ae" },
-  { id: "bold_yellow", name: "أصفر جريء", buttonColor: "#E82222", headlineColor: "#212121", textColor: "#5d4037", linkColor: "#c62828", bgColor: "#FFC107", cardBg: "#ffd54f" },
-  { id: "hot_pink", name: "وردي", buttonColor: "#FFD600", headlineColor: "#ffffff", textColor: "#fce4ec", linkColor: "#FFD600", bgColor: "#E91E63", cardBg: "#f06292" },
-  { id: "ocean_deep", name: "بحري", buttonColor: "#06b6d4", headlineColor: "#f0f9ff", textColor: "#7dd3fc", linkColor: "#22d3ee", bgColor: "#0c4a6e", cardBg: "#164e63" },
+  { id: "kitabh_blue", name: "أزرق الحبر", buttonColor: "#1a1aaa", headlineColor: "#ffffff", textColor: "#b0c4ff", linkColor: "#90b0ff", bgColor: "#0000FF", cardBg: "#1a1aff" },
+  { id: "neon", name: "نيون ساطع", buttonColor: "#1a1a1a", headlineColor: "#1a1a1a", textColor: "#1b5e20", linkColor: "#1a1a1a", bgColor: "#00FF41", cardBg: "#69f0ae" },
+  { id: "bold_yellow", name: "أصفر قوي", buttonColor: "#E82222", headlineColor: "#212121", textColor: "#5d4037", linkColor: "#c62828", bgColor: "#FFC107", cardBg: "#ffd54f" },
+  { id: "hot_pink", name: "وردي ناعم", buttonColor: "#FFD600", headlineColor: "#ffffff", textColor: "#fce4ec", linkColor: "#FFD600", bgColor: "#E91E63", cardBg: "#f06292" },
+  { id: "ocean_deep", name: "أزرق بحري", buttonColor: "#06b6d4", headlineColor: "#f0f9ff", textColor: "#7dd3fc", linkColor: "#22d3ee", bgColor: "#0c4a6e", cardBg: "#164e63" },
 ];
 
 // ─── SVG Icons ──────────────────────────────────────────
@@ -506,13 +506,13 @@ export default function KitabhWebsiteBuilder(props: any) {
       case "مقالات":
         return [header, { id: genId(), type: "article_collection", enabled: true, settings: { articles: MOCK_ARTICLES.map(a => a.id), title: "جميع المقالات" } }, { id: genId(), type: "subscribe", enabled: true, settings: { ...getDefaultSettings("subscribe"), layout: "cta" } }, footer];
       case "عن المدونة":
-        return [header, { id: genId(), type: "subscribe", enabled: true, settings: { layout: "hero", title: "من نحن", subtitle: "تعرّف على قصتنا ورؤيتنا", buttonText: "اشتراك", buttonColor: "#E82222" } }, { id: genId(), type: "banner", enabled: true, settings: getDefaultSettings("banner") }, footer];
+        return [header, { id: genId(), type: "subscribe", enabled: true, settings: { layout: "hero", title: "من نحن", subtitle: "تعرّف على قصتنا ورؤيتنا", buttonText: "اشتراك" } }, { id: genId(), type: "banner", enabled: true, settings: getDefaultSettings("banner") }, footer];
       case "اشتراك":
         return [header, { id: genId(), type: "subscribe", enabled: true, settings: getDefaultSettings("subscribe") }, { id: genId(), type: "subscribe", enabled: true, settings: { ...getDefaultSettings("subscribe"), layout: "cta" } }, footer];
       case "تواصل":
-        return [header, { id: genId(), type: "subscribe", enabled: true, settings: { layout: "hero", title: "تواصل معنا", subtitle: "نسعد بتواصلك معنا عبر البريد الإلكتروني", buttonText: "أرسل", buttonColor: "#E82222" } }, footer];
+        return [header, { id: genId(), type: "subscribe", enabled: true, settings: { layout: "hero", title: "تواصل معنا", subtitle: "نسعد بتواصلك معنا عبر البريد الإلكتروني", buttonText: "أرسل" } }, footer];
       case "المتجر":
-        return [header, { id: genId(), type: "subscribe", enabled: true, settings: { layout: "hero", title: "المتجر", subtitle: "تصفح منتجاتنا الحصرية", buttonText: "تسوّق", buttonColor: "#E82222" } }, { id: genId(), type: "banner", enabled: true, settings: getDefaultSettings("banner") }, footer];
+        return [header, { id: genId(), type: "subscribe", enabled: true, settings: { layout: "hero", title: "المتجر", subtitle: "تصفح منتجاتنا الحصرية", buttonText: "تسوّق" } }, { id: genId(), type: "banner", enabled: true, settings: getDefaultSettings("banner") }, footer];
       case "عرض المقال":
         return [header, { id: genId(), type: "article_view", enabled: true, settings: {} }, { id: genId(), type: "subscribe", enabled: true, settings: { ...getDefaultSettings("subscribe"), layout: "cta" } }, footer];
       default:
@@ -577,8 +577,8 @@ export default function KitabhWebsiteBuilder(props: any) {
       case "subscribe": return { layout: "hero", title: "انضم لنشرتنا البريدية", subtitle: "محتوى حصري يصلك كل أسبوع", description: "محتوى حصري يصلك مباشرة إلى بريدك", buttonText: "اشتراك", showNameField: false, heroImageUrl: "" };
       case "hero_slider": return { articles: MOCK_ARTICLES.slice(0, 3).map(a => a.id) };
       case "banner": return { cards: [
-        { title: "تصفح أرشيف نشرتنا", linkText: "جميع المقالات", linkUrl: "", color: "#E82222", imageUrl: "" },
-        { title: "قصتنا", linkText: "اقرأ المزيد", linkUrl: "", color: "#371D12", imageUrl: "" },
+        { title: "تصفح أرشيف نشرتنا", linkText: "جميع المقالات", linkUrl: "", color: "", imageUrl: "" },
+        { title: "قصتنا", linkText: "اقرأ المزيد", linkUrl: "", color: "", imageUrl: "" },
       ] };
 
       case "article_collection": return { layout: "grid", articles: MOCK_ARTICLES.slice(0, 4).map(a => a.id), title: "", showSearch: false, showCategories: false };
@@ -1277,7 +1277,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
 /* Banners */
 .pv-banners{padding:0;}
 .pv-banner-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(128,128,128,0.2);}
-.pv-banner-card{padding:32px 24px;color:#fff;display:flex;flex-direction:column;gap:10px;min-height:160px;justify-content:flex-end;border-radius:var(--pv-radius);overflow:hidden;}
+.pv-banner-card{padding:32px 24px;color:#fff;display:flex;flex-direction:column;gap:10px;min-height:160px;justify-content:flex-end;border-radius:0;overflow:hidden;}
 .pv-banner-card span{font-size:18px;font-weight:700;}
 .pv-banner-card a{font-size:13px;color:rgba(255,255,255,0.8);text-decoration:underline;cursor:pointer;}
 /* Footer */
@@ -1678,7 +1678,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                               </nav>
                               <div className="kwb-p-header-actions">
                                 <button className="kwb-p-login-btn" onClick={() => setShowLoginModal(true)}>الدخول</button>
-                                <button className="kwb-p-subscribe-btn" style={{ background: comp.settings.buttonColor || activeSite.branding.buttonColor }} onClick={() => setShowSubscribePopup(true)}>
+                                <button className="kwb-p-subscribe-btn" style={{ background: activeSite.branding.buttonColor }} onClick={() => setShowSubscribePopup(true)}>
                                   {comp.settings.buttonText || "اشتراك"}
                                 </button>
                                 <button className="kwb-p-darkmode-btn" title="الوضع الداكن">
@@ -1702,7 +1702,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                                 </nav>
                                 <div className="kwb-p-mobile-menu-actions">
                                   <button className="kwb-p-login-btn" onClick={() => { setShowLoginModal(true); setShowMobileMenu(false); }}>الدخول</button>
-                                  <button className="kwb-p-subscribe-btn" style={{ background: comp.settings.buttonColor || activeSite.branding.buttonColor }} onClick={() => { setShowSubscribePopup(true); setShowMobileMenu(false); }}>
+                                  <button className="kwb-p-subscribe-btn" style={{ background: activeSite.branding.buttonColor }} onClick={() => { setShowSubscribePopup(true); setShowMobileMenu(false); }}>
                                     {comp.settings.buttonText || "اشتراك"}
                                   </button>
                                   <button className="kwb-p-darkmode-btn" title="الوضع الداكن">
@@ -1783,7 +1783,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                             <p contentEditable suppressContentEditableWarning onBlur={(e) => updateComponentSettings(comp.id, { subtitle: e.currentTarget.textContent || "" })} className="kwb-p-editable">{comp.settings.subtitle || "محتوى حصري يصلك كل أسبوع"}</p>
                             <div className="kwb-p-hero-sub-form">
                               <input type="email" name="email" autoComplete="email" placeholder="أدخل بريدك الإلكتروني" className="kwb-p-email-input" />
-                              <button className="kwb-p-subscribe-btn" style={{ background: comp.settings.buttonColor || activeSite.branding.buttonColor }} onClick={() => setShowSubscribePopup(true)}>
+                              <button className="kwb-p-subscribe-btn" style={{ background: activeSite.branding.buttonColor }} onClick={() => setShowSubscribePopup(true)}>
                                 {comp.settings.buttonText || "اشتراك"}
                               </button>
                             </div>
@@ -1802,7 +1802,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                               </div>
                               <div className="kwb-p-cta-form">
                                 <input type="email" name="email" autoComplete="email" placeholder="أدخل بريدك الإلكتروني" className="kwb-p-email-input" />
-                                <button className="kwb-p-subscribe-btn" style={{ background: comp.settings.buttonColor || activeSite.branding.buttonColor }} onClick={() => setShowSubscribePopup(true)}>
+                                <button className="kwb-p-subscribe-btn" style={{ background: activeSite.branding.buttonColor }} onClick={() => setShowSubscribePopup(true)}>
                                   {comp.settings.buttonText || "اشتراك"}
                                 </button>
                               </div>
@@ -1817,7 +1817,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                             {comp.settings.showNameField && <input type="text" placeholder="الاسم" className="kwb-p-email-input" style={{ maxWidth: 440, margin: "0 auto 8px", display: "block" }} />}
                             <div className="kwb-p-hero-sub-form">
                               <input type="email" name="email" autoComplete="email" placeholder="أدخل بريدك الإلكتروني" className="kwb-p-email-input" />
-                              <button className="kwb-p-subscribe-btn" style={{ background: comp.settings.buttonColor || activeSite.branding.buttonColor }} onClick={() => setShowSubscribePopup(true)}>
+                              <button className="kwb-p-subscribe-btn" style={{ background: activeSite.branding.buttonColor }} onClick={() => setShowSubscribePopup(true)}>
                                 {comp.settings.buttonText || "اشتراك"}
                               </button>
                             </div>
@@ -1830,7 +1830,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                             <p contentEditable suppressContentEditableWarning onBlur={(e) => updateComponentSettings(comp.id, { subtitle: e.currentTarget.textContent || "" })} className="kwb-p-editable">{comp.settings.subtitle || "محتوى حصري يصلك كل أسبوع"}</p>
                             <div className="kwb-p-hero-sub-form">
                               <input type="email" name="email" autoComplete="email" placeholder="أدخل بريدك الإلكتروني" className="kwb-p-email-input" />
-                              <button className="kwb-p-subscribe-btn" style={{ background: comp.settings.buttonColor || activeSite.branding.buttonColor }} onClick={() => setShowSubscribePopup(true)}>
+                              <button className="kwb-p-subscribe-btn" style={{ background: activeSite.branding.buttonColor }} onClick={() => setShowSubscribePopup(true)}>
                                 {comp.settings.buttonText || "اشتراك"}
                               </button>
                             </div>
@@ -2080,7 +2080,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                               <p className="kwb-p-footer-tagline kwb-p-editable" contentEditable suppressContentEditableWarning onBlur={(e) => updateComponentSettings(comp.id, { tagline: e.currentTarget.textContent || "" })}>{comp.settings.tagline || "محتوى حصري يصلك مباشرة إلى بريدك"}</p>
                               <div className="kwb-p-footer-form">
                                 <input type="email" name="email" autoComplete="email" placeholder="أدخل بريدك الإلكتروني" className="kwb-p-footer-email" />
-                                <button className="kwb-p-subscribe-btn" style={{ background: comp.settings.buttonColor || activeSite.branding.buttonColor }} onClick={() => setShowSubscribePopup(true)}>
+                                <button className="kwb-p-subscribe-btn" style={{ background: activeSite.branding.buttonColor }} onClick={() => setShowSubscribePopup(true)}>
                                   {comp.settings.buttonText || "اشتراك"}
                                 </button>
                               </div>
@@ -2220,7 +2220,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                             <input name="name" placeholder="الاسم" className="kwb-p-cf-input" required autoComplete="name" />
                             <input name="email" type="email" placeholder="البريد الإلكتروني" className="kwb-p-cf-input" required autoComplete="email" />
                             <textarea name="message" placeholder="الرسالة" className="kwb-p-cf-textarea" rows={4} required />
-                            <button type="submit" className="kwb-p-subscribe-btn kwb-p-cf-btn" style={{ background: comp.settings.buttonColor || activeSite.branding.buttonColor }}>
+                            <button type="submit" className="kwb-p-subscribe-btn kwb-p-cf-btn" style={{ background: activeSite.branding.buttonColor }}>
                               {comp.settings.buttonText || "إرسال"}
                             </button>
                           </form>
@@ -3937,7 +3937,7 @@ const CSS_STYLES = `
 /* Article Collection */
 .kwb-p-articles{padding:24px 16px;background:var(--kwb-bg,#fff);}
 .kwb-p-articles-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
-.kwb-p-article-card{display:flex;flex-direction:column;gap:6px;cursor:pointer;transition:transform .15s,box-shadow .15s;border-radius:12px;padding:8px;margin:-8px;}
+.kwb-p-article-card{display:flex;flex-direction:column;gap:6px;cursor:pointer;transition:transform .15s,box-shadow .15s;border-radius:0;padding:8px;margin:-8px;}
 .kwb-p-article-card:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.08);}
 .kwb-p-article-card-text{display:contents;}
 .kwb-p-article-img{width:100%;aspect-ratio:16/9;background:rgba(128,128,128,0.15);}
@@ -4508,7 +4508,7 @@ const CSS_STYLES = `
 .kwb-preview-content .kwb-p-cf-input{border-radius:var(--kwb-radius,0);}
 .kwb-preview-content .kwb-p-cf-textarea{border-radius:var(--kwb-radius,0);}
 .kwb-preview-content .kwb-p-cf-btn{border-radius:var(--kwb-radius,0);}
-.kwb-preview-content .kwb-p-article-card{border-radius:var(--kwb-radius,0);overflow:hidden;}
+.kwb-preview-content .kwb-p-article-card{border-radius:0;overflow:hidden;}
 .kwb-preview-content .kwb-p-bento-card{border-radius:var(--kwb-radius,0);}
 .kwb-preview-content .kwb-p-bento-card-img{border-radius:var(--kwb-radius,0);overflow:hidden;}
 .kwb-preview-content .kwb-p-bento-card-img img{border-radius:var(--kwb-radius,0);}
@@ -4538,7 +4538,7 @@ const CSS_STYLES = `
 .kwb-preview-content .kwb-p-catfeed-featured-img img{border-radius:var(--kwb-radius,0);}
 .kwb-preview-content .kwb-p-catfeed-sidebar{border-radius:var(--kwb-radius,0);overflow:hidden;}
 .kwb-preview-content .kwb-p-catfeed-sidebar-img{border-radius:var(--kwb-radius,0);}
-.kwb-preview-content .kwb-p-banner-card{border-radius:var(--kwb-radius,0);overflow:hidden;}
+.kwb-preview-content .kwb-p-banner-card{border-radius:0;overflow:hidden;}
 .kwb-preview-content .kwb-p-slider-img{border-radius:var(--kwb-radius,0);overflow:hidden;}
 .kwb-preview-content .kwb-p-slider-img img{border-radius:var(--kwb-radius,0);}
 .kwb-preview-content .kwb-p-podcast-card{border-radius:var(--kwb-radius,0);overflow:hidden;}
