@@ -130,6 +130,7 @@ interface Template {
   description: string;
   defaultBranding?: Partial<SiteBranding>;
   componentOverrides?: Partial<Record<ComponentType, Record<string, any>>>;
+  homeComponents?: { type: ComponentType; settings?: Record<string, any> }[];
 }
 
 // ─── Helpers ────────────────────────────────────────────
@@ -159,60 +160,142 @@ const SKELETON = {
 // ─── Design Variations (visual overrides only) ──────────
 // Each template inherits skeleton structure and overrides branding/settings.
 const TEMPLATES: Template[] = [
+  // ── 1. Media Publisher: hero news grid → ticker → articles → banners ──
   {
     id: "media",
     name: "مؤسسة إعلامية",
     description: "مثالي للناشرين وصنّاع المحتوى",
   },
+  // ── 2. Newsletter Writer: subscribe hero with image → articles → CTA ──
   {
-    id: "writer",
-    name: "كاتب مستقل",
-    description: "بسيط وأنيق لنشرة بريدية شخصية",
+    id: "newsletter",
+    name: "نشرة بريدية",
+    description: "صفحة هبوط أنيقة لنشرتك البريدية",
+    defaultBranding: {
+      accentColor: "#7C2D12", buttonColor: "#7C2D12", headlineColor: "#292524",
+      textColor: "#78716C", linkColor: "#B45309", bgColor: "#FAF7F2", cardBg: "#FFFFFF",
+      fontFamily: "IBM Plex Sans Arabic", borderRadius: 50,
+    },
+    homeComponents: [
+      { type: "header" },
+      { type: "subscribe", settings: { layout: "hero", title: "نشرة أسبوعية عن عالم الكتابة", subtitle: "كل أربعاء، أفكار ونصائح عملية تصلك مباشرة", description: "انضم لأكثر من ٣٠٠٠ كاتب يقرؤون هذه النشرة", buttonText: "اشترك مجانًا", heroImageUrl: "/images/articles/thumbs/calligraphy.jpg" } },
+      { type: "testimonials", settings: { sectionTitle: "ماذا يقول القرّاء", layout: "grid", items: [
+        { name: "ريم العتيبي", role: "كاتبة محتوى", text: "هذه النشرة غيّرت طريقة كتابتي تمامًا. أفكار عملية أطبقها كل أسبوع.", imageUrl: "" },
+        { name: "فهد المالكي", role: "مؤسس شركة ناشئة", text: "أفضل مصدر عربي لتعلّم الكتابة الاحترافية.", imageUrl: "" },
+        { name: "نورة السالم", role: "صحفية مستقلة", text: "محتوى عميق ومختصر. لا أفوّت عددًا واحدًا.", imageUrl: "" },
+      ] } },
+      { type: "article_collection", settings: { layout: "grid", title: "من أعداد سابقة" } },
+      { type: "subscribe", settings: { layout: "cta", title: "لا تفوّت العدد القادم", subtitle: "اشترك الآن واحصل على محتوى حصري كل أسبوع", buttonText: "اشترك مجانًا" } },
+      { type: "footer" },
+    ],
+  },
+  // ── 3. Personal Blog: straight to articles, clean and minimal ──
+  {
+    id: "blog",
+    name: "مدونة شخصية",
+    description: "بسيط ونظيف — المحتوى هو البطل",
     defaultBranding: {
       accentColor: "#1a1a1a", buttonColor: "#1a1a1a", headlineColor: "#1a1a1a",
-      textColor: "#555555", linkColor: "#1a1a1a", bgColor: "#FAF9F6", cardBg: "#FFFFFF",
+      textColor: "#555555", linkColor: "#1a1a1a", bgColor: "#FFFFFF", cardBg: "#F9FAFB",
       fontFamily: "IBM Plex Sans Arabic", borderRadius: 8,
     },
+    homeComponents: [
+      { type: "header" },
+      { type: "article_collection", settings: { layout: "grid", title: "آخر المقالات", showSearch: true, showCategories: true } },
+      { type: "banner", settings: { cards: [
+        { title: "عن الكاتب", linkText: "اقرأ المزيد", linkUrl: "", color: "", imageUrl: "" },
+        { title: "تواصل معي", linkText: "أرسل رسالة", linkUrl: "", color: "", imageUrl: "" },
+      ] } },
+      { type: "subscribe", settings: { layout: "cta", title: "تابع مقالاتي الجديدة", subtitle: "اشترك وتوصلك المقالات فور نشرها", buttonText: "اشتراك" } },
+      { type: "social_links" },
+      { type: "footer" },
+    ],
   },
+  // ── 4. Podcast: podcast component on top with real episode structure ──
   {
-    id: "business",
-    name: "شركة ومشروع",
-    description: "احترافي ورسمي لمحتوى الأعمال",
-    defaultBranding: {
-      accentColor: "#0A66C2", buttonColor: "#0A66C2", headlineColor: "#0F172A",
-      textColor: "#64748B", linkColor: "#0A66C2", bgColor: "#FFFFFF", cardBg: "#F8FAFC",
-      fontFamily: "IBM Plex Sans Arabic", borderRadius: 12,
-    },
-  },
-  {
-    id: "magazine",
-    name: "مجلة رقمية",
-    description: "جريء وملفت لمحتوى غني بالصور",
-    defaultBranding: {
-      accentColor: "#F97316", buttonColor: "#F97316", headlineColor: "#1F2937",
-      textColor: "#6B7280", linkColor: "#EF4444", bgColor: "#FFF7ED", cardBg: "#FFFFFF",
-      fontFamily: "Alyamama", borderRadius: 16,
-    },
-  },
-  {
-    id: "dark",
-    name: "داكن عصري",
-    description: "أنيق وداكن لمحتوى مميز",
+    id: "podcast",
+    name: "بودكاست",
+    description: "لصنّاع المحتوى الصوتي والبودكاست",
     defaultBranding: {
       accentColor: "#8B5CF6", buttonColor: "#8B5CF6", headlineColor: "#F9FAFB",
       textColor: "#9CA3AF", linkColor: "#A78BFA", bgColor: "#0F172A", cardBg: "#1E293B",
-      fontFamily: "IBM Plex Sans Arabic", darkMode: true, borderRadius: 12,
+      fontFamily: "IBM Plex Sans Arabic", darkMode: true, borderRadius: 14,
     },
+    homeComponents: [
+      { type: "header" },
+      { type: "podcast", settings: { sectionTitle: "حلقات البودكاست", layout: "list", programs: [
+        { name: "بودكاست بصوت عالي", description: "حوارات معمّقة مع كتّاب ومبدعين عرب", imageUrl: "/images/articles/thumbs/headphones.jpg", url: "", episodes: [
+          { title: "كيف تبني جمهورًا من الصفر", subtitle: "مع أحمد الشقيري", duration: "٥٥ دقيقة", url: "" },
+          { title: "فن السرد القصصي", subtitle: "مع منى المرزوقي", duration: "٤٢ دقيقة", url: "" },
+          { title: "من مدونة إلى مشروع", subtitle: "مع خالد الدوسري", duration: "٣٨ دقيقة", url: "" },
+        ]},
+        { name: "كبسولة الكتابة", description: "نصائح كتابة في ٥ دقائق", imageUrl: "/images/articles/thumbs/bokeh.jpg", url: "", episodes: [
+          { title: "٣ أخطاء يقع فيها كل كاتب مبتدئ", subtitle: "حلقة سريعة", duration: "٥ دقائق", url: "" },
+          { title: "كيف تكتب مقدمة لا يمكن تجاهلها", subtitle: "حلقة سريعة", duration: "٧ دقائق", url: "" },
+        ]},
+      ] } },
+      { type: "subscribe", settings: { layout: "hero", title: "لا تفوّت حلقة", subtitle: "اشترك وتوصلك الحلقات الجديدة فور نزولها", buttonText: "اشترك الآن", heroImageUrl: "/images/articles/thumbs/vinyl.jpg" } },
+      { type: "article_collection", settings: { layout: "grid", title: "مقالات مرافقة" } },
+      { type: "footer" },
+    ],
   },
+  // ── 5. Cinema & Reviews: movies posters grid on top ──
   {
-    id: "minimal",
-    name: "بسيط وهادئ",
-    description: "تصميم نظيف يركّز على المحتوى",
+    id: "cinema",
+    name: "سينما ومراجعات",
+    description: "لعشّاق الأفلام والمسلسلات والمراجعات",
     defaultBranding: {
-      accentColor: "#166534", buttonColor: "#166534", headlineColor: "#052E16",
-      textColor: "#6B7280", linkColor: "#10B981", bgColor: "#F0FDF4", cardBg: "#FFFFFF",
-      fontFamily: "IBM Plex Sans Arabic", borderRadius: 10,
+      accentColor: "#EF4444", buttonColor: "#EF4444", headlineColor: "#FAFAFA",
+      textColor: "#A1A1AA", linkColor: "#FB7185", bgColor: "#0A0A0A", cardBg: "#18181B",
+      fontFamily: "Alyamama", darkMode: true, borderRadius: 12,
     },
+    homeComponents: [
+      { type: "header" },
+      { type: "movies", settings: { sectionTitle: "الآن في السينما", items: [
+        { title: "فيلم الرسالة", subtitle: "دراما تاريخية ملحمية", imageUrl: "/images/articles/thumbs/desert-dunes.jpg", url: "", buttonText: "اقرأ المراجعة" },
+        { title: "ليل القاهرة", subtitle: "إثارة وتشويق في قلب المدينة", imageUrl: "/images/articles/thumbs/red-corridor.jpg", url: "", buttonText: "اقرأ المراجعة" },
+        { title: "حكاية البحر", subtitle: "رحلة بصرية مذهلة", imageUrl: "/images/articles/thumbs/underwater.jpg", url: "", buttonText: "اقرأ المراجعة" },
+        { title: "آخر الشتاء", subtitle: "دراما عائلية مؤثرة", imageUrl: "/images/articles/thumbs/mountain.jpg", url: "", buttonText: "اقرأ المراجعة" },
+      ] } },
+      { type: "hero_slider" },
+      { type: "article_collection", settings: { layout: "grid", title: "آخر المراجعات" } },
+      { type: "subscribe", settings: { layout: "cta", title: "تابع مراجعاتنا", subtitle: "اشترك وتوصلك مراجعات الأفلام والمسلسلات كل أسبوع", buttonText: "اشتراك" } },
+      { type: "footer" },
+    ],
+  },
+  // ── 6. Courses & Education: courses + topics grid ──
+  {
+    id: "education",
+    name: "تعليم ودورات",
+    description: "لصنّاع المحتوى التعليمي والدورات",
+    defaultBranding: {
+      accentColor: "#0A66C2", buttonColor: "#0A66C2", headlineColor: "#0F172A",
+      textColor: "#64748B", linkColor: "#2563EB", bgColor: "#F8FAFC", cardBg: "#FFFFFF",
+      fontFamily: "IBM Plex Sans Arabic", borderRadius: 14,
+    },
+    homeComponents: [
+      { type: "header" },
+      { type: "subscribe", settings: { layout: "hero", title: "تعلّم الكتابة الاحترافية", subtitle: "دورات ومحتوى تعليمي من خبراء عرب", description: "انضم لأكثر من ١٠٠٠ متعلّم", buttonText: "ابدأ مجانًا", heroImageUrl: "/images/articles/thumbs/paper-art.jpg" } },
+      { type: "courses", settings: { sectionTitle: "الدورات المتاحة", layout: "grid", items: [
+        { title: "أساسيات الكتابة الإبداعية", subtitle: "١٢ درس | ٦ ساعات", price: "٢٩٩ ر.س", imageUrl: "/images/articles/thumbs/calligraphy.jpg", url: "", buttonText: "سجّل الآن" },
+        { title: "التسويق بالمحتوى", subtitle: "٨ دروس | ٤ ساعات", price: "١٩٩ ر.س", imageUrl: "/images/articles/thumbs/gradient.jpg", url: "", buttonText: "سجّل الآن" },
+        { title: "كتابة النشرات البريدية", subtitle: "٦ دروس | ٣ ساعات", price: "١٤٩ ر.س", imageUrl: "/images/articles/thumbs/textile.jpg", url: "", buttonText: "سجّل الآن" },
+      ] } },
+      { type: "topics", settings: { sectionTitle: "تصفّح حسب الموضوع", layout: "grid", items: [
+        { title: "كتابة إبداعية", icon: "", url: "" },
+        { title: "تسويق رقمي", icon: "", url: "" },
+        { title: "ريادة أعمال", icon: "", url: "" },
+        { title: "تصميم", icon: "", url: "" },
+        { title: "إنتاجية", icon: "", url: "" },
+        { title: "تقنية", icon: "", url: "" },
+      ] } },
+      { type: "article_collection", settings: { layout: "grid", title: "مقالات تعليمية" } },
+      { type: "testimonials", settings: { sectionTitle: "آراء المتعلّمين", layout: "grid", items: [
+        { name: "عبدالله القحطاني", role: "طالب", text: "الدورة غيّرت مستوى كتابتي بشكل كبير. محتوى عملي وتطبيقات فورية.", imageUrl: "" },
+        { name: "هند الشمري", role: "مسوّقة محتوى", text: "أفضل استثمار في مسيرتي المهنية. المحتوى عميق ومنظّم.", imageUrl: "" },
+      ] } },
+      { type: "footer" },
+    ],
   },
 ];
 
@@ -620,10 +703,11 @@ export default function KitabhWebsiteBuilder(props: any) {
       name,
       slug: slugify(name),
       components: name === "الرئيسية" || name === SKELETON.pages[0]
-        ? SKELETON.defaultComponents.map(type => {
-            const baseSettings = getDefaultSettings(type);
-            const overrides = tpl.componentOverrides?.[type] || {};
-            return { id: genId(), type, enabled: true, settings: { ...baseSettings, ...overrides } };
+        ? (tpl.homeComponents || SKELETON.defaultComponents.map(t => ({ type: t }))).map(spec => {
+            const baseSettings = getDefaultSettings(spec.type);
+            const typeOverrides = tpl.componentOverrides?.[spec.type] || {};
+            const inlineSettings = spec.settings || {};
+            return { id: genId(), type: spec.type, enabled: true, settings: { ...baseSettings, ...typeOverrides, ...inlineSettings } };
           })
         : getPageDefaultComponents(name),
     }));
