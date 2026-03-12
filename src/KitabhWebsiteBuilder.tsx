@@ -201,7 +201,7 @@ const TEMPLATES: Template[] = [
     defaultBranding: {
       accentColor: "#1a1a1a", buttonColor: "#1a1a1a", headlineColor: "#1a1a1a",
       textColor: "#555555", linkColor: "#1a1a1a", bgColor: "#FFFFFF", cardBg: "#F9FAFB",
-      fontFamily: "Noto Sans Arabic", borderRadius: 8,
+      fontFamily: "Almarai", borderRadius: 8,
     },
     homeComponents: [
       { type: "header" },
@@ -3189,7 +3189,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                   <label className="kwb-label" style={{ marginTop: 16 }}>الخط</label>
                   <div className="kwb-font-picker">
                     {[
-                      "Alyamama", "IBM Plex Sans Arabic", "Noto Sans Arabic", "Cairo", "Tajawal",
+                      "Alyamama", "IBM Plex Sans Arabic", "Cairo", "Tajawal",
                       "Almarai", "Changa", "El Messiri", "Readex Pro", "Rubik",
                       "Amiri", "Playpen Sans Arabic",
                     ].map(font => (
@@ -4361,7 +4361,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
 // ═══════════════════════════════════════════════════════
 const CSS_STYLES = `
 /* Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Noto+Sans+Arabic:wght@400;500;600;700&family=Cairo:wght@400;500;600;700&family=Tajawal:wght@400;500;700&family=Almarai:wght@400;700;800&family=Changa:wght@400;500;600;700&family=El+Messiri:wght@400;500;600;700&family=Readex+Pro:wght@400;500;600;700&family=Rubik:wght@400;500;600;700&family=Amiri:wght@400;700&family=Alyamama:wght@400;500;600;700&family=Playpen+Sans+Arabic:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Cairo:wght@400;500;600;700&family=Tajawal:wght@400;500;700&family=Almarai:wght@400;700;800&family=Changa:wght@400;500;600;700&family=El+Messiri:wght@400;500;600;700&family=Readex+Pro:wght@400;500;600;700&family=Rubik:wght@400;500;600;700&family=Amiri:wght@400;700&family=Alyamama:wght@400;500;600;700&family=Playpen+Sans+Arabic:wght@400;500;600;700&display=swap');
 
 /* Base */
 .kwb,.kwb-builder{font-family:'IBM Plex Sans Arabic',system-ui,sans-serif;direction:rtl;text-align:right;color:#371D12;line-height:1.6;box-sizing:border-box;}
