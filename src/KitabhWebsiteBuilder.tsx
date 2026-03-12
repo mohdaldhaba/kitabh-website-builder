@@ -1088,9 +1088,11 @@ export default function KitabhWebsiteBuilder(props: any) {
           case "hero_news":
             const ha = (s.articles || []).map((id: string) => MOCK_ARTICLES.find(a => a.id === id)).filter(Boolean);
             const ma = ha[0]; const sa = ha.slice(1, 5);
-            const sideR = sa.slice(0, 2).map((a: any) => `<div class="pv-hero-side-card"><div class="pv-img" style="height:200px"></div><h4>${a.title.slice(0, 60)}...</h4><div class="pv-author-row"><div class="pv-avatar">${a.author.charAt(0)}</div><span class="pv-author-name">${a.author}</span></div><div class="pv-meta-row"><span class="pv-date">${a.date}</span><span class="pv-eng"><span style="color:var(--pv-btn)">❤ ${a.likes}</span><span>💬 ${a.comments}</span></span></div></div>`).join("");
-            const sideL = sa.slice(2, 4).map((a: any) => `<div class="pv-hero-side-card"><div class="pv-img" style="height:200px"></div><h4>${a.title.slice(0, 60)}...</h4><div class="pv-author-row"><div class="pv-avatar">${a.author.charAt(0)}</div><span class="pv-author-name">${a.author}</span></div><div class="pv-meta-row"><span class="pv-date">${a.date}</span><span class="pv-eng"><span style="color:var(--pv-btn)">❤ ${a.likes}</span><span>💬 ${a.comments}</span></span></div></div>`).join("");
-            const mainH = ma ? `<div class="pv-hero-main"><div class="pv-img" style="height:260px;min-height:260px"></div><h2>${ma.title}</h2><p class="pv-excerpt">${ma.excerpt}</p><div class="pv-meta-row"><div class="pv-author-row"><div class="pv-avatar">${ma.author.charAt(0)}</div><span class="pv-author-name">${ma.author}</span><span class="pv-date" style="margin-inline-start:8px">${ma.date}</span></div><span class="pv-eng">💬 ${ma.comments} <span style="color:var(--pv-btn)">❤ ${ma.likes}</span></span></div></div>` : "";
+            const heroImg = (a: any) => a.imageUrl ? `<img src="${a.imageUrl}" alt="${a.title}" style="width:100%;height:200px;object-fit:cover;display:block;border-radius:var(--pv-radius)"/>` : `<div class="pv-img" style="height:200px"></div>`;
+            const sideR = sa.slice(0, 2).map((a: any) => `<div class="pv-hero-side-card" data-article-id="${a.id}" style="cursor:pointer">${heroImg(a)}<h4>${a.title.slice(0, 60)}...</h4><div class="pv-author-row"><div class="pv-avatar">${a.author.charAt(0)}</div><span class="pv-author-name">${a.author}</span></div><div class="pv-meta-row"><span class="pv-date">${a.date}</span><span class="pv-eng"><span style="color:var(--pv-btn)">❤ ${a.likes}</span><span>💬 ${a.comments}</span></span></div></div>`).join("");
+            const sideL = sa.slice(2, 4).map((a: any) => `<div class="pv-hero-side-card" data-article-id="${a.id}" style="cursor:pointer">${heroImg(a)}<h4>${a.title.slice(0, 60)}...</h4><div class="pv-author-row"><div class="pv-avatar">${a.author.charAt(0)}</div><span class="pv-author-name">${a.author}</span></div><div class="pv-meta-row"><span class="pv-date">${a.date}</span><span class="pv-eng"><span style="color:var(--pv-btn)">❤ ${a.likes}</span><span>💬 ${a.comments}</span></span></div></div>`).join("");
+            const mainImg = ma?.imageUrl ? `<img src="${ma.imageUrl}" alt="${ma.title}" style="width:100%;height:260px;min-height:260px;object-fit:cover;display:block;border-radius:var(--pv-radius)"/>` : `<div class="pv-img" style="height:260px;min-height:260px"></div>`;
+            const mainH = ma ? `<div class="pv-hero-main" data-article-id="${ma.id}" style="cursor:pointer">${mainImg}<h2>${ma.title}</h2><p class="pv-excerpt">${ma.excerpt}</p><div class="pv-meta-row"><div class="pv-author-row"><div class="pv-avatar">${ma.author.charAt(0)}</div><span class="pv-author-name">${ma.author}</span><span class="pv-date" style="margin-inline-start:8px">${ma.date}</span></div><span class="pv-eng">💬 ${ma.comments} <span style="color:var(--pv-btn)">❤ ${ma.likes}</span></span></div></div>` : "";
             pc += `<div class="pv-hero-grid"><div class="pv-hero-side pv-hero-side-r">${sideR}</div>${mainH}<div class="pv-hero-side pv-hero-side-l">${sideL}</div></div>`;
             break;
           case "subscribe":
@@ -1111,19 +1113,19 @@ export default function KitabhWebsiteBuilder(props: any) {
           case "article_collection":
             if (s.layout === "gallery") {
               const gArts = (s.articles || []).map((id: string) => MOCK_ARTICLES.find(a => a.id === id)).filter(Boolean);
-              const gCards = gArts.map((a: any) => `<div class="pv-gallery-card"><div class="pv-gallery-card-img">${a.imageUrl ? `<img src="${a.imageUrl}" alt="${a.title}"/>` : `<div class="pv-img" style="height:160px"></div>`}</div><h3>${a.title}</h3><p>${a.excerpt.slice(0, 120)}...</p><div class="pv-gallery-card-footer"><span>${a.author}</span></div></div>`).join("");
+              const gCards = gArts.map((a: any) => `<div class="pv-gallery-card" data-article-id="${a.id}" style="cursor:pointer"><div class="pv-gallery-card-img">${a.imageUrl ? `<img src="${a.imageUrl}" alt="${a.title}"/>` : `<div class="pv-img" style="height:160px"></div>`}</div><h3>${a.title}</h3><p>${a.excerpt.slice(0, 120)}...</p><div class="pv-gallery-card-footer"><span>${a.author}</span></div></div>`).join("");
               const gSidebar = s.showSidebar ? `<div class="pv-gallery-sidebar">${s.sidebarTitle ? `<h3>${s.sidebarTitle}</h3>` : ""}${s.sidebarImageUrl ? `<img src="${s.sidebarImageUrl}" class="pv-gallery-sidebar-img"/>` : `<div class="pv-img" style="height:300px"></div>`}${s.sidebarButtonText ? `<button class="pv-gallery-sidebar-btn">${s.sidebarButtonText}</button>` : ""}</div>` : "";
               pc += `<div class="pv-gallery">${s.sectionTitle ? `<div class="pv-gallery-header"><h2>${s.sectionTitle}</h2></div>` : ""}<div class="pv-gallery-body ${s.showSidebar ? "pv-gallery-with-sidebar" : ""}">${gCards.length ? `<div class="pv-gallery-cards">${gCards}</div>` : ""}${gSidebar}</div></div>`;
             } else if (s.layout === "category_feed") {
               const cfCat = MOCK_CATEGORIES.find(c => c._id === s.categoryId);
               const cfArts = MOCK_ARTICLES.filter(a => a.categories.includes(s.categoryId || "")).slice(0, s.maxArticles || 5);
               const cfFeat = cfArts[0]; const cfRest = cfArts.slice(1);
-              const cfCards = cfRest.map((a: any) => `<div class="pv-catfeed-card">${a.imageUrl ? `<img src="${a.imageUrl}" class="pv-catfeed-card-img"/>` : `<div class="pv-img" style="width:120px;height:90px"></div>`}<div class="pv-catfeed-card-content"><h3>${a.title}</h3><p>${a.excerpt.slice(0, 80)}...</p><span class="pv-catfeed-author">${a.author}</span></div></div>`).join("");
-              const cfFeatH = cfFeat ? `<div class="pv-catfeed-featured">${cfFeat.imageUrl ? `<img src="${cfFeat.imageUrl}" class="pv-catfeed-featured-img"/>` : `<div class="pv-img" style="height:280px"></div>`}<h3>${cfFeat.title}</h3><p>${cfFeat.excerpt.slice(0, 140)}...</p><span class="pv-catfeed-author">${cfFeat.author}</span></div>` : "";
+              const cfCards = cfRest.map((a: any) => `<div class="pv-catfeed-card" data-article-id="${a.id}" style="cursor:pointer">${a.imageUrl ? `<img src="${a.imageUrl}" class="pv-catfeed-card-img"/>` : `<div class="pv-img" style="width:120px;height:90px"></div>`}<div class="pv-catfeed-card-content"><h3>${a.title}</h3><p>${a.excerpt.slice(0, 80)}...</p><span class="pv-catfeed-author">${a.author}</span></div></div>`).join("");
+              const cfFeatH = cfFeat ? `<div class="pv-catfeed-featured" data-article-id="${cfFeat.id}" style="cursor:pointer">${cfFeat.imageUrl ? `<img src="${cfFeat.imageUrl}" class="pv-catfeed-featured-img"/>` : `<div class="pv-img" style="height:280px"></div>`}<h3>${cfFeat.title}</h3><p>${cfFeat.excerpt.slice(0, 140)}...</p><span class="pv-catfeed-author">${cfFeat.author}</span></div>` : "";
               pc += `<div class="pv-catfeed"><div class="pv-catfeed-header"><h2>${cfCat?.name || ""}</h2>${s.showMoreLink ? `<span class="pv-catfeed-more">${s.moreText || `المزيد من ${cfCat?.name || ""}`} &#x25C0;</span>` : ""}</div><div class="pv-catfeed-body pv-catfeed-${s.categoryLayout || "featured_right"}">${cfCards ? `<div class="pv-catfeed-main">${cfCards}</div>` : ""}${cfFeatH}</div></div>`;
             } else {
               const ac = (s.articles || []).map((id: string) => MOCK_ARTICLES.find(a => a.id === id)).filter(Boolean);
-              const acH = ac.map((a: any) => `<a href="/article/${a.slug}" class="pv-art-card" style="text-decoration:none;color:inherit"><div class="pv-img" style="aspect-ratio:16/9;width:100%;${a.imageUrl ? `background-image:url(${a.imageUrl});background-size:cover;background-position:center` : ''}"></div><h4>${a.title}</h4><p class="pv-excerpt-sm">${a.excerpt.slice(0, 80)}...</p><div class="pv-author-row"><div class="pv-avatar">${a.author.charAt(0)}</div><span class="pv-author-name">${a.author}</span></div><div class="pv-meta-row"><span>${a.date}</span><span class="pv-eng"><span style="color:var(--pv-btn)">❤ ${a.likes}</span><span>💬 ${a.comments}</span></span></div></a>`).join("");
+              const acH = ac.map((a: any) => `<div class="pv-art-card" data-article-id="${a.id}" style="cursor:pointer">${a.imageUrl ? `<img src="${a.imageUrl}" alt="${a.title}" style="aspect-ratio:16/9;width:100%;object-fit:cover;display:block;border-radius:var(--pv-radius)"/>` : `<div class="pv-img" style="aspect-ratio:16/9;width:100%"></div>`}<h4>${a.title}</h4><p class="pv-excerpt-sm">${a.excerpt.slice(0, 80)}...</p><div class="pv-author-row"><div class="pv-avatar">${a.author.charAt(0)}</div><span class="pv-author-name">${a.author}</span></div><div class="pv-meta-row"><span>${a.date}</span><span class="pv-eng"><span style="color:var(--pv-btn)">❤ ${a.likes}</span><span>💬 ${a.comments}</span></span></div></div>`).join("");
               pc += `<div class="pv-articles"><div class="pv-articles-grid">${acH}</div><a class="pv-all-link">جميع المقالات &#x2197;</a></div>`;
             }
             break;
@@ -1153,7 +1155,8 @@ export default function KitabhWebsiteBuilder(props: any) {
             break;
           case "article_view":
             const sampleA = MOCK_ARTICLES[0];
-            pc += `<div class="pv-av"><div class="pv-av-head"><span class="pv-av-cat">مقالات</span><h1>${sampleA.title}</h1><div class="pv-av-meta"><div class="pv-av-author"><div class="pv-av-avatar">${sampleA.author.charAt(0)}</div><div><strong>${sampleA.author}</strong><span class="pv-date">${sampleA.date}</span></div></div><div class="pv-av-actions"><span>❤ ${sampleA.likes}</span><span>💬 ${sampleA.comments}</span></div></div></div><div class="pv-img" style="height:300px;width:100%"></div><div class="pv-av-body"><p>هذا نص تجريبي يمثل محتوى المقال كما سيظهر للقارئ. يمكن للكاتب إضافة فقرات متعددة وتنسيقات مختلفة لإثراء المحتوى وجعله أكثر جاذبية للقراء.</p><p>يدعم المقال إضافة صور وعناوين فرعية واقتباسات وقوائم نقطية ومرقمة. كل هذه العناصر تساعد في تنظيم المحتوى وتسهيل قراءته.</p><h3>عنوان فرعي للمقال</h3><p>هنا يستمر المقال بتفاصيل إضافية حول الموضوع المطروح.</p><blockquote>الكتابة الجيدة هي إعادة الكتابة. لا تخف من تعديل نصك حتى يصل إلى أفضل صورة ممكنة.</blockquote><p>في النهاية، يُختتم المقال بملخص أو دعوة للتفاعل مع المحتوى.</p></div><div class="pv-av-tags"><span>كتابة</span><span>محتوى</span><span>نشرات بريدية</span></div></div>`;
+            const avCover = sampleA.imageUrl ? `<img src="${sampleA.imageUrl}" alt="${sampleA.title}" class="pv-av-cover"/>` : `<div class="pv-av-cover" style="background:rgba(128,128,128,0.15)"></div>`;
+            pc += `<div class="pv-av"><div class="pv-av-head"><span class="pv-av-cat">مقالات</span><h1>${sampleA.title}</h1><div class="pv-av-meta"><div class="pv-av-author"><div class="pv-av-avatar">${sampleA.author.charAt(0)}</div><div><strong>${sampleA.author}</strong><span class="pv-date">${sampleA.date}</span></div></div><div class="pv-av-actions"><span style="color:var(--pv-btn)">❤ ${sampleA.likes}</span><span>💬 ${sampleA.comments}</span><span>↗ مشاركة</span><span>🔖</span></div></div></div>${avCover}<div class="pv-av-body"><p>هذا نص تجريبي يمثل محتوى المقال كما سيظهر للقارئ. يمكن للكاتب إضافة فقرات متعددة وتنسيقات مختلفة لإثراء المحتوى وجعله أكثر جاذبية للقراء.</p><p>يدعم المقال إضافة صور وعناوين فرعية واقتباسات وقوائم نقطية ومرقمة. كل هذه العناصر تساعد في تنظيم المحتوى وتسهيل قراءته.</p><h3>عنوان فرعي للمقال</h3><p>هنا يستمر المقال بتفاصيل إضافية حول الموضوع المطروح.</p><blockquote>الكتابة الجيدة هي إعادة الكتابة. لا تخف من تعديل نصك حتى يصل إلى أفضل صورة ممكنة.</blockquote><p>في النهاية، يُختتم المقال بملخص أو دعوة للتفاعل مع المحتوى.</p></div><div class="pv-av-tags"><span>كتابة</span><span>محتوى</span><span>نشرات بريدية</span></div><div class="pv-av-engagement"><span style="color:var(--pv-btn)">❤ ${sampleA.likes}</span><span>💬 ${sampleA.comments}</span><span>↗ مشاركة</span></div></div>`;
             break;
           case "section_title":
             pc += `<div class="pv-section-title"><h2>${s.title || "عنوان القسم"}</h2></div>`;
@@ -1342,12 +1345,18 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
 .pv-av-avatar{width:40px;height:40px;border-radius:50%;background:rgba(128,128,128,0.15);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px;color:var(--pv-text);}
 .pv-av-author strong{font-size:14px;display:block;color:var(--pv-headline);}
 .pv-av-actions{display:flex;gap:16px;font-size:13px;color:var(--pv-text);opacity:0.7;}
+.pv-av-cover{width:100%;height:300px;object-fit:cover;display:block;border-radius:var(--pv-radius);}
 .pv-av-body{padding:28px 24px;max-width:640px;margin:0 auto;}
 .pv-av-body p{font-size:16px;line-height:2;color:var(--pv-text);margin:0 0 18px;}
 .pv-av-body h3{font-size:20px;font-weight:800;margin:28px 0 14px;color:var(--pv-headline);}
 .pv-av-body blockquote{border-right:3px solid var(--pv-btn);padding:14px 20px;margin:24px 0;background:var(--pv-card-bg);font-size:16px;font-style:italic;color:var(--pv-text);line-height:1.8;}
-.pv-av-tags{padding:20px 24px 36px;display:flex;gap:8px;flex-wrap:wrap;}
+.pv-av-tags{padding:20px 24px 0;display:flex;gap:8px;flex-wrap:wrap;}
 .pv-av-tags span{font-size:12px;padding:6px 14px;border:1px solid rgba(128,128,128,0.2);color:var(--pv-text);background:var(--pv-card-bg);border-radius:var(--pv-radius);}
+.pv-av-engagement{padding:12px 24px 36px;display:flex;gap:16px;font-size:13px;color:var(--pv-text);opacity:0.8;}
+/* Article view overlay */
+.pv-article-overlay{position:fixed;inset:0;background:var(--pv-bg);z-index:100;overflow-y:auto;}
+.pv-article-back{position:sticky;top:0;z-index:101;background:var(--pv-card-bg);border-bottom:1px solid rgba(128,128,128,0.2);padding:12px 24px;display:flex;align-items:center;gap:8px;cursor:pointer;font-family:inherit;font-size:14px;font-weight:600;color:var(--pv-headline);border:none;width:100%;}
+.pv-article-back:hover{background:rgba(128,128,128,0.05);}
 /* Page separator */
 .pv-page-sep{border-top:3px solid rgba(128,128,128,0.15);}
 /* Section Title */
@@ -1441,7 +1450,8 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
 }
 </style>
 </head>
-<body><div class="pv-site-wrapper">${pagesHtml}</div>
+<body><div class="pv-site-wrapper" id="pv-main">${pagesHtml}</div>
+<div id="pv-article-overlay" class="pv-article-overlay" style="display:none"></div>
 <script>
 (function(){
   var html=document.documentElement;
@@ -1452,6 +1462,37 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
   window.matchMedia('(prefers-color-scheme:dark)').addEventListener('change',function(e){
     if(e.matches){html.classList.add('dark')}else{html.classList.remove('dark')}
     var btn=document.querySelector('.pv-darkmode-btn');if(btn)btn.textContent=html.classList.contains('dark')?'☀':'☾';
+  });
+  // Article data for navigation
+  var articles=${JSON.stringify(MOCK_ARTICLES.map(a => ({ id: a.id, title: a.title, excerpt: a.excerpt, imageUrl: a.imageUrl, author: a.author, date: a.date, likes: a.likes, comments: a.comments, categories: a.categories })))};
+  var articleMap={};articles.forEach(function(a){articleMap[a.id]=a;});
+  var overlay=document.getElementById('pv-article-overlay');
+  var main=document.getElementById('pv-main');
+  function openArticle(id){
+    var a=articleMap[id];if(!a)return;
+    var cover=a.imageUrl?'<img src="'+a.imageUrl+'" alt="" class="pv-av-cover"/>':'<div class="pv-av-cover" style="background:rgba(128,128,128,0.15)"></div>';
+    overlay.innerHTML='<button class="pv-article-back" onclick="closeArticle()">&#x2192; العودة للرئيسية</button><div class="pv-site-wrapper"><div class="pv-av"><div class="pv-av-head"><span class="pv-av-cat">مقالات</span><h1>'+a.title+'</h1><div class="pv-av-meta"><div class="pv-av-author"><div class="pv-av-avatar">'+a.author.charAt(0)+'</div><div><strong>'+a.author+'</strong><span class="pv-date">'+a.date+'</span></div></div><div class="pv-av-actions"><span style="color:var(--pv-btn)">❤ '+a.likes+'</span><span>💬 '+a.comments+'</span><span>↗ مشاركة</span><span>🔖</span></div></div></div>'+cover+'<div class="pv-av-body"><p>'+a.excerpt+'</p><p>هذا نص تجريبي يمثل محتوى المقال كما سيظهر للقارئ. يمكن للكاتب إضافة فقرات متعددة وتنسيقات مختلفة لإثراء المحتوى وجعله أكثر جاذبية للقراء.</p><h3>عنوان فرعي للمقال</h3><p>هنا يستمر المقال بتفاصيل إضافية حول الموضوع المطروح. يمكن للكاتب التوسع في الشرح وإضافة أمثلة عملية تساعد القارئ على فهم الموضوع بشكل أفضل.</p><blockquote>الكتابة الجيدة هي إعادة الكتابة. لا تخف من تعديل نصك حتى يصل إلى أفضل صورة ممكنة.</blockquote><p>في النهاية، يُختتم المقال بملخص أو دعوة للتفاعل مع المحتوى من خلال التعليقات أو مشاركة المقال مع الآخرين.</p></div><div class="pv-av-tags"><span>كتابة</span><span>محتوى</span><span>نشرات بريدية</span></div><div class="pv-av-engagement"><span style="color:var(--pv-btn)">❤ '+a.likes+'</span><span>💬 '+a.comments+'</span><span>↗ مشاركة</span></div></div></div>';
+    overlay.style.display='block';main.style.display='none';overlay.scrollTop=0;
+  }
+  window.closeArticle=function(){overlay.style.display='none';main.style.display='block';};
+  window.openArticle=openArticle;
+  // Attach click handlers to all article cards and hero items
+  document.addEventListener('click',function(e){
+    var el=e.target.closest('[data-article-id]');
+    if(el){e.preventDefault();openArticle(el.getAttribute('data-article-id'));}
+  });
+  // Handle page navigation from nav links
+  document.querySelectorAll('.pv-nav-link, .pv-mobile-nav-link').forEach(function(link){
+    link.addEventListener('click',function(e){
+      var href=link.getAttribute('href');
+      if(href&&href.startsWith('#page-')){
+        e.preventDefault();
+        if(overlay.style.display==='block')closeArticle();
+        var target=document.getElementById(href.slice(1));
+        if(target)target.scrollIntoView({behavior:'smooth'});
+        var mm=document.getElementById('pv-mobile-menu');if(mm)mm.classList.remove('pv-mobile-menu-open');
+      }
+    });
   });
 })();
 </script>
