@@ -3848,18 +3848,18 @@ const CSS_STYLES = `
 .kwb-preview-mobile .kwb-p-banner-grid{grid-template-columns:1fr;}
 .kwb-preview-mobile .kwb-p-cta-inner{flex-direction:column;}
 .kwb-preview-mobile .kwb-p-cta-form{min-width:unset;flex-direction:column;}
-.kwb-preview-mobile .kwb-p-cta-form .kwb-p-email-input{border-right:1px solid #ddd;width:100%;}
+.kwb-preview-mobile .kwb-p-cta-form .kwb-p-email-input{border-right:1px solid #ddd;width:100%;height:52px;font-size:16px;}
 .kwb-preview-mobile .kwb-p-cta-form .kwb-p-subscribe-btn{width:100%;}
 .kwb-preview-mobile .kwb-p-footer-inner{flex-direction:column;gap:20px;}
 .kwb-preview-mobile .kwb-p-footer-logo{font-size:36px;}
 .kwb-preview-mobile .kwb-p-footer-form{flex-direction:column;}
-.kwb-preview-mobile .kwb-p-footer-form .kwb-p-footer-email{border-right:1px solid #444;width:100%;}
+.kwb-preview-mobile .kwb-p-footer-form .kwb-p-footer-email{border-right:1px solid #444;width:100%;height:52px;font-size:16px;}
 .kwb-preview-mobile .kwb-p-footer-form .kwb-p-subscribe-btn{width:100%;}
 .kwb-preview-mobile .kwb-p-ticker-inner{font-size:32px;}
 .kwb-preview-mobile .kwb-p-gallery{display:none;}
 .kwb-preview-mobile .kwb-p-catfeed{display:none;}
 .kwb-preview-mobile .kwb-p-hero-sub-form{flex-direction:column;}
-.kwb-preview-mobile .kwb-p-hero-sub-form .kwb-p-email-input{border-right:1px solid rgba(128,128,128,0.3);width:100%;}
+.kwb-preview-mobile .kwb-p-hero-sub-form .kwb-p-email-input{border-right:1px solid rgba(128,128,128,0.3);width:100%;height:52px;font-size:16px;}
 .kwb-preview-mobile .kwb-p-hero-sub-form .kwb-p-subscribe-btn{width:100%;}
 .kwb-preview-content{direction:rtl;text-align:right;font-family:'IBM Plex Sans Arabic',system-ui,sans-serif;color:var(--kwb-text-color,#1a1a1a);line-height:1.6;background:var(--kwb-bg,#fff);}
 
