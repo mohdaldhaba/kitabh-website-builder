@@ -585,7 +585,7 @@ export default function KitabhWebsiteBuilder(props: any) {
       ] };
 
       case "article_collection": return { layout: "grid", articles: MOCK_ARTICLES.slice(0, 4).map(a => a.id), title: "", showSearch: false, showCategories: false };
-      case "footer": return { logoUrl: "", title: "", buttonText: "اشتراك", links: [], customText: "", customLinks: [] as { label: string; url: string }[], showKitabhBadge: true };
+      case "footer": return { logoUrl: "", title: "", buttonText: "اشتراك", links: [], customText: "", customLinks: [] as { label: string; url: string }[], showKitabhBadge: true, badgeStyle: "black" as "black" | "blue" | "white" };
       case "article_view": return {};
       case "text_block": return { content: "أضف نصك هنا..." };
       case "image_block": return { imageUrl: "", caption: "" };
@@ -1126,7 +1126,8 @@ export default function KitabhWebsiteBuilder(props: any) {
                 const label = typeof link === "string" ? link : link.label;
                 return `<a class="pv-footer-link">${label}</a>`;
               }).join("");
-            const pvBadge = s.showKitabhBadge !== false ? `<a href="https://kitabh.com" target="_blank" rel="noopener noreferrer" class="pv-kitabh-badge"><svg width="16" height="16" viewBox="0 0 100 100" fill="currentColor"><path d="M25 5h20c0 11-9 20-20 20H5V5h20z"/><path d="M55 5h20v20H55c-11 0-20-9-20-20h20z"/><path d="M25 55h-20v20h20c11 0 20 9 20 20H25V55z"/><path d="M75 55v20H55c0 11 9 20 20 20h20V55H75z"/><path d="M45 25c0 16.6-13.4 30-30 30v-5c13.8 0 25-11.2 25-25h5z"/><path d="M55 75c0-16.6 13.4-30 30-30v5c-13.8 0-25 11.2-25 25h-5z"/></svg>صُمّم باستخدام كتابة</a>` : "";
+            const pvBadgeStyle = s.badgeStyle || "black";
+            const pvBadge = s.showKitabhBadge !== false ? `<a href="https://kitabh.com" target="_blank" rel="noopener noreferrer" class="pv-kitabh-badge pv-badge-${pvBadgeStyle}"><svg width="16" height="16" viewBox="0 0 100 100" fill="currentColor"><path d="M25 5h20c0 11-9 20-20 20H5V5h20z"/><path d="M55 5h20v20H55c-11 0-20-9-20-20h20z"/><path d="M25 55h-20v20h20c11 0 20 9 20 20H25V55z"/><path d="M75 55v20H55c0 11 9 20 20 20h20V55H75z"/><path d="M45 25c0 16.6-13.4 30-30 30v-5c13.8 0 25-11.2 25-25h5z"/><path d="M55 75c0-16.6 13.4-30 30-30v5c-13.8 0-25 11.2-25 25h-5z"/></svg>صُمّم باستخدام كتابة</a>` : "";
             pc += `<footer class="pv-footer"><div class="pv-footer-inner"><div class="pv-footer-logo-col">${fl}</div><div class="pv-footer-right"><p class="pv-footer-tagline">${s.tagline || "محتوى حصري يصلك مباشرة إلى بريدك"}</p><div class="pv-form-row"><input type="email" name="email" autocomplete="email" placeholder="أدخل بريدك الإلكتروني" class="pv-footer-email" /><button class="pv-btn" style="background:${s.buttonColor || bc}">${s.buttonText || "اشتراك"}</button></div><nav class="pv-footer-nav">${fLinks}</nav></div></div><div class="pv-footer-bottom"><span>جميع الحقوق محفوظة ${new Date().getFullYear()} ${sn}</span>${pvBadge}</div></footer>`;
             break;
           case "article_view":
@@ -1297,9 +1298,18 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
 .pv-footer-link{font-size:13px;color:var(--pv-bg);opacity:0.6;}
 .pv-footer-link:hover{opacity:1;}
 .pv-footer-bottom{border-top:1px solid rgba(255,255,255,0.15);padding:20px 0;text-align:center;font-size:12px;color:var(--pv-bg);opacity:0.4;margin-top:28px;display:flex;flex-direction:column;align-items:center;gap:10px;}
-.pv-kitabh-badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;direction:rtl;padding:8px 16px;border-radius:50px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);color:inherit;opacity:1;text-decoration:none;transition:all .2s ease;}
-.pv-kitabh-badge:hover{background:rgba(255,255,255,0.18);transform:translateY(-1px);}
+.pv-kitabh-badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;direction:rtl;padding:8px 16px;border-radius:50px;text-decoration:none;transition:all .2s ease;}
+.pv-kitabh-badge:hover{transform:translateY(-1px);}
 .pv-kitabh-badge svg{flex-shrink:0;}
+.pv-badge-black{background:#000;color:#fff;border:1px solid #000;}
+.pv-badge-black:hover{background:#222;}
+.pv-badge-black svg{fill:#fff;}
+.pv-badge-blue{background:#0000FF;color:#fff;border:1px solid #0000FF;}
+.pv-badge-blue:hover{background:#0000dd;}
+.pv-badge-blue svg{fill:#fff;}
+.pv-badge-white{background:#fff;color:#000;border:1px solid #e0e0e0;}
+.pv-badge-white:hover{background:#f5f5f5;}
+.pv-badge-white svg{fill:#0000FF;}
 /* Article View */
 .pv-av{max-width:800px;margin:0 auto;}
 .pv-av-head{padding:36px 24px 24px;}
@@ -2103,7 +2113,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                           <div className="kwb-p-footer-bottom">
                             <span>جميع الحقوق محفوظة {new Date().getFullYear()} {activeSite.branding.siteName}</span>
                             {(comp.settings.showKitabhBadge !== false) && (
-                              <a href="https://kitabh.com" target="_blank" rel="noopener noreferrer" className="kwb-p-footer-kitabh-badge">
+                              <a href="https://kitabh.com" target="_blank" rel="noopener noreferrer" className={`kwb-p-footer-kitabh-badge kwb-badge-${comp.settings.badgeStyle || "black"}`}>
                                 <svg width="16" height="16" viewBox="0 0 100 100" fill="currentColor"><path d="M25 5h20c0 11-9 20-20 20H5V5h20z"/><path d="M55 5h20v20H55c-11 0-20-9-20-20h20z"/><path d="M25 55h-20v20h20c11 0 20 9 20 20H25V55z"/><path d="M75 55v20H55c0 11 9 20 20 20h20V55H75z"/><path d="M45 25c0 16.6-13.4 30-30 30v-5c13.8 0 25-11.2 25-25h5z"/><path d="M55 75c0-16.6 13.4-30 30-30v5c-13.8 0-25 11.2-25 25h-5z"/></svg>
                                 صُمّم باستخدام كتابة
                               </a>
@@ -3193,6 +3203,32 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                                   </label>
                                   <span>إظهار شارة "صُمّم باستخدام كتابة"</span>
                                 </div>
+
+                                {comp.settings.showKitabhBadge !== false && (
+                                  <>
+                                    <label className="kwb-label" style={{ marginTop: 12 }}>نمط الشارة</label>
+                                    <div className="kwb-badge-style-picker">
+                                      <button className={`kwb-badge-style-opt ${(comp.settings.badgeStyle || "black") === "black" ? "kwb-badge-style-active" : ""}`} onClick={() => updateComponentSettings(comp.id, { badgeStyle: "black" })} title="أسود">
+                                        <span className="kwb-badge-preview kwb-badge-preview-black">
+                                          <svg width="12" height="12" viewBox="0 0 100 100" fill="#fff"><path d="M25 5h20c0 11-9 20-20 20H5V5h20z"/><path d="M55 5h20v20H55c-11 0-20-9-20-20h20z"/><path d="M25 55h-20v20h20c11 0 20 9 20 20H25V55z"/><path d="M75 55v20H55c0 11 9 20 20 20h20V55H75z"/><path d="M45 25c0 16.6-13.4 30-30 30v-5c13.8 0 25-11.2 25-25h5z"/><path d="M55 75c0-16.6 13.4-30 30-30v5c-13.8 0-25 11.2-25 25h-5z"/></svg>
+                                          <span>صُمّم باستخدام كتابة</span>
+                                        </span>
+                                      </button>
+                                      <button className={`kwb-badge-style-opt ${comp.settings.badgeStyle === "blue" ? "kwb-badge-style-active" : ""}`} onClick={() => updateComponentSettings(comp.id, { badgeStyle: "blue" })} title="أزرق">
+                                        <span className="kwb-badge-preview kwb-badge-preview-blue">
+                                          <svg width="12" height="12" viewBox="0 0 100 100" fill="#fff"><path d="M25 5h20c0 11-9 20-20 20H5V5h20z"/><path d="M55 5h20v20H55c-11 0-20-9-20-20h20z"/><path d="M25 55h-20v20h20c11 0 20 9 20 20H25V55z"/><path d="M75 55v20H55c0 11 9 20 20 20h20V55H75z"/><path d="M45 25c0 16.6-13.4 30-30 30v-5c13.8 0 25-11.2 25-25h5z"/><path d="M55 75c0-16.6 13.4-30 30-30v5c-13.8 0-25 11.2-25 25h-5z"/></svg>
+                                          <span>صُمّم باستخدام كتابة</span>
+                                        </span>
+                                      </button>
+                                      <button className={`kwb-badge-style-opt ${comp.settings.badgeStyle === "white" ? "kwb-badge-style-active" : ""}`} onClick={() => updateComponentSettings(comp.id, { badgeStyle: "white" })} title="أبيض">
+                                        <span className="kwb-badge-preview kwb-badge-preview-white">
+                                          <svg width="12" height="12" viewBox="0 0 100 100" fill="#0000FF"><path d="M25 5h20c0 11-9 20-20 20H5V5h20z"/><path d="M55 5h20v20H55c-11 0-20-9-20-20h20z"/><path d="M25 55h-20v20h20c11 0 20 9 20 20H25V55z"/><path d="M75 55v20H55c0 11 9 20 20 20h20V55H75z"/><path d="M45 25c0 16.6-13.4 30-30 30v-5c13.8 0 25-11.2 25-25h5z"/><path d="M55 75c0-16.6 13.4-30 30-30v5c-13.8 0-25 11.2-25 25h-5z"/></svg>
+                                          <span>صُمّم باستخدام كتابة</span>
+                                        </span>
+                                      </button>
+                                    </div>
+                                  </>
+                                )}
 
                                 <p className="kwb-hint" style={{ marginTop: 12 }}>الروابط الأساسية متصلة بروابط رأس الصفحة تلقائيًا. عدّل الروابط من إعدادات رأس الصفحة.</p>
                               </>
@@ -4608,11 +4644,25 @@ const CSS_STYLES = `
 /* ─── Footer enhancements ─── */
 .kwb-p-footer-custom-text{font-size:12px;color:var(--kwb-bg,#fff);opacity:0.5;margin:8px 0 0;line-height:1.6;}
 .kwb-p-footer-bottom{border-top:1px solid rgba(255,255,255,0.15);padding:16px 0;text-align:center;font-size:11px;color:var(--kwb-bg,#fff);opacity:0.4;display:flex;flex-direction:column;align-items:center;gap:8px;}
-.kwb-p-footer-kitabh-badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;direction:rtl;padding:8px 16px;border-radius:50px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);color:var(--kwb-bg,#fff);opacity:0.7;text-decoration:none;transition:all .2s ease;cursor:pointer;letter-spacing:0.2px;}
-.kwb-p-footer-kitabh-badge:hover{opacity:1;background:rgba(255,255,255,0.18);transform:translateY(-1px);}
+.kwb-p-footer-kitabh-badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;direction:rtl;padding:8px 16px;border-radius:50px;text-decoration:none;transition:all .2s ease;cursor:pointer;letter-spacing:0.2px;}
+.kwb-p-footer-kitabh-badge:hover{transform:translateY(-1px);}
 .kwb-p-footer-kitabh-badge svg{flex-shrink:0;}
-.kwb-light-footer .kwb-p-footer-kitabh-badge{background:rgba(0,0,0,0.05);border-color:rgba(0,0,0,0.1);color:var(--kwb-text-color,#666);}
-.kwb-light-footer .kwb-p-footer-kitabh-badge:hover{background:rgba(0,0,0,0.1);}
+.kwb-badge-black{background:#000;color:#fff;border:1px solid #000;}
+.kwb-badge-black:hover{background:#222;}
+.kwb-badge-black svg{fill:#fff;}
+.kwb-badge-blue{background:#0000FF;color:#fff;border:1px solid #0000FF;}
+.kwb-badge-blue:hover{background:#0000dd;}
+.kwb-badge-blue svg{fill:#fff;}
+.kwb-badge-white{background:#fff;color:#000;border:1px solid #e0e0e0;}
+.kwb-badge-white:hover{background:#f5f5f5;}
+.kwb-badge-white svg{fill:#0000FF;}
+.kwb-badge-style-picker{display:flex;gap:8px;flex-wrap:wrap;}
+.kwb-badge-style-opt{border:2px solid transparent;border-radius:8px;padding:4px;cursor:pointer;background:none;transition:border-color .2s;}
+.kwb-badge-style-active{border-color:#0000FF;}
+.kwb-badge-preview{display:inline-flex;align-items:center;gap:4px;font-size:9px;font-weight:600;direction:rtl;padding:5px 10px;border-radius:50px;white-space:nowrap;}
+.kwb-badge-preview-black{background:#000;color:#fff;}
+.kwb-badge-preview-blue{background:#0000FF;color:#fff;}
+.kwb-badge-preview-white{background:#fff;color:#000;border:1px solid #ddd;}
 
 /* Bento mini preview */
 .kwb-mc-bento-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:2px;}
