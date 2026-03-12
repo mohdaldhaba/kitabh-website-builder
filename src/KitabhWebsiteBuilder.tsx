@@ -297,6 +297,106 @@ const TEMPLATES: Template[] = [
       { type: "footer" },
     ],
   },
+  // ── 7. Online Store: products + bento grid + subscribe ──
+  {
+    id: "store",
+    name: "متجر إلكتروني",
+    description: "لبيع الكتب والمنتجات الرقمية",
+    defaultBranding: {
+      accentColor: "#E82222", buttonColor: "#E82222", headlineColor: "#1a1a1a",
+      textColor: "#555555", linkColor: "#E82222", bgColor: "#FFFFFF", cardBg: "#F9FAFB",
+      fontFamily: "IBM Plex Sans Arabic", borderRadius: 14,
+    },
+    homeComponents: [
+      { type: "header", settings: { buttonText: "تسوّق الآن" } },
+      { type: "subscribe", settings: { layout: "hero", title: "متجر الكاتب", subtitle: "كتب إلكترونية، أدلّة عملية، وأدوات للكتّاب", description: "منتجات رقمية صنعها كتّاب لكتّاب", buttonText: "تصفّح المنتجات", heroImageUrl: "/images/articles/thumbs/paper-art.jpg" } },
+      { type: "products", settings: { sectionTitle: "الأكثر مبيعًا", layout: "grid", items: [
+        { title: "كتاب فن العنوان", subtitle: "٧٠ صفحة من تقنيات كتابة العناوين الجذابة", price: "٤٩ ر.س", imageUrl: "/images/articles/thumbs/calligraphy.jpg", url: "", buttonText: "اشتري الآن" },
+        { title: "دليل النشرة البريدية", subtitle: "من الصفر إلى ١٠٠٠ مشترك", price: "٧٩ ر.س", imageUrl: "/images/articles/thumbs/gradient.jpg", url: "", buttonText: "اشتري الآن" },
+        { title: "قوالب محتوى جاهزة", subtitle: "٥٠ قالب لمنصات التواصل", price: "٣٩ ر.س", imageUrl: "/images/articles/thumbs/pattern.jpg", url: "", buttonText: "اشتري الآن" },
+        { title: "دورة الكتابة الإبداعية", subtitle: "١٢ درس فيديو + تمارين", price: "١٩٩ ر.س", imageUrl: "/images/articles/thumbs/textile.jpg", url: "", buttonText: "سجّل الآن" },
+      ] } },
+      { type: "bento_grid", settings: { layout: "2-1", items: [
+        { title: "شحن فوري", text: "جميع المنتجات رقمية تصلك فورًا على بريدك", imageUrl: "", linkUrl: "" },
+        { title: "ضمان استرداد", text: "غير راضٍ؟ استرد أموالك خلال ٧ أيام", imageUrl: "", linkUrl: "" },
+        { title: "دعم مباشر", text: "تواصل معنا مباشرة عبر البريد أو الواتساب", imageUrl: "", linkUrl: "" },
+      ] } },
+      { type: "testimonials", settings: { sectionTitle: "آراء المشترين", layout: "grid", items: [
+        { name: "سلطان العنزي", role: "كاتب محتوى", text: "كتاب فن العنوان غيّر طريقة كتابتي للعناوين تمامًا. أنصح به بشدة.", imageUrl: "" },
+        { name: "لمى الحربي", role: "مسوّقة رقمية", text: "قوالب المحتوى وفّرت عليّ ساعات من العمل كل أسبوع.", imageUrl: "" },
+      ] } },
+      { type: "subscribe", settings: { layout: "cta", title: "احصل على خصم ١٠٪", subtitle: "اشترك في القائمة البريدية واحصل على كود خصم فوري", buttonText: "اشترك واحصل على الخصم" } },
+      { type: "footer" },
+    ],
+  },
+  // ── 8. Coach & Expert: personal brand + social proof + booking ──
+  {
+    id: "coach",
+    name: "مدرب وخبير",
+    description: "لبناء علامتك الشخصية كخبير ومدرب",
+    defaultBranding: {
+      accentColor: "#166534", buttonColor: "#166534", headlineColor: "#052E16",
+      textColor: "#6B7280", linkColor: "#10B981", bgColor: "#F0FDF4", cardBg: "#FFFFFF",
+      fontFamily: "IBM Plex Sans Arabic", borderRadius: 16,
+    },
+    homeComponents: [
+      { type: "header", settings: { buttonText: "احجز استشارة" } },
+      { type: "subscribe", settings: { layout: "hero", title: "ساعدتُ أكثر من ٥٠٠ كاتب على تحويل شغفهم لمصدر دخل", subtitle: "مدرّب كتابة ومحتوى رقمي", description: "خبرة ١٠ سنوات في صناعة المحتوى العربي", buttonText: "احجز جلسة مجانية", heroImageUrl: "/images/articles/thumbs/sunset.jpg" } },
+      { type: "bento_grid", settings: { layout: "1-2", items: [
+        { title: "تدريب ١-١", text: "جلسات شخصية مصمّمة لاحتياجاتك", imageUrl: "", linkUrl: "" },
+        { title: "ورش عمل", text: "ورش جماعية تفاعلية كل شهر", imageUrl: "", linkUrl: "" },
+        { title: "برنامج مكثّف", text: "٨ أسابيع لتحويل كتابتك بالكامل", imageUrl: "", linkUrl: "" },
+      ] } },
+      { type: "courses", settings: { sectionTitle: "البرامج التدريبية", layout: "grid", items: [
+        { title: "برنامج الكاتب المحترف", subtitle: "٨ أسابيع | ١٦ جلسة", price: "١,٤٩٩ ر.س", imageUrl: "/images/articles/thumbs/forest.jpg", url: "", buttonText: "سجّل الآن" },
+        { title: "ورشة كتابة النشرات", subtitle: "٣ ساعات مكثّفة", price: "٢٩٩ ر.س", imageUrl: "/images/articles/thumbs/ocean-wave.jpg", url: "", buttonText: "احجز مقعدك" },
+        { title: "استشارة محتوى ١-١", subtitle: "٦٠ دقيقة", price: "٣٤٩ ر.س", imageUrl: "/images/articles/thumbs/mountain.jpg", url: "", buttonText: "احجز الآن" },
+      ] } },
+      { type: "testimonials", settings: { sectionTitle: "ماذا يقول المتدرّبون", layout: "grid", items: [
+        { name: "محمد القرني", role: "كاتب مستقل", text: "بعد البرنامج، ضاعفت دخلي من الكتابة ٣ مرات خلال ٦ أشهر.", imageUrl: "" },
+        { name: "أريج البلوي", role: "صانعة محتوى", text: "أول مرة أحس إن عندي خطة واضحة. التدريب عملي ومباشر.", imageUrl: "" },
+        { name: "يزيد السبيعي", role: "مدوّن", text: "جلسة واحدة غيّرت نظرتي تمامًا لكتابة المحتوى.", imageUrl: "" },
+      ] } },
+      { type: "article_collection", settings: { layout: "grid", title: "مقالات ونصائح مجانية" } },
+      { type: "social_links" },
+      { type: "subscribe", settings: { layout: "cta", title: "انضم للقائمة البريدية", subtitle: "نصائح أسبوعية مجانية عن الكتابة وصناعة المحتوى", buttonText: "اشترك مجانًا" } },
+      { type: "footer" },
+    ],
+  },
+  // ── 9. Portfolio: bento grid showcase + social + minimal ──
+  {
+    id: "portfolio",
+    name: "ملف أعمال",
+    description: "لعرض أعمالك ومشاريعك بشكل احترافي",
+    defaultBranding: {
+      accentColor: "#1a1a1a", buttonColor: "#1a1a1a", headlineColor: "#0F172A",
+      textColor: "#64748B", linkColor: "#1a1a1a", bgColor: "#FAFAFA", cardBg: "#FFFFFF",
+      fontFamily: "IBM Plex Sans Arabic", borderRadius: 10,
+    },
+    homeComponents: [
+      { type: "header", settings: { buttonText: "تواصل معي" } },
+      { type: "subscribe", settings: { layout: "hero", title: "كاتب ومصمم محتوى رقمي", subtitle: "أساعد العلامات التجارية على بناء حضور رقمي مؤثر", description: "", buttonText: "شاهد أعمالي", heroImageUrl: "/images/articles/thumbs/stained-glass.jpg" } },
+      { type: "bento_grid", settings: { layout: "3-col", items: [
+        { title: "حملة تسويقية — شركة نماء", text: "إدارة المحتوى وكتابة ٣٠ منشورًا شهريًا", imageUrl: "/images/articles/thumbs/colorful-windows.jpg", linkUrl: "" },
+        { title: "هوية بصرية — مطعم الديرة", text: "تصميم الهوية وكتابة محتوى القائمة", imageUrl: "/images/articles/thumbs/coral.jpg", linkUrl: "" },
+        { title: "نشرة بريدية — منصة بناء", text: "كتابة وإدارة نشرة أسبوعية لـ ٥٠٠٠ مشترك", imageUrl: "/images/articles/thumbs/blue-tiles.jpg", linkUrl: "" },
+        { title: "سلسلة بودكاست — صوت الرياض", text: "كتابة السكريبت لـ ٢٤ حلقة", imageUrl: "/images/articles/thumbs/headphones.jpg", linkUrl: "" },
+        { title: "محتوى تعليمي — أكاديمية نور", text: "تطوير مناهج ٣ دورات تدريبية", imageUrl: "/images/articles/thumbs/paper-art.jpg", linkUrl: "" },
+        { title: "تقارير سنوية — مؤسسة وقف", text: "كتابة وتصميم التقرير السنوي", imageUrl: "/images/articles/thumbs/abstract-warm.jpg", linkUrl: "" },
+      ] } },
+      { type: "brands_ticker", settings: { headline: "عملت مع", speed: 30, repeatCount: 3, items: [
+        { text: "شركة نماء", imageUrl: "" },
+        { text: "منصة بناء", imageUrl: "" },
+        { text: "أكاديمية نور", imageUrl: "" },
+        { text: "مؤسسة وقف", imageUrl: "" },
+        { text: "مطعم الديرة", imageUrl: "" },
+      ] } },
+      { type: "article_collection", settings: { layout: "grid", title: "مقالات ومدونة" } },
+      { type: "social_links" },
+      { type: "subscribe", settings: { layout: "cta", title: "مهتم بالتعاون؟", subtitle: "أرسل لي رسالة وسأرد خلال ٢٤ ساعة", buttonText: "تواصل معي" } },
+      { type: "footer" },
+    ],
+  },
 ];
 
 // ─── Kitabh icons — one per badge style ──────
