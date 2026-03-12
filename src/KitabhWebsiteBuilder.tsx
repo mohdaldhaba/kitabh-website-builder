@@ -170,7 +170,8 @@ const TEMPLATES: Template[] = [
 const KITABH_ICON_BLACK = "/images/kitabh-icon-black.png";
 const KITABH_ICON_BLUE = "/images/kitabh-icon-blue.png";
 const KITABH_ICON_WHITE = "/images/kitabh-icon-white.png";
-const KITABH_ICONS: Record<string, string> = { black: KITABH_ICON_BLACK, blue: KITABH_ICON_BLUE, white: KITABH_ICON_WHITE };
+// Map badge style → correct icon (white icon on dark bg, black icon on light bg)
+const KITABH_ICONS: Record<string, string> = { black: KITABH_ICON_WHITE, blue: KITABH_ICON_WHITE, white: KITABH_ICON_BLACK };
 
 // ─── Image pool (shuffled on each page load) ──────
 const IMAGE_POOL = [
@@ -1498,7 +1499,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
 }
 </style>
 </head>
-<body><div class="pv-site-wrapper" id="pv-main">${pagesHtml}</div>${activeSite.branding.showKitabhBadge !== false ? `<div class="pv-kitabh-badge-wrap"><a href="https://kitabh.com" target="_blank" rel="noopener noreferrer" class="pv-kitabh-badge pv-badge-${activeSite.branding.badgeStyle || "black"}" style="transform:scale(${(activeSite.branding.badgeScale ?? 100) / 100})"><img src="${KITABH_ICONS[activeSite.branding.badgeStyle || "black"]}" alt="كتابة" />صُمّم باستخدام كتابة</a></div>` : ''}
+<body><div class="pv-site-wrapper" id="pv-main">${pagesHtml}</div>${activeSite.branding.showKitabhBadge !== false ? `<div class="pv-kitabh-badge-wrap"><a href="https://kitabh.com" target="_blank" rel="noopener noreferrer" class="pv-kitabh-badge pv-badge-${activeSite.branding.badgeStyle || "black"}" style="transform:scale(${(activeSite.branding.badgeScale ?? 85) / 100})"><img src="${KITABH_ICONS[activeSite.branding.badgeStyle || "black"]}" alt="كتابة" />صُمّم باستخدام كتابة</a></div>` : ''}
 <div id="pv-article-overlay" class="pv-article-overlay" style="display:none"></div>
 <script>
 (function(){
@@ -2702,7 +2703,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                 {/* Kitabh Badge — standalone element below all components */}
                 {activeSite.branding.showKitabhBadge !== false && (
                   <div className="kwb-p-kitabh-badge-wrap">
-                    <a href="https://kitabh.com" target="_blank" rel="noopener noreferrer" className={`kwb-p-footer-kitabh-badge kwb-badge-${activeSite.branding.badgeStyle || "black"}`} style={{ transform: `scale(${(activeSite.branding.badgeScale ?? 100) / 100})` }}>
+                    <a href="https://kitabh.com" target="_blank" rel="noopener noreferrer" className={`kwb-p-footer-kitabh-badge kwb-badge-${activeSite.branding.badgeStyle || "black"}`} style={{ transform: `scale(${(activeSite.branding.badgeScale ?? 85) / 100})` }}>
                       <img src={KITABH_ICONS[activeSite.branding.badgeStyle || "black"]} alt="كتابة" />
                       صُمّم باستخدام كتابة
                     </a>
@@ -2966,7 +2967,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                       <label className="kwb-label" style={{ marginTop: 10 }}>حجم الشارة</label>
                       <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                         <span style={{ fontSize: 11, color: "#999" }}>صغير</span>
-                        <input type="range" min="50" max="100" value={activeSite.branding.badgeScale ?? 100} onChange={e => updateSite(activeSite.id, { branding: { ...activeSite.branding, badgeScale: parseInt(e.target.value) } })} style={{ flex: 1, accentColor: activeSite.branding.buttonColor || "#E82222" }} />
+                        <input type="range" min="70" max="100" value={activeSite.branding.badgeScale ?? 85} onChange={e => updateSite(activeSite.id, { branding: { ...activeSite.branding, badgeScale: parseInt(e.target.value) } })} style={{ flex: 1, accentColor: activeSite.branding.buttonColor || "#E82222" }} />
                         <span style={{ fontSize: 11, color: "#999" }}>كبير</span>
                       </div>
                     </>
