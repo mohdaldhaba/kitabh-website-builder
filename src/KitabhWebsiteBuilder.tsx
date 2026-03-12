@@ -1126,7 +1126,8 @@ export default function KitabhWebsiteBuilder(props: any) {
                 const label = typeof link === "string" ? link : link.label;
                 return `<a class="pv-footer-link">${label}</a>`;
               }).join("");
-            pc += `<footer class="pv-footer"><div class="pv-footer-inner"><div class="pv-footer-logo-col">${fl}</div><div class="pv-footer-right"><p class="pv-footer-tagline">${s.tagline || "محتوى حصري يصلك مباشرة إلى بريدك"}</p><div class="pv-form-row"><input type="email" name="email" autocomplete="email" placeholder="أدخل بريدك الإلكتروني" class="pv-footer-email" /><button class="pv-btn" style="background:${s.buttonColor || bc}">${s.buttonText || "اشتراك"}</button></div><nav class="pv-footer-nav">${fLinks}</nav></div></div><div class="pv-footer-bottom">جميع الحقوق محفوظة ${new Date().getFullYear()} ${sn}</div></footer>`;
+            const pvBadge = s.showKitabhBadge !== false ? `<a href="https://kitabh.com" target="_blank" rel="noopener noreferrer" class="pv-kitabh-badge"><svg width="16" height="16" viewBox="0 0 100 100" fill="currentColor"><path d="M25 5h20c0 11-9 20-20 20H5V5h20z"/><path d="M55 5h20v20H55c-11 0-20-9-20-20h20z"/><path d="M25 55h-20v20h20c11 0 20 9 20 20H25V55z"/><path d="M75 55v20H55c0 11 9 20 20 20h20V55H75z"/><path d="M45 25c0 16.6-13.4 30-30 30v-5c13.8 0 25-11.2 25-25h5z"/><path d="M55 75c0-16.6 13.4-30 30-30v5c-13.8 0-25 11.2-25 25h-5z"/></svg>صُمّم باستخدام كتابة</a>` : "";
+            pc += `<footer class="pv-footer"><div class="pv-footer-inner"><div class="pv-footer-logo-col">${fl}</div><div class="pv-footer-right"><p class="pv-footer-tagline">${s.tagline || "محتوى حصري يصلك مباشرة إلى بريدك"}</p><div class="pv-form-row"><input type="email" name="email" autocomplete="email" placeholder="أدخل بريدك الإلكتروني" class="pv-footer-email" /><button class="pv-btn" style="background:${s.buttonColor || bc}">${s.buttonText || "اشتراك"}</button></div><nav class="pv-footer-nav">${fLinks}</nav></div></div><div class="pv-footer-bottom"><span>جميع الحقوق محفوظة ${new Date().getFullYear()} ${sn}</span>${pvBadge}</div></footer>`;
             break;
           case "article_view":
             const sampleA = MOCK_ARTICLES[0];
@@ -1295,7 +1296,10 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
 .pv-footer-nav{display:flex;gap:20px;flex-wrap:wrap;margin-top:20px;}
 .pv-footer-link{font-size:13px;color:var(--pv-bg);opacity:0.6;}
 .pv-footer-link:hover{opacity:1;}
-.pv-footer-bottom{border-top:1px solid rgba(255,255,255,0.15);padding:20px 0;text-align:center;font-size:12px;color:var(--pv-bg);opacity:0.4;margin-top:28px;}
+.pv-footer-bottom{border-top:1px solid rgba(255,255,255,0.15);padding:20px 0;text-align:center;font-size:12px;color:var(--pv-bg);opacity:0.4;margin-top:28px;display:flex;flex-direction:column;align-items:center;gap:10px;}
+.pv-kitabh-badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;direction:rtl;padding:8px 16px;border-radius:50px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);color:inherit;opacity:1;text-decoration:none;transition:all .2s ease;}
+.pv-kitabh-badge:hover{background:rgba(255,255,255,0.18);transform:translateY(-1px);}
+.pv-kitabh-badge svg{flex-shrink:0;}
 /* Article View */
 .pv-av{max-width:800px;margin:0 auto;}
 .pv-av-head{padding:36px 24px 24px;}
@@ -2099,10 +2103,10 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                           <div className="kwb-p-footer-bottom">
                             <span>جميع الحقوق محفوظة {new Date().getFullYear()} {activeSite.branding.siteName}</span>
                             {(comp.settings.showKitabhBadge !== false) && (
-                              <span className="kwb-p-footer-kitabh-badge">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>
-                                صُنع في منصة كتابة
-                              </span>
+                              <a href="https://kitabh.com" target="_blank" rel="noopener noreferrer" className="kwb-p-footer-kitabh-badge">
+                                <svg width="16" height="16" viewBox="0 0 100 100" fill="currentColor"><path d="M25 5h20c0 11-9 20-20 20H5V5h20z"/><path d="M55 5h20v20H55c-11 0-20-9-20-20h20z"/><path d="M25 55h-20v20h20c11 0 20 9 20 20H25V55z"/><path d="M75 55v20H55c0 11 9 20 20 20h20V55H75z"/><path d="M45 25c0 16.6-13.4 30-30 30v-5c13.8 0 25-11.2 25-25h5z"/><path d="M55 75c0-16.6 13.4-30 30-30v5c-13.8 0-25 11.2-25 25h-5z"/></svg>
+                                صُمّم باستخدام كتابة
+                              </a>
                             )}
                           </div>
                         </div>
@@ -3187,7 +3191,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                                     <input type="checkbox" checked={comp.settings.showKitabhBadge !== false} onChange={e => updateComponentSettings(comp.id, { showKitabhBadge: e.target.checked })} />
                                     <span className="kwb-toggle-track"><span className="kwb-toggle-thumb" /></span>
                                   </label>
-                                  <span>إظهار شارة "صُنع في منصة كتابة"</span>
+                                  <span>إظهار شارة "صُمّم باستخدام كتابة"</span>
                                 </div>
 
                                 <p className="kwb-hint" style={{ marginTop: 12 }}>الروابط الأساسية متصلة بروابط رأس الصفحة تلقائيًا. عدّل الروابط من إعدادات رأس الصفحة.</p>
@@ -4604,8 +4608,11 @@ const CSS_STYLES = `
 /* ─── Footer enhancements ─── */
 .kwb-p-footer-custom-text{font-size:12px;color:var(--kwb-bg,#fff);opacity:0.5;margin:8px 0 0;line-height:1.6;}
 .kwb-p-footer-bottom{border-top:1px solid rgba(255,255,255,0.15);padding:16px 0;text-align:center;font-size:11px;color:var(--kwb-bg,#fff);opacity:0.4;display:flex;flex-direction:column;align-items:center;gap:8px;}
-.kwb-p-footer-kitabh-badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;opacity:0.7;direction:rtl;}
-.kwb-p-footer-kitabh-badge svg{opacity:0.6;}
+.kwb-p-footer-kitabh-badge{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;direction:rtl;padding:8px 16px;border-radius:50px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.15);color:var(--kwb-bg,#fff);opacity:0.7;text-decoration:none;transition:all .2s ease;cursor:pointer;letter-spacing:0.2px;}
+.kwb-p-footer-kitabh-badge:hover{opacity:1;background:rgba(255,255,255,0.18);transform:translateY(-1px);}
+.kwb-p-footer-kitabh-badge svg{flex-shrink:0;}
+.kwb-light-footer .kwb-p-footer-kitabh-badge{background:rgba(0,0,0,0.05);border-color:rgba(0,0,0,0.1);color:var(--kwb-text-color,#666);}
+.kwb-light-footer .kwb-p-footer-kitabh-badge:hover{background:rgba(0,0,0,0.1);}
 
 /* Bento mini preview */
 .kwb-mc-bento-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:2px;}
