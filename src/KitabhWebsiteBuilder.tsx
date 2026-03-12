@@ -2135,7 +2135,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                 <div className="kwb-tpl-preview" style={{background:bgColor}}>
                   {patternFn(accent, btn, bgColor)}
                   <div className="kwb-tpl-preview-label" style={{fontFamily:`'${font}', sans-serif`}}>
-                    <span className="kwb-tpl-preview-name" style={{color:isDark?"#fff":"#000",background:isDark?"rgba(0,0,0,.45)":"rgba(255,255,255,.55)",backdropFilter:"blur(8px)",WebkitBackdropFilter:"blur(8px)",padding:"8px 24px",borderRadius:12}}>{t.name}</span>
+                    <span className="kwb-tpl-preview-name" style={{color:isDark?"#fff":"#000",textShadow:isDark?"0 2px 8px rgba(0,0,0,.7), 0 0 2px rgba(0,0,0,.5)":"0 2px 8px rgba(255,255,255,.9), 0 0 2px rgba(255,255,255,.7)"}}>{t.name}</span>
                   </div>
                 </div>
                 <div className="kwb-tpl-overlay">
@@ -5376,7 +5376,7 @@ const CSS_STYLES = `
 @media(max-width:600px){
   .kwb{padding:16px 12px 40px;}
   .kwb-sites-grid{grid-template-columns:1fr;}
-  .kwb-tpl-grid{grid-template-columns:1fr;gap:20px;}
+  .kwb-tpl-grid{grid-template-columns:1fr;gap:36px;}
   .kwb-tpl-picker{padding:24px 16px 40px;}
   .kwb-tpl-picker-title{font-size:24px;}
   .kwb-tpl-picker-header{margin-bottom:28px;}
