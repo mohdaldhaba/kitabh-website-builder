@@ -2172,6 +2172,39 @@ export default function KitabhChecker() {
                       شارك نتيجتك
                     </button>
                   </div>
+                  {/* Grade scale */}
+                  {(() => {
+                    const grades = [
+                      { label: "استثنائي", range: "9-10", color: "#059669", bg: "#ECFDF5", min: 9, max: 10 },
+                      { label: "ممتاز", range: "8-8.9", color: "#12B76A", bg: "#F0FDF4", min: 8, max: 8.9 },
+                      { label: "جيد جداً", range: "7-7.9", color: "#0000FF", bg: "#EBEBFF", min: 7, max: 7.9 },
+                      { label: "جيد", range: "5.5-6.9", color: "#DFB300", bg: "#FFFBEB", min: 5.5, max: 6.9 },
+                      { label: "يحتاج تطوير", range: "1-5.4", color: "#E82222", bg: "#FEF2F2", min: 1, max: 5.4 },
+                    ]
+                    const activeIdx = grades.findIndex(g => sc >= g.min && sc <= g.max)
+                    return (
+                      <div style={{display:"flex",direction:"rtl",gap:4,marginTop:16}}>
+                        {grades.map((g, i) => {
+                          const isActive = i === activeIdx
+                          return (
+                            <div key={i} style={{flex: i === 4 ? 1.8 : i === 3 ? 1.4 : 1, display:"flex",flexDirection:"column",alignItems:"center",gap:4}}>
+                              <div style={{
+                                width:"100%",height:6,borderRadius:3,
+                                background: isActive ? g.color : "#E5E5E5",
+                                opacity: isActive ? 1 : 0.4,
+                                transition:"all .3s",
+                                position:"relative",
+                              }}>
+                                {isActive && <div style={{position:"absolute",top:-3,right:`${Math.max(5,Math.min(90,((sc - g.min) / (g.max - g.min + 0.1)) * 100))}%`,width:12,height:12,borderRadius:"50%",background:g.color,border:"2px solid #fff",boxShadow:"0 1px 4px rgba(0,0,0,.2)",transform:"translateX(50%)"}}/>}
+                              </div>
+                              <span style={{fontSize:10,fontWeight: isActive ? 700 : 500,color: isActive ? g.color : "#AAA",whiteSpace:"nowrap"}}>{g.label}</span>
+                              <span style={{fontSize:9,color: isActive ? g.color : "#CCC",fontWeight:500}}>{g.range}</span>
+                            </div>
+                          )
+                        })}
+                      </div>
+                    )
+                  })()}
                 </div>
               )
             })()}
