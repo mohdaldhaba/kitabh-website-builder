@@ -1635,12 +1635,12 @@ export default function KitabhOutline(props: { premium?: boolean }) {
           <div className="kb-res">
             {/* Top bar */}
             <div className="kb-top-bar">
+              <button className="kb-btn-icon" onClick={reset} title="عودة">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M5 12h14"/><path d="M12 5l7 7-7 7"/>
+                </svg>
+              </button>
               <div style={{display:"flex",gap:"8px",alignItems:"center"}}>
-                <button className="kb-btn-icon" onClick={reset} title="عودة">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M5 12h14"/><path d="M12 5l7 7-7 7"/>
-                  </svg>
-                </button>
                 <button className="kb-btn-icon" onClick={copyOutline} title={copied ? "تم النسخ" : "نسخ المخطط"}>
                   {copied
                     ? <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#12B76A" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
@@ -1650,13 +1650,13 @@ export default function KitabhOutline(props: { premium?: boolean }) {
                 <button className="kb-btn-icon" onClick={()=>setShowShare(true)} title="مشاركة">
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
                 </button>
+                <a className="kb-btn-editor" href="https://kitabh.com/editor/create">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/>
+                  </svg>
+                  اكتب في المحرر
+                </a>
               </div>
-              <a className="kb-btn-editor" href="https://kitabh.com/editor/create">
-                اكتب في المحرر
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M5 12h14"/><path d="M12 5l7 7-7 7"/>
-                </svg>
-              </a>
             </div>
 
             {/* Summary */}
