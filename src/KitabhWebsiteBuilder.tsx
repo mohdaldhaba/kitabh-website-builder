@@ -86,6 +86,8 @@ interface SiteBranding {
   popupTitle?: string;
   popupDesc?: string;
   popupButtonText?: string;
+  showKitabhBadge?: boolean;
+  badgeStyle?: "black" | "blue" | "white";
 }
 
 interface Article {
@@ -148,6 +150,7 @@ const SKELETON = {
     accentColor: "#E82222", buttonColor: "#E82222", headlineColor: "#1a1a1a",
     textColor: "#666666", linkColor: "#E82222", bgColor: "#ffffff", cardBg: "#ffffff",
     fontFamily: "Alyamama", layoutWidth: "compact" as "compact" | "full", darkMode: false, borderRadius: 0,
+    showKitabhBadge: true, badgeStyle: "black" as "black" | "blue" | "white",
   } as SiteBranding,
 };
 
@@ -606,7 +609,7 @@ export default function KitabhWebsiteBuilder(props: any) {
       ] };
 
       case "article_collection": return { layout: "grid", articles: MOCK_ARTICLES.slice(0, 4).map(a => a.id), title: "", showSearch: false, showCategories: false };
-      case "footer": return { logoUrl: "", title: "", buttonText: "اشتراك", links: [], customText: "", customLinks: [] as { label: string; url: string }[], showKitabhBadge: true, badgeStyle: "black" as "black" | "blue" | "white" };
+      case "footer": return { logoUrl: "", title: "", buttonText: "اشتراك", links: [], customText: "", customLinks: [] as { label: string; url: string }[] };
       case "article_view": return {};
       case "text_block": return { content: "أضف نصك هنا..." };
       case "image_block": return { imageUrl: "", caption: "" };
@@ -1155,9 +1158,7 @@ export default function KitabhWebsiteBuilder(props: any) {
                 const label = typeof link === "string" ? link : link.label;
                 return `<a class="pv-footer-link">${label}</a>`;
               }).join("");
-            const pvBadgeStyle = s.badgeStyle || "black";
-            const pvBadge = s.showKitabhBadge !== false ? `<a href="https://kitabh.com" target="_blank" rel="noopener noreferrer" class="pv-kitabh-badge pv-badge-${pvBadgeStyle}"><svg width="24" height="24" viewBox="0 0 100 100"><path d="M25 5h20c0 11-9 20-20 20H5V5h20z"/><path d="M55 5h20v20H55c-11 0-20-9-20-20h20z"/><path d="M25 55h-20v20h20c11 0 20 9 20 20H25V55z"/><path d="M75 55v20H55c0 11 9 20 20 20h20V55H75z"/><path d="M45 25c0 16.6-13.4 30-30 30v-5c13.8 0 25-11.2 25-25h5z"/><path d="M55 75c0-16.6 13.4-30 30-30v5c-13.8 0-25 11.2-25 25h-5z"/></svg>صُمّم باستخدام كتابة</a>` : "";
-            pc += `<footer class="pv-footer"><div class="pv-footer-inner"><div class="pv-footer-logo-col">${fl}</div><div class="pv-footer-right"><p class="pv-footer-tagline">${s.tagline || "محتوى حصري يصلك مباشرة إلى بريدك"}</p><div class="pv-form-row"><input type="email" name="email" autocomplete="email" placeholder="أدخل بريدك الإلكتروني" class="pv-footer-email" /><button class="pv-btn" style="background:${s.buttonColor || bc}">${s.buttonText || "اشتراك"}</button></div><nav class="pv-footer-nav">${fLinks}</nav></div></div><div class="pv-footer-bottom"><span>جميع الحقوق محفوظة ${new Date().getFullYear()} ${sn}</span>${pvBadge}</div></footer>`;
+            pc += `<footer class="pv-footer"><div class="pv-footer-inner"><div class="pv-footer-logo-col">${fl}</div><div class="pv-footer-right"><p class="pv-footer-tagline">${s.tagline || "محتوى حصري يصلك مباشرة إلى بريدك"}</p><div class="pv-form-row"><input type="email" name="email" autocomplete="email" placeholder="أدخل بريدك الإلكتروني" class="pv-footer-email" /><button class="pv-btn" style="background:${s.buttonColor || bc}">${s.buttonText || "اشتراك"}</button></div><nav class="pv-footer-nav">${fLinks}</nav></div></div><div class="pv-footer-bottom"><span>جميع الحقوق محفوظة ${new Date().getFullYear()} ${sn}</span></div></footer>`;
             break;
           case "article_view":
             const sampleA = MOCK_ARTICLES[0];
@@ -1329,6 +1330,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
 .pv-footer-link:hover{opacity:1;}
 .pv-footer-bottom{border-top:1px solid rgba(255,255,255,0.15);padding:20px 0;text-align:center;font-size:12px;color:var(--pv-bg);margin-top:28px;display:flex;flex-direction:column;align-items:center;gap:12px;}
 .pv-footer-bottom > span{opacity:0.4;}
+.pv-kitabh-badge-wrap{text-align:center;padding:24px 0;background:var(--pv-bg);}
 .pv-kitabh-badge{display:inline-flex;align-items:center;gap:10px;font-size:15px;font-weight:700;direction:rtl;padding:12px 24px;border-radius:50px;text-decoration:none;transition:all .2s ease;position:relative;z-index:10;isolation:isolate;}
 .pv-kitabh-badge:hover{transform:translateY(-1px);}
 .pv-kitabh-badge svg{flex-shrink:0;width:24px;height:24px;}
@@ -1485,7 +1487,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
 }
 </style>
 </head>
-<body><div class="pv-site-wrapper" id="pv-main">${pagesHtml}</div>
+<body><div class="pv-site-wrapper" id="pv-main">${pagesHtml}</div>${activeSite.branding.showKitabhBadge !== false ? `<div class="pv-kitabh-badge-wrap"><a href="https://kitabh.com" target="_blank" rel="noopener noreferrer" class="pv-kitabh-badge pv-badge-${activeSite.branding.badgeStyle || "black"}"><svg width="24" height="24" viewBox="0 0 100 100"><path d="M25 5h20c0 11-9 20-20 20H5V5h20z"/><path d="M55 5h20v20H55c-11 0-20-9-20-20h20z"/><path d="M25 55h-20v20h20c11 0 20 9 20 20H25V55z"/><path d="M75 55v20H55c0 11 9 20 20 20h20V55H75z"/><path d="M45 25c0 16.6-13.4 30-30 30v-5c13.8 0 25-11.2 25-25h5z"/><path d="M55 75c0-16.6 13.4-30 30-30v5c-13.8 0-25 11.2-25 25h-5z"/></svg>صُمّم باستخدام كتابة</a></div>` : ''}
 <div id="pv-article-overlay" class="pv-article-overlay" style="display:none"></div>
 <script>
 (function(){
@@ -2238,12 +2240,6 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                           </div>
                           <div className="kwb-p-footer-bottom">
                             <span>جميع الحقوق محفوظة {new Date().getFullYear()} {activeSite.branding.siteName}</span>
-                            {(comp.settings.showKitabhBadge !== false) && (
-                              <a href="https://kitabh.com" target="_blank" rel="noopener noreferrer" className={`kwb-p-footer-kitabh-badge kwb-badge-${comp.settings.badgeStyle || "black"}`}>
-                                <svg width="24" height="24" viewBox="0 0 100 100"><path d="M25 5h20c0 11-9 20-20 20H5V5h20z"/><path d="M55 5h20v20H55c-11 0-20-9-20-20h20z"/><path d="M25 55h-20v20h20c11 0 20 9 20 20H25V55z"/><path d="M75 55v20H55c0 11 9 20 20 20h20V55H75z"/><path d="M45 25c0 16.6-13.4 30-30 30v-5c13.8 0 25-11.2 25-25h5z"/><path d="M55 75c0-16.6 13.4-30 30-30v5c-13.8 0-25 11.2-25 25h-5z"/></svg>
-                                صُمّم باستخدام كتابة
-                              </a>
-                            )}
                           </div>
                         </div>
                       ); break;
@@ -2692,6 +2688,15 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                     </React.Fragment>
                   );
                 })}
+                {/* Kitabh Badge — standalone element below all components */}
+                {activeSite.branding.showKitabhBadge !== false && (
+                  <div className="kwb-p-kitabh-badge-wrap">
+                    <a href="https://kitabh.com" target="_blank" rel="noopener noreferrer" className={`kwb-p-footer-kitabh-badge kwb-badge-${activeSite.branding.badgeStyle || "black"}`}>
+                      <svg width="24" height="24" viewBox="0 0 100 100"><path d="M25 5h20c0 11-9 20-20 20H5V5h20z"/><path d="M55 5h20v20H55c-11 0-20-9-20-20h20z"/><path d="M25 55h-20v20h20c11 0 20 9 20 20H25V55z"/><path d="M75 55v20H55c0 11 9 20 20 20h20V55H75z"/><path d="M45 25c0 16.6-13.4 30-30 30v-5c13.8 0 25-11.2 25-25h5z"/><path d="M55 75c0-16.6 13.4-30 30-30v5c-13.8 0-25 11.2-25 25h-5z"/></svg>
+                      صُمّم باستخدام كتابة
+                    </a>
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -2903,6 +2908,41 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                       <span style={{ fontSize: 11, color: "#999" }}>مستدير</span>
                     </div>
                   </div>
+
+                  {/* ─── Kitabh Badge ─── */}
+                  <label className="kwb-label" style={{ marginTop: 20 }}>شارة كتابة</label>
+                  <div className="kwb-newsletter-toggle" style={{ marginTop: 4 }}>
+                    <label className="kwb-toggle">
+                      <input type="checkbox" checked={activeSite.branding.showKitabhBadge !== false} onChange={e => updateSite(activeSite.id, { branding: { ...activeSite.branding, showKitabhBadge: e.target.checked } })} />
+                      <span className="kwb-toggle-track"><span className="kwb-toggle-thumb" /></span>
+                    </label>
+                    <span>إظهار شارة "صُمّم باستخدام كتابة"</span>
+                  </div>
+                  {activeSite.branding.showKitabhBadge !== false && (
+                    <>
+                      <label className="kwb-label" style={{ marginTop: 10 }}>نمط الشارة</label>
+                      <div className="kwb-badge-style-picker">
+                        <button className={`kwb-badge-style-opt ${(activeSite.branding.badgeStyle || "black") === "black" ? "kwb-badge-style-active" : ""}`} onClick={() => updateSite(activeSite.id, { branding: { ...activeSite.branding, badgeStyle: "black" } })} title="أسود">
+                          <span className="kwb-badge-preview kwb-badge-preview-black">
+                            <svg width="12" height="12" viewBox="0 0 100 100" fill="#fff"><path d="M25 5h20c0 11-9 20-20 20H5V5h20z"/><path d="M55 5h20v20H55c-11 0-20-9-20-20h20z"/><path d="M25 55h-20v20h20c11 0 20 9 20 20H25V55z"/><path d="M75 55v20H55c0 11 9 20 20 20h20V55H75z"/><path d="M45 25c0 16.6-13.4 30-30 30v-5c13.8 0 25-11.2 25-25h5z"/><path d="M55 75c0-16.6 13.4-30 30-30v5c-13.8 0-25 11.2-25 25h-5z"/></svg>
+                            <span>صُمّم باستخدام كتابة</span>
+                          </span>
+                        </button>
+                        <button className={`kwb-badge-style-opt ${activeSite.branding.badgeStyle === "blue" ? "kwb-badge-style-active" : ""}`} onClick={() => updateSite(activeSite.id, { branding: { ...activeSite.branding, badgeStyle: "blue" } })} title="أزرق">
+                          <span className="kwb-badge-preview kwb-badge-preview-blue">
+                            <svg width="12" height="12" viewBox="0 0 100 100" fill="#fff"><path d="M25 5h20c0 11-9 20-20 20H5V5h20z"/><path d="M55 5h20v20H55c-11 0-20-9-20-20h20z"/><path d="M25 55h-20v20h20c11 0 20 9 20 20H25V55z"/><path d="M75 55v20H55c0 11 9 20 20 20h20V55H75z"/><path d="M45 25c0 16.6-13.4 30-30 30v-5c13.8 0 25-11.2 25-25h5z"/><path d="M55 75c0-16.6 13.4-30 30-30v5c-13.8 0-25 11.2-25 25h-5z"/></svg>
+                            <span>صُمّم باستخدام كتابة</span>
+                          </span>
+                        </button>
+                        <button className={`kwb-badge-style-opt ${activeSite.branding.badgeStyle === "white" ? "kwb-badge-style-active" : ""}`} onClick={() => updateSite(activeSite.id, { branding: { ...activeSite.branding, badgeStyle: "white" } })} title="أبيض">
+                          <span className="kwb-badge-preview kwb-badge-preview-white">
+                            <svg width="12" height="12" viewBox="0 0 100 100" fill="#0000FF"><path d="M25 5h20c0 11-9 20-20 20H5V5h20z"/><path d="M55 5h20v20H55c-11 0-20-9-20-20h20z"/><path d="M25 55h-20v20h20c11 0 20 9 20 20H25V55z"/><path d="M75 55v20H55c0 11 9 20 20 20h20V55H75z"/><path d="M45 25c0 16.6-13.4 30-30 30v-5c13.8 0 25-11.2 25-25h5z"/><path d="M55 75c0-16.6 13.4-30 30-30v5c-13.8 0-25 11.2-25 25h-5z"/></svg>
+                            <span>صُمّم باستخدام كتابة</span>
+                          </span>
+                        </button>
+                      </div>
+                    </>
+                  )}
                 </div>
               )}
 
@@ -3321,40 +3361,6 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                                   </div>
                                 ))}
                                 <button className="kwb-btn-outline kwb-btn-full" style={{ marginTop: 6 }} onClick={() => updateComponentSettings(comp.id, { customLinks: [...(comp.settings.customLinks || []), { label: "", url: "" }] })}>+ إضافة رابط</button>
-
-                                <div className="kwb-newsletter-toggle" style={{ marginTop: 12 }}>
-                                  <label className="kwb-toggle">
-                                    <input type="checkbox" checked={comp.settings.showKitabhBadge !== false} onChange={e => updateComponentSettings(comp.id, { showKitabhBadge: e.target.checked })} />
-                                    <span className="kwb-toggle-track"><span className="kwb-toggle-thumb" /></span>
-                                  </label>
-                                  <span>إظهار شارة "صُمّم باستخدام كتابة"</span>
-                                </div>
-
-                                {comp.settings.showKitabhBadge !== false && (
-                                  <>
-                                    <label className="kwb-label" style={{ marginTop: 12 }}>نمط الشارة</label>
-                                    <div className="kwb-badge-style-picker">
-                                      <button className={`kwb-badge-style-opt ${(comp.settings.badgeStyle || "black") === "black" ? "kwb-badge-style-active" : ""}`} onClick={() => updateComponentSettings(comp.id, { badgeStyle: "black" })} title="أسود">
-                                        <span className="kwb-badge-preview kwb-badge-preview-black">
-                                          <svg width="12" height="12" viewBox="0 0 100 100" fill="#fff"><path d="M25 5h20c0 11-9 20-20 20H5V5h20z"/><path d="M55 5h20v20H55c-11 0-20-9-20-20h20z"/><path d="M25 55h-20v20h20c11 0 20 9 20 20H25V55z"/><path d="M75 55v20H55c0 11 9 20 20 20h20V55H75z"/><path d="M45 25c0 16.6-13.4 30-30 30v-5c13.8 0 25-11.2 25-25h5z"/><path d="M55 75c0-16.6 13.4-30 30-30v5c-13.8 0-25 11.2-25 25h-5z"/></svg>
-                                          <span>صُمّم باستخدام كتابة</span>
-                                        </span>
-                                      </button>
-                                      <button className={`kwb-badge-style-opt ${comp.settings.badgeStyle === "blue" ? "kwb-badge-style-active" : ""}`} onClick={() => updateComponentSettings(comp.id, { badgeStyle: "blue" })} title="أزرق">
-                                        <span className="kwb-badge-preview kwb-badge-preview-blue">
-                                          <svg width="12" height="12" viewBox="0 0 100 100" fill="#fff"><path d="M25 5h20c0 11-9 20-20 20H5V5h20z"/><path d="M55 5h20v20H55c-11 0-20-9-20-20h20z"/><path d="M25 55h-20v20h20c11 0 20 9 20 20H25V55z"/><path d="M75 55v20H55c0 11 9 20 20 20h20V55H75z"/><path d="M45 25c0 16.6-13.4 30-30 30v-5c13.8 0 25-11.2 25-25h5z"/><path d="M55 75c0-16.6 13.4-30 30-30v5c-13.8 0-25 11.2-25 25h-5z"/></svg>
-                                          <span>صُمّم باستخدام كتابة</span>
-                                        </span>
-                                      </button>
-                                      <button className={`kwb-badge-style-opt ${comp.settings.badgeStyle === "white" ? "kwb-badge-style-active" : ""}`} onClick={() => updateComponentSettings(comp.id, { badgeStyle: "white" })} title="أبيض">
-                                        <span className="kwb-badge-preview kwb-badge-preview-white">
-                                          <svg width="12" height="12" viewBox="0 0 100 100" fill="#0000FF"><path d="M25 5h20c0 11-9 20-20 20H5V5h20z"/><path d="M55 5h20v20H55c-11 0-20-9-20-20h20z"/><path d="M25 55h-20v20h20c11 0 20 9 20 20H25V55z"/><path d="M75 55v20H55c0 11 9 20 20 20h20V55H75z"/><path d="M45 25c0 16.6-13.4 30-30 30v-5c13.8 0 25-11.2 25-25h5z"/><path d="M55 75c0-16.6 13.4-30 30-30v5c-13.8 0-25 11.2-25 25h-5z"/></svg>
-                                          <span>صُمّم باستخدام كتابة</span>
-                                        </span>
-                                      </button>
-                                    </div>
-                                  </>
-                                )}
 
                                 <p className="kwb-hint" style={{ marginTop: 12 }}>الروابط الأساسية متصلة بروابط رأس الصفحة تلقائيًا. عدّل الروابط من إعدادات رأس الصفحة.</p>
                               </>
@@ -4771,6 +4777,7 @@ const CSS_STYLES = `
 .kwb-p-footer-custom-text{font-size:12px;color:var(--kwb-bg,#fff);opacity:0.5;margin:8px 0 0;line-height:1.6;}
 .kwb-p-footer-bottom{border-top:1px solid rgba(255,255,255,0.15);padding:20px 0;text-align:center;font-size:11px;color:var(--kwb-bg,#fff);display:flex;flex-direction:column;align-items:center;gap:12px;}
 .kwb-p-footer-bottom > span{opacity:0.4;}
+.kwb-p-kitabh-badge-wrap{text-align:center;padding:24px 0;background:var(--kwb-bg,#fff);}
 .kwb-p-footer-kitabh-badge{display:inline-flex;align-items:center;gap:10px;font-size:15px;font-weight:700;direction:rtl;padding:12px 24px;border-radius:50px;text-decoration:none;transition:all .2s ease;cursor:pointer;letter-spacing:0.3px;opacity:1 !important;position:relative;z-index:10;isolation:isolate;}
 .kwb-p-footer-kitabh-badge:hover{transform:translateY(-1px);}
 .kwb-p-footer-kitabh-badge svg{flex-shrink:0;width:24px;height:24px;}
