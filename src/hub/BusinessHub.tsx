@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, lazy, Suspense } from 'react';
 import HubLayout from './HubLayout';
 import DashboardPage from './DashboardPage';
 import PostsPage from './PostsPage';
@@ -7,9 +7,24 @@ import GrowPage from './GrowPage';
 import WebsitePage from './WebsitePage';
 import MembersPage from './MembersPage';
 import SettingsPage from './SettingsPage';
-import AnalyzePage from './AnalyzePage';
+import AudiencePage from './AudiencePage';
+import { MOCK_NEWSLETTER } from '../mockData';
 import { colors } from './HubLayout';
 import type { Page } from './HubLayout';
+
+// Lazy-load the actual tool components
+const KitabhOutline = lazy(() => import('../tools/KitabhOutline'));
+const KitabhChecker = lazy(() => import('../tools/KitabhChecker'));
+const KitabhSocial = lazy(() => import('../tools/KitabhSocial'));
+
+// Loading spinner for lazy components
+const ToolLoader: React.FC = () => (
+  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '80px 0' }}>
+    <div style={{ fontSize: 14, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>
+      جارٍ التحميل...
+    </div>
+  </div>
+);
 
 // Coming soon placeholder
 const ComingSoonPage: React.FC<{ title: string; description: string }> = ({ title, description }) => (
@@ -60,25 +75,26 @@ const BusinessHub: React.FC = () => {
       case 'dashboard':
         return <DashboardPage />;
       case 'posts':
-        if (activeSubPage === 'newsletter-stats') {
-          return <AnalyzePage subPage="newsletter-stats" />;
+        if (activeSubPage === 'outline') {
+          return <Suspense fallback={<ToolLoader />}><KitabhOutline premium /></Suspense>;
+        }
+        if (activeSubPage === 'checker') {
+          return <Suspense fallback={<ToolLoader />}><KitabhChecker /></Suspense>;
         }
         return <PostsPage subPage={activeSubPage} />;
       case 'notifications':
         return <NotificationsPage />;
       case 'grow':
+        if (activeSubPage === 'social') {
+          return <Suspense fallback={<ToolLoader />}><KitabhSocial premium /></Suspense>;
+        }
         return <GrowPage subPage={activeSubPage} />;
       case 'website':
         return <WebsitePage />;
-      case 'members':
+      case 'writers':
         return <MembersPage />;
       case 'subscribers':
-        return (
-          <ComingSoonPage
-            title="المشتركون"
-            description="قريبا ستتمكن من إدارة مشتركيك، عرض تفاصيلهم، تصديرهم، وتصنيفهم حسب مستوى التفاعل"
-          />
-        );
+        return <AudiencePage />;
       case 'email-journeys':
         return (
           <ComingSoonPage
@@ -94,7 +110,7 @@ const BusinessHub: React.FC = () => {
   };
 
   return (
-    <HubLayout activePage={activePage} activeSubPage={activeSubPage} onNavigate={handleNavigate}>
+    <HubLayout activePage={activePage} activeSubPage={activeSubPage} onNavigate={handleNavigate} displayName={MOCK_NEWSLETTER.displayName}>
       {renderPage()}
     </HubLayout>
   );

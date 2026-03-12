@@ -424,8 +424,6 @@ const ArticlesList: React.FC<{ defaultFilter?: FilterStatus }> = ({ defaultFilte
 
 // ─── Posts Page Router ───────────────────────────────────
 const PostsPage: React.FC<PostsPageProps> = ({ subPage = 'all-posts' }) => {
-  if (subPage === 'outline') return <OutlineCreator />;
-  if (subPage === 'drafts') return <ArticlesList defaultFilter="draft" />;
   return <ArticlesList />;
 };
 

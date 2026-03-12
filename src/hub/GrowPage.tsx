@@ -130,36 +130,90 @@ const CarouselSection: React.FC = () => (
   </div>
 );
 
-// ─── Magic Link Section (Coming Soon) ───────────────────
-const MagicLinkComingSoon: React.FC = () => (
-  <div style={{ maxWidth: 600, margin: '80px auto', textAlign: 'center' }}>
-    <div style={{
-      width: 64, height: 64, borderRadius: 16, background: '#F3F4F6',
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      margin: '0 auto 20px',
-    }}>
-      {icons.magicLink}
-    </div>
-    <h2 style={{ fontSize: 20, fontWeight: 700, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 8px' }}>
-      نماذج الاشتراك
+// ─── Magic Link Section ─────────────────────────────────
+const MagicLinkSection: React.FC = () => (
+  <div>
+    <h2 style={{ fontSize: 18, fontWeight: 700, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 8px' }}>
+      رابط سحري
     </h2>
-    <p style={{ fontSize: 14, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 24px', lineHeight: 1.7 }}>
-      قريبا ستتمكن من إنشاء نماذج اشتراك مخصصة وروابط سريعة لمشاركتها في أي مكان
+    <p style={{ fontSize: 14, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 24px' }}>
+      أنشئ روابط اشتراك سريعة لمشاركتها في أي مكان — بايو إنستغرام، تويتر، يوتيوب، أو أي منصة أخرى
     </p>
-    <span
-      style={{
-        display: 'inline-block',
-        padding: '6px 16px',
-        background: '#F3F4F6',
-        borderRadius: 8,
-        fontSize: 13,
-        fontWeight: 600,
-        fontFamily: 'IBM Plex Sans Arabic, sans-serif',
-        color: '#9CA3AF',
-      }}
-    >
-      قريبا
-    </span>
+
+    <div style={{ background: '#fff', borderRadius: 12, border: '1px solid #E5E7EB', padding: 24, marginBottom: 20 }}>
+      <div style={{ marginBottom: 20 }}>
+        <label style={{ display: 'block', fontSize: 14, fontWeight: 600, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', marginBottom: 8 }}>
+          رابط الاشتراك الخاص بك
+        </label>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <input
+            type="text"
+            readOnly
+            value="kitabh.com/subscribe/mohdaldhabaa"
+            style={{
+              flex: 1,
+              padding: '12px 16px',
+              border: '1px solid #E5E7EB',
+              borderRadius: 8,
+              fontSize: 14,
+              fontFamily: 'monospace',
+              color: colors.text,
+              background: '#FAFAFA',
+              direction: 'ltr',
+              outline: 'none',
+              boxSizing: 'border-box',
+            }}
+          />
+          <button
+            style={{
+              padding: '12px 20px',
+              background: '#111',
+              color: '#fff',
+              border: 'none',
+              borderRadius: 8,
+              fontSize: 14,
+              fontWeight: 600,
+              fontFamily: 'IBM Plex Sans Arabic, sans-serif',
+              cursor: 'pointer',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            نسخ الرابط
+          </button>
+        </div>
+      </div>
+
+      <div style={{ marginBottom: 20 }}>
+        <label style={{ display: 'block', fontSize: 14, fontWeight: 600, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', marginBottom: 8 }}>
+          نموذج اشتراك مضمّن
+        </label>
+        <div style={{ padding: '16px', background: '#F9FAFB', borderRadius: 8, border: '1px solid #E5E7EB' }}>
+          <code style={{ fontSize: 12, fontFamily: 'monospace', color: colors.textMuted, direction: 'ltr', display: 'block', textAlign: 'left' }}>
+            {'<iframe src="kitabh.com/embed/subscribe/mohdaldhabaa" />'}
+          </code>
+        </div>
+      </div>
+
+      <button
+        style={{
+          padding: '12px 24px',
+          background: '#111',
+          color: '#fff',
+          border: 'none',
+          borderRadius: 8,
+          fontSize: 14,
+          fontWeight: 600,
+          fontFamily: 'IBM Plex Sans Arabic, sans-serif',
+          cursor: 'pointer',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 8,
+        }}
+      >
+        {icons.magicLink}
+        إنشاء رابط جديد
+      </button>
+    </div>
   </div>
 );
 
@@ -167,7 +221,7 @@ const MagicLinkComingSoon: React.FC = () => (
 const GrowPage: React.FC<GrowPageProps> = ({ subPage = 'carousel' }) => (
   <div style={{ maxWidth: 900, margin: '0 auto' }}>
     {subPage === 'carousel' && <CarouselSection />}
-    {subPage === 'magic-link' && <MagicLinkComingSoon />}
+    {subPage === 'magic-link' && <MagicLinkSection />}
   </div>
 );
 

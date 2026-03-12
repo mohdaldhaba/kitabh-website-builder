@@ -95,7 +95,7 @@ const icons = {
 };
 
 // ─── Types ───────────────────────────────────────────────
-type Page = 'dashboard' | 'posts' | 'notifications' | 'grow' | 'website' | 'members' | 'subscribers' | 'email-journeys' | 'settings';
+type Page = 'dashboard' | 'posts' | 'notifications' | 'grow' | 'website' | 'writers' | 'subscribers' | 'email-journeys' | 'settings';
 
 interface SubItem {
   id: string;
@@ -116,6 +116,7 @@ interface HubLayoutProps {
   activePage: Page;
   activeSubPage?: string;
   onNavigate: (page: Page, subPage?: string) => void;
+  displayName?: string;
 }
 
 const navItems: NavItem[] = [
@@ -126,9 +127,8 @@ const navItems: NavItem[] = [
     icon: icons.posts,
     subItems: [
       { id: 'all-posts', label: 'كل المنشورات' },
-      { id: 'drafts', label: 'المسودات' },
-      { id: 'outline', label: 'إنشاء مخطط' },
-      { id: 'newsletter-stats', label: 'إحصائيات النشرة' },
+      { id: 'outline', label: 'مخطط المقال' },
+      { id: 'checker', label: 'فحص المقال' },
     ],
   },
   { id: 'notifications', label: 'الإشعارات', icon: icons.notification },
@@ -138,12 +138,13 @@ const navItems: NavItem[] = [
     icon: icons.grow,
     subItems: [
       { id: 'carousel', label: 'مولّد الكاروسيل' },
-      { id: 'magic-link', label: 'نماذج الاشتراك', comingSoon: true },
+      { id: 'social', label: 'محوّل اجتماعي' },
+      { id: 'magic-link', label: 'رابط سحري' },
     ],
   },
-  { id: 'website', label: 'الموقع', icon: icons.website },
-  { id: 'members', label: 'الأعضاء', icon: icons.members },
-  { id: 'subscribers', label: 'المشتركون', icon: icons.audience, comingSoon: true },
+  { id: 'website', label: 'المواقع', icon: icons.website },
+  { id: 'writers', label: 'كتّابك', icon: icons.members },
+  { id: 'subscribers', label: 'المشتركين', icon: icons.audience },
   { id: 'email-journeys', label: 'رحلات البريد', icon: icons.emailJourney, comingSoon: true },
 ];
 
@@ -172,14 +173,14 @@ const pageTitles: Record<Page, string> = {
   posts: 'المحتوى',
   notifications: 'الإشعارات',
   grow: 'النمو',
-  website: 'الموقع',
-  members: 'الأعضاء',
-  subscribers: 'المشتركون',
+  website: 'المواقع',
+  writers: 'كتّابك',
+  subscribers: 'المشتركين',
   'email-journeys': 'رحلات البريد',
   settings: 'الإعدادات',
 };
 
-const HubLayout: React.FC<HubLayoutProps> = ({ children, activePage, activeSubPage, onNavigate }) => {
+const HubLayout: React.FC<HubLayoutProps> = ({ children, activePage, activeSubPage, onNavigate, displayName }) => {
   const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set(['posts']));
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -229,10 +230,10 @@ const HubLayout: React.FC<HubLayoutProps> = ({ children, activePage, activeSubPa
               fontFamily: 'IBM Plex Sans Arabic, sans-serif',
             }}
           >
-            ك
+            {(displayName || 'ك').charAt(0)}
           </div>
           <span style={{ fontWeight: 600, fontSize: 14, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>
-            نشرة رسالة السبت
+            {displayName || 'نشرتي'}
           </span>
         </div>
         <button
