@@ -8,6 +8,7 @@ import WebsitePage from './WebsitePage';
 import MembersPage from './MembersPage';
 import SettingsPage from './SettingsPage';
 import AudiencePage from './AudiencePage';
+import NewslettersPage from './NewslettersPage';
 import { MOCK_NEWSLETTER } from '../mockData';
 import { colors } from './HubLayout';
 import type { Page } from './HubLayout';
@@ -82,6 +83,8 @@ const BusinessHub: React.FC = () => {
           return <Suspense fallback={<ToolLoader />}><KitabhChecker /></Suspense>;
         }
         return <PostsPage subPage={activeSubPage} />;
+      case 'newsletters':
+        return <NewslettersPage />;
       case 'notifications':
         return <NotificationsPage />;
       case 'grow':

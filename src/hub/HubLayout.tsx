@@ -95,7 +95,7 @@ const icons = {
 };
 
 // ─── Types ───────────────────────────────────────────────
-type Page = 'dashboard' | 'posts' | 'notifications' | 'grow' | 'website' | 'writers' | 'subscribers' | 'email-journeys' | 'settings';
+type Page = 'dashboard' | 'posts' | 'newsletters' | 'notifications' | 'grow' | 'website' | 'writers' | 'subscribers' | 'email-journeys' | 'settings';
 
 interface SubItem {
   id: string;
@@ -131,6 +131,7 @@ const navItems: NavItem[] = [
       { id: 'checker', label: 'فحص المقال' },
     ],
   },
+  { id: 'newsletters', label: 'النشرات', icon: icons.emailJourney },
   { id: 'notifications', label: 'الإشعارات', icon: icons.notification },
   {
     id: 'grow',
@@ -171,6 +172,7 @@ const colors = {
 const pageTitles: Record<Page, string> = {
   dashboard: 'لوحة التحكم',
   posts: 'المحتوى',
+  newsletters: 'النشرات',
   notifications: 'الإشعارات',
   grow: 'النمو',
   website: 'المواقع',
