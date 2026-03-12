@@ -1113,9 +1113,9 @@ export default function KitabhChecker() {
   const [history, setHistory] = useState<{title:string;tool:string;date:number;score:number;result:any}[]>(()=>{
     try{const h=localStorage.getItem("kb_checker_history");return h?JSON.parse(h):[]}catch(_){return[]}
   })
-  const saveToHistory = useCallback((r:any, t:string) => {
-    const title = r.title || r.pillars?.[0]?.feedback?.slice(0,40) || "تحليل بدون عنوان"
-    const score = r.confidence || r.score || 0
+  const saveToHistory = useCallback((r:any, t:string, userText?:string) => {
+    const title = (userText || "").trim().split("\n")[0]?.slice(0, 80) || r.title || r.pillars?.[0]?.feedback?.slice(0,40) || "تحليل بدون عنوان"
+    const score = parseFloat(r.overall_score) || r.confidence || r.score || 0
     const entry = {title, tool:t, date:Date.now(), score, result:r}
     setHistory(prev => {
       const next = [entry, ...prev].slice(0, 20)
@@ -1251,7 +1251,7 @@ export default function KitabhChecker() {
       const data   = normalizePillars(await callAPI(text, prompt), tool)
       if(!isPremium){recordCheck();setRemaining(checksRemaining())}
       if((window as any).fbq) (window as any).fbq('track','AnalyzeArticle')
-      saveToHistory(data, tool)
+      saveToHistory(data, tool, text)
       setResult(data); setPhase("results")
     } catch(err: any) { setPhase("input"); alert("خطأ: " + err.message) }
   }, [text, tool, canGo])
@@ -1904,7 +1904,7 @@ export default function KitabhChecker() {
                         <span className="kb-history-date">{dateStr}</span>
                       </div>
                       <div className="kb-history-item-title">{entry.title}</div>
-                      {entry.score > 0 && <div className="kb-history-item-score">النتيجة: {entry.score}%</div>}
+                      {entry.score > 0 && <div className="kb-history-item-score">{entry.score <= 10 ? `${entry.score}/10` : `${entry.score}%`}</div>}
                     </button>
                   )
                 })}
