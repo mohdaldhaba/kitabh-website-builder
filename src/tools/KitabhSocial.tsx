@@ -1233,7 +1233,7 @@ export default function KitabhSocial({premium:premiumProp=false}:{premium?:boole
   },[text,autoDetected])
 
   const wc = text.trim()?text.trim().split(/\s+/).length:0
-  const canGo = wc>=50&&selected.size>0
+  const canGo = text.trim().length>0&&selected.size>0
 
   useEffect(()=>{if(phase==="loading"){setStepIdx(0);timerRef.current=setInterval(()=>setStepIdx(i=>i<LOADING_STEPS.length-1?i+1:i),2500)}else clearInterval(timerRef.current);return()=>clearInterval(timerRef.current)},[phase])
 
