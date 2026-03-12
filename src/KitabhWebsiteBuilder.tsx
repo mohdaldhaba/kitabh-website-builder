@@ -1113,7 +1113,7 @@ export default function KitabhWebsiteBuilder(props: any) {
             const heroImg = (a: any) => a.imageUrl ? `<img src="${a.imageUrl}" alt="${a.title}" style="width:100%;height:200px;object-fit:cover;display:block;border-radius:var(--pv-radius)"/>` : `<div class="pv-img" style="height:200px"></div>`;
             const sideR = sa.slice(0, 2).map((a: any) => `<div class="pv-hero-side-card" data-article-id="${a.id}" style="cursor:pointer">${heroImg(a)}<h4>${a.title.slice(0, 60)}...</h4><div class="pv-author-row"><div class="pv-avatar">${a.author.charAt(0)}</div><span class="pv-author-name">${a.author}</span></div><div class="pv-meta-row"><span class="pv-date">${a.date}</span><span class="pv-eng"><span style="color:var(--pv-btn)">❤ ${a.likes}</span><span>💬 ${a.comments}</span></span></div></div>`).join("");
             const sideL = sa.slice(2, 4).map((a: any) => `<div class="pv-hero-side-card" data-article-id="${a.id}" style="cursor:pointer">${heroImg(a)}<h4>${a.title.slice(0, 60)}...</h4><div class="pv-author-row"><div class="pv-avatar">${a.author.charAt(0)}</div><span class="pv-author-name">${a.author}</span></div><div class="pv-meta-row"><span class="pv-date">${a.date}</span><span class="pv-eng"><span style="color:var(--pv-btn)">❤ ${a.likes}</span><span>💬 ${a.comments}</span></span></div></div>`).join("");
-            const mainImg = ma?.imageUrl ? `<img src="${ma.imageUrl}" alt="${ma.title}" style="width:100%;height:260px;min-height:260px;object-fit:cover;display:block;border-radius:var(--pv-radius)"/>` : `<div class="pv-img" style="height:260px;min-height:260px"></div>`;
+            const mainImg = ma?.imageUrl ? `<img src="${ma.imageUrl}" alt="${ma.title}" style="width:100%;height:520px;min-height:520px;object-fit:cover;display:block;border-radius:var(--pv-radius)"/>` : `<div class="pv-img" style="height:520px;min-height:520px"></div>`;
             const mainH = ma ? `<div class="pv-hero-main" data-article-id="${ma.id}" style="cursor:pointer">${mainImg}<h2>${ma.title}</h2><p class="pv-excerpt">${ma.excerpt}</p><div class="pv-meta-row"><div class="pv-author-row"><div class="pv-avatar">${ma.author.charAt(0)}</div><span class="pv-author-name">${ma.author}</span><span class="pv-date" style="margin-inline-start:8px">${ma.date}</span></div><span class="pv-eng">💬 ${ma.comments} <span style="color:var(--pv-btn)">❤ ${ma.likes}</span></span></div></div>` : "";
             pc += `<div class="pv-hero-grid"><div class="pv-hero-side pv-hero-side-r">${sideR}</div>${mainH}<div class="pv-hero-side pv-hero-side-l">${sideL}</div></div>`;
             break;
@@ -4204,7 +4204,7 @@ const CSS_STYLES = `
 .kwb-p-hero-side-card h4{font-size:14px;font-weight:700;margin:0;line-height:1.5;color:var(--kwb-headline-color,#1a1a1a);}
 .kwb-p-hero-date{font-size:10px;color:var(--kwb-text-color,#999);opacity:0.7;}
 .kwb-p-hero-main{background:var(--kwb-card-bg,#fff);padding:16px;display:flex;flex-direction:column;gap:8px;}
-.kwb-p-hero-main-img{width:100%;height:100%;min-height:200px;object-fit:cover;display:block;}
+.kwb-p-hero-main-img{width:100%;height:100%;min-height:400px;object-fit:cover;display:block;}
 .kwb-p-hero-main-title{font-size:24px;font-weight:800;margin:0;line-height:1.5;color:var(--kwb-headline-color,#1a1a1a);}
 .kwb-p-hero-main-excerpt{font-size:15px;color:var(--kwb-text-color,#666);margin:0;line-height:1.7;}
 .kwb-p-hero-meta{display:flex;justify-content:space-between;font-size:10px;color:var(--kwb-text-color,#999);opacity:0.7;}
