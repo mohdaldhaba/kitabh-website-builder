@@ -465,7 +465,7 @@ const CSS = `
 .kb-exp-png:not(:disabled):hover{border-color:#EC4899;background:#FDF0F7;color:#EC4899;}
 .kb-exp-pdf:not(:disabled):hover{border-color:#0000FF;background:#EBEBFF;color:#0000FF;}
 /* PDF hidden report */
-.kb-pdf-root{position:absolute;left:-9999px;top:0;width:794px;font-family:'IBM Plex Sans Arabic',sans-serif;direction:rtl;background:#fff;color:#371D12;font-size:13px;line-height:1.7;}
+.kb-pdf-root{position:fixed;left:-9999px;top:0;width:794px;font-family:'IBM Plex Sans Arabic',sans-serif;direction:rtl;background:#fff;color:#371D12;font-size:13px;line-height:1.7;visibility:hidden;pointer-events:none;}
 
 /* ── Shapes (results - larger, swipeable) ── */
 .kb-shapes{display:flex;gap:10px;overflow-x:auto;padding:4px 0 8px;-webkit-overflow-scrolling:touch;scrollbar-width:none;cursor:grab;}
@@ -1739,7 +1739,7 @@ export default function KitabhChecker() {
 
   // ── JSX ───────────────────────────────────────────────
   return (
-    <div className="kb" style={{width:"100%",alignSelf:"stretch",display:"block"}}>
+    <div className="kb" style={{width:"100%",maxWidth:"100vw",alignSelf:"stretch",display:"block",overflowX:"hidden"}}>
       <style>{CSS}</style>
 
       {/* PILLAR MODAL */}
