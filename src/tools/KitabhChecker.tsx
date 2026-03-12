@@ -112,10 +112,10 @@ const ARTICLE_PROMPTS: Record<string,string> = {
 اللغة الرفيعة ليست عيباً - اقرأ هذا بعناية:
 الكاتب هو من يحدد جمهوره، لا أنت. لا تفترض أبداً أن الجمهور المستهدف هو القارئ العام أو مستخدم وسائل التواصل. المصطلحات التخصصية والمفردات الرفيعة واللغة الأكاديمية أو الفلسفية هي سمة احترافية في الكتابة العربية - لا تقل أبداً "بسّط المصطلحات" أو "اشرح المفاهيم للقارئ العام" أو "استخدم لغة أبسط". إذا كانت اللغة دقيقة ومحكمة فهذا إتقان يُمدح. جزالة الأسلوب ورصانة المفردات وعلوّ التعبير فضائل راسخة في التراث الكتابي العربي - قيّمها كذلك.
 
-معايير التقييم: 1-5.4 يحتاج تطوير عميق، 5.5-6.9 جيد، 7-7.9 جيد جداً، 8-8.9 ممتاز، 9-10 استثنائي. قيّم النص لا الكاتب. معظم النصوص تقع بين 4 و6.5. لا تعطِ 7+ إلا إذا كان المطلع قوياً والصوت مميزاً.
+معايير التقييم: 1-5.4 يحتاج تطوير عميق، 5.5-6.9 جيد، 7-7.9 جيّد جدًا، 8-8.9 ممتاز، 9-10 استثنائي. قيّم النص لا الكاتب. معظم النصوص تقع بين 4 و6.5. لا تعطِ 7+ إلا إذا كان المطلع قوياً والصوت مميزاً.
 اقتبس من النص في كل ملاحظة. لا تستخدم " استخدم « ».
 أعِد JSON فقط ثم GRAMMAR_START...GRAMMAR_END.
-{"overall_score":<1-10>,"overall_label":"ممتاز|جيد جداً|جيد|يحتاج تطوير","overall_summary":"<3-4 جمل>","categories":[{"id":"title","name":"العنوان والمطلع","score":<1-10>,"feedback":"<3-4 جمل>"},{"id":"format","name":"القالب والقارئ","score":<1-10>,"feedback":"<3-4 جمل>"},{"id":"story","name":"التجربة والمعرفة","score":<1-10>,"feedback":"<3-4 جمل>"},{"id":"message","name":"المغزى والرسالة","score":<1-10>,"feedback":"<3-4 جمل>"},{"id":"voice","name":"الصوت والأسلوب","score":<1-10>,"feedback":"<3-4 جمل>"}],"strengths":["<1>","<2>","<3>"],"improvements":["<1>","<2>","<3>"],"highlight_quote":"<جملة حرفية>","highlight_feedback":"<3-4 جمل>","pillars":[{"id":"1","name":"العنوان","score":<1-10>,"feedback":"<جملة واحدة فقط: لماذا هذه الدرجة وكيف تحسّنها>"},{"id":"2","name":"القالب","score":<1-10>,"feedback":"<جملة واحدة>"},{"id":"3","name":"الموضوع","score":<1-10>,"feedback":"<جملة واحدة>"},{"id":"4","name":"القارئ","score":<1-10>,"feedback":"<جملة واحدة>"},{"id":"5","name":"التجربة","score":<1-10>,"feedback":"<جملة واحدة>"},{"id":"6","name":"المعرفة","score":<1-10>,"feedback":"<جملة واحدة>"},{"id":"7","name":"المغزى","score":<1-10>,"feedback":"<جملة واحدة>"},{"id":"8","name":"الأسلوب","score":<1-10>,"feedback":"<جملة واحدة>"},{"id":"9","name":"الوسيلة","score":<1-10>,"feedback":"<جملة واحدة>"},{"id":"10","name":"الصوت","score":<1-10>,"feedback":"<جملة واحدة>"}],"rewrite":{"original":"<جملة من النص>","improved":"<نسخة محسّنة>","explanation":"<2-3 جمل>"},"next_focus":{"skill":"<المهارة>","tip":"<2-3 جمل>"}}
+{"overall_score":<1-10>,"overall_label":"ممتاز|جيّد جدًا|جيد|يحتاج تطوير","overall_summary":"<3-4 جمل>","categories":[{"id":"title","name":"العنوان والمطلع","score":<1-10>,"feedback":"<3-4 جمل>"},{"id":"format","name":"القالب والقارئ","score":<1-10>,"feedback":"<3-4 جمل>"},{"id":"story","name":"التجربة والمعرفة","score":<1-10>,"feedback":"<3-4 جمل>"},{"id":"message","name":"المغزى والرسالة","score":<1-10>,"feedback":"<3-4 جمل>"},{"id":"voice","name":"الصوت والأسلوب","score":<1-10>,"feedback":"<3-4 جمل>"}],"strengths":["<1>","<2>","<3>"],"improvements":["<1>","<2>","<3>"],"highlight_quote":"<جملة حرفية>","highlight_feedback":"<3-4 جمل>","pillars":[{"id":"1","name":"العنوان","score":<1-10>,"feedback":"<جملة واحدة فقط: لماذا هذه الدرجة وكيف تحسّنها>"},{"id":"2","name":"القالب","score":<1-10>,"feedback":"<جملة واحدة>"},{"id":"3","name":"الموضوع","score":<1-10>,"feedback":"<جملة واحدة>"},{"id":"4","name":"القارئ","score":<1-10>,"feedback":"<جملة واحدة>"},{"id":"5","name":"التجربة","score":<1-10>,"feedback":"<جملة واحدة>"},{"id":"6","name":"المعرفة","score":<1-10>,"feedback":"<جملة واحدة>"},{"id":"7","name":"المغزى","score":<1-10>,"feedback":"<جملة واحدة>"},{"id":"8","name":"الأسلوب","score":<1-10>,"feedback":"<جملة واحدة>"},{"id":"9","name":"الوسيلة","score":<1-10>,"feedback":"<جملة واحدة>"},{"id":"10","name":"الصوت","score":<1-10>,"feedback":"<جملة واحدة>"}],"rewrite":{"original":"<جملة من النص>","improved":"<نسخة محسّنة>","explanation":"<2-3 جمل>"},"next_focus":{"skill":"<المهارة>","tip":"<2-3 جمل>"}}
 GRAMMAR_START
 خطأ: [الكلمة الخاطئة] | صحيح: [الصواب] | نوع: [همزة قطع|همزة وصل|تاء مربوطة|تنوين|إعراب|مطابقة|صرف|إملاء] | قاعدة: [اشرح القاعدة النحوية أو الصرفية في جملة واحدة واضحة] | جملة: [الجملة كاملة من النص]
 GRAMMAR_END`,
@@ -129,7 +129,7 @@ GRAMMAR_END`,
 الكاتب يختار جمهوره بوعي - لا تفترض أن القارئ المستهدف هو العامة. المفردات الرفيعة والتراكيب البلاغية العالية والإحالات الأدبية والفلسفية هي أدوات الكاتب المتمكن. لا تقل "بسّط لغتك" أو "اشرح مصطلحاتك" - بل قيّم مدى دقة توظيف اللغة وجماله. جزالة الأسلوب وفخامة التعبير هي معايير جودة في الكتابة العربية الرفيعة.
 
 معايير التقييم أكثر سخاءً من المقالة. لا تستخدم " استخدم « ».
-{"overall_score":<1-10>,"overall_label":"ممتاز|جيد جداً|جيد|يحتاج تطوير","overall_summary":"<3-4 جمل>","categories":[{"id":"voice","name":"الصوت والأصالة","score":<1-10>,"feedback":"<3-4 جمل>"},{"id":"imagery","name":"الصورة والإيقاع","score":<1-10>,"feedback":"<3-4 جمل>"},{"id":"experience","name":"التجربة والعمق","score":<1-10>,"feedback":"<3-4 جمل>"},{"id":"density","name":"الكثافة والتكثيف","score":<1-10>,"feedback":"<3-4 جمل>"},{"id":"impact","name":"الأثر العاطفي","score":<1-10>,"feedback":"<3-4 جمل>"}],"strengths":["<1>","<2>","<3>"],"improvements":["<1>","<2>","<3>"],"highlight_quote":"<جملة>","highlight_feedback":"<3-4 جمل>","pillars":[{"id":"1","name":"الصوت","score":<1-10>,"feedback":"<جملة واحدة فقط: لماذا هذه الدرجة وكيف تحسّنها>"},{"id":"2","name":"الأصالة","score":<1-10>,"feedback":"<جملة واحدة>"},{"id":"3","name":"الصورة","score":<1-10>,"feedback":"<جملة واحدة>"},{"id":"4","name":"الإيقاع","score":<1-10>,"feedback":"<جملة واحدة>"},{"id":"5","name":"التجربة","score":<1-10>,"feedback":"<جملة واحدة>"},{"id":"6","name":"العمق","score":<1-10>,"feedback":"<جملة واحدة>"},{"id":"7","name":"الكثافة","score":<1-10>,"feedback":"<جملة واحدة>"},{"id":"8","name":"العاطفة","score":<1-10>,"feedback":"<جملة واحدة>"},{"id":"9","name":"البنية","score":<1-10>,"feedback":"<جملة واحدة>"},{"id":"10","name":"الأثر","score":<1-10>,"feedback":"<جملة واحدة>"}],"rewrite":{"original":"<جملة>","improved":"<نسخة أقوى>","explanation":"<2-3 جمل>"},"next_focus":{"skill":"<مهارة>","tip":"<2-3 جمل>"}}
+{"overall_score":<1-10>,"overall_label":"ممتاز|جيّد جدًا|جيد|يحتاج تطوير","overall_summary":"<3-4 جمل>","categories":[{"id":"voice","name":"الصوت والأصالة","score":<1-10>,"feedback":"<3-4 جمل>"},{"id":"imagery","name":"الصورة والإيقاع","score":<1-10>,"feedback":"<3-4 جمل>"},{"id":"experience","name":"التجربة والعمق","score":<1-10>,"feedback":"<3-4 جمل>"},{"id":"density","name":"الكثافة والتكثيف","score":<1-10>,"feedback":"<3-4 جمل>"},{"id":"impact","name":"الأثر العاطفي","score":<1-10>,"feedback":"<3-4 جمل>"}],"strengths":["<1>","<2>","<3>"],"improvements":["<1>","<2>","<3>"],"highlight_quote":"<جملة>","highlight_feedback":"<3-4 جمل>","pillars":[{"id":"1","name":"الصوت","score":<1-10>,"feedback":"<جملة واحدة فقط: لماذا هذه الدرجة وكيف تحسّنها>"},{"id":"2","name":"الأصالة","score":<1-10>,"feedback":"<جملة واحدة>"},{"id":"3","name":"الصورة","score":<1-10>,"feedback":"<جملة واحدة>"},{"id":"4","name":"الإيقاع","score":<1-10>,"feedback":"<جملة واحدة>"},{"id":"5","name":"التجربة","score":<1-10>,"feedback":"<جملة واحدة>"},{"id":"6","name":"العمق","score":<1-10>,"feedback":"<جملة واحدة>"},{"id":"7","name":"الكثافة","score":<1-10>,"feedback":"<جملة واحدة>"},{"id":"8","name":"العاطفة","score":<1-10>,"feedback":"<جملة واحدة>"},{"id":"9","name":"البنية","score":<1-10>,"feedback":"<جملة واحدة>"},{"id":"10","name":"الأثر","score":<1-10>,"feedback":"<جملة واحدة>"}],"rewrite":{"original":"<جملة>","improved":"<نسخة أقوى>","explanation":"<2-3 جمل>"},"next_focus":{"skill":"<مهارة>","tip":"<2-3 جمل>"}}
 GRAMMAR_START
 خطأ: [الكلمة الخاطئة] | صحيح: [الصواب] | نوع: [همزة قطع|همزة وصل|تاء مربوطة|تنوين|إعراب|مطابقة|صرف|إملاء] | قاعدة: [اشرح القاعدة النحوية أو الصرفية في جملة واحدة واضحة] | جملة: [الجملة كاملة من النص]
 GRAMMAR_END`,
@@ -154,7 +154,7 @@ const STORY_PROMPT = `أنت خبير في نظرية كورت فونيغت لأ
 
 حدد الشكل وقيّم القصة. لا تستخدم " استخدم « ».
 أعِد JSON ثم GRAMMAR_START...GRAMMAR_END.
-{"shape_id":"<id>","confidence":<0-100>,"arc_data":[<11 أرقام 0-10>],"arc_label":"<وصف>","overall_score":<1-10>,"overall_label":"ممتاز|جيد جداً|جيد|يحتاج تطوير","overall_summary":"<3-4 جمل>","categories":[{"id":"opening","name":"العنوان والمشهد الافتتاحي","score":<1-10>,"feedback":"<3-4 جمل>"},{"id":"character","name":"الشخصية والبطل","score":<1-10>,"feedback":"<3-4 جمل>"},{"id":"conflict","name":"الصراع والحبكة","score":<1-10>,"feedback":"<3-4 جمل>"},{"id":"dialogue","name":"الحوار والصوت","score":<1-10>,"feedback":"<3-4 جمل>"},{"id":"ending","name":"الخاتمة والأثر","score":<1-10>,"feedback":"<3-4 جمل>"}],"strengths":["<1>","<2>","<3>"],"improvements":["<1>","<2>","<3>"],"highlight_quote":"<جملة>","highlight_feedback":"<3-4 جمل>","pillars":[{"id":"1","name":"العنوان","score":<1-10>,"feedback":"<جملة واحدة فقط: لماذا هذه الدرجة وكيف تحسّنها>"},{"id":"2","name":"الشخصية","score":<1-10>,"feedback":"<جملة واحدة>"},{"id":"3","name":"الصراع","score":<1-10>,"feedback":"<جملة واحدة>"},{"id":"4","name":"الحوار","score":<1-10>,"feedback":"<جملة واحدة>"},{"id":"5","name":"المشهد","score":<1-10>,"feedback":"<جملة واحدة>"},{"id":"6","name":"التفاصيل","score":<1-10>,"feedback":"<جملة واحدة>"},{"id":"7","name":"الصوت","score":<1-10>,"feedback":"<جملة واحدة>"},{"id":"8","name":"الإيقاع","score":<1-10>,"feedback":"<جملة واحدة>"},{"id":"9","name":"الخاتمة","score":<1-10>,"feedback":"<جملة واحدة>"},{"id":"10","name":"الأثر","score":<1-10>,"feedback":"<جملة واحدة>"}],"rewrite":{"original":"<جملة>","improved":"<نسخة>","explanation":"<2-3 جمل>"},"next_focus":{"skill":"<مهارة>","tip":"<2-3 جمل>"}}
+{"shape_id":"<id>","confidence":<0-100>,"arc_data":[<11 أرقام 0-10>],"arc_label":"<وصف>","overall_score":<1-10>,"overall_label":"ممتاز|جيّد جدًا|جيد|يحتاج تطوير","overall_summary":"<3-4 جمل>","categories":[{"id":"opening","name":"العنوان والمشهد الافتتاحي","score":<1-10>,"feedback":"<3-4 جمل>"},{"id":"character","name":"الشخصية والبطل","score":<1-10>,"feedback":"<3-4 جمل>"},{"id":"conflict","name":"الصراع والحبكة","score":<1-10>,"feedback":"<3-4 جمل>"},{"id":"dialogue","name":"الحوار والصوت","score":<1-10>,"feedback":"<3-4 جمل>"},{"id":"ending","name":"الخاتمة والأثر","score":<1-10>,"feedback":"<3-4 جمل>"}],"strengths":["<1>","<2>","<3>"],"improvements":["<1>","<2>","<3>"],"highlight_quote":"<جملة>","highlight_feedback":"<3-4 جمل>","pillars":[{"id":"1","name":"العنوان","score":<1-10>,"feedback":"<جملة واحدة فقط: لماذا هذه الدرجة وكيف تحسّنها>"},{"id":"2","name":"الشخصية","score":<1-10>,"feedback":"<جملة واحدة>"},{"id":"3","name":"الصراع","score":<1-10>,"feedback":"<جملة واحدة>"},{"id":"4","name":"الحوار","score":<1-10>,"feedback":"<جملة واحدة>"},{"id":"5","name":"المشهد","score":<1-10>,"feedback":"<جملة واحدة>"},{"id":"6","name":"التفاصيل","score":<1-10>,"feedback":"<جملة واحدة>"},{"id":"7","name":"الصوت","score":<1-10>,"feedback":"<جملة واحدة>"},{"id":"8","name":"الإيقاع","score":<1-10>,"feedback":"<جملة واحدة>"},{"id":"9","name":"الخاتمة","score":<1-10>,"feedback":"<جملة واحدة>"},{"id":"10","name":"الأثر","score":<1-10>,"feedback":"<جملة واحدة>"}],"rewrite":{"original":"<جملة>","improved":"<نسخة>","explanation":"<2-3 جمل>"},"next_focus":{"skill":"<مهارة>","tip":"<2-3 جمل>"}}
 GRAMMAR_START
 خطأ: [الكلمة الخاطئة] | صحيح: [الصواب] | نوع: [همزة قطع|همزة وصل|تاء مربوطة|تنوين|إعراب|مطابقة|صرف|إملاء] | قاعدة: [اشرح القاعدة النحوية أو الصرفية في جملة واحدة واضحة] | جملة: [الجملة كاملة من النص]
 GRAMMAR_END`
@@ -280,7 +280,7 @@ function scoreColor(s: number) {
   return s >= 8.5 ? "#12B76A" : s >= 7 ? "#0000FF" : s >= 5.5 ? "#DFB300" : "#E82222"
 }
 function badgeClass(l: string) {
-  return l === "ممتاز" ? "kb-badge-exc" : l === "جيد جداً" ? "kb-badge-good" : l === "جيد" ? "kb-badge-fair" : "kb-badge-weak"
+  return l === "ممتاز" ? "kb-badge-exc" : l === "جيّد جدًا" ? "kb-badge-good" : l === "جيد" ? "kb-badge-fair" : "kb-badge-weak"
 }
 
 function arabicGrammarCheck(text: string) {
@@ -1428,8 +1428,8 @@ export default function KitabhChecker() {
 
       // Label badge
       const lbl = result.overall_label
-      const lC = lbl==="ممتاز"?"#12B76A":lbl==="جيد جداً"?"#0000FF":lbl==="جيد"?"#DFB300":"#E82222"
-      const lBg = lbl==="ممتاز"?"#ECFDF5":lbl==="جيد جداً"?"#EBEBFF":lbl==="جيد"?"#FFFBEB":"#FEF2F2"
+      const lC = lbl==="ممتاز"?"#12B76A":lbl==="جيّد جدًا"?"#0000FF":lbl==="جيد"?"#DFB300":"#E82222"
+      const lBg = lbl==="ممتاز"?"#ECFDF5":lbl==="جيّد جدًا"?"#EBEBFF":lbl==="جيد"?"#FFFBEB":"#FEF2F2"
       ctx.font="bold 34px 'IBM Plex Sans Arabic',sans-serif"; ctx.textBaseline="middle"
       const bw = ctx.measureText(lbl).width + 58
       rrect(ctx, W/2-bw/2, cy+88, bw, 62, 31); ctx.fillStyle=lBg; ctx.fill()
@@ -1655,7 +1655,7 @@ export default function KitabhChecker() {
   // ── Pillar modal ───────────────────────────────────────
   const PillarModal = ({ p, onClose }: { p: any; onClose: () => void }) => {
     const s = parseFloat(p.score), c = scoreColor(s)
-    const label = s >= 8.5 ? "ممتاز" : s >= 7 ? "جيد جداً" : s >= 5.5 ? "متوسط" : "يحتاج تطوير"
+    const label = s >= 8.5 ? "ممتاز" : s >= 7 ? "جيّد جدًا" : s >= 5.5 ? "متوسط" : "يحتاج تطوير"
     // Find pillar definition
     const defs = PILLAR_DEFS[tool] || PILLAR_DEFS.article
     const names = PILLAR_NAMES[tool] || PILLAR_NAMES.article
@@ -2147,7 +2147,7 @@ export default function KitabhChecker() {
             {/* ── Results header: title + grade + share ── */}
             {(() => {
               const sc = parseFloat(result.overall_score || result.confidence || "0")
-              const lbl = result.overall_label || (sc >= 8.5 ? "ممتاز" : sc >= 7 ? "جيد جداً" : sc >= 5.5 ? "جيد" : "يحتاج تحسين")
+              const lbl = result.overall_label || (sc >= 8.5 ? "ممتاز" : sc >= 7 ? "جيّد جدًا" : sc >= 5.5 ? "جيد" : "يحتاج تحسين")
               const gradeColor = sc >= 8.5 ? "#12B76A" : sc >= 7 ? "#0000FF" : sc >= 5.5 ? "#DFB300" : "#E82222"
               const articleTitle = text.trim().split("\n")[0]?.slice(0, 80) || "تحليل بدون عنوان"
               const toolLabels: Record<string,string> = { article: "مقال", story: "قصة", thread: "ثريد", script: "سكريبت" }
@@ -2173,7 +2173,7 @@ export default function KitabhChecker() {
                     const grades = [
                       { label: "يحتاج تطوير", range: "1-5.4", color: "#E82222", bg: "#FEF2F2", min: 1, max: 5.4 },
                       { label: "جيد", range: "5.5-6.9", color: "#DFB300", bg: "#FFFBEB", min: 5.5, max: 6.9 },
-                      { label: "جيد جداً", range: "7-7.9", color: "#0000FF", bg: "#EBEBFF", min: 7, max: 7.9 },
+                      { label: "جيّد جدًا", range: "7-7.9", color: "#0000FF", bg: "#EBEBFF", min: 7, max: 7.9 },
                       { label: "ممتاز", range: "8-8.9", color: "#12B76A", bg: "#F0FDF4", min: 8, max: 8.9 },
                       { label: "استثنائي", range: "9-10", color: "#059669", bg: "#ECFDF5", min: 9, max: 10 },
                     ]
@@ -2328,8 +2328,8 @@ export default function KitabhChecker() {
         const sc = parseFloat(result.overall_score)
         const scC = sc>=8.5?"#12B76A":sc>=7?"#0000FF":sc>=5.5?"#DFB300":"#E82222"
         const lbl = result.overall_label
-        const lC = lbl==="ممتاز"?"#12B76A":lbl==="جيد جداً"?"#0000FF":lbl==="جيد"?"#DFB300":"#E82222"
-        const lBg = lbl==="ممتاز"?"#ECFDF5":lbl==="جيد جداً"?"#EBEBFF":lbl==="جيد"?"#FFFBEB":"#FEF2F2"
+        const lC = lbl==="ممتاز"?"#12B76A":lbl==="جيّد جدًا"?"#0000FF":lbl==="جيد"?"#DFB300":"#E82222"
+        const lBg = lbl==="ممتاز"?"#ECFDF5":lbl==="جيّد جدًا"?"#EBEBFF":lbl==="جيد"?"#FFFBEB":"#FEF2F2"
         return (
           <div ref={pdfRef} className="kb-pdf-root">
 
@@ -2488,7 +2488,7 @@ export default function KitabhChecker() {
       {/* ── Share popup ── */}
       {showShare && (() => {
         const sc = parseFloat(result?.overall_score || result?.confidence || "0")
-        const lbl = result?.overall_label || (sc >= 8.5 ? "ممتاز" : sc >= 7 ? "جيد جداً" : sc >= 5.5 ? "جيد" : "يحتاج تحسين")
+        const lbl = result?.overall_label || (sc >= 8.5 ? "ممتاز" : sc >= 7 ? "جيّد جدًا" : sc >= 5.5 ? "جيد" : "يحتاج تحسين")
         const articleTitle = text.trim().split("\n")[0]?.slice(0, 60) || "مقال"
         const shareEmoji = sc >= 9 ? "🏆" : sc >= 8 ? "🔥" : sc >= 7 ? "💪" : sc >= 5.5 ? "✍️" : "📝"
         const shareText = `اختبرت نصي على منصة كتابة… والنتيجة؟ ${sc.toFixed(0)}/10 ${shareEmoji}\nتقييم ${lbl}!\nهل سيحصل نصك على نتيجة أفضل؟ جرّب الاختبار:`
