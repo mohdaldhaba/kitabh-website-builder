@@ -167,9 +167,9 @@ const TEMPLATES: Template[] = [
 ];
 
 // ─── Kitabh icons — one per badge style ──────
-const KITABH_ICON_BLACK = "/images/kitabh-icon-black.png";
-const KITABH_ICON_BLUE = "/images/kitabh-icon-blue.png";
-const KITABH_ICON_WHITE = "/images/kitabh-icon-white.png";
+const KITABH_ICON_BLACK = "data:image/png;base64,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";
+const KITABH_ICON_BLUE = "data:image/png;base64,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";
+const KITABH_ICON_WHITE = "data:image/png;base64,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";
 // Map badge style → correct icon (white icon on dark bg, black icon on light bg)
 const KITABH_ICONS: Record<string, string> = { black: KITABH_ICON_WHITE, blue: KITABH_ICON_WHITE, white: KITABH_ICON_BLACK };
 
@@ -604,10 +604,10 @@ export default function KitabhWebsiteBuilder(props: any) {
   function getDefaultSettings(type: ComponentType): Record<string, any> {
     switch (type) {
       case "header": return { layout: "navbar", subtitle: "", logoUrl: "", buttonText: "اشتراك", navLinks: [
-        { id: genId(), label: "الرئيسية", linkType: "page", target: "", visible: true },
-        { id: genId(), label: "مقالات", linkType: "page", target: "", visible: true },
-        { id: genId(), label: "عن المدونة", linkType: "page", target: "", visible: true },
-        { id: genId(), label: "اشتراك", linkType: "anchor", target: "", visible: true },
+        { id: genId(), label: "الرئيسية", linkType: "page", target: "الرئيسية", visible: true },
+        { id: genId(), label: "مقالات", linkType: "page", target: "مقالات", visible: true },
+        { id: genId(), label: "عن المدونة", linkType: "page", target: "عن-المدونة", visible: true },
+        { id: genId(), label: "اشتراك", linkType: "page", target: "اشتراك", visible: true },
       ] as NavLink[] };
       case "hero_news": return { articles: MOCK_ARTICLES.slice(0, 5).map(a => a.id) };
       case "subscribe": return { layout: "hero", title: "انضم لنشرتنا البريدية", subtitle: "محتوى حصري يصلك كل أسبوع", description: "محتوى حصري يصلك مباشرة إلى بريدك", buttonText: "اشتراك", showNameField: false, heroImageUrl: "" };
@@ -1089,6 +1089,7 @@ export default function KitabhWebsiteBuilder(props: any) {
     const subBtnColor = subComp?.settings?.buttonColor || bc;
 
     let pagesHtml = "";
+    let footerRendered = false;
     allPages.forEach((page, pi) => {
       let pc = "";
       page.components.filter(c => c.enabled).forEach(comp => {
@@ -1169,6 +1170,8 @@ export default function KitabhWebsiteBuilder(props: any) {
             break;
           }
           case "footer":
+            if (footerRendered) break;
+            footerRendered = true;
             let fl = "";
             if ((ll === "logo_only" || ll === "logo_and_text") && lu) fl += `<img src="${lu}" alt="" class="pv-footer-logo-img" />`;
             if (ll === "text_only" || ll === "logo_and_text") fl += `<span class="pv-footer-logo">${s.title || sn}</span>`;
@@ -1183,11 +1186,13 @@ export default function KitabhWebsiteBuilder(props: any) {
             const footerCustomLinks = (s.customLinks || []).map((cl: any) => `<a class="pv-footer-link" href="${cl.url || "#"}"${cl.url ? ' target="_blank" rel="noopener noreferrer"' : ""}>${cl.label}</a>`).join("");
             pc += `<footer class="pv-footer"><div class="pv-footer-inner"><div class="pv-footer-logo-col">${fl}${footerCustomText}</div><div class="pv-footer-right"><p class="pv-footer-tagline">${s.tagline || "محتوى حصري يصلك مباشرة إلى بريدك"}</p><div class="pv-form-row"><input type="email" name="email" autocomplete="email" placeholder="أدخل بريدك الإلكتروني" class="pv-footer-email" /><button class="pv-btn" style="background:${s.buttonColor || bc}">${s.buttonText || "اشتراك"}</button></div><nav class="pv-footer-nav">${fLinks}${footerCustomLinks}</nav></div></div><div class="pv-footer-bottom"><span>جميع الحقوق محفوظة ${new Date().getFullYear()} ${sn}</span></div></footer>`;
             break;
-          case "article_view":
+          case "article_view": {
             const sampleA = MOCK_ARTICLES[0];
+            if (!sampleA) break;
             const avCover = sampleA.imageUrl ? `<img src="${sampleA.imageUrl}" alt="${sampleA.title}" class="pv-av-cover"/>` : `<div class="pv-av-cover" style="background:rgba(128,128,128,0.15)"></div>`;
             pc += `<nav class="pv-breadcrumb"><a href="#">الرئيسية</a><span class="pv-bc-sep">&#x276E;</span><a href="#">المقالات</a><span class="pv-bc-sep">&#x276E;</span><span class="pv-bc-current">${sampleA.title.slice(0, 50)}${sampleA.title.length > 50 ? '...' : ''}</span></nav><div class="pv-av"><div class="pv-av-head"><h1>${sampleA.title}</h1><div class="pv-av-meta"><div class="pv-av-author"><div class="pv-av-avatar">${sampleA.author.charAt(0)}</div><div><strong>${sampleA.author}</strong><span class="pv-date">${sampleA.date}</span></div></div><div class="pv-av-actions"><span style="color:var(--pv-btn)">❤ ${sampleA.likes}</span><span>💬 ${sampleA.comments}</span><span>↗ مشاركة</span><span>🔖</span></div></div></div>${avCover}<div class="pv-av-body"><p>هذا نص تجريبي يمثل محتوى المقال كما سيظهر للقارئ. يمكن للكاتب إضافة فقرات متعددة وتنسيقات مختلفة لإثراء المحتوى وجعله أكثر جاذبية للقراء.</p><p>يدعم المقال إضافة صور وعناوين فرعية واقتباسات وقوائم نقطية ومرقمة. كل هذه العناصر تساعد في تنظيم المحتوى وتسهيل قراءته.</p><h3>عنوان فرعي للمقال</h3><p>هنا يستمر المقال بتفاصيل إضافية حول الموضوع المطروح.</p><blockquote>الكتابة الجيدة هي إعادة الكتابة. لا تخف من تعديل نصك حتى يصل إلى أفضل صورة ممكنة.</blockquote><p>في النهاية، يُختتم المقال بملخص أو دعوة للتفاعل مع المحتوى.</p></div><div class="pv-av-tags"><span>كتابة</span><span>محتوى</span><span>نشرات بريدية</span></div><div class="pv-av-engagement"><span style="color:var(--pv-btn)">❤ ${sampleA.likes}</span><span>💬 ${sampleA.comments}</span><span>↗ مشاركة</span></div></div>`;
             break;
+          }
           case "section_title":
             pc += `<div class="pv-section-title"><h2>${s.title || "عنوان القسم"}</h2></div>`;
             break;
@@ -1912,7 +1917,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                                 <button className="kwb-p-subscribe-btn" style={{ background: activeSite.branding.buttonColor }} onClick={() => setShowSubscribePopup(true)}>
                                   {comp.settings.buttonText || "اشتراك"}
                                 </button>
-                                <button className="kwb-p-darkmode-btn" title="الوضع الداكن">
+                                <button className="kwb-p-darkmode-btn" title="الوضع الداكن" onClick={() => updateSite(activeSite.id, { branding: { ...activeSite.branding, darkMode: !activeSite.branding.darkMode } })}>
                                   {activeSite.branding.darkMode ? "☀" : "☾"}
                                 </button>
                               </div>
@@ -1936,7 +1941,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                                   <button className="kwb-p-subscribe-btn" style={{ background: activeSite.branding.buttonColor }} onClick={() => { setShowSubscribePopup(true); setShowMobileMenu(false); }}>
                                     {comp.settings.buttonText || "اشتراك"}
                                   </button>
-                                  <button className="kwb-p-darkmode-btn" title="الوضع الداكن">
+                                  <button className="kwb-p-darkmode-btn" title="الوضع الداكن" onClick={() => updateSite(activeSite.id, { branding: { ...activeSite.branding, darkMode: !activeSite.branding.darkMode } })}>
                                     {activeSite.branding.darkMode ? "☀" : "☾"}
                                   </button>
                                 </div>
@@ -2329,8 +2334,9 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                         </div>
                       ); break;
 
-                    case "article_view":
+                    case "article_view": {
                       const sampleArticle = MOCK_ARTICLES[0];
+                      if (!sampleArticle) { _inner = null; break; }
                       _inner = (
                         <div className="kwb-p-article-view">
                           <div className="kwb-p-av-header">
@@ -2375,6 +2381,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                           </div>
                         </div>
                       ); break;
+                    }
 
                     case "text_block":
                       _inner = (
@@ -4139,8 +4146,14 @@ const CSS_STYLES = `
 .kwb-preview-mobile .kwb-p-footer-form .kwb-p-footer-email{border-right:1px solid #444;width:100%;height:52px;font-size:16px;}
 .kwb-preview-mobile .kwb-p-footer-form .kwb-p-subscribe-btn{width:100%;}
 .kwb-preview-mobile .kwb-p-ticker-inner{font-size:32px;}
-.kwb-preview-mobile .kwb-p-gallery{display:none;}
-.kwb-preview-mobile .kwb-p-catfeed{display:none;}
+.kwb-preview-mobile .kwb-p-gallery{display:block;}
+.kwb-preview-mobile .kwb-p-gallery-cards{grid-template-columns:1fr;gap:16px;}
+.kwb-preview-mobile .kwb-p-gallery-body{flex-direction:column;gap:16px;}
+.kwb-preview-mobile .kwb-p-gallery-sidebar{display:none;}
+.kwb-preview-mobile .kwb-p-catfeed{display:block;}
+.kwb-preview-mobile .kwb-p-catfeed-body{grid-template-columns:1fr;gap:16px;}
+.kwb-preview-mobile .kwb-p-catfeed-featured{border-right:none;border-left:none;padding:0;}
+.kwb-preview-mobile .kwb-p-catfeed-sidebar{display:none;}
 .kwb-preview-mobile .kwb-p-hero-sub-form{flex-direction:column;}
 .kwb-preview-mobile .kwb-p-hero-sub-form .kwb-p-email-input{border-right:1px solid rgba(128,128,128,0.3);width:100%;height:52px;font-size:16px;}
 .kwb-preview-mobile .kwb-p-hero-sub-form .kwb-p-subscribe-btn{width:100%;}
@@ -4991,8 +5004,14 @@ const CSS_STYLES = `
 
 /* ─── Article Mobile List Layout ─── */
 @media(max-width:768px){
-  .kwb-p-gallery{display:none;}
-  .kwb-p-catfeed{display:none;}
+  .kwb-p-gallery{display:block;}
+  .kwb-p-gallery-cards{grid-template-columns:1fr;gap:16px;}
+  .kwb-p-gallery-body{flex-direction:column;gap:16px;}
+  .kwb-p-gallery-sidebar{display:none;}
+  .kwb-p-catfeed{display:block;}
+  .kwb-p-catfeed-body{grid-template-columns:1fr;gap:16px;}
+  .kwb-p-catfeed-featured{border-right:none;border-left:none;padding:0;}
+  .kwb-p-catfeed-sidebar{display:none;}
 }
 
 /* ─── Bento Card Fix (image on top) ─── */
