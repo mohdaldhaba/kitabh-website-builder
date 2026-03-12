@@ -2033,79 +2033,82 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
   //  RENDER: TEMPLATE PICKER
   // ═══════════════════════════════════════════════════════
   if (view === "templates") {
-    // Bold geometric SVG pattern per template — fills the entire card
+    // Bold geometric CSS-animated patterns per template
     const geoPatterns: Record<string, (c1:string,c2:string,bg:string) => React.ReactNode> = {
       // Media: bold horizontal stripes
-      media: (c1,c2,bg) => (
-        <svg viewBox="0 0 400 500" className="kwb-tpl-svg">
-          {Array.from({length:14}).map((_,i)=><rect key={i} x="0" y={i*36} width="400" height="20" fill={i%2===0?c1:c2} opacity={i%3===0?.9:.7}><animateTransform attributeName="transform" type="translate" values={`0,0;${i%2===0?20:-20},0;0,0`} dur={`${6+i%3}s`} repeatCount="indefinite"/></rect>)}
-        </svg>),
+      media: (c1,c2) => {
+        const css = Array.from({length:14}).map((_,i)=>`@keyframes kwb-m${i}{0%,100%{transform:translateX(0)}50%{transform:translateX(${i%2===0?20:-20}px)}}`).join("");
+        return <><style>{css}</style><svg viewBox="0 0 400 500" className="kwb-tpl-svg">
+          {Array.from({length:14}).map((_,i)=><rect key={i} x="0" y={i*36} width="400" height="20" fill={i%2===0?c1:c2} opacity={i%3===0?.9:.7} style={{animation:`kwb-m${i} ${6+i%3}s ease-in-out infinite`}}/>)}
+        </svg></>;
+      },
       // Newsletter: concentric circles
-      newsletter: (c1,c2,bg) => (
-        <svg viewBox="0 0 400 500" className="kwb-tpl-svg">
-          {[200,170,140,110,80,50,20].map((r,i)=><circle key={i} cx="200" cy="250" r={r} fill="none" stroke={i%2===0?c1:c2} strokeWidth={i<3?16:12} opacity={.6+i*.05}><animateTransform attributeName="transform" type="scale" values={`1;${1+i*.03};1`} dur={`${5+i}s`} repeatCount="indefinite" additive="sum"/></circle>)}
-        </svg>),
+      newsletter: (c1,c2) => {
+        const css = [200,170,140,110,80,50,20].map((_,i)=>`@keyframes kwb-n${i}{0%,100%{transform:scale(1)}50%{transform:scale(${1+i*.03})}}`).join("");
+        return <><style>{css}</style><svg viewBox="0 0 400 500" className="kwb-tpl-svg">
+          {[200,170,140,110,80,50,20].map((r,i)=><circle key={i} cx="200" cy="250" r={r} fill="none" stroke={i%2===0?c1:c2} strokeWidth={i<3?16:12} opacity={.6+i*.05} style={{transformOrigin:"200px 250px",animation:`kwb-n${i} ${5+i}s ease-in-out infinite`}}/>)}
+        </svg></>;
+      },
       // Blog: diagonal lines
-      blog: (c1,c2,bg) => (
-        <svg viewBox="0 0 400 500" className="kwb-tpl-svg">
-          {Array.from({length:20}).map((_,i)=><line key={i} x1={-100+i*40} y1="0" x2={-100+i*40+500} y2="500" stroke={i%3===0?c2:c1} strokeWidth={i%2===0?12:8} opacity={i%4===0?.5:.3}><animateTransform attributeName="transform" type="translate" values={`0,0;${i%2===0?15:-15},0;0,0`} dur={`${7+i%4}s`} repeatCount="indefinite"/></line>)}
-        </svg>),
+      blog: (c1,c2) => {
+        const css = Array.from({length:20}).map((_,i)=>`@keyframes kwb-b${i}{0%,100%{transform:translateX(0)}50%{transform:translateX(${i%2===0?15:-15}px)}}`).join("");
+        return <><style>{css}</style><svg viewBox="0 0 400 500" className="kwb-tpl-svg">
+          {Array.from({length:20}).map((_,i)=><line key={i} x1={-100+i*40} y1="0" x2={-100+i*40+500} y2="500" stroke={i%3===0?c2:c1} strokeWidth={i%2===0?12:8} opacity={i%4===0?.5:.3} style={{animation:`kwb-b${i} ${7+i%4}s ease-in-out infinite`}}/>)}
+        </svg></>;
+      },
       // Podcast: stacked wave lines
-      podcast: (c1,c2,bg) => (
-        <svg viewBox="0 0 400 500" className="kwb-tpl-svg">
+      podcast: (c1,c2) => {
+        const css = Array.from({length:10}).map((_,i)=>`@keyframes kwb-p${i}{0%,100%{transform:translateY(0)}50%{transform:translateY(${i%2===0?12:-12}px)}}`).join("");
+        return <><style>{css}</style><svg viewBox="0 0 400 500" className="kwb-tpl-svg">
           {Array.from({length:10}).map((_,i)=>{
             const y=50+i*45;const a=i%2===0?30:25;
-            return <path key={i} d={`M0,${y} Q100,${y-a} 200,${y} T400,${y}`} fill="none" stroke={i%2===0?c1:c2} strokeWidth={i%3===0?14:10} strokeLinecap="round" opacity={.5+i*.04}>
-              <animateTransform attributeName="transform" type="translate" values={`0,0;0,${i%2===0?12:-12};0,0`} dur={`${4+i*.5}s`} repeatCount="indefinite"/>
-            </path>;
+            return <path key={i} d={`M0,${y} Q100,${y-a} 200,${y} T400,${y}`} fill="none" stroke={i%2===0?c1:c2} strokeWidth={i%3===0?14:10} strokeLinecap="round" opacity={.5+i*.04} style={{animation:`kwb-p${i} ${4+i*.5}s ease-in-out infinite`}}/>;
           })}
-        </svg>),
+        </svg></>;
+      },
       // Cinema: checkerboard
-      cinema: (c1,c2,bg) => (
+      cinema: (c1,c2) => (
         <svg viewBox="0 0 400 500" className="kwb-tpl-svg">
           {Array.from({length:6}).map((_,r)=>Array.from({length:5}).map((_,c)=>{
             const on=(r+c)%2===0;
-            return <rect key={`${r}-${c}`} x={c*80} y={r*84} width="80" height="84" fill={on?c1:c2} opacity={on?.8:.5}>
-              <animateTransform attributeName="transform" type="scale" values={`1;${on?1.05:.95};1`} dur={`${3+r*.5+c*.3}s`} repeatCount="indefinite" additive="sum"/>
-            </rect>;
+            return <rect key={`${r}-${c}`} x={c*80} y={r*84} width="80" height="84" fill={on?c1:c2} opacity={on?.8:.5}/>;
           }))}
         </svg>),
       // Education: diamond grid
-      education: (c1,c2,bg) => (
+      education: (c1,c2) => (
         <svg viewBox="0 0 400 500" className="kwb-tpl-svg">
           {Array.from({length:8}).map((_,r)=>Array.from({length:6}).map((_,c)=>{
             const cx=c*72+36;const cy=r*68+34;
-            return <rect key={`${r}-${c}`} x={cx-24} y={cy-24} width="48" height="48" rx="6" fill={(r+c)%2===0?c1:c2} opacity={(r+c)%3===0?.7:.4} transform={`rotate(45,${cx},${cy})`}>
-              <animateTransform attributeName="transform" type="rotate" values={`45,${cx},${cy};50,${cx},${cy};45,${cx},${cy}`} dur={`${5+r%3}s`} repeatCount="indefinite"/>
-            </rect>;
+            return <rect key={`${r}-${c}`} x={cx-24} y={cy-24} width="48" height="48" rx="6" fill={(r+c)%2===0?c1:c2} opacity={(r+c)%3===0?.7:.4} transform={`rotate(45,${cx},${cy})`}/>;
           }))}
         </svg>),
       // Store: stacked rounded rectangles
-      store: (c1,c2,bg) => (
-        <svg viewBox="0 0 400 500" className="kwb-tpl-svg">
+      store: (c1,c2) => {
+        const css = Array.from({length:7}).map((_,i)=>`@keyframes kwb-s${i}{0%,100%{transform:translateX(0)}50%{transform:translateX(${i%2===0?12:-12}px)}}`).join("");
+        return <><style>{css}</style><svg viewBox="0 0 400 500" className="kwb-tpl-svg">
           {Array.from({length:7}).map((_,i)=>{
             const w=360-i*30;const h=50;const y=i*70+10;const x=(400-w)/2;
-            return <rect key={i} x={x} y={y} width={w} height={h} rx={h/2} fill={i%2===0?c1:c2} opacity={.6-i*.05}>
-              <animateTransform attributeName="transform" type="translate" values={`0,0;${i%2===0?12:-12},0;0,0`} dur={`${5+i*.7}s`} repeatCount="indefinite"/>
-            </rect>;
+            return <rect key={i} x={x} y={y} width={w} height={h} rx={h/2} fill={i%2===0?c1:c2} opacity={.6-i*.05} style={{animation:`kwb-s${i} ${5+i*.7}s ease-in-out infinite`}}/>;
           })}
-        </svg>),
+        </svg></>;
+      },
       // Coach: large overlapping circles
-      coach: (c1,c2,bg) => (
+      coach: (c1,c2) => (<>
+        <style>{`@keyframes kwb-c0{0%,100%{transform:translate(0,0)}50%{transform:translate(15px,10px)}}@keyframes kwb-c1{0%,100%{transform:translate(0,0)}50%{transform:translate(-12px,8px)}}@keyframes kwb-c2{0%,100%{transform:translate(0,0)}50%{transform:translate(8px,-12px)}}@keyframes kwb-c3{0%,100%{transform:translate(0,0)}50%{transform:translate(-8px,10px)}}@keyframes kwb-c4{0%,100%{transform:translate(0,0)}50%{transform:translate(10px,-8px)}}`}</style>
         <svg viewBox="0 0 400 500" className="kwb-tpl-svg">
-          <circle cx="130" cy="180" r="140" fill={c1} opacity=".5"><animateTransform attributeName="transform" type="translate" values="0,0;15,10;0,0" dur="7s" repeatCount="indefinite"/></circle>
-          <circle cx="280" cy="180" r="120" fill={c2} opacity=".45"><animateTransform attributeName="transform" type="translate" values="0,0;-12,8;0,0" dur="8s" repeatCount="indefinite"/></circle>
-          <circle cx="200" cy="340" r="130" fill={c1} opacity=".4"><animateTransform attributeName="transform" type="translate" values="0,0;8,-12;0,0" dur="9s" repeatCount="indefinite"/></circle>
-          <circle cx="100" cy="400" r="80" fill={c2} opacity=".35"><animateTransform attributeName="transform" type="translate" values="0,0;-8,10;0,0" dur="6s" repeatCount="indefinite"/></circle>
-          <circle cx="320" cy="420" r="90" fill={c1} opacity=".3"><animateTransform attributeName="transform" type="translate" values="0,0;10,-8;0,0" dur="10s" repeatCount="indefinite"/></circle>
-        </svg>),
+          <circle cx="130" cy="180" r="140" fill={c1} opacity=".5" style={{animation:"kwb-c0 7s ease-in-out infinite"}}/>
+          <circle cx="280" cy="180" r="120" fill={c2} opacity=".45" style={{animation:"kwb-c1 8s ease-in-out infinite"}}/>
+          <circle cx="200" cy="340" r="130" fill={c1} opacity=".4" style={{animation:"kwb-c2 9s ease-in-out infinite"}}/>
+          <circle cx="100" cy="400" r="80" fill={c2} opacity=".35" style={{animation:"kwb-c3 6s ease-in-out infinite"}}/>
+          <circle cx="320" cy="420" r="90" fill={c1} opacity=".3" style={{animation:"kwb-c4 10s ease-in-out infinite"}}/>
+        </svg></>),
       // Portfolio: vertical stripes
-      portfolio: (c1,c2,bg) => (
-        <svg viewBox="0 0 400 500" className="kwb-tpl-svg">
-          {Array.from({length:12}).map((_,i)=><rect key={i} x={i*34} y="0" width="18" height="500" fill={i%3===0?c1:i%3===1?c2:c1} opacity={i%2===0?.6:.35}>
-            <animateTransform attributeName="transform" type="translate" values={`0,0;0,${i%2===0?18:-18};0,0`} dur={`${5+i%4}s`} repeatCount="indefinite"/>
-          </rect>)}
-        </svg>),
+      portfolio: (c1,c2) => {
+        const css = Array.from({length:12}).map((_,i)=>`@keyframes kwb-v${i}{0%,100%{transform:translateY(0)}50%{transform:translateY(${i%2===0?18:-18}px)}}`).join("");
+        return <><style>{css}</style><svg viewBox="0 0 400 500" className="kwb-tpl-svg">
+          {Array.from({length:12}).map((_,i)=><rect key={i} x={i*34} y="0" width="18" height="500" fill={i%3===0?c1:i%3===1?c2:c1} opacity={i%2===0?.6:.35} style={{animation:`kwb-v${i} ${5+i%4}s ease-in-out infinite`}}/>)}
+        </svg></>;
+      },
     };
 
     return (
