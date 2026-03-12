@@ -174,11 +174,11 @@ const MOCK_ARTICLES: Article[] = RAW_MOCK_ARTICLES.map(a => ({
 }));
 
 const COMPONENT_META: Record<ComponentType, { label: string; hasSettings: boolean }> = {
-  header: { label: "الهيدر", hasSettings: true },
+  header: { label: "رأس الصفحة", hasSettings: true },
   hero_news: { label: "البطل: أخبار", hasSettings: true },
 
   hero_slider: { label: "البطل: عرض شرائح", hasSettings: true },
-  banner: { label: "بانر", hasSettings: true },
+  banner: { label: "لافتة", hasSettings: true },
   subscribe: { label: "اشتراك", hasSettings: true },
   article_collection: { label: "مقالات", hasSettings: true },
   footer: { label: "التذييل", hasSettings: true },
@@ -195,7 +195,7 @@ const COMPONENT_META: Record<ComponentType, { label: string; hasSettings: boolea
   contact_form: { label: "نموذج تواصل", hasSettings: true },
   divider: { label: "فاصل", hasSettings: false },
   rich_text: { label: "محتوى منسق", hasSettings: true },
-  bento_grid: { label: "شبكة بينتو", hasSettings: true },
+  bento_grid: { label: "مربعات ومستطيلات", hasSettings: true },
   social_links: { label: "روابط التواصل", hasSettings: true },
   movies: { label: "أفلام / مسلسلات", hasSettings: true },
 
@@ -267,27 +267,27 @@ const COLOR_THEMES: ColorTheme[] = [
   { id: "royal_purple", name: "ملكي", buttonColor: "#a78bfa", headlineColor: "#f5f3ff", textColor: "#c4b5fd", linkColor: "#c084fc", bgColor: "#1e1b4b", cardBg: "#312e81" },
   { id: "sunset_glow", name: "غروب", buttonColor: "#f43f5e", headlineColor: "#fef2f2", textColor: "#fda4af", linkColor: "#fb7185", bgColor: "#1a0a10", cardBg: "#2d1520" },
   // ── 5. Earthy & warm ──
-  { id: "elegant_beige", name: "بيج أنيق", buttonColor: "#6d6132", headlineColor: "#3e2723", textColor: "#795548", linkColor: "#6d6132", bgColor: "#D7CCC8", cardBg: "#efebe9" },
+  { id: "elegant_beige", name: "عاجي أنيق", buttonColor: "#6d6132", headlineColor: "#3e2723", textColor: "#795548", linkColor: "#6d6132", bgColor: "#D7CCC8", cardBg: "#efebe9" },
   { id: "natural_green", name: "أخضر طبيعي", buttonColor: "#6d7c3a", headlineColor: "#ffffff", textColor: "#c8e6c9", linkColor: "#aed581", bgColor: "#33691e", cardBg: "#3e7c23" },
   { id: "notebook", name: "دفتر", buttonColor: "#F9A825", headlineColor: "#3e2723", textColor: "#6d4c41", linkColor: "#f57f17", bgColor: "#FFF8E1", cardBg: "#ffffff" },
   { id: "calm_gray", name: "رمادي هادئ", buttonColor: "#1565C0", headlineColor: "#212121", textColor: "#616161", linkColor: "#1976D2", bgColor: "#ECEFF1", cardBg: "#ffffff" },
   // ── 6. Signature & accent ──
   { id: "kitabh_blue", name: "أزرق كتابة", buttonColor: "#1a1aaa", headlineColor: "#ffffff", textColor: "#b0c4ff", linkColor: "#90b0ff", bgColor: "#0000FF", cardBg: "#1a1aff" },
-  { id: "neon", name: "نيون", buttonColor: "#1a1a1a", headlineColor: "#1a1a1a", textColor: "#1b5e20", linkColor: "#1a1a1a", bgColor: "#00FF41", cardBg: "#69f0ae" },
+  { id: "neon", name: "نيون متوهّج", buttonColor: "#1a1a1a", headlineColor: "#1a1a1a", textColor: "#1b5e20", linkColor: "#1a1a1a", bgColor: "#00FF41", cardBg: "#69f0ae" },
   { id: "bold_yellow", name: "أصفر جريء", buttonColor: "#E82222", headlineColor: "#212121", textColor: "#5d4037", linkColor: "#c62828", bgColor: "#FFC107", cardBg: "#ffd54f" },
   { id: "hot_pink", name: "وردي", buttonColor: "#FFD600", headlineColor: "#ffffff", textColor: "#fce4ec", linkColor: "#FFD600", bgColor: "#E91E63", cardBg: "#f06292" },
   { id: "ocean_deep", name: "بحري", buttonColor: "#06b6d4", headlineColor: "#f0f9ff", textColor: "#7dd3fc", linkColor: "#22d3ee", bgColor: "#0c4a6e", cardBg: "#164e63" },
   // ── 7. Designer themes ──
-  { id: "midnight_neon", name: "نيون منتصف الليل", buttonColor: "#EC4899", headlineColor: "#F9FAFB", textColor: "#9CA3AF", linkColor: "#6366F1", bgColor: "#0B0F19", cardBg: "#111827" },
+  { id: "midnight_neon", name: "نيون متوهّج منتصف الليل", buttonColor: "#EC4899", headlineColor: "#F9FAFB", textColor: "#9CA3AF", linkColor: "#6366F1", bgColor: "#0B0F19", cardBg: "#111827" },
   { id: "arctic_glass", name: "زجاج قطبي", buttonColor: "#2563EB", headlineColor: "#0F172A", textColor: "#64748B", linkColor: "#8B5CF6", bgColor: "#F8FAFC", cardBg: "#FFFFFF" },
   { id: "sunset_editorial", name: "غروب تحريري", buttonColor: "#F97316", headlineColor: "#1F2937", textColor: "#6B7280", linkColor: "#EF4444", bgColor: "#FFF7ED", cardBg: "#FFFFFF" },
   { id: "forest_journal", name: "يوميات الغابة", buttonColor: "#166534", headlineColor: "#052E16", textColor: "#6B7280", linkColor: "#10B981", bgColor: "#F0FDF4", cardBg: "#FFFFFF" },
   { id: "royal_editorial", name: "ملكي تحريري", buttonColor: "#7C3AED", headlineColor: "#F8FAFC", textColor: "#94A3B8", linkColor: "#FBBF24", bgColor: "#0F172A", cardBg: "#1E293B" },
   { id: "retro_wave", name: "موجة ريترو", buttonColor: "#D946EF", headlineColor: "#FAFAFA", textColor: "#A1A1AA", linkColor: "#22D3EE", bgColor: "#0A0A0A", cardBg: "#18181B" },
   { id: "minimal_editorial", name: "تحريري بسيط", buttonColor: "#3B82F6", headlineColor: "#0F172A", textColor: "#94A3B8", linkColor: "#3B82F6", bgColor: "#FFFFFF", cardBg: "#F8FAFC" },
-  { id: "cyber_teal", name: "فيروزي سايبر", buttonColor: "#14B8A6", headlineColor: "#E2E8F0", textColor: "#64748B", linkColor: "#22D3EE", bgColor: "#020617", cardBg: "#0F172A" },
+  { id: "cyber_teal", name: "فيروزي رقمي", buttonColor: "#14B8A6", headlineColor: "#E2E8F0", textColor: "#64748B", linkColor: "#22D3EE", bgColor: "#020617", cardBg: "#0F172A" },
   { id: "coffee_magazine", name: "مجلة القهوة", buttonColor: "#7C2D12", headlineColor: "#292524", textColor: "#78716C", linkColor: "#B45309", bgColor: "#FAF7F2", cardBg: "#FFFFFF" },
-  { id: "electric_pop", name: "بوب كهربائي", buttonColor: "#C026D3", headlineColor: "#1E1B4B", textColor: "#6B7280", linkColor: "#F43F5E", bgColor: "#FDF4FF", cardBg: "#FFFFFF" },
+  { id: "electric_pop", name: "ألوان كهربائية نابضة", buttonColor: "#C026D3", headlineColor: "#1E1B4B", textColor: "#6B7280", linkColor: "#F43F5E", bgColor: "#FDF4FF", cardBg: "#FFFFFF" },
 ];
 
 // ─── SVG Icons ──────────────────────────────────────────
@@ -2046,7 +2046,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                             {bannerCards.map((card: any, ci: number) => (
                               <div key={ci} className="kwb-p-banner-card" style={{ background: card.imageUrl ? `url(${card.imageUrl}) center/cover` : (card.color || activeSite.branding.buttonColor || "#E82222") }}>
                                 {card.imageUrl && <div className="kwb-p-banner-card-overlay" />}
-                                <span contentEditable suppressContentEditableWarning onBlur={(e) => { const cards = [...(comp.settings.cards || [])]; cards[ci] = { ...cards[ci], title: e.currentTarget.textContent || "" }; updateComponentSettings(comp.id, { cards }); }} className="kwb-p-editable">{card.title || "عنوان البانر"}</span>
+                                <span contentEditable suppressContentEditableWarning onBlur={(e) => { const cards = [...(comp.settings.cards || [])]; cards[ci] = { ...cards[ci], title: e.currentTarget.textContent || "" }; updateComponentSettings(comp.id, { cards }); }} className="kwb-p-editable">{card.title || "عنوان اللافتة"}</span>
                                 <a href={card.linkUrl || "#"} target={card.linkUrl ? "_blank" : undefined} rel="noopener">{card.linkText || "اقرأ المزيد"} &#x2197;</a>
                               </div>
                             ))}
@@ -2216,7 +2216,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                       _inner = (
                         <div className="kwb-p-contact-form">
                           <h3 contentEditable suppressContentEditableWarning onBlur={(e) => updateComponentSettings(comp.id, { title: e.currentTarget.textContent || "" })} className="kwb-p-editable">{comp.settings.title || "تواصل معنا"}</h3>
-                          <form className="kwb-p-cf-fields" onSubmit={(e) => { e.preventDefault(); const fd = new FormData(e.currentTarget); console.log("Contact form:", { name: fd.get("name"), email: fd.get("email"), message: fd.get("message"), to: activeSite.name }); alert("تم إرسال رسالتك بنجاح!"); e.currentTarget.reset(); }}>
+                          <form className="kwb-p-cf-fields" onSubmit={(e) => { e.preventDefault(); const fd = new FormData(e.currentTarget); console.log("Contact form:", { name: fd.get("name"), email: fd.get("email"), message: fd.get("message"), to: activeSite.name }); alert("أُرسلت رسالتك بنجاح!"); e.currentTarget.reset(); }}>
                             <input name="name" placeholder="الاسم" className="kwb-p-cf-input" required autoComplete="name" />
                             <input name="email" type="email" placeholder="البريد الإلكتروني" className="kwb-p-cf-input" required autoComplete="email" />
                             <textarea name="message" placeholder="الرسالة" className="kwb-p-cf-textarea" rows={4} required />
@@ -2573,7 +2573,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                   {publishStatus === "publishing" ? (
                     <><svg className="kwb-spin" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg> جاري النشر</>
                   ) : publishStatus === "done" ? (
-                    <><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg> تم النشر</>
+                    <><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg> نُشر</>
                   ) : (
                     <><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg> نشر</>
                   )}
@@ -2599,7 +2599,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                   {activeSite.branding.logoUrl ? (
                     <div className="kwb-upload-preview"><img src={activeSite.branding.logoUrl} alt="" /><button className="kwb-upload-remove" onClick={() => updateSite(activeSite.id, { branding: { ...activeSite.branding, logoUrl: "" } })}>{Icons.x}</button></div>
                   ) : (
-                    <div className="kwb-upload-area">{Icons.image}<span>لم يتم اختيار صورة</span></div>
+                    <div className="kwb-upload-area">{Icons.image}<span>لا توجد صورة</span></div>
                   )}
                   <button className="kwb-btn-outline kwb-btn-full" onClick={() => triggerUpload({ type: "branding_logo" })}>رفع صورة</button>
 
@@ -2817,7 +2817,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                                 {comp.settings.logoUrl ? (
                                   <div className="kwb-upload-preview"><img src={comp.settings.logoUrl} alt="" /><button className="kwb-upload-remove" onClick={() => updateComponentSettings(comp.id, { logoUrl: "" })}>{Icons.x}</button></div>
                                 ) : (
-                                  <div className="kwb-upload-area-sm">{Icons.image}<span>لم يتم اختيار صورة</span></div>
+                                  <div className="kwb-upload-area-sm">{Icons.image}<span>لا توجد صورة</span></div>
                                 )}
                                 <button className="kwb-btn-outline kwb-btn-full" onClick={() => triggerUpload({ type: "comp_logo", compId: comp.id })}>رفع صورة</button>
                                 <label className="kwb-label" style={{ marginTop: 12 }}>نص الزر</label>
@@ -3100,7 +3100,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                                     {comp.settings.heroImageUrl ? (
                                       <div className="kwb-upload-preview"><img src={comp.settings.heroImageUrl} alt="" /><button className="kwb-upload-remove" onClick={() => updateComponentSettings(comp.id, { heroImageUrl: "" })}>{Icons.x}</button></div>
                                     ) : (
-                                      <div className="kwb-upload-area-sm">{Icons.image}<span>لم يتم اختيار صورة</span></div>
+                                      <div className="kwb-upload-area-sm">{Icons.image}<span>لا توجد صورة</span></div>
                                     )}
                                     <button className="kwb-btn-outline kwb-btn-full" onClick={() => triggerUpload({ type: "header_hero_img", compId: comp.id })}>رفع صورة</button>
                                   </>
@@ -3144,7 +3144,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                                 {comp.settings.logoUrl ? (
                                   <div className="kwb-upload-preview"><img src={comp.settings.logoUrl} alt="" /><button className="kwb-upload-remove" onClick={() => updateComponentSettings(comp.id, { logoUrl: "" })}>{Icons.x}</button></div>
                                 ) : (
-                                  <div className="kwb-upload-area-sm">{Icons.image}<span>لم يتم اختيار صورة</span></div>
+                                  <div className="kwb-upload-area-sm">{Icons.image}<span>لا توجد صورة</span></div>
                                 )}
                                 <button className="kwb-btn-outline kwb-btn-full" onClick={() => triggerUpload({ type: "comp_logo", compId: comp.id })}>رفع صورة</button>
                                 <label className="kwb-label" style={{ marginTop: 12 }}>العنوان</label>
@@ -3181,7 +3181,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                                   <span>إظهار شارة "صُنع في منصة كتابة"</span>
                                 </div>
 
-                                <p className="kwb-hint" style={{ marginTop: 12 }}>الروابط الأساسية متصلة بروابط الهيدر تلقائيا. عدّل الروابط من إعدادات الهيدر.</p>
+                                <p className="kwb-hint" style={{ marginTop: 12 }}>الروابط الأساسية متصلة بروابط رأس الصفحة تلقائيًا. عدّل الروابط من إعدادات رأس الصفحة.</p>
                               </>
                             )}
 
@@ -3205,7 +3205,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                                 {comp.settings.imageUrl ? (
                                   <div className="kwb-upload-preview"><img src={comp.settings.imageUrl} alt="" /><button className="kwb-upload-remove" onClick={() => updateComponentSettings(comp.id, { imageUrl: "" })}>{Icons.x}</button></div>
                                 ) : (
-                                  <div className="kwb-upload-area-sm">{Icons.image}<span>لم يتم اختيار صورة</span></div>
+                                  <div className="kwb-upload-area-sm">{Icons.image}<span>لا توجد صورة</span></div>
                                 )}
                                 <button className="kwb-btn-outline kwb-btn-full" onClick={() => triggerUpload({ type: "comp_banner", compId: comp.id })}>رفع صورة</button>
                                 <label className="kwb-label" style={{ marginTop: 12 }}>وصف الصورة</label>
@@ -3536,7 +3536,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                       <span>نشرة بريدية لهذا الموقع؟</span>
                     </div>
                     <button className="kwb-btn-primary kwb-btn-full" onClick={handleSave} style={saveStatus === "saved" ? { background: "#10B981" } : saveStatus === "saving" ? { opacity: 0.7 } : {}}>
-                      {saveStatus === "saving" ? "جاري الحفظ..." : saveStatus === "saved" ? "تم الحفظ" : "حفظ الموقع"}
+                      {saveStatus === "saving" ? "جاري الحفظ..." : saveStatus === "saved" ? "حُفظ" : "حفظ الموقع"}
                     </button>
                   </div>
                 </div>
@@ -3673,7 +3673,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
               <button className={`kwb-login-tab ${loginTab === "signin" ? "kwb-login-tab-active" : ""}`} style={loginTab === "signin" ? { borderColor: activeSite.branding.buttonColor || "#E82222", color: activeSite.branding.buttonColor || "#E82222" } : {}} onClick={() => setLoginTab("signin")}>تسجيل الدخول</button>
               <button className={`kwb-login-tab ${loginTab === "signup" ? "kwb-login-tab-active" : ""}`} style={loginTab === "signup" ? { borderColor: activeSite.branding.buttonColor || "#E82222", color: activeSite.branding.buttonColor || "#E82222" } : {}} onClick={() => setLoginTab("signup")}>إنشاء حساب</button>
             </div>
-            <form className="kwb-login-form" onSubmit={e => { e.preventDefault(); const fd = new FormData(e.currentTarget); console.log(loginTab === "signin" ? "Sign in:" : "Sign up:", Object.fromEntries(fd)); alert(loginTab === "signin" ? "تسجيل الدخول - سيتم الربط مع kitabh.com" : "تم إنشاء الحساب - سيتم الربط مع kitabh.com"); e.currentTarget.reset(); setShowLoginModal(false); }}>
+            <form className="kwb-login-form" onSubmit={e => { e.preventDefault(); const fd = new FormData(e.currentTarget); console.log(loginTab === "signin" ? "Sign in:" : "Sign up:", Object.fromEntries(fd)); alert(loginTab === "signin" ? "تسجيل الدخول — سيُربط مع kitabh.com" : "أُنشئ الحساب — سيُربط مع kitabh.com"); e.currentTarget.reset(); setShowLoginModal(false); }}>
               {loginTab === "signup" && <input name="name" placeholder="الاسم الكامل" className="kwb-login-input" required autoComplete="name" style={{ borderRadius: `var(--kwb-radius, 8px)` }} />}
               <input name="email" type="email" placeholder="البريد الإلكتروني" className="kwb-login-input" required autoComplete="email" style={{ borderRadius: `var(--kwb-radius, 8px)` }} />
               <input name="password" type="password" placeholder="كلمة المرور" className="kwb-login-input" required autoComplete={loginTab === "signin" ? "current-password" : "new-password"} style={{ borderRadius: `var(--kwb-radius, 8px)` }} />
@@ -3715,7 +3715,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                 </div>
               </div>
               <div className="kwb-modal-footer">
-                <button className="kwb-btn-primary kwb-btn-full" onClick={() => setShowSeoModal(null)}>تم</button>
+                <button className="kwb-btn-primary kwb-btn-full" onClick={() => setShowSeoModal(null)}>حسنًا</button>
               </div>
             </div>
           </div>
