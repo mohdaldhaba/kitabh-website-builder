@@ -2033,177 +2033,73 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
   //  RENDER: TEMPLATE PICKER
   // ═══════════════════════════════════════════════════════
   if (view === "templates") {
-    const skelBlock = (t: Template) => {
-      const b = { ...SKELETON.defaultBranding, ...(t.defaultBranding || {}) };
-      const isDark = b.darkMode || ["#0","#1","#2"].some(p => (b.bgColor||"").toLowerCase().startsWith(p));
-      const bar = isDark ? "rgba(255,255,255,.18)" : "#ddd";
-      const img = isDark ? "rgba(255,255,255,.10)" : "#e8e8e8";
-      const btn = b.buttonColor || "#E82222";
-      const card = b.cardBg || "#fff";
-      const accent = b.accentColor || btn;
-      const rad = b.borderRadius ? Math.min(b.borderRadius/3,6) : 3;
-      const comps = (t.homeComponents || SKELETON.defaultComponents.map(c=>({type:c}))).filter(c=>c.type!=="header"&&c.type!=="footer");
-
-      const R = (comp:{type:string;settings?:Record<string,any>},i:number) => {
-        const s = comp.settings || {};
-        switch(comp.type) {
-          case "hero_news": return (
-            <div key={i} style={{display:"grid",gridTemplateColumns:"2fr 3fr 2fr",gap:4}}>
-              <div style={{display:"flex",flexDirection:"column",gap:4}}>
-                <div style={{flex:1,background:`${accent}22`,borderRadius:rad,minHeight:32}} />
-                <div style={{flex:1,background:`${accent}15`,borderRadius:rad,minHeight:32}} />
-              </div>
-              <div style={{background:`linear-gradient(135deg, ${accent}25, ${btn}18)`,borderRadius:rad,minHeight:70}} />
-              <div style={{display:"flex",flexDirection:"column",gap:4}}>
-                <div style={{flex:1,background:`${accent}12`,borderRadius:rad,minHeight:32}} />
-                <div style={{flex:1,background:`${btn}15`,borderRadius:rad,minHeight:32}} />
-              </div>
-            </div>);
-          case "subscribe": return s.layout==="cta" ? (
-            <div key={i} style={{background:isDark?"rgba(255,255,255,.04)":accent+"0a",padding:"10px 14px",display:"flex",alignItems:"center",justifyContent:"space-between",borderRadius:rad,gap:6}}>
-              <div style={{width:44,height:13,borderRadius:rad,background:btn}} />
-              <div style={{flex:1,display:"flex",flexDirection:"column",gap:4,alignItems:"flex-end"}}>
-                <div style={{width:"55%",height:6,borderRadius:3,background:bar}} />
-                <div style={{width:"35%",height:5,borderRadius:2,background:bar,opacity:.5}} />
-              </div>
-            </div>
-          ) : (
-            <div key={i} style={{display:"flex",gap:6,alignItems:"stretch",minHeight:80}}>
-              <div style={{flex:1,background:`linear-gradient(135deg, ${accent}30, ${btn}18)`,borderRadius:rad}} />
-              <div style={{flex:1,display:"flex",flexDirection:"column",alignItems:"flex-end",justifyContent:"center",gap:6,padding:"6px 0"}}>
-                <div style={{width:"85%",height:8,borderRadius:3,background:bar}} />
-                <div style={{width:"60%",height:6,borderRadius:2,background:bar,opacity:.5}} />
-                <div style={{width:48,height:14,borderRadius:rad,background:btn,marginTop:4}} />
-              </div>
-            </div>);
-          case "article_collection": return (
-            <div key={i} style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:5}}>
-              {[70,60,80,65].map((w,j)=>(
-                <div key={j} style={{background:card,borderRadius:rad,padding:4,display:"flex",flexDirection:"column",gap:4}}>
-                  <div style={{height:32,background:img,borderRadius:Math.max(rad-1,2)}} />
-                  <div style={{width:`${w}%`,height:5,borderRadius:3,background:bar}} />
-                  <div style={{width:`${w-20}%`,height:4,borderRadius:2,background:bar,opacity:.5}} />
-                </div>))}
-            </div>);
-          case "podcast": {
-            const pc = [accent,btn,"#6366F1","#EC4899"];
-            return (
-            <div key={i} style={{display:"flex",flexDirection:"column",gap:4}}>
-              {[0,1].map(j=>(
-                <div key={j} style={{display:"flex",gap:6,alignItems:"center",background:card,borderRadius:rad,padding:6}}>
-                  <div style={{flex:1,display:"flex",flexDirection:"column",gap:4,alignItems:"flex-end"}}>
-                    <div style={{width:"75%",height:6,borderRadius:3,background:bar}} />
-                    <div style={{width:"50%",height:4,borderRadius:2,background:bar,opacity:.4}} />
-                  </div>
-                  <div style={{width:38,height:38,borderRadius:rad,background:`linear-gradient(135deg, ${pc[j]}, ${pc[j+1]})`,flexShrink:0}} />
-                </div>))}
-            </div>);}
-          case "movies": {
-            const colors = ["#1a1a2e","#16213e","#0f3460","#533483","#2b2d42","#3d405b","#1b2838","#2d1b4e"];
-            return (
-            <div key={i} style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:4}}>
-              {[0,1,2,3].map(j=>(
-                <div key={j} style={{background:`linear-gradient(180deg, ${colors[j*2]}, ${colors[j*2+1]})`,borderRadius:rad,height:64,position:"relative",overflow:"hidden"}}>
-                  <div style={{position:"absolute",top:5,right:5,width:10,height:4,borderRadius:2,background:btn,opacity:.9}} />
-                  <div style={{position:"absolute",bottom:5,right:5,left:5,display:"flex",flexDirection:"column",gap:3,alignItems:"flex-end"}}>
-                    <div style={{width:"70%",height:5,borderRadius:2,background:"rgba(255,255,255,.5)"}} />
-                    <div style={{width:"40%",height:4,borderRadius:2,background:"rgba(255,255,255,.2)"}} />
-                  </div>
-                </div>))}
-            </div>);}
-          case "hero_slider": return (
-            <div key={i} style={{background:img,borderRadius:rad,height:40,position:"relative"}}>
-              <div style={{position:"absolute",bottom:6,left:"50%",transform:"translateX(-50%)",display:"flex",gap:4}}>
-                {[1,2,3].map(j=><div key={j} style={{width:6,height:6,borderRadius:"50%",background:j===1?btn:"rgba(255,255,255,.4)"}} />)}
-              </div>
-            </div>);
-          case "testimonials": return (
-            <div key={i} style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:4}}>
-              {[1,2,3].map(j=>(
-                <div key={j} style={{background:card,borderRadius:rad,padding:6,display:"flex",flexDirection:"column",alignItems:"center",gap:4}}>
-                  <div style={{width:18,height:18,borderRadius:"50%",background:img}} />
-                  <div style={{width:"70%",height:4,borderRadius:2,background:bar}} />
-                  <div style={{width:"90%",height:3,borderRadius:2,background:bar,opacity:.3}} />
-                </div>))}
-            </div>);
-          case "courses": return (
-            <div key={i} style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:4}}>
-              {[1,2,3].map(j=>(
-                <div key={j} style={{background:card,borderRadius:rad,padding:4,display:"flex",flexDirection:"column",gap:4}}>
-                  <div style={{height:28,background:img,borderRadius:Math.max(rad-1,2)}} />
-                  <div style={{width:"60%",height:5,borderRadius:3,background:bar}} />
-                  <div style={{width:36,height:10,borderRadius:rad,background:btn,alignSelf:"flex-end"}} />
-                </div>))}
-            </div>);
-          case "topics": return (
-            <div key={i} style={{display:"grid",gridTemplateColumns:"repeat(3,1fr)",gap:4}}>
-              {[1,2,3,4,5,6].map(j=>(
-                <div key={j} style={{background:accent+"15",borderRadius:rad,padding:"5px 8px",display:"flex",alignItems:"center",justifyContent:"center"}}>
-                  <div style={{width:"60%",height:5,borderRadius:3,background:bar}} />
-                </div>))}
-            </div>);
-          case "banner": return (
-            <div key={i} style={{display:"grid",gridTemplateColumns:"repeat(2,1fr)",gap:4}}>
-              {[1,2].map(j=>(
-                <div key={j} style={{background:card,borderRadius:rad,padding:8,display:"flex",flexDirection:"column",gap:4,alignItems:"flex-end"}}>
-                  <div style={{width:"65%",height:6,borderRadius:3,background:bar}} />
-                  <div style={{width:32,height:10,borderRadius:rad,background:btn}} />
-                </div>))}
-            </div>);
-          case "social_links": return (
-            <div key={i} style={{display:"flex",gap:6,justifyContent:"center",padding:"4px 0"}}>
-              {[1,2,3,4].map(j=><div key={j} style={{width:16,height:16,borderRadius:"50%",background:bar}} />)}
-            </div>);
-          case "products": return (
-            <div key={i} style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:4}}>
-              {[1,2,3,4].map(j=>(
-                <div key={j} style={{background:card,borderRadius:rad,padding:4,display:"flex",flexDirection:"column",gap:4}}>
-                  <div style={{height:28,background:img,borderRadius:Math.max(rad-1,2)}} />
-                  <div style={{width:"55%",height:5,borderRadius:3,background:bar}} />
-                  <div style={{width:30,height:9,borderRadius:rad,background:btn,alignSelf:"flex-end"}} />
-                </div>))}
-            </div>);
-          case "bento_grid": return (
-            <div key={i} style={{display:"grid",gridTemplateColumns:s.layout==="3-col"?"repeat(3,1fr)":"2fr 1fr",gap:4}}>
-              {(s.layout==="3-col"?[1,2,3]:[1,2,3]).map(j=>(
-                <div key={j} style={{background:card,borderRadius:rad,padding:8,minHeight:30,display:"flex",flexDirection:"column",gap:3,justifyContent:"center",alignItems:"flex-end"}}>
-                  <div style={{width:"60%",height:5,borderRadius:3,background:bar}} />
-                  <div style={{width:"80%",height:4,borderRadius:2,background:bar,opacity:.35}} />
-                </div>))}
-            </div>);
-          case "brands_ticker": return (
-            <div key={i} style={{display:"flex",gap:10,justifyContent:"center",alignItems:"center",padding:"6px 0"}}>
-              {[1,2,3,4,5].map(j=><div key={j} style={{width:30,height:10,borderRadius:3,background:bar,opacity:.45}} />)}
-            </div>);
-          default: return null;
-        }
-      };
-
-      const headerBg = isDark ? "rgba(255,255,255,.05)" : "#fff";
-      const headerBorder = isDark ? "rgba(255,255,255,.08)" : "#eee";
-      const footBg = isDark ? "rgba(0,0,0,.3)" : "#1a1a1a";
-      const footBar = isDark ? "rgba(255,255,255,.3)" : "#666";
-
-      return (
-        <div style={{background:b.bgColor,display:"flex",flexDirection:"column",minHeight:"100%"}}>
-          <div className="kwb-skel-header" style={{background:headerBg,borderBottomColor:headerBorder}}>
-            <div style={{width:50,height:8,borderRadius:4,background:bar}} />
-            <div style={{display:"flex",gap:8,flex:1,justifyContent:"flex-start"}}>
-              <div style={{width:28,height:6,borderRadius:3,background:bar}} />
-              <div style={{width:28,height:6,borderRadius:3,background:bar}} />
-              <div style={{width:28,height:6,borderRadius:3,background:bar}} />
-            </div>
-            <div style={{width:42,height:12,borderRadius:rad,background:btn}} />
-          </div>
-          <div style={{flex:1,display:"flex",flexDirection:"column",gap:6,padding:"6px 8px",overflow:"hidden"}}>
-            {comps.map(R)}
-          </div>
-          <div className="kwb-skel-footer" style={{background:footBg}}>
-            <div style={{width:44,height:7,borderRadius:3,background:footBar}} />
-            <div style={{width:64,height:5,borderRadius:2,background:footBar,opacity:.6}} />
-          </div>
-        </div>
-      );
+    // Each template gets a unique set of floating geometric shapes
+    const shapeConfigs: Record<string, { shapes: { type: "circle"|"rect"|"ring"|"dot"|"line"; x: number; y: number; size: number; delay: number; dur: number; dx: number; dy: number; rot?: number }[] }> = {
+      media:     { shapes: [
+        { type:"rect",x:15,y:20,size:120,delay:0,dur:8,dx:10,dy:-15,rot:12 },
+        { type:"circle",x:70,y:60,size:80,delay:1,dur:10,dx:-15,dy:10 },
+        { type:"ring",x:40,y:75,size:50,delay:2,dur:7,dx:8,dy:-8 },
+        { type:"dot",x:80,y:25,size:16,delay:0.5,dur:6,dx:-5,dy:12 },
+        { type:"line",x:25,y:45,size:100,delay:1.5,dur:9,dx:12,dy:5,rot:-15 },
+        { type:"rect",x:60,y:10,size:40,delay:3,dur:11,dx:-8,dy:8,rot:25 },
+      ]},
+      newsletter:{ shapes: [
+        { type:"circle",x:20,y:30,size:100,delay:0,dur:9,dx:12,dy:-10 },
+        { type:"rect",x:65,y:55,size:70,delay:1.5,dur:8,dx:-10,dy:8,rot:8 },
+        { type:"ring",x:75,y:20,size:45,delay:0.5,dur:11,dx:-8,dy:15 },
+        { type:"dot",x:35,y:70,size:14,delay:2,dur:7,dx:6,dy:-6 },
+        { type:"line",x:50,y:85,size:80,delay:3,dur:10,dx:-12,dy:-5,rot:10 },
+      ]},
+      blog:      { shapes: [
+        { type:"rect",x:10,y:15,size:90,delay:0,dur:10,dx:15,dy:10,rot:-5 },
+        { type:"circle",x:75,y:65,size:60,delay:1,dur:8,dx:-10,dy:-12 },
+        { type:"dot",x:50,y:40,size:18,delay:2,dur:6,dx:8,dy:8 },
+        { type:"line",x:30,y:80,size:110,delay:0.5,dur:12,dx:-6,dy:-8,rot:20 },
+        { type:"ring",x:85,y:30,size:35,delay:3,dur:9,dx:-12,dy:6 },
+      ]},
+      podcast:   { shapes: [
+        { type:"circle",x:25,y:25,size:110,delay:0,dur:8,dx:10,dy:12 },
+        { type:"circle",x:70,y:70,size:70,delay:2,dur:10,dx:-12,dy:-8 },
+        { type:"ring",x:55,y:35,size:55,delay:1,dur:7,dx:8,dy:-10 },
+        { type:"dot",x:15,y:75,size:20,delay:3,dur:9,dx:6,dy:-6 },
+        { type:"rect",x:80,y:15,size:45,delay:1.5,dur:11,dx:-10,dy:10,rot:15 },
+      ]},
+      cinema:    { shapes: [
+        { type:"rect",x:10,y:10,size:130,delay:0,dur:9,dx:8,dy:12,rot:5 },
+        { type:"rect",x:60,y:50,size:80,delay:1.5,dur:8,dx:-12,dy:-6,rot:-10 },
+        { type:"circle",x:80,y:80,size:50,delay:2,dur:11,dx:-6,dy:-10 },
+        { type:"dot",x:30,y:60,size:16,delay:0.5,dur:7,dx:10,dy:8 },
+        { type:"line",x:45,y:25,size:90,delay:3,dur:10,dx:-8,dy:6,rot:30 },
+      ]},
+      education: { shapes: [
+        { type:"circle",x:20,y:20,size:90,delay:0,dur:10,dx:12,dy:8 },
+        { type:"rect",x:65,y:45,size:75,delay:1,dur:8,dx:-10,dy:12,rot:12 },
+        { type:"ring",x:40,y:75,size:40,delay:2,dur:9,dx:8,dy:-10 },
+        { type:"dot",x:80,y:20,size:14,delay:1.5,dur:6,dx:-6,dy:10 },
+        { type:"dot",x:15,y:55,size:12,delay:3,dur:7,dx:5,dy:-5 },
+        { type:"line",x:55,y:10,size:70,delay:0.5,dur:11,dx:-10,dy:6,rot:-20 },
+      ]},
+      store:     { shapes: [
+        { type:"rect",x:15,y:25,size:100,delay:0,dur:8,dx:10,dy:-8,rot:8 },
+        { type:"circle",x:75,y:60,size:85,delay:1.5,dur:10,dx:-12,dy:10 },
+        { type:"dot",x:45,y:15,size:20,delay:0.5,dur:6,dx:6,dy:12 },
+        { type:"ring",x:30,y:70,size:45,delay:2,dur:9,dx:10,dy:-6 },
+        { type:"line",x:60,y:85,size:80,delay:3,dur:11,dx:-8,dy:-10,rot:15 },
+      ]},
+      coach:     { shapes: [
+        { type:"circle",x:25,y:30,size:105,delay:0,dur:9,dx:10,dy:-12 },
+        { type:"rect",x:70,y:55,size:65,delay:1,dur:8,dx:-8,dy:10,rot:10 },
+        { type:"ring",x:50,y:80,size:50,delay:2,dur:10,dx:6,dy:-8 },
+        { type:"dot",x:80,y:20,size:16,delay:1.5,dur:7,dx:-10,dy:6 },
+        { type:"line",x:15,y:55,size:90,delay:3,dur:11,dx:12,dy:8,rot:-12 },
+      ]},
+      portfolio: { shapes: [
+        { type:"rect",x:10,y:15,size:110,delay:0,dur:10,dx:12,dy:10,rot:-8 },
+        { type:"circle",x:70,y:55,size:75,delay:1.5,dur:8,dx:-10,dy:-12 },
+        { type:"ring",x:45,y:80,size:40,delay:1,dur:9,dx:8,dy:-6 },
+        { type:"dot",x:25,y:50,size:14,delay:2,dur:6,dx:6,dy:8 },
+        { type:"dot",x:85,y:30,size:18,delay:3,dur:7,dx:-8,dy:10 },
+      ]},
     };
 
     return (
@@ -2219,16 +2115,50 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
             {TEMPLATES.map(t => {
               const b = { ...SKELETON.defaultBranding, ...(t.defaultBranding || {}) };
               const btn = b.buttonColor || "#E82222";
+              const accent = b.accentColor || btn;
+              const bgColor = b.bgColor || "#fff";
+              const isDark = b.darkMode || ["#0","#1","#2"].some(p => bgColor.toLowerCase().startsWith(p));
+              const font = b.fontFamily || "IBM Plex Sans Arabic";
+              const shapes = shapeConfigs[t.id] || shapeConfigs.media;
+
               return (
               <div key={t.id} className="kwb-tpl-card" onClick={() => createFromTemplate(t.id)}>
-                <div className="kwb-tpl-preview">
-                  {skelBlock(t)}
+                <div className="kwb-tpl-preview" style={{background:bgColor}}>
+                  {shapes.shapes.map((sh,i) => {
+                    const animName = `kwb-float-${t.id}-${i}`;
+                    const color1 = i % 2 === 0 ? accent : btn;
+                    const opacity = sh.type === "dot" ? 0.6 : sh.type === "ring" ? 0.25 : 0.15;
+                    const style: React.CSSProperties = {
+                      position:"absolute",
+                      left:`${sh.x}%`,top:`${sh.y}%`,
+                      animation:`${animName} ${sh.dur}s ease-in-out ${sh.delay}s infinite alternate`,
+                    };
+                    const keyframes = `@keyframes ${animName}{0%{transform:translate(0,0)${sh.rot?` rotate(0deg)`:""}}100%{transform:translate(${sh.dx}px,${sh.dy}px)${sh.rot?` rotate(${sh.rot}deg)`:""}}}`;
+
+                    let shapeEl: React.ReactNode;
+                    if (sh.type === "circle") {
+                      shapeEl = <div style={{...style,width:sh.size,height:sh.size,borderRadius:"50%",background:color1,opacity}} />;
+                    } else if (sh.type === "rect") {
+                      shapeEl = <div style={{...style,width:sh.size,height:sh.size*0.65,borderRadius:sh.size*0.12,background:color1,opacity}} />;
+                    } else if (sh.type === "ring") {
+                      shapeEl = <div style={{...style,width:sh.size,height:sh.size,borderRadius:"50%",border:`2px solid ${color1}`,opacity:opacity+0.15}} />;
+                    } else if (sh.type === "dot") {
+                      shapeEl = <div style={{...style,width:sh.size,height:sh.size,borderRadius:"50%",background:color1,opacity}} />;
+                    } else {
+                      shapeEl = <div style={{...style,width:sh.size,height:3,borderRadius:2,background:color1,opacity:opacity+0.1}} />;
+                    }
+                    return <React.Fragment key={i}><style>{keyframes}</style>{shapeEl}</React.Fragment>;
+                  })}
+                  {/* Template name centered in the preview */}
+                  <div className="kwb-tpl-preview-label" style={{color:isDark?"rgba(255,255,255,.85)":"rgba(0,0,0,.7)",fontFamily:font}}>
+                    <span className="kwb-tpl-preview-name">{t.name}</span>
+                  </div>
                 </div>
                 <div className="kwb-tpl-overlay">
                   <button className="kwb-tpl-use-btn" style={{background:btn}}>ابدأ بهذا القالب</button>
                 </div>
                 <div className="kwb-tpl-meta">
-                  <h3 className="kwb-tpl-name">{t.name}</h3>
+                  <h3 className="kwb-tpl-name" style={{fontFamily:font}}>{t.name}</h3>
                   <p className="kwb-tpl-desc">{t.description}</p>
                 </div>
               </div>
@@ -4500,7 +4430,8 @@ const CSS_STYLES = `
 .kwb-tpl-card{position:relative;cursor:pointer;border-radius:16px;overflow:hidden;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.06);transition:transform .25s ease,box-shadow .25s ease;}
 .kwb-tpl-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,.12);}
 .kwb-tpl-preview{height:380px;overflow:hidden;position:relative;}
-.kwb-tpl-preview>div{transform-origin:top center;}
+.kwb-tpl-preview-label{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:1;pointer-events:none;}
+.kwb-tpl-preview-name{font-size:28px;font-weight:800;letter-spacing:-.02em;text-align:center;line-height:1.2;}
 .kwb-tpl-overlay{position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0);display:flex;align-items:center;justify-content:center;transition:background .25s ease;pointer-events:none;z-index:2;}
 .kwb-tpl-card:hover .kwb-tpl-overlay{background:rgba(0,0,0,.35);pointer-events:auto;}
 .kwb-tpl-use-btn{color:#fff;font-size:14px;font-weight:600;padding:12px 28px;border:none;border-radius:10px;cursor:pointer;opacity:0;transform:translateY(8px);transition:opacity .25s ease,transform .25s ease;font-family:inherit;}
@@ -4508,8 +4439,6 @@ const CSS_STYLES = `
 .kwb-tpl-meta{padding:16px 18px 18px;text-align:right;background:#fff;position:relative;z-index:1;}
 .kwb-tpl-name{font-size:16px;font-weight:700;margin:0 0 2px;color:#1a1a1a;}
 .kwb-tpl-desc{font-size:13px;color:#999;margin:0;line-height:1.4;}
-.kwb-skel-header{display:flex;align-items:center;gap:8px;direction:rtl;padding:6px 8px;background:#fff;border-bottom:1px solid #eee;}
-.kwb-skel-footer{background:#1a1a1a;padding:10px 12px;display:flex;flex-direction:column;align-items:center;gap:5px;}
 
 /* ─── BUILDER ─── */
 .kwb-builder{position:absolute;top:0;left:0;right:0;bottom:0;background:#F2F2F2;display:flex;flex-direction:column;z-index:50;}
