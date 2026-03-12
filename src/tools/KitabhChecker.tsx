@@ -420,7 +420,7 @@ function Sparkline({ data, color, width=80, height=36, showLabels=false, showArr
 const CSS = `
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700;800&display=swap');
 .kb *{margin:0;padding:0;box-sizing:border-box;min-width:0;}
-.kb{width:100%;max-width:100%;min-width:320px;overflow-x:hidden;align-self:stretch;font-family:'IBM Plex Sans Arabic',system-ui,sans-serif;font-size:17px;line-height:1.65;direction:rtl;text-align:right;background:#F2F2F2;color:#371D12;}
+.kb{width:100%;max-width:100%;min-width:320px;min-height:100vh;overflow-x:hidden;align-self:stretch;font-family:'IBM Plex Sans Arabic',system-ui,sans-serif;font-size:17px;line-height:1.65;direction:rtl;text-align:right;background:#F2F2F2;color:#371D12;}
 
 /* ── Tool selector dropdown ── */
 .kb-sel-wrap{position:relative;}
