@@ -89,6 +89,7 @@ interface SiteBranding {
   showKitabhBadge?: boolean;
   badgeStyle?: "black" | "blue" | "white";
   badgeScale?: number; // 0-100, default 100
+  favicon?: string; // data URL for favicon
 }
 
 interface Article {
@@ -165,8 +166,11 @@ const TEMPLATES: Template[] = [
   },
 ];
 
-// ─── Kitabh icon (base64 PNG) ──────
-const KITABH_ICON = "data:image/png;base64,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";
+// ─── Kitabh icons — one per badge style ──────
+const KITABH_ICON_BLACK = "/images/kitabh-icon-black.png";
+const KITABH_ICON_BLUE = "/images/kitabh-icon-blue.png";
+const KITABH_ICON_WHITE = "/images/kitabh-icon-white.png";
+const KITABH_ICONS: Record<string, string> = { black: KITABH_ICON_BLACK, blue: KITABH_ICON_BLUE, white: KITABH_ICON_WHITE };
 
 // ─── Image pool (shuffled on each page load) ──────
 const IMAGE_POOL = [
@@ -921,7 +925,7 @@ export default function KitabhWebsiteBuilder(props: any) {
 
   // ─── File upload (local preview via FileReader) ────────
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [uploadTarget, setUploadTarget] = useState<{ type: "branding_logo" | "comp_logo" | "comp_banner" | "testi_img" | "ticker_img" | "gallery_sidebar" | "podcast_cover" | "header_hero_img" | "movie_poster" | "banner_card_img"; compId?: string; itemIndex?: number } | null>(null);
+  const [uploadTarget, setUploadTarget] = useState<{ type: "branding_logo" | "branding_favicon" | "comp_logo" | "comp_banner" | "testi_img" | "ticker_img" | "gallery_sidebar" | "podcast_cover" | "header_hero_img" | "movie_poster" | "banner_card_img"; compId?: string; itemIndex?: number } | null>(null);
 
   const triggerUpload = (target: typeof uploadTarget) => {
     setUploadTarget(target);
@@ -937,6 +941,8 @@ export default function KitabhWebsiteBuilder(props: any) {
       if (uploadTarget.type === "branding_logo") {
         const newLayout = activeSite!.branding.logoLayout === "text_only" ? "logo_and_text" : activeSite!.branding.logoLayout;
         updateSite(activeSiteId, { branding: { ...activeSite!.branding, logoUrl: dataUrl, logoLayout: newLayout } });
+      } else if (uploadTarget.type === "branding_favicon") {
+        updateSite(activeSiteId, { branding: { ...activeSite!.branding, favicon: dataUrl } });
       } else if (uploadTarget.type === "comp_logo" && uploadTarget.compId) {
         updateComponentSettings(uploadTarget.compId, { logoUrl: dataUrl });
       } else if (uploadTarget.type === "comp_banner" && uploadTarget.compId) {
@@ -1235,6 +1241,7 @@ export default function KitabhWebsiteBuilder(props: any) {
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>${sn}</title>
+${activeSite.branding.favicon ? `<link rel="icon" href="${activeSite.branding.favicon}" type="image/png">` : ''}
 <link href="https://fonts.googleapis.com/css2?family=${encodeURIComponent(ff)}:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;}
@@ -1340,13 +1347,13 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
 .pv-kitabh-badge img{flex-shrink:0;width:24px;height:auto;display:block;}
 .pv-badge-black{background:#000;color:#fff;border:1px solid #000;}
 .pv-badge-black:hover{background:#222;}
-.pv-badge-black img{filter:brightness(0) invert(1);}
+.pv-badge-black img{}
 .pv-badge-blue{background:#0000FF;color:#fff;border:1px solid #0000FF;}
 .pv-badge-blue:hover{background:#0000dd;}
-.pv-badge-blue img{filter:brightness(0) invert(1);}
+.pv-badge-blue img{}
 .pv-badge-white{background:#fff;color:#000;border:1px solid #e0e0e0;}
 .pv-badge-white:hover{background:#f5f5f5;}
-.pv-badge-white img{filter:none;}
+.pv-badge-white img{}
 /* Breadcrumb */
 .pv-breadcrumb{display:flex;align-items:center;gap:8px;padding:16px 24px 0;max-width:800px;margin:0 auto;font-size:13px;direction:rtl;}
 .pv-breadcrumb a{color:var(--pv-text);opacity:0.7;cursor:pointer;text-decoration:none;font-weight:500;}
@@ -1491,7 +1498,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
 }
 </style>
 </head>
-<body><div class="pv-site-wrapper" id="pv-main">${pagesHtml}</div>${activeSite.branding.showKitabhBadge !== false ? `<div class="pv-kitabh-badge-wrap"><a href="https://kitabh.com" target="_blank" rel="noopener noreferrer" class="pv-kitabh-badge pv-badge-${activeSite.branding.badgeStyle || "black"}" style="transform:scale(${(activeSite.branding.badgeScale ?? 100) / 100})"><img src="${KITABH_ICON}" alt="كتابة" />صُمّم باستخدام كتابة</a></div>` : ''}
+<body><div class="pv-site-wrapper" id="pv-main">${pagesHtml}</div>${activeSite.branding.showKitabhBadge !== false ? `<div class="pv-kitabh-badge-wrap"><a href="https://kitabh.com" target="_blank" rel="noopener noreferrer" class="pv-kitabh-badge pv-badge-${activeSite.branding.badgeStyle || "black"}" style="transform:scale(${(activeSite.branding.badgeScale ?? 100) / 100})"><img src="${KITABH_ICONS[activeSite.branding.badgeStyle || "black"]}" alt="كتابة" />صُمّم باستخدام كتابة</a></div>` : ''}
 <div id="pv-article-overlay" class="pv-article-overlay" style="display:none"></div>
 <script>
 (function(){
@@ -2696,7 +2703,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                 {activeSite.branding.showKitabhBadge !== false && (
                   <div className="kwb-p-kitabh-badge-wrap">
                     <a href="https://kitabh.com" target="_blank" rel="noopener noreferrer" className={`kwb-p-footer-kitabh-badge kwb-badge-${activeSite.branding.badgeStyle || "black"}`} style={{ transform: `scale(${(activeSite.branding.badgeScale ?? 100) / 100})` }}>
-                      <img src={KITABH_ICON} alt="كتابة" />
+                      <img src={KITABH_ICONS[activeSite.branding.badgeStyle || "black"]} alt="كتابة" />
                       صُمّم باستخدام كتابة
                     </a>
                   </div>
@@ -2755,6 +2762,17 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                     <div className="kwb-upload-area">{Icons.image}<span>لا توجد صورة</span></div>
                   )}
                   <button className="kwb-btn-outline kwb-btn-full" onClick={() => triggerUpload({ type: "branding_logo" })}>رفع صورة</button>
+
+                  <label className="kwb-label" style={{ marginTop: 16 }}>أيقونة الموقع (Favicon)</label>
+                  {activeSite.branding.favicon ? (
+                    <div className="kwb-upload-preview" style={{ maxWidth: 48 }}>
+                      <img src={activeSite.branding.favicon} alt="favicon" style={{ width: 32, height: 32, objectFit: "contain" }} />
+                      <button className="kwb-upload-remove" onClick={() => updateSite(activeSite.id, { branding: { ...activeSite.branding, favicon: "" } })}>{Icons.x}</button>
+                    </div>
+                  ) : (
+                    <div className="kwb-upload-area" style={{ padding: "8px 12px", minHeight: "auto" }}>{Icons.image}<span style={{ fontSize: 12 }}>لا توجد أيقونة</span></div>
+                  )}
+                  <button className="kwb-btn-outline kwb-btn-full" onClick={() => triggerUpload({ type: "branding_favicon" })}>رفع أيقونة</button>
 
                   <label className="kwb-label" style={{ marginTop: 16 }}>تخطيط الشعار</label>
                   <div className="kwb-logo-layout-options">
@@ -2928,19 +2946,19 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                       <div className="kwb-badge-style-picker">
                         <button className={`kwb-badge-style-opt ${(activeSite.branding.badgeStyle || "black") === "black" ? "kwb-badge-style-active" : ""}`} onClick={() => updateSite(activeSite.id, { branding: { ...activeSite.branding, badgeStyle: "black" } })} title="أسود">
                           <span className="kwb-badge-preview kwb-badge-preview-black">
-                            <img src={KITABH_ICON} alt="" style={{ width: 12, height: "auto", filter: "brightness(0) invert(1)" }} />
+                            <img src={KITABH_ICON_WHITE} alt="" style={{ width: 12, height: "auto" }} />
                             <span>صُمّم باستخدام كتابة</span>
                           </span>
                         </button>
                         <button className={`kwb-badge-style-opt ${activeSite.branding.badgeStyle === "blue" ? "kwb-badge-style-active" : ""}`} onClick={() => updateSite(activeSite.id, { branding: { ...activeSite.branding, badgeStyle: "blue" } })} title="أزرق">
                           <span className="kwb-badge-preview kwb-badge-preview-blue">
-                            <img src={KITABH_ICON} alt="" style={{ width: 12, height: "auto", filter: "brightness(0) invert(1)" }} />
+                            <img src={KITABH_ICON_WHITE} alt="" style={{ width: 12, height: "auto" }} />
                             <span>صُمّم باستخدام كتابة</span>
                           </span>
                         </button>
                         <button className={`kwb-badge-style-opt ${activeSite.branding.badgeStyle === "white" ? "kwb-badge-style-active" : ""}`} onClick={() => updateSite(activeSite.id, { branding: { ...activeSite.branding, badgeStyle: "white" } })} title="أبيض">
                           <span className="kwb-badge-preview kwb-badge-preview-white">
-                            <img src={KITABH_ICON} alt="" style={{ width: 12, height: "auto" }} />
+                            <img src={KITABH_ICON_BLACK} alt="" style={{ width: 12, height: "auto" }} />
                             <span>صُمّم باستخدام كتابة</span>
                           </span>
                         </button>
@@ -2948,7 +2966,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                       <label className="kwb-label" style={{ marginTop: 10 }}>حجم الشارة</label>
                       <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                         <span style={{ fontSize: 11, color: "#999" }}>صغير</span>
-                        <input type="range" min="40" max="100" value={activeSite.branding.badgeScale ?? 100} onChange={e => updateSite(activeSite.id, { branding: { ...activeSite.branding, badgeScale: parseInt(e.target.value) } })} style={{ flex: 1, accentColor: activeSite.branding.buttonColor || "#E82222" }} />
+                        <input type="range" min="50" max="100" value={activeSite.branding.badgeScale ?? 100} onChange={e => updateSite(activeSite.id, { branding: { ...activeSite.branding, badgeScale: parseInt(e.target.value) } })} style={{ flex: 1, accentColor: activeSite.branding.buttonColor || "#E82222" }} />
                         <span style={{ fontSize: 11, color: "#999" }}>كبير</span>
                       </div>
                     </>
@@ -4793,13 +4811,13 @@ const CSS_STYLES = `
 .kwb-p-footer-kitabh-badge img{flex-shrink:0;width:24px;height:auto;display:block;}
 .kwb-badge-black{background:#000;color:#fff;border:1px solid #000;}
 .kwb-badge-black:hover{background:#1a1a1a;}
-.kwb-badge-black img{filter:brightness(0) invert(1);}
+.kwb-badge-black img{}
 .kwb-badge-blue{background:#0000FF;color:#fff;border:1px solid #0000FF;}
 .kwb-badge-blue:hover{background:#0000dd;}
-.kwb-badge-blue img{filter:brightness(0) invert(1);}
+.kwb-badge-blue img{}
 .kwb-badge-white{background:#fff;color:#000;border:1px solid #e0e0e0;}
 .kwb-badge-white:hover{background:#f5f5f5;}
-.kwb-badge-white img{filter:none;}
+.kwb-badge-white img{}
 .kwb-badge-style-picker{display:flex;gap:8px;flex-wrap:wrap;}
 .kwb-badge-style-opt{border:2px solid transparent;border-radius:8px;padding:4px;cursor:pointer;background:none;transition:border-color .2s;}
 .kwb-badge-style-active{border-color:#0000FF;}
