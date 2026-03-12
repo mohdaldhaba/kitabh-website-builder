@@ -707,6 +707,11 @@ const CSS = `
   .kb-sm-chart{width:100%;}
   .kb-sec-head{margin:28px 0 14px;}
   .kb-sec-head-first{margin-top:10px;}
+  .kb-res-header{padding:14px;}
+  .kb-res-header-top{flex-direction:column;align-items:stretch;gap:10px;}
+  .kb-res-title{font-size:15px;white-space:normal;}
+  .kb-btn-share{align-self:flex-start;font-size:12px;padding:7px 14px;}
+  .kb-top-bar{flex-wrap:wrap;gap:8px;}
 }
 @media(max-width:400px){
   .kb-pg{grid-template-columns:repeat(3,1fr);}
