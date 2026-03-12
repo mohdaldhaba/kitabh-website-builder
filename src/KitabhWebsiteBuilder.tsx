@@ -2168,7 +2168,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                             <div className={`kwb-p-articles-grid ${comp.settings.mobileLayout === "list" ? "kwb-p-articles-mobile-list" : ""}`}>
                               {collArticles.map(a => (
                                 <a key={a.id} className="kwb-p-article-card" href={`/article/${a.slug}`} target="_blank" rel="noopener noreferrer" style={{ textDecoration: "none", color: "inherit" }}>
-                                  <div className="kwb-p-article-img" style={a.imageUrl ? { backgroundImage: `url(${a.imageUrl})`, backgroundSize: "cover", backgroundPosition: "center" } : undefined} />
+                                  <div className="kwb-p-article-img" style={a.imageUrl ? { background: `url(${a.imageUrl}) center/cover no-repeat` } : undefined} />
                                   <div className="kwb-p-article-card-text">
                                     <h4 className="kwb-p-article-title">{a.title}</h4>
                                     <p className="kwb-p-article-excerpt">{a.excerpt.slice(0, 80)}...</p>
