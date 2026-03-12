@@ -161,13 +161,34 @@ const TEMPLATES: Template[] = [
   },
 ];
 
+// ─── Image pool (shuffled on each page load) ──────
+const IMAGE_POOL = [
+  "/images/articles/blue-tiles.jpg", "/images/articles/red-light.jpg", "/images/articles/colorful-windows.jpg",
+  "/images/articles/abstract-warm.jpg", "/images/articles/yellow-blur.jpg", "/images/articles/underwater.jpg",
+  "/images/articles/stained-glass.jpg", "/images/articles/fish.jpg", "/images/articles/red-corridor.jpg",
+  "/images/articles/valley.jpg", "/images/articles/red-glass.jpg", "/images/articles/rainbow.jpg",
+  "/images/articles/pink-fabric.jpg", "/images/articles/blue-glass.jpg", "/images/articles/prism.jpg",
+  "/images/articles/basketball.jpg", "/images/articles/coral.jpg", "/images/articles/bird.jpg",
+  "/images/articles/ocean-wave.jpg", "/images/articles/sunset.jpg", "/images/articles/forest.jpg",
+  "/images/articles/mountain.jpg", "/images/articles/hourglass.jpg", "/images/articles/calligraphy.jpg",
+  "/images/articles/desert-dunes.jpg", "/images/articles/vinyl.jpg", "/images/articles/gradient.jpg",
+  "/images/articles/headphones.jpg", "/images/articles/bokeh.jpg", "/images/articles/paper-art.jpg",
+  "/images/articles/textile.jpg", "/images/articles/pattern.jpg",
+];
+function shuffleArray<T>(arr: T[]): T[] {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+  return a;
+}
+const shuffledImages = shuffleArray(IMAGE_POOL);
+
 // ─── Mock articles (derived from mockData.ts — matches MongoDB schema) ──────
-const MOCK_ARTICLES: Article[] = RAW_MOCK_ARTICLES.map(a => ({
+const MOCK_ARTICLES: Article[] = RAW_MOCK_ARTICLES.map((a, i) => ({
   id: a._id,
   slug: a.slug,
   title: a.title,
   excerpt: a.description || a.articleText.slice(0, 120),
-  imageUrl: a.coverImage,
+  imageUrl: shuffledImages[i % shuffledImages.length],
   author: MOCK_AUTHORS_MAP[a.author] || MOCK_AUTHOR.name,
   date: new Date(a.publishedAt).toLocaleDateString("ar-SA", { year: "numeric", month: "long", day: "numeric" }),
   likes: a.likeCount,
