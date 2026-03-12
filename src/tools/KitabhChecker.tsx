@@ -2490,7 +2490,8 @@ export default function KitabhChecker() {
         const sc = parseFloat(result?.overall_score || result?.confidence || "0")
         const lbl = result?.overall_label || (sc >= 8.5 ? "ممتاز" : sc >= 7 ? "جيد جداً" : sc >= 5.5 ? "جيد" : "يحتاج تحسين")
         const articleTitle = text.trim().split("\n")[0]?.slice(0, 60) || "مقال"
-        const shareText = `حصل نصي في اختبار منصة كتابة على ${sc.toFixed(0)}/10 وهذا يعني أنه (${lbl}). جرّب الاختبار لمعرفة تقييم نصك من هنا:`
+        const shareEmoji = sc >= 9 ? "🏆" : sc >= 8 ? "🔥" : sc >= 7 ? "💪" : sc >= 5.5 ? "✍️" : "📝"
+        const shareText = `اختبرت نصي على منصة كتابة… والنتيجة؟ ${sc.toFixed(0)}/10 ${shareEmoji}\nتقييم ${lbl}!\nهل سيحصل نصك على نتيجة أفضل؟ جرّب الاختبار:`
         const shareUrl = "https://kitabh.com/tools/article_checker"
         const encoded = encodeURIComponent(shareText + "\n" + shareUrl)
         const encodedUrl = encodeURIComponent(shareUrl)
