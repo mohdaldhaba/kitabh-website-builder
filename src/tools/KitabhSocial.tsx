@@ -628,7 +628,7 @@ const CSS = `
 .ks-top-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:16px;}
 .ks-btn-back{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:#818181;background:#fff;border:1.5px solid #D9D9D9;padding:8px 14px;border-radius:9px;cursor:pointer;font-family:inherit;}
 .ks-btn-back:hover{border-color:#371D12;color:#371D12;}
-.ks-res-header{text-align:center;margin-bottom:24px;}
+.ks-res-header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:24px;text-align:right;}
 .ks-res-title{font-size:22px;font-weight:800;color:#371D12;margin-bottom:4px;}
 .ks-res-sub{font-size:14px;color:#818181;}
 .ks-pcard{background:#fff;border:1.5px solid #D9D9D9;border-radius:16px;margin-bottom:16px;overflow:hidden;box-shadow:0 2px 10px rgba(0,0,0,.06);animation:ks-fu .35s ease both;position:relative;}
@@ -1311,7 +1311,7 @@ export default function KitabhSocial({premium:premiumProp=false}:{premium?:boole
       // Preserve hooks from previous result if new result doesn't have them
       if(!pd.hooks && result?.[pid]?.hooks) pd.hooks = result[pid].hooks
       setResult((prev:any)=>({...prev,[pid]:pd}))
-    }catch(e:any){console.error("KS regen:",e);setError(e.message||"خطأ في إعادة التوليد")}
+    }catch(e:any){console.error("KS regen:",e);setError(e.message||"خطأ في إعادة الكتابة")}
     setRegenLoading(p=>({...p,[pid]:false}))
   },[text,cfg,superHook,result])
 
@@ -1342,7 +1342,7 @@ export default function KitabhSocial({premium:premiumProp=false}:{premium?:boole
       if(!hasContent) throw new Error("لم نحصل على محتوى. حاول مرة أخرى.")
       recordUsage();setUsed(getUsage())
       setResult(flat);setSelectedHook({})
-    }catch(e:any){console.error("KS regenAll:",e);setError(e.message||"خطأ في إعادة التوليد")}
+    }catch(e:any){console.error("KS regenAll:",e);setError(e.message||"خطأ في إعادة الكتابة")}
     setRegenAllLoading(false)
   },[text,selected,cfg,superHook,regenAllLoading])
 
@@ -1767,21 +1767,23 @@ export default function KitabhSocial({premium:premiumProp=false}:{premium?:boole
           <div className="ks-res">
             <div className="ks-top-bar"><button className="ks-btn-back" onClick={reset} type="button"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round"><path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/></svg>عودة</button></div>
             {error&&<div className="ks-error">{error}<button className="ks-error-dismiss" onClick={()=>setError(null)}>إغلاق</button></div>}
-            <div className="ks-res-header"><div className="ks-res-title">محتواك جاهز للنشر</div><div className="ks-res-sub">انسخ المحتوى وانشره مباشرة على كل منصة</div></div>
+            <div className="ks-res-header">
+              <div><div className="ks-res-title">محتواك جاهز للنشر</div><div className="ks-res-sub">انسخ المحتوى وانشره مباشرة على كل منصة</div></div>
+              <button className="ks-mini-refresh" type="button" onClick={regenAll} disabled={regenAllLoading} style={{flexShrink:0}}>
+                {regenAllLoading ? (
+                  <svg className="ks-spin" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><circle cx="12" cy="12" r="10" strokeOpacity=".2"/><path d="M12 2a10 10 0 0110 10" strokeLinecap="round"/></svg>
+                ) : (
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
+                )}
+                {regenAllLoading ? "جاري الكتابة..." : "أعد الكتابة"}
+              </button>
+            </div>
             {/* v15: Animated settings toggle + collapsible panel */}
             <div className="ks-settings-bar">
               <button className={`ks-settings-tog${showSettings?" on":""}`} type="button" onClick={()=>setShowSettings(v=>!v)}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" strokeWidth="2" strokeLinecap="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
                 نبرة المحتوى
                 <svg className={`ks-settings-arrow${showSettings?" open":""}`} width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M6 9l6 6 6-6"/></svg>
-              </button>
-              <button className="ks-mini-refresh" type="button" onClick={regenAll} disabled={regenAllLoading} style={{marginRight:"auto"}}>
-                {regenAllLoading ? (
-                  <svg className="ks-spin" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><circle cx="12" cy="12" r="10" strokeOpacity=".2"/><path d="M12 2a10 10 0 0110 10" strokeLinecap="round"/></svg>
-                ) : (
-                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><path d="M23 4v6h-6"/><path d="M1 20v-6h6"/><path d="M3.51 9a9 9 0 0114.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0020.49 15"/></svg>
-                )}
-                {regenAllLoading ? "جاري التوليد..." : "أعد التوليد"}
               </button>
             </div>
             {showSettings && (
