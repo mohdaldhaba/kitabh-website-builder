@@ -6,7 +6,7 @@
 // ═══════════════════════════════════════════════════════
 
 import React, { useState, useCallback, useEffect, useRef } from "react";
-import { MOCK_ARTICLES as RAW_MOCK_ARTICLES, MOCK_AUTHOR, MOCK_CATEGORIES } from "./mockData";
+import { MOCK_ARTICLES as RAW_MOCK_ARTICLES, MOCK_AUTHOR, MOCK_AUTHORS_MAP, MOCK_CATEGORIES } from "./mockData";
 
 // ─── Types ──────────────────────────────────────────────
 type ViewMode = "sites" | "templates" | "builder";
@@ -168,7 +168,7 @@ const MOCK_ARTICLES: Article[] = RAW_MOCK_ARTICLES.map(a => ({
   title: a.title,
   excerpt: a.description || a.articleText.slice(0, 120),
   imageUrl: a.coverImage,
-  author: MOCK_AUTHOR.name,
+  author: MOCK_AUTHORS_MAP[a.author] || MOCK_AUTHOR.name,
   date: new Date(a.publishedAt).toLocaleDateString("ar-SA", { year: "numeric", month: "long", day: "numeric" }),
   likes: a.likeCount,
   comments: a.commentCount,
