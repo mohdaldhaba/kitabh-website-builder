@@ -841,6 +841,32 @@ const CSS = `
 .ktk-pw-apple{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;background:#000;color:#FFF;font-family:inherit;font-size:14px;font-weight:600;text-decoration:none;border-radius:12px;margin-top:8px;transition:all .2s;text-align:center;box-sizing:border-box;}
 .ktk-pw-apple:hover{background:#222;}
 .ktk-pw-proof{font-size:10px;color:#94A3B8;margin-top:10px;}
+
+/* ═══ Results Header ═══ */
+.kb-res-header{display:flex;flex-direction:column;gap:8px;margin-bottom:20px;padding:20px;background:#fff;border:1.5px solid #E5E5E5;border-radius:14px;}
+.kb-res-header-top{display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.kb-res-title{font-size:17px;font-weight:700;color:#371D12;line-height:1.6;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.kb-res-meta{font-size:12px;color:#999;display:flex;align-items:center;gap:8px;}
+.kb-btn-share{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:#0000FF;background:#F0F0FF;border:1.5px solid #D9D9FF;padding:8px 16px;border-radius:9px;cursor:pointer;font-family:inherit;transition:all .15s;flex-shrink:0;}
+.kb-btn-share:hover{background:#E0E0FF;border-color:#0000FF;}
+
+/* ═══ Share Popup ═══ */
+.kb-share-overlay{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.4);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);animation:ktk-fadein .2s ease;}
+.kb-share-card{position:relative;background:#FFF;border-radius:20px;padding:32px 24px 28px;box-shadow:0 8px 40px rgba(0,0,0,.12);max-width:360px;width:100%;text-align:center;font-family:'IBM Plex Sans Arabic',sans-serif;direction:rtl;animation:ktk-slideup .3s ease;}
+.kb-share-close{position:absolute;top:14px;left:14px;width:30px;height:30px;border:none;background:#F2F2F2;border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#666;transition:all .2s;}
+.kb-share-close:hover{background:#E5E5E5;color:#333;}
+.kb-share-h{font-size:18px;font-weight:700;color:#111;margin-bottom:6px;}
+.kb-share-sub{font-size:13px;color:#999;margin-bottom:20px;}
+.kb-share-icons{display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:20px;}
+.kb-share-ico{display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;text-decoration:none;}
+.kb-share-ico-circle{width:48px;height:48px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:transform .15s;}
+.kb-share-ico-circle:hover{transform:scale(1.08);}
+.kb-share-ico-label{font-size:11px;color:#666;font-weight:500;}
+.kb-share-divider{display:flex;align-items:center;gap:12px;margin-bottom:16px;}
+.kb-share-divider::before,.kb-share-divider::after{content:'';flex:1;height:1px;background:#E5E5E5;}
+.kb-share-divider span{font-size:12px;color:#AAAAAA;}
+.kb-share-copy{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;background:#fff;border:1.5px solid #E5E5E5;border-radius:10px;font-size:14px;font-weight:600;color:#371D12;cursor:pointer;font-family:inherit;transition:all .15s;}
+.kb-share-copy:hover{border-color:#0000FF;color:#0000FF;}
 `
 
 // ─── CAT SVG icons ─────────────────────────────────────
@@ -1061,6 +1087,7 @@ export default function KitabhChecker() {
   const [showPopup, setShowPopup] = useState(false)
   const [popupEmail, setPopupEmail] = useState("")
   const [showPaywall, setShowPaywall] = useState(false)
+  const [showShare, setShowShare] = useState(false)
   const [tool,         setTool]         = useState<Tool>("article")
   const [phase,        setPhase]        = useState<Phase>("input")
   const [text,         setText]         = useState("")
@@ -2121,6 +2148,34 @@ export default function KitabhChecker() {
               </button>
             </div>
 
+            {/* ── Results header: title + grade + share ── */}
+            {(() => {
+              const sc = parseFloat(result.overall_score || result.confidence || "0")
+              const lbl = result.overall_label || (sc >= 8.5 ? "ممتاز" : sc >= 7 ? "جيد جداً" : sc >= 5.5 ? "جيد" : "يحتاج تحسين")
+              const gradeColor = sc >= 8.5 ? "#12B76A" : sc >= 7 ? "#0000FF" : sc >= 5.5 ? "#DFB300" : "#E82222"
+              const articleTitle = text.trim().split("\n")[0]?.slice(0, 80) || "تحليل بدون عنوان"
+              const toolLabels: Record<string,string> = { article: "مقال", story: "قصة", thread: "ثريد", script: "سكريبت" }
+              return (
+                <div className="kb-res-header">
+                  <div className="kb-res-header-top">
+                    <div style={{flex:1,minWidth:0}}>
+                      <div className="kb-res-title">{articleTitle}</div>
+                      <div style={{display:"flex",alignItems:"center",gap:8,marginTop:4}}>
+                        <span style={{fontSize:12,color:"#999",fontWeight:500}}>{toolLabels[tool] || tool}</span>
+                        <span style={{width:3,height:3,borderRadius:"50%",background:"#D9D9D9"}}/>
+                        <span style={{fontSize:13,fontWeight:700,color:gradeColor}}>{sc.toFixed(1)}/10</span>
+                        <span style={{fontSize:12,fontWeight:600,color:gradeColor,background:`${gradeColor}12`,padding:"2px 8px",borderRadius:6}}>{lbl}</span>
+                      </div>
+                    </div>
+                    <button className="kb-btn-share" onClick={()=>setShowShare(true)}>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                      شارك نتيجتك
+                    </button>
+                  </div>
+                </div>
+              )
+            })()}
+
             {/* ── Report content ── */}
             {tool !== "story" ? (
               <>
@@ -2396,6 +2451,52 @@ export default function KitabhChecker() {
             <div style={{background:"#371D12",padding:"12px 32px",display:"flex",justifyContent:"space-between",alignItems:"center",marginTop:8}}>
               <div style={{color:"rgba(255,255,255,.45)",fontSize:10}}>تقرير مُنشأ بواسطة منصة كتابة</div>
               <div style={{color:"#0000FF",fontSize:14,fontWeight:700,fontFamily:"'IBM Plex Sans Arabic',sans-serif"}}>kitabh.com</div>
+            </div>
+          </div>
+        )
+      })()}
+
+      {/* ── Share popup ── */}
+      {showShare && (() => {
+        const sc = parseFloat(result?.overall_score || result?.confidence || "0")
+        const lbl = result?.overall_label || (sc >= 8.5 ? "ممتاز" : sc >= 7 ? "جيد جداً" : sc >= 5.5 ? "جيد" : "يحتاج تحسين")
+        const articleTitle = text.trim().split("\n")[0]?.slice(0, 60) || "مقال"
+        const shareText = `حصل مقالي "${articleTitle}" على تقييم ${sc.toFixed(1)}/10 (${lbl}) في فاحص كتابة! جرّب تحليل مقالك مجانًا:`
+        const shareUrl = "https://start.kitabh.com/checker"
+        const encoded = encodeURIComponent(shareText + "\n" + shareUrl)
+        const encodedUrl = encodeURIComponent(shareUrl)
+        const encodedText = encodeURIComponent(shareText)
+        return (
+          <div className="kb-share-overlay" onClick={()=>setShowShare(false)}>
+            <div className="kb-share-card" onClick={e=>e.stopPropagation()}>
+              <button className="kb-share-close" onClick={()=>setShowShare(false)} type="button">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M18 6L6 18"/><path d="M6 6l12 12"/></svg>
+              </button>
+              <div className="kb-share-h">مشاركة النتيجة</div>
+              <div className="kb-share-sub">شارك تقييم مقالك مع متابعينك</div>
+              <div className="kb-share-icons">
+                <a className="kb-share-ico" href={`https://wa.me/?text=${encoded}`} target="_blank" rel="noopener noreferrer">
+                  <div className="kb-share-ico-circle" style={{background:"#25D366"}}><svg width="22" height="22" viewBox="0 0 24 24" fill="#FFF"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg></div>
+                  <span className="kb-share-ico-label">واتساب</span>
+                </a>
+                <a className="kb-share-ico" href={`https://twitter.com/intent/tweet?text=${encodedText}&url=${encodedUrl}`} target="_blank" rel="noopener noreferrer">
+                  <div className="kb-share-ico-circle" style={{background:"#000"}}><svg width="18" height="18" viewBox="0 0 24 24" fill="#FFF"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></div>
+                  <span className="kb-share-ico-label">X</span>
+                </a>
+                <a className="kb-share-ico" href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}`} target="_blank" rel="noopener noreferrer">
+                  <div className="kb-share-ico-circle" style={{background:"#0A66C2"}}><svg width="20" height="20" viewBox="0 0 24 24" fill="#FFF"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></div>
+                  <span className="kb-share-ico-label">لينكدإن</span>
+                </a>
+                <a className="kb-share-ico" href={`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`} target="_blank" rel="noopener noreferrer">
+                  <div className="kb-share-ico-circle" style={{background:"#1877F2"}}><svg width="20" height="20" viewBox="0 0 24 24" fill="#FFF"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></div>
+                  <span className="kb-share-ico-label">فيسبوك</span>
+                </a>
+              </div>
+              <div className="kb-share-divider"><span>أو</span></div>
+              <button className="kb-share-copy" onClick={()=>{navigator.clipboard.writeText(shareText + "\n" + shareUrl);const btn=document.querySelector('.kb-share-copy') as HTMLElement;if(btn){btn.textContent='تم النسخ ✓';setTimeout(()=>{btn.innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>نسخ الرابط';},1500)}}}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                نسخ الرابط
+              </button>
             </div>
           </div>
         )
