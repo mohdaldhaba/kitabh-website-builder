@@ -683,15 +683,11 @@ const CSS = `
 
 /* Results */
 .kb-res{width:100%;padding:16px 16px 8px;box-sizing:border-box;}
-.kb-btn-editor{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:#FFF;background:#0000FF;border:1.5px solid #0000FF;padding:8px 14px;border-radius:9px;cursor:pointer;font-family:inherit;text-decoration:none;transition:all .15s;}
-.kb-btn-editor:hover{background:#1a1aFF;}
+.kb-btn-editor{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:700;color:#FFF;background:#0000FF;border:none;padding:10px 20px;border-radius:10px;cursor:pointer;font-family:inherit;text-decoration:none;transition:all .15s;box-shadow:0 2px 8px rgba(0,0,255,.2);}
+.kb-btn-editor:hover{background:#0000DD;box-shadow:0 4px 12px rgba(0,0,255,.3);}
 .kb-top-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px;}
-.kb-btn-back{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:#818181;background:#fff;border:1.5px solid #D9D9D9;padding:8px 14px;border-radius:9px;cursor:pointer;font-family:inherit;transition:all .15s;}
-.kb-btn-back:hover{border-color:#371D12;color:#371D12;}
-.kb-btn-copy{display:inline-flex;align-items:center;gap:7px;font-size:13px;font-weight:600;color:#0000FF;background:#E8E8FF;border:1.5px solid #0000FF;padding:8px 14px;border-radius:9px;cursor:pointer;font-family:inherit;transition:all .15s;}
-.kb-btn-copy:hover{background:#D5D5FF;}
-.kb-btn-share{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:#0000FF;background:#F0F0FF;border:1.5px solid #D9D9FF;padding:8px 14px;border-radius:9px;cursor:pointer;font-family:inherit;transition:all .15s;}
-.kb-btn-share:hover{background:#E0E0FF;border-color:#0000FF;}
+.kb-btn-icon{width:36px;height:36px;border-radius:9px;border:1.5px solid #D9D9D9;background:#fff;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .15s;flex-shrink:0;color:#818181;}
+.kb-btn-icon:hover{border-color:#0000FF;color:#0000FF;background:#F0F0FF;}
 .kb-share-overlay{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.4);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);animation:ktk-fadein .2s ease;}
 .kb-share-card{position:relative;background:#FFF;border-radius:20px;padding:32px 24px 28px;box-shadow:0 8px 40px rgba(0,0,0,.12);max-width:360px;width:100%;text-align:center;font-family:'IBM Plex Sans Arabic',sans-serif;direction:rtl;animation:ktk-slideup .3s ease;}
 .kb-share-close{position:absolute;top:14px;left:14px;width:30px;height:30px;border:none;background:#F2F2F2;border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:#666;transition:all .2s;}
@@ -1639,30 +1635,28 @@ export default function KitabhOutline(props: { premium?: boolean }) {
           <div className="kb-res">
             {/* Top bar */}
             <div className="kb-top-bar">
-              <button className="kb-btn-back" onClick={reset}>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/>
-                </svg>
-                عودة
-              </button>
               <div style={{display:"flex",gap:"8px",alignItems:"center"}}>
-                <a className="kb-btn-editor" href="https://kitabh.com/editor/create">
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z"/>
+                <button className="kb-btn-icon" onClick={reset} title="عودة">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M5 12h14"/><path d="M12 5l7 7-7 7"/>
                   </svg>
-                  اكتب في المحرر
-                </a>
-                <button className="kb-btn-copy" onClick={copyOutline}>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
-                  </svg>
-                  {copied ? "تم النسخ" : "نسخ المخطط"}
                 </button>
-                <button className="kb-btn-share" onClick={()=>setShowShare(true)}>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-                  مشاركة
+                <button className="kb-btn-icon" onClick={copyOutline} title={copied ? "تم النسخ" : "نسخ المخطط"}>
+                  {copied
+                    ? <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#12B76A" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6L9 17l-5-5"/></svg>
+                    : <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
+                  }
+                </button>
+                <button className="kb-btn-icon" onClick={()=>setShowShare(true)} title="مشاركة">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
                 </button>
               </div>
+              <a className="kb-btn-editor" href="https://kitabh.com/editor/create">
+                اكتب في المحرر
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M5 12h14"/><path d="M12 5l7 7-7 7"/>
+                </svg>
+              </a>
             </div>
 
             {/* Summary */}
