@@ -1068,6 +1068,12 @@ export default function KitabhWebsiteBuilder(props: any) {
     if ((ll === "logo_only" || ll === "logo_and_text") && lu) logoHtml += `<img src="${lu}" alt="" class="pv-logo-img" />`;
     if (ll === "text_only" || ll === "logo_and_text") logoHtml += `<span class="pv-logo-text">${sn}</span>`;
 
+    // Get subscribe component subtitle for article CTA
+    const subComp = allPages.flatMap(p => p.components).find(c => c.type === "subscribe");
+    const subTitle = subComp?.settings?.subtitle || subComp?.settings?.description || "محتوى حصري يصلك كل أسبوع";
+    const subBtnText = subComp?.settings?.buttonText || "اشتراك";
+    const subBtnColor = subComp?.settings?.buttonColor || bc;
+
     let pagesHtml = "";
     allPages.forEach((page, pi) => {
       let pc = "";
@@ -1374,6 +1380,14 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
 .pv-kr-author{display:flex;align-items:center;gap:6px;margin-top:auto;}
 .pv-kr-author .pv-avatar{width:24px;height:24px;}
 .pv-kr-author span{font-size:12px;font-weight:600;color:var(--pv-text);}
+/* Article Subscribe CTA */
+.pv-av-subscribe{max-width:800px;margin:0 auto;padding:0 24px 40px;}
+.pv-av-subscribe-inner{background:rgba(128,128,128,0.06);border-radius:var(--pv-radius);padding:40px 32px;text-align:center;}
+.pv-av-subscribe-inner h3{font-size:20px;font-weight:800;color:var(--pv-headline);margin:0 0 8px;}
+.pv-av-subscribe-inner p{font-size:14px;color:var(--pv-text);margin:0 0 20px;line-height:1.7;}
+.pv-av-sub-form{display:flex;gap:0;max-width:420px;margin:0 auto;}
+.pv-av-sub-form input{flex:1;height:48px;padding:0 16px;border:1px solid rgba(128,128,128,0.2);border-right:none;font-family:inherit;font-size:15px;outline:none;background:#fff;color:var(--pv-text);direction:rtl;min-width:0;border-radius:var(--pv-radius) 0 0 var(--pv-radius);}
+.pv-av-sub-form button{padding:0 28px;height:48px;border:none;color:#fff;font-family:inherit;font-size:15px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;border-radius:0 var(--pv-radius) var(--pv-radius) 0;}
 /* Article view overlay */
 .pv-article-overlay{position:fixed;inset:0;background:var(--pv-bg);z-index:100;overflow-y:auto;}
 /* Page separator */
@@ -1484,6 +1498,11 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
     if(e.matches){html.classList.add('dark')}else{html.classList.remove('dark')}
     var btn=document.querySelector('.pv-darkmode-btn');if(btn)btn.textContent=html.classList.contains('dark')?'☀':'☾';
   });
+  // Site data for article CTA
+  var siteName=${JSON.stringify(sn)};
+  var subText=${JSON.stringify(subTitle)};
+  var subBtnTxt=${JSON.stringify(subBtnText)};
+  var subBtnClr=${JSON.stringify(subBtnColor)};
   // Article data for navigation
   var articles=${JSON.stringify(MOCK_ARTICLES.map(a => ({ id: a.id, title: a.title, excerpt: a.excerpt, imageUrl: a.imageUrl, author: a.author, date: a.date, likes: a.likes, comments: a.comments, categories: a.categories })))};
   var articleMap={};articles.forEach(function(a){articleMap[a.id]=a;});
@@ -1502,7 +1521,8 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
     var others=articles.filter(function(x){return x.id!==id;});
     var krCards='';for(var ki=0;ki<3&&ki<others.length;ki++){var o=others[ki];krCards+='<div class="pv-kr-card" data-article-id="'+o.id+'">'+(o.imageUrl?'<img src="'+o.imageUrl+'" alt="" class="pv-kr-img"/>':'<div class="pv-kr-img-ph"></div>')+'<div class="pv-kr-content"><span class="pv-kr-date">'+o.date+'</span><h3>'+o.title+'</h3><p>'+o.excerpt.slice(0,100)+'...</p><div class="pv-kr-author"><div class="pv-avatar">'+o.author.charAt(0)+'</div><span>'+o.author+'</span></div></div></div>';}
     var keepReading='<div class="pv-keep-reading"><h2>تابع القراءة</h2><div class="pv-kr-list">'+krCards+'</div></div>';
-    overlay.innerHTML='<div class="pv-site-wrapper">'+headerHtml+breadcrumb+'<div class="pv-av"><div class="pv-av-head"><h1>'+a.title+'</h1><div class="pv-av-meta"><div class="pv-av-author"><div class="pv-av-avatar">'+a.author.charAt(0)+'</div><div><strong>'+a.author+'</strong><span class="pv-date">'+a.date+'</span></div></div><div class="pv-av-actions"><span style="color:var(--pv-btn)">❤ '+a.likes+'</span><span>💬 '+a.comments+'</span><span>↗ مشاركة</span><span>🔖</span></div></div></div>'+cover+'<div class="pv-av-body"><p>'+a.excerpt+'</p><p>هذا نص تجريبي يمثل محتوى المقال كما سيظهر للقارئ. يمكن للكاتب إضافة فقرات متعددة وتنسيقات مختلفة لإثراء المحتوى وجعله أكثر جاذبية للقراء.</p><h3>عنوان فرعي للمقال</h3><p>هنا يستمر المقال بتفاصيل إضافية حول الموضوع المطروح. يمكن للكاتب التوسع في الشرح وإضافة أمثلة عملية تساعد القارئ على فهم الموضوع بشكل أفضل.</p><blockquote>الكتابة الجيدة هي إعادة الكتابة. لا تخف من تعديل نصك حتى يصل إلى أفضل صورة ممكنة.</blockquote><p>في النهاية، يُختتم المقال بملخص أو دعوة للتفاعل مع المحتوى من خلال التعليقات أو مشاركة المقال مع الآخرين.</p></div><div class="pv-av-tags"><span>كتابة</span><span>محتوى</span><span>نشرات بريدية</span></div><div class="pv-av-engagement"><span style="color:var(--pv-btn)">❤ '+a.likes+'</span><span>💬 '+a.comments+'</span><span>↗ مشاركة</span></div></div>'+keepReading+footerHtml+'</div>';
+    var subscribeCta='<div class="pv-av-subscribe"><div class="pv-av-subscribe-inner"><h3>اشترك في '+siteName+'</h3><p>'+subText+'</p><div class="pv-av-sub-form"><input type="email" placeholder="أدخل بريدك الإلكتروني"/><button style="background:'+subBtnClr+'">'+subBtnTxt+'</button></div></div></div>';
+    overlay.innerHTML='<div class="pv-site-wrapper">'+headerHtml+breadcrumb+'<div class="pv-av"><div class="pv-av-head"><h1>'+a.title+'</h1><div class="pv-av-meta"><div class="pv-av-author"><div class="pv-av-avatar">'+a.author.charAt(0)+'</div><div><strong>'+a.author+'</strong><span class="pv-date">'+a.date+'</span></div></div><div class="pv-av-actions"><span style="color:var(--pv-btn)">❤ '+a.likes+'</span><span>💬 '+a.comments+'</span><span>↗ مشاركة</span><span>🔖</span></div></div></div>'+cover+'<div class="pv-av-body"><p>'+a.excerpt+'</p><p>هذا نص تجريبي يمثل محتوى المقال كما سيظهر للقارئ. يمكن للكاتب إضافة فقرات متعددة وتنسيقات مختلفة لإثراء المحتوى وجعله أكثر جاذبية للقراء.</p><h3>عنوان فرعي للمقال</h3><p>هنا يستمر المقال بتفاصيل إضافية حول الموضوع المطروح. يمكن للكاتب التوسع في الشرح وإضافة أمثلة عملية تساعد القارئ على فهم الموضوع بشكل أفضل.</p><blockquote>الكتابة الجيدة هي إعادة الكتابة. لا تخف من تعديل نصك حتى يصل إلى أفضل صورة ممكنة.</blockquote><p>في النهاية، يُختتم المقال بملخص أو دعوة للتفاعل مع المحتوى من خلال التعليقات أو مشاركة المقال مع الآخرين.</p></div><div class="pv-av-tags"><span>كتابة</span><span>محتوى</span><span>نشرات بريدية</span></div><div class="pv-av-engagement"><span style="color:var(--pv-btn)">❤ '+a.likes+'</span><span>💬 '+a.comments+'</span><span>↗ مشاركة</span></div></div>'+subscribeCta+keepReading+footerHtml+'</div>';
     overlay.style.display='block';main.style.display='none';overlay.scrollTop=0;
     // Re-attach hamburger handler in overlay header
     var hb=overlay.querySelector('.pv-hamburger');
