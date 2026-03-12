@@ -219,7 +219,7 @@ const COMPONENT_META: Record<ComponentType, { label: string; hasSettings: boolea
   contact_form: { label: "نموذج تواصل", hasSettings: true },
   divider: { label: "فاصل", hasSettings: false },
   rich_text: { label: "محتوى منسق", hasSettings: true },
-  bento_grid: { label: "مربعات ومستطيلات", hasSettings: true },
+  bento_grid: { label: "بطاقات", hasSettings: true },
   social_links: { label: "روابط التواصل", hasSettings: true },
   movies: { label: "أفلام / مسلسلات", hasSettings: true },
 
