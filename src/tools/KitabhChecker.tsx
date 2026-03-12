@@ -313,10 +313,13 @@ function arabicGrammarCheck(text: string) {
 }
 
 async function callAPI(text: string, prompt: string) {
-  const res = await fetch("/api/analyze", {
+  const res = await fetch("/api/gemini", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ text, prompt }),
+    body: JSON.stringify({
+      contents: [{ role: "user", parts: [{ text: `${prompt}\n\n---\n\nالنص المراد تحليله:\n\n${text}\n\n---\n\nتعليمات الإخراج - التزم بها حرفياً:\n1. ابدأ ردّك مباشرةً بعلامة { ولا تضف أي كلام قبل JSON.\n2. حقل pillars يجب أن يحتوي على 10 أركان بالضبط - لا 9 ولا 8 ولا أقل. أكمل الـ 10 كلها قبل أي شيء آخر.\n3. feedback لكل ركن: جملة واحدة فقط (لا أكثر).\n4. بعد إغلاق JSON أعِد GRAMMAR_START...GRAMMAR_END.` }] }],
+      generationConfig: { maxOutputTokens: 16384, temperature: 0.3 },
+    }),
   })
   if (!res.ok) {
     const errBody = await res.json().catch(() => ({}))
