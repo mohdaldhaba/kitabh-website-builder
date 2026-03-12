@@ -1127,9 +1127,19 @@ export default function KitabhWebsiteBuilder(props: any) {
               pc += `<div class="pv-hero-sub"><h2>${s.title || "انضم لنشرتنا البريدية"}</h2><p>${s.subtitle || "محتوى حصري يصلك كل أسبوع"}</p><div class="pv-form-row pv-form-center"><input type="email" name="email" autocomplete="email" placeholder="أدخل بريدك الإلكتروني" class="pv-email" /><button class="pv-btn" style="background:${s.buttonColor || bc}">${s.buttonText || "اشتراك"}</button></div></div>`;
             }
             break;
-          case "brands_ticker":
-            pc += `<div class="pv-ticker"><div class="pv-ticker-inner">${sn} &#x2022; مدونة ${sn} &#x2022; ${sn} &#x2022; مدونة ${sn}</div></div>`;
+          case "brands_ticker": {
+            const tickerSpeed = s.speed || 30;
+            const brandItems = s.items || [];
+            const tickerHeadline = s.headline ? `<h3 class="pv-ticker-headline">${s.headline}</h3>` : "";
+            let tickerContent = "";
+            if (brandItems.length > 0) {
+              tickerContent = brandItems.map((b: any) => `<span class="pv-ticker-brand">${b.imageUrl ? `<img src="${b.imageUrl}" alt="${b.name || ""}" class="pv-ticker-logo"/>` : ""}${b.name ? `<span>${b.name}</span>` : ""}</span>`).join("");
+            } else {
+              tickerContent = `<span>${sn}</span><span class="pv-ticker-dot">&#x2022;</span><span>مدونة ${sn}</span><span class="pv-ticker-dot">&#x2022;</span><span>${sn}</span><span class="pv-ticker-dot">&#x2022;</span><span>مدونة ${sn}</span>`;
+            }
+            pc += `<div class="pv-ticker">${tickerHeadline}<div class="pv-ticker-inner" style="animation-duration:${tickerSpeed}s">${tickerContent}</div></div>`;
             break;
+          }
           case "article_collection":
             if (s.layout === "gallery") {
               const gArts = (s.articles || []).map((id: string) => MOCK_ARTICLES.find(a => a.id === id)).filter(Boolean);
@@ -1169,7 +1179,9 @@ export default function KitabhWebsiteBuilder(props: any) {
                 const label = typeof link === "string" ? link : link.label;
                 return `<a class="pv-footer-link">${label}</a>`;
               }).join("");
-            pc += `<footer class="pv-footer"><div class="pv-footer-inner"><div class="pv-footer-logo-col">${fl}</div><div class="pv-footer-right"><p class="pv-footer-tagline">${s.tagline || "محتوى حصري يصلك مباشرة إلى بريدك"}</p><div class="pv-form-row"><input type="email" name="email" autocomplete="email" placeholder="أدخل بريدك الإلكتروني" class="pv-footer-email" /><button class="pv-btn" style="background:${s.buttonColor || bc}">${s.buttonText || "اشتراك"}</button></div><nav class="pv-footer-nav">${fLinks}</nav></div></div><div class="pv-footer-bottom"><span>جميع الحقوق محفوظة ${new Date().getFullYear()} ${sn}</span></div></footer>`;
+            const footerCustomText = s.customText ? `<p class="pv-footer-custom-text">${s.customText}</p>` : "";
+            const footerCustomLinks = (s.customLinks || []).map((cl: any) => `<a class="pv-footer-link" href="${cl.url || "#"}"${cl.url ? ' target="_blank" rel="noopener noreferrer"' : ""}>${cl.label}</a>`).join("");
+            pc += `<footer class="pv-footer"><div class="pv-footer-inner"><div class="pv-footer-logo-col">${fl}${footerCustomText}</div><div class="pv-footer-right"><p class="pv-footer-tagline">${s.tagline || "محتوى حصري يصلك مباشرة إلى بريدك"}</p><div class="pv-form-row"><input type="email" name="email" autocomplete="email" placeholder="أدخل بريدك الإلكتروني" class="pv-footer-email" /><button class="pv-btn" style="background:${s.buttonColor || bc}">${s.buttonText || "اشتراك"}</button></div><nav class="pv-footer-nav">${fLinks}${footerCustomLinks}</nav></div></div><div class="pv-footer-bottom"><span>جميع الحقوق محفوظة ${new Date().getFullYear()} ${sn}</span></div></footer>`;
             break;
           case "article_view":
             const sampleA = MOCK_ARTICLES[0];
@@ -1186,7 +1198,7 @@ export default function KitabhWebsiteBuilder(props: any) {
             pc += `<div class="pv-rich-text">${s.html || "<p>محتوى نصي</p>"}</div>`;
             break;
           case "contact_form":
-            pc += `<div class="pv-contact-form"><h3>${s.title || "تواصل معنا"}</h3><form class="pv-contact-fields"><input type="text" placeholder="الاسم" class="pv-input" /><input type="email" placeholder="البريد الإلكتروني" class="pv-input" /><textarea placeholder="رسالتك" class="pv-textarea"></textarea><button class="pv-btn" style="background:${bc}">إرسال</button></form></div>`;
+            pc += `<div class="pv-contact-form"><h3>${s.title || "تواصل معنا"}</h3><form class="pv-contact-fields" onsubmit="event.preventDefault();this.reset();alert('تم الإرسال بنجاح');"><input type="text" placeholder="الاسم" class="pv-input" /><input type="email" placeholder="البريد الإلكتروني" class="pv-input" /><textarea placeholder="رسالتك" class="pv-textarea"></textarea><button class="pv-btn" style="background:${bc}">إرسال</button></form></div>`;
             break;
           case "testimonials":
             const tItems = s.items || [];
@@ -1226,6 +1238,50 @@ export default function KitabhWebsiteBuilder(props: any) {
             const mItems = s.items || [];
             const mHtml = mItems.map((item: any) => `<a class="pv-movie-card" href="${item.url || "#"}" target="_blank" rel="noopener" style="text-decoration:none;color:inherit"><div class="pv-movie-poster">${item.imageUrl ? `<img src="${item.imageUrl}" alt="${item.title || ""}"/>` : `<div class="pv-movie-poster-ph"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="2"/><polygon points="10 8 16 12 10 16"/></svg></div>`}</div><div class="pv-movie-info"><h4>${item.title || ""}</h4><p>${item.subtitle || ""}</p>${item.buttonText ? `<span class="pv-movie-btn" style="background:${bc}">${item.buttonText}</span>` : ""}</div></a>`).join("");
             pc += `<div class="pv-section"><h2 class="pv-section-title">${s.sectionTitle || "أفلام ومسلسلات"}</h2><div class="pv-movies-grid">${mHtml}</div></div>`;
+            break;
+          }
+          case "image_block":
+            pc += `<div class="pv-image-block">${s.imageUrl ? `<img src="${s.imageUrl}" alt="" class="pv-image-full"/>` : `<div class="pv-img" style="height:300px"></div>`}${s.caption ? `<p class="pv-image-caption">${s.caption}</p>` : ""}</div>`;
+            break;
+          case "divider":
+            pc += `<hr class="pv-divider"/>`;
+            break;
+          case "podcast": {
+            const podProgs = s.programs || [];
+            const podLayout = s.layout || "list";
+            if (podLayout === "featured") {
+              const pfCards = podProgs.map((prog: any) => `<a class="pv-podcast-featured-card" href="${prog.url || "#"}" target="_blank" rel="noopener" style="text-decoration:none;color:inherit"><div class="pv-podcast-featured-cover">${prog.imageUrl ? `<img src="${prog.imageUrl}" alt="${prog.name || ""}"/>` : `<div class="pv-podcast-cover-ph"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#ccc" stroke-width="1.5"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/></svg></div>`}</div><div class="pv-podcast-featured-info"><h4>${prog.name || ""}</h4><p>${prog.description || ""}</p><span class="pv-podcast-eps">${(prog.episodes || []).length} حلقة</span></div></a>`).join("");
+              pc += `<div class="pv-section"><h2 class="pv-section-title">${s.sectionTitle || "البودكاست"}</h2><div class="pv-podcast-featured-grid">${pfCards}</div></div>`;
+            } else {
+              const podIsGrid = podLayout === "grid";
+              let podHtml = "";
+              podProgs.forEach((prog: any, pi: number) => {
+                const epsHtml = (prog.episodes || []).map((ep: any, ei: number) => `<div class="pv-podcast-card"><div class="pv-podcast-ep-num">${ei + 1}</div><div class="pv-podcast-info"><h4>${ep.title || ""}</h4><p>${ep.subtitle || ""}</p><span class="pv-podcast-duration">${ep.duration || ""}</span></div></div>`).join("");
+                podHtml += `<div style="${pi < podProgs.length - 1 ? "margin-bottom:20px" : ""}"><div class="pv-podcast-program">${prog.imageUrl ? `<img src="${prog.imageUrl}" alt="" class="pv-podcast-prog-img"/>` : `<div class="pv-podcast-prog-img pv-img"></div>`}<div><h4>${prog.name || ""}</h4><p>${prog.description || ""}</p></div></div><div class="${podIsGrid ? "pv-podcast-grid" : "pv-podcast-list"}">${epsHtml}</div></div>`;
+              });
+              pc += `<div class="pv-section"><h2 class="pv-section-title">${s.sectionTitle || "البودكاست"}</h2>${podHtml}</div>`;
+            }
+            break;
+          }
+          case "products": {
+            const prodItems = s.items || [];
+            const prodIsGrid = (s.layout || "grid") === "grid";
+            const prodCards = prodItems.map((item: any) => `<div class="pv-product-card">${item.imageUrl ? `<img src="${item.imageUrl}" alt="${item.title || ""}" class="pv-product-img"/>` : `<div class="pv-product-img pv-img"></div>`}<h4>${item.title || ""}</h4><p>${item.subtitle || ""}</p><span class="pv-product-price">${item.price || ""}</span><button class="pv-btn" style="background:${bc};width:100%;margin-top:8px">${item.buttonText || "اشتري"}</button></div>`).join("");
+            pc += `<div class="pv-section"><h2 class="pv-section-title">${s.sectionTitle || "المنتجات"}</h2><div class="${prodIsGrid ? "pv-products-grid" : "pv-products-list"}">${prodCards}</div></div>`;
+            break;
+          }
+          case "courses": {
+            const courseItems = s.items || [];
+            const courseIsGrid = (s.layout || "grid") === "grid";
+            const courseCards = courseItems.map((item: any) => `<div class="pv-course-card">${item.imageUrl ? `<img src="${item.imageUrl}" alt="${item.title || ""}" class="pv-course-img"/>` : `<div class="pv-course-img pv-img"></div>`}<h4>${item.title || ""}</h4><p>${item.subtitle || ""}</p><span class="pv-product-price">${item.price || ""}</span><button class="pv-btn" style="background:${bc};width:100%;margin-top:8px">${item.buttonText || "سجّل"}</button></div>`).join("");
+            pc += `<div class="pv-section"><h2 class="pv-section-title">${s.sectionTitle || "الدورات"}</h2><div class="${courseIsGrid ? "pv-products-grid" : "pv-products-list"}">${courseCards}</div></div>`;
+            break;
+          }
+          case "topics": {
+            const topicItems = s.items || [];
+            const topicIsGrid = (s.layout || "grid") === "grid";
+            const topicCards = topicItems.map((item: any) => `<div class="pv-topic-tag">${item.title || ""}</div>`).join("");
+            pc += `<div class="pv-section"><h2 class="pv-section-title">${s.sectionTitle || "المواضيع"}</h2><div class="${topicIsGrid ? "pv-topics-grid" : "pv-topics-list"}">${topicCards}</div></div>`;
             break;
           }
           default:
@@ -1400,7 +1456,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
 .pv-av-subscribe-inner h3{font-size:20px;font-weight:800;color:var(--pv-headline);margin:0 0 8px;}
 .pv-av-subscribe-inner p{font-size:14px;color:var(--pv-text);margin:0 0 20px;line-height:1.7;}
 .pv-av-sub-form{display:flex;gap:0;max-width:420px;margin:0 auto;}
-.pv-av-sub-form input{flex:1;height:48px;padding:0 16px;border:1px solid rgba(128,128,128,0.2);border-right:none;font-family:inherit;font-size:15px;outline:none;background:#fff;color:var(--pv-text);direction:rtl;min-width:0;border-radius:var(--pv-radius) 0 0 var(--pv-radius);}
+.pv-av-sub-form input{flex:1;height:48px;padding:0 16px;border:1px solid rgba(128,128,128,0.2);border-right:none;font-family:inherit;font-size:15px;outline:none;background:var(--pv-card-bg);color:var(--pv-text);direction:rtl;min-width:0;border-radius:var(--pv-radius) 0 0 var(--pv-radius);}
 .pv-av-sub-form button{padding:0 28px;height:48px;border:none;color:#fff;font-family:inherit;font-size:15px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;border-radius:0 var(--pv-radius) var(--pv-radius) 0;}
 /* Article view overlay */
 .pv-article-overlay{position:fixed;inset:0;background:var(--pv-bg);z-index:100;overflow-y:auto;}
@@ -1464,6 +1520,23 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
 .pv-catfeed-featured-img{width:100%;aspect-ratio:4/3;object-fit:cover;border-radius:var(--pv-radius);}
 .pv-catfeed-featured h3{font-size:17px;font-weight:800;line-height:1.5;color:var(--pv-headline);margin:0;}
 .pv-catfeed-featured p{font-size:13px;color:var(--pv-text);margin:0;line-height:1.6;}
+/* Image Block */
+.pv-image-block{padding:16px 24px;}.pv-image-full{width:100%;display:block;border-radius:var(--pv-radius);}.pv-image-caption{font-size:13px;color:var(--pv-text);opacity:0.7;text-align:center;margin:8px 0 0;}
+/* Divider */
+.pv-divider{border:none;border-top:1px solid rgba(128,128,128,0.2);margin:24px;}
+/* Podcast */
+.pv-podcast-program{display:flex;gap:14px;align-items:center;padding:0 24px 12px;}.pv-podcast-prog-img{width:64px;height:64px;border-radius:var(--pv-radius);object-fit:cover;flex-shrink:0;}.pv-podcast-program h4{font-size:16px;font-weight:700;color:var(--pv-headline);margin:0;}.pv-podcast-program p{font-size:13px;color:var(--pv-text);margin:4px 0 0;}
+.pv-podcast-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;padding:0 24px;}.pv-podcast-list{display:flex;flex-direction:column;gap:0;padding:0 24px;}
+.pv-podcast-card{display:flex;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid rgba(128,128,128,0.1);}.pv-podcast-ep-num{width:28px;height:28px;border-radius:50%;background:var(--pv-btn);color:#fff;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex-shrink:0;}.pv-podcast-info h4{font-size:14px;font-weight:700;color:var(--pv-headline);margin:0;}.pv-podcast-info p{font-size:12px;color:var(--pv-text);margin:2px 0;}.pv-podcast-duration{font-size:11px;color:var(--pv-text);opacity:0.7;}
+.pv-podcast-featured-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:20px;padding:0 24px 24px;}.pv-podcast-featured-card{display:flex;flex-direction:column;overflow:hidden;border-radius:var(--pv-radius);border:1px solid rgba(128,128,128,0.15);background:var(--pv-card-bg);}.pv-podcast-featured-cover{width:100%;aspect-ratio:1;background:rgba(128,128,128,0.1);overflow:hidden;}.pv-podcast-featured-cover img{width:100%;height:100%;object-fit:cover;display:block;}.pv-podcast-cover-ph{width:100%;height:100%;display:flex;align-items:center;justify-content:center;}.pv-podcast-featured-info{padding:12px 14px;}.pv-podcast-featured-info h4{font-size:15px;font-weight:700;color:var(--pv-headline);margin:0 0 4px;}.pv-podcast-featured-info p{font-size:12px;color:var(--pv-text);margin:0 0 6px;line-height:1.5;}.pv-podcast-eps{font-size:11px;color:var(--pv-text);opacity:0.7;}
+/* Products & Courses */
+.pv-products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:20px;padding:0 24px 24px;}.pv-products-list{display:flex;flex-direction:column;gap:16px;padding:0 24px 24px;}
+.pv-product-card,.pv-course-card{background:var(--pv-card-bg);border:1px solid rgba(128,128,128,0.15);border-radius:var(--pv-radius);padding:16px;display:flex;flex-direction:column;gap:4px;}.pv-product-card h4,.pv-course-card h4{font-size:15px;font-weight:700;color:var(--pv-headline);margin:0;}.pv-product-card p,.pv-course-card p{font-size:13px;color:var(--pv-text);margin:0;line-height:1.5;}.pv-product-price{font-size:14px;font-weight:700;color:var(--pv-btn);margin-top:4px;}.pv-product-img,.pv-course-img{width:100%;height:140px;object-fit:cover;border-radius:var(--pv-radius);margin-bottom:8px;}
+/* Topics */
+.pv-topics-grid{display:flex;flex-wrap:wrap;gap:10px;padding:0 24px 24px;}.pv-topics-list{display:flex;flex-direction:column;gap:8px;padding:0 24px 24px;}
+.pv-topic-tag{padding:10px 20px;border:1.5px solid rgba(128,128,128,0.2);border-radius:var(--pv-radius);font-size:14px;font-weight:600;color:var(--pv-headline);background:var(--pv-card-bg);cursor:pointer;transition:all .15s;}.pv-topic-tag:hover{border-color:var(--pv-btn);color:var(--pv-btn);}
+/* Section generic */
+.pv-section{padding:24px 0;}
 .pv-placeholder{padding:40px 24px;background:var(--pv-card-bg);border:2px dashed rgba(128,128,128,0.2);text-align:center;color:var(--pv-text);opacity:0.5;font-size:15px;font-weight:600;}
 /* Mobile */
 @media(max-width:768px){
