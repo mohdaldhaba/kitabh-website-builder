@@ -1090,9 +1090,10 @@ export default function KitabhWebsiteBuilder(props: any) {
 
     let pagesHtml = "";
     let footerRendered = false;
-    allPages.forEach((page, pi) => {
+    allPages.filter(p => !p.hidden).forEach((page, pi) => {
       let pc = "";
       page.components.filter(c => c.enabled).forEach(comp => {
+        pc += `<div id="${comp.id}">`;
         const s = comp.settings;
         switch (comp.type) {
           case "header":
@@ -1292,9 +1293,11 @@ export default function KitabhWebsiteBuilder(props: any) {
           default:
             pc += `<div class="pv-placeholder">${COMPONENT_META[comp.type]?.label || comp.type}</div>`;
         }
+        pc += `</div>`;
       });
-      if (pi > 0) pagesHtml += `<div id="page-${page.slug}" class="pv-page-sep"></div>`;
+      pagesHtml += `<div id="page-${page.slug}" class="${pi > 0 ? 'pv-page-sep' : ''}">`;
       pagesHtml += pc;
+      pagesHtml += `</div>`;
     });
 
     const html = `<!DOCTYPE html>
@@ -1639,14 +1642,12 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
     var link=e2.target.closest('.pv-nav-link, .pv-mobile-nav-link');
     if(!link)return;
     var href=link.getAttribute('href');
-    if(href&&href.startsWith('#page-')){
+    if(href&&href.startsWith('#')){
       e2.preventDefault();
       if(overlay.style.display==='block')closeArticle();
-      setTimeout(function(){var target=document.getElementById(href.slice(1));if(target)target.scrollIntoView({behavior:'smooth'});},50);
       document.querySelectorAll('.pv-mobile-menu').forEach(function(mm){mm.classList.remove('pv-mobile-menu-open');});
-    } else if(href==='#'){
-      e2.preventDefault();
-      if(overlay.style.display==='block')closeArticle();
+      if(href==='#')return window.scrollTo({top:0,behavior:'smooth'});
+      setTimeout(function(){var target=document.getElementById(href.slice(1));if(target)target.scrollIntoView({behavior:'smooth'});else window.scrollTo({top:0,behavior:'smooth'});},50);
     }
   });
 })();
@@ -1905,10 +1906,19 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                               </div>
                               <nav className="kwb-p-nav">
                                 {navLinksData.map((link: any, i: number) => {
-                                  const isNavLink = typeof link !== "string" && link.linkType === "page" && link.target;
-                                  const targetPage = isNavLink ? activeSite.pages.find(p => p.slug === link.target) : null;
+                                  const isPageLink = typeof link !== "string" && link.linkType === "page" && link.target;
+                                  const isExternal = typeof link !== "string" && link.linkType === "external" && link.target;
+                                  const isAnchor = typeof link !== "string" && link.linkType === "anchor" && link.target;
+                                  const targetPage = isPageLink ? activeSite.pages.find(p => p.slug === link.target) : null;
                                   return (
-                                    <a key={typeof link === "string" ? i : link.id} className={`kwb-p-nav-link ${targetPage && activePageId === targetPage.id ? "kwb-p-nav-link-active" : ""}`} onClick={targetPage ? () => { setActivePageId(targetPage.id); setExpandedComponent(null); } : undefined} style={targetPage ? { cursor: "pointer" } : {}}>{typeof link === "string" ? link : link.label}</a>
+                                    <a key={typeof link === "string" ? i : link.id}
+                                      className={`kwb-p-nav-link ${targetPage && activePageId === targetPage.id ? "kwb-p-nav-link-active" : ""}`}
+                                      onClick={targetPage ? () => { setActivePageId(targetPage.id); setExpandedComponent(null); } : isAnchor ? () => { const el = document.querySelector(`[data-comp-id="${link.target}"]`); if (el) el.scrollIntoView({ behavior: "smooth" }); } : undefined}
+                                      href={isExternal ? link.target : undefined}
+                                      target={isExternal ? "_blank" : undefined}
+                                      rel={isExternal ? "noopener noreferrer" : undefined}
+                                      style={{ cursor: targetPage || isAnchor || isExternal ? "pointer" : undefined }}
+                                    >{typeof link === "string" ? link : link.label}</a>
                                   );
                                 })}
                               </nav>
