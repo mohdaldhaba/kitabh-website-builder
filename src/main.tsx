@@ -13,6 +13,10 @@ if (path === '/hub' || path.startsWith('/hub/')) {
   import('./TipAuthorPage').then(({ default: TipAuthorPage }) => {
     root.render(<React.StrictMode><TipAuthorPage /></React.StrictMode>)
   })
+} else if (path === '/checker') {
+  import('./tools/KitabhChecker').then(({ default: KitabhChecker }) => {
+    root.render(<React.StrictMode><KitabhChecker /></React.StrictMode>)
+  })
 } else if (path === '/dashboard') {
   import('./components/OwnerDashboard').then(({ default: OwnerDashboard }) => {
     root.render(<React.StrictMode><OwnerDashboard /></React.StrictMode>)
