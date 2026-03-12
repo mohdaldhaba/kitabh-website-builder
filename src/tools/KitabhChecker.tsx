@@ -713,7 +713,6 @@ const CSS = `
   .kb-res-header{padding:14px;}
   .kb-res-header-top{flex-direction:column;align-items:stretch;gap:10px;}
   .kb-res-title{font-size:15px;white-space:normal;}
-  .kb-btn-share{align-self:flex-start;font-size:12px;padding:7px 14px;}
   .kb-top-bar{flex-wrap:wrap;gap:8px;}
 }
 @media(max-width:400px){
@@ -846,8 +845,8 @@ const CSS = `
 .kb-res-header-top{display:flex;align-items:center;justify-content:space-between;gap:12px;}
 .kb-res-title{font-size:17px;font-weight:700;color:#371D12;line-height:1.6;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .kb-res-meta{font-size:12px;color:#999;display:flex;align-items:center;gap:8px;}
-.kb-btn-share{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:600;color:#0000FF;background:#F0F0FF;border:1.5px solid #D9D9FF;padding:8px 16px;border-radius:9px;cursor:pointer;font-family:inherit;transition:all .15s;flex-shrink:0;}
-.kb-btn-share:hover{background:#E0E0FF;border-color:#0000FF;}
+.kb-btn-share-main{display:inline-flex;align-items:center;gap:8px;font-size:14px;font-weight:700;color:#FFF;background:#0000FF;border:none;padding:10px 20px;border-radius:10px;cursor:pointer;font-family:inherit;transition:all .15s;flex-shrink:0;box-shadow:0 2px 8px rgba(0,0,255,.2);}
+.kb-btn-share-main:hover{background:#0000DD;box-shadow:0 4px 12px rgba(0,0,255,.3);}
 
 /* ═══ Share Popup ═══ */
 .kb-share-overlay{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;background:rgba(0,0,0,.4);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);animation:ktk-fadein .2s ease;}
@@ -2137,13 +2136,17 @@ export default function KitabhChecker() {
         <>
           <div className="kb-res">
 
-            {/* ── Top bar: back ── */}
+            {/* ── Top bar: back + share ── */}
             <div className="kb-top-bar">
               <button className="kb-btn-back" onClick={reset}>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M19 12H5"/><path d="M12 19l-7-7 7-7"/>
+                  <path d="M5 12h14"/><path d="M12 5l7 7-7 7"/>
                 </svg>
                 عودة
+              </button>
+              <button className="kb-btn-share-main" onClick={()=>setShowShare(true)}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+                شارك نتيجتك
               </button>
             </div>
 
@@ -2166,10 +2169,6 @@ export default function KitabhChecker() {
                         <span style={{fontSize:12,fontWeight:600,color:gradeColor,background:`${gradeColor}12`,padding:"2px 8px",borderRadius:6}}>{lbl}</span>
                       </div>
                     </div>
-                    <button className="kb-btn-share" onClick={()=>setShowShare(true)}>
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
-                      شارك نتيجتك
-                    </button>
                   </div>
                   {/* Grade scale */}
                   {(() => {
