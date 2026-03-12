@@ -177,7 +177,7 @@ const TEMPLATES: Template[] = [
     defaultBranding: {
       accentColor: "#7C2D12", buttonColor: "#7C2D12", headlineColor: "#292524",
       textColor: "#78716C", linkColor: "#B45309", bgColor: "#FAF7F2", cardBg: "#FFFFFF",
-      fontFamily: "IBM Plex Sans Arabic", borderRadius: 50,
+      fontFamily: "Amiri", borderRadius: 50,
     },
     homeComponents: [
       { type: "header" },
@@ -201,7 +201,7 @@ const TEMPLATES: Template[] = [
     defaultBranding: {
       accentColor: "#1a1a1a", buttonColor: "#1a1a1a", headlineColor: "#1a1a1a",
       textColor: "#555555", linkColor: "#1a1a1a", bgColor: "#FFFFFF", cardBg: "#F9FAFB",
-      fontFamily: "IBM Plex Sans Arabic", borderRadius: 8,
+      fontFamily: "Noto Sans Arabic", borderRadius: 8,
     },
     homeComponents: [
       { type: "header" },
@@ -224,7 +224,7 @@ const TEMPLATES: Template[] = [
     defaultBranding: {
       accentColor: "#8B5CF6", buttonColor: "#8B5CF6", headlineColor: "#F9FAFB",
       textColor: "#9CA3AF", linkColor: "#A78BFA", bgColor: "#0F172A", cardBg: "#1E293B",
-      fontFamily: "IBM Plex Sans Arabic", darkMode: true, borderRadius: 14,
+      fontFamily: "Tajawal", darkMode: true, borderRadius: 14,
     },
     homeComponents: [
       { type: "header" },
@@ -278,7 +278,7 @@ const TEMPLATES: Template[] = [
     defaultBranding: {
       accentColor: "#0A66C2", buttonColor: "#0A66C2", headlineColor: "#0F172A",
       textColor: "#64748B", linkColor: "#2563EB", bgColor: "#F8FAFC", cardBg: "#FFFFFF",
-      fontFamily: "IBM Plex Sans Arabic", borderRadius: 14,
+      fontFamily: "Cairo", borderRadius: 14,
     },
     homeComponents: [
       { type: "header" },
@@ -313,7 +313,7 @@ const TEMPLATES: Template[] = [
     defaultBranding: {
       accentColor: "#E82222", buttonColor: "#E82222", headlineColor: "#1a1a1a",
       textColor: "#555555", linkColor: "#E82222", bgColor: "#FFFFFF", cardBg: "#F9FAFB",
-      fontFamily: "IBM Plex Sans Arabic", borderRadius: 14,
+      fontFamily: "Changa", borderRadius: 14,
     },
     homeComponents: [
       { type: "header", settings: { buttonText: "تسوّق الآن" } },
@@ -346,7 +346,7 @@ const TEMPLATES: Template[] = [
     defaultBranding: {
       accentColor: "#166534", buttonColor: "#166534", headlineColor: "#052E16",
       textColor: "#6B7280", linkColor: "#10B981", bgColor: "#F0FDF4", cardBg: "#FFFFFF",
-      fontFamily: "IBM Plex Sans Arabic", borderRadius: 16,
+      fontFamily: "El Messiri", borderRadius: 16,
     },
     homeComponents: [
       { type: "header", settings: { buttonText: "احجز استشارة" } },
@@ -381,7 +381,7 @@ const TEMPLATES: Template[] = [
     defaultBranding: {
       accentColor: "#1a1a1a", buttonColor: "#1a1a1a", headlineColor: "#0F172A",
       textColor: "#64748B", linkColor: "#1a1a1a", bgColor: "#FAFAFA", cardBg: "#FFFFFF",
-      fontFamily: "IBM Plex Sans Arabic", borderRadius: 10,
+      fontFamily: "Readex Pro", borderRadius: 10,
     },
     homeComponents: [
       { type: "header", settings: { buttonText: "تواصل معي" } },
@@ -2033,73 +2033,79 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
   //  RENDER: TEMPLATE PICKER
   // ═══════════════════════════════════════════════════════
   if (view === "templates") {
-    // Each template gets a unique set of floating geometric shapes
-    const shapeConfigs: Record<string, { shapes: { type: "circle"|"rect"|"ring"|"dot"|"line"; x: number; y: number; size: number; delay: number; dur: number; dx: number; dy: number; rot?: number }[] }> = {
-      media:     { shapes: [
-        { type:"rect",x:15,y:20,size:120,delay:0,dur:8,dx:10,dy:-15,rot:12 },
-        { type:"circle",x:70,y:60,size:80,delay:1,dur:10,dx:-15,dy:10 },
-        { type:"ring",x:40,y:75,size:50,delay:2,dur:7,dx:8,dy:-8 },
-        { type:"dot",x:80,y:25,size:16,delay:0.5,dur:6,dx:-5,dy:12 },
-        { type:"line",x:25,y:45,size:100,delay:1.5,dur:9,dx:12,dy:5,rot:-15 },
-        { type:"rect",x:60,y:10,size:40,delay:3,dur:11,dx:-8,dy:8,rot:25 },
-      ]},
-      newsletter:{ shapes: [
-        { type:"circle",x:20,y:30,size:100,delay:0,dur:9,dx:12,dy:-10 },
-        { type:"rect",x:65,y:55,size:70,delay:1.5,dur:8,dx:-10,dy:8,rot:8 },
-        { type:"ring",x:75,y:20,size:45,delay:0.5,dur:11,dx:-8,dy:15 },
-        { type:"dot",x:35,y:70,size:14,delay:2,dur:7,dx:6,dy:-6 },
-        { type:"line",x:50,y:85,size:80,delay:3,dur:10,dx:-12,dy:-5,rot:10 },
-      ]},
-      blog:      { shapes: [
-        { type:"rect",x:10,y:15,size:90,delay:0,dur:10,dx:15,dy:10,rot:-5 },
-        { type:"circle",x:75,y:65,size:60,delay:1,dur:8,dx:-10,dy:-12 },
-        { type:"dot",x:50,y:40,size:18,delay:2,dur:6,dx:8,dy:8 },
-        { type:"line",x:30,y:80,size:110,delay:0.5,dur:12,dx:-6,dy:-8,rot:20 },
-        { type:"ring",x:85,y:30,size:35,delay:3,dur:9,dx:-12,dy:6 },
-      ]},
-      podcast:   { shapes: [
-        { type:"circle",x:25,y:25,size:110,delay:0,dur:8,dx:10,dy:12 },
-        { type:"circle",x:70,y:70,size:70,delay:2,dur:10,dx:-12,dy:-8 },
-        { type:"ring",x:55,y:35,size:55,delay:1,dur:7,dx:8,dy:-10 },
-        { type:"dot",x:15,y:75,size:20,delay:3,dur:9,dx:6,dy:-6 },
-        { type:"rect",x:80,y:15,size:45,delay:1.5,dur:11,dx:-10,dy:10,rot:15 },
-      ]},
-      cinema:    { shapes: [
-        { type:"rect",x:10,y:10,size:130,delay:0,dur:9,dx:8,dy:12,rot:5 },
-        { type:"rect",x:60,y:50,size:80,delay:1.5,dur:8,dx:-12,dy:-6,rot:-10 },
-        { type:"circle",x:80,y:80,size:50,delay:2,dur:11,dx:-6,dy:-10 },
-        { type:"dot",x:30,y:60,size:16,delay:0.5,dur:7,dx:10,dy:8 },
-        { type:"line",x:45,y:25,size:90,delay:3,dur:10,dx:-8,dy:6,rot:30 },
-      ]},
-      education: { shapes: [
-        { type:"circle",x:20,y:20,size:90,delay:0,dur:10,dx:12,dy:8 },
-        { type:"rect",x:65,y:45,size:75,delay:1,dur:8,dx:-10,dy:12,rot:12 },
-        { type:"ring",x:40,y:75,size:40,delay:2,dur:9,dx:8,dy:-10 },
-        { type:"dot",x:80,y:20,size:14,delay:1.5,dur:6,dx:-6,dy:10 },
-        { type:"dot",x:15,y:55,size:12,delay:3,dur:7,dx:5,dy:-5 },
-        { type:"line",x:55,y:10,size:70,delay:0.5,dur:11,dx:-10,dy:6,rot:-20 },
-      ]},
-      store:     { shapes: [
-        { type:"rect",x:15,y:25,size:100,delay:0,dur:8,dx:10,dy:-8,rot:8 },
-        { type:"circle",x:75,y:60,size:85,delay:1.5,dur:10,dx:-12,dy:10 },
-        { type:"dot",x:45,y:15,size:20,delay:0.5,dur:6,dx:6,dy:12 },
-        { type:"ring",x:30,y:70,size:45,delay:2,dur:9,dx:10,dy:-6 },
-        { type:"line",x:60,y:85,size:80,delay:3,dur:11,dx:-8,dy:-10,rot:15 },
-      ]},
-      coach:     { shapes: [
-        { type:"circle",x:25,y:30,size:105,delay:0,dur:9,dx:10,dy:-12 },
-        { type:"rect",x:70,y:55,size:65,delay:1,dur:8,dx:-8,dy:10,rot:10 },
-        { type:"ring",x:50,y:80,size:50,delay:2,dur:10,dx:6,dy:-8 },
-        { type:"dot",x:80,y:20,size:16,delay:1.5,dur:7,dx:-10,dy:6 },
-        { type:"line",x:15,y:55,size:90,delay:3,dur:11,dx:12,dy:8,rot:-12 },
-      ]},
-      portfolio: { shapes: [
-        { type:"rect",x:10,y:15,size:110,delay:0,dur:10,dx:12,dy:10,rot:-8 },
-        { type:"circle",x:70,y:55,size:75,delay:1.5,dur:8,dx:-10,dy:-12 },
-        { type:"ring",x:45,y:80,size:40,delay:1,dur:9,dx:8,dy:-6 },
-        { type:"dot",x:25,y:50,size:14,delay:2,dur:6,dx:6,dy:8 },
-        { type:"dot",x:85,y:30,size:18,delay:3,dur:7,dx:-8,dy:10 },
-      ]},
+    // Bold geometric SVG pattern per template — fills the entire card
+    const geoPatterns: Record<string, (c1:string,c2:string,bg:string) => React.ReactNode> = {
+      // Media: bold horizontal stripes
+      media: (c1,c2,bg) => (
+        <svg viewBox="0 0 400 500" className="kwb-tpl-svg">
+          {Array.from({length:14}).map((_,i)=><rect key={i} x="0" y={i*36} width="400" height="20" fill={i%2===0?c1:c2} opacity={i%3===0?.9:.7}><animateTransform attributeName="transform" type="translate" values={`0,0;${i%2===0?20:-20},0;0,0`} dur={`${6+i%3}s`} repeatCount="indefinite"/></rect>)}
+        </svg>),
+      // Newsletter: concentric circles
+      newsletter: (c1,c2,bg) => (
+        <svg viewBox="0 0 400 500" className="kwb-tpl-svg">
+          {[200,170,140,110,80,50,20].map((r,i)=><circle key={i} cx="200" cy="250" r={r} fill="none" stroke={i%2===0?c1:c2} strokeWidth={i<3?16:12} opacity={.6+i*.05}><animateTransform attributeName="transform" type="scale" values={`1;${1+i*.03};1`} dur={`${5+i}s`} repeatCount="indefinite" additive="sum"/></circle>)}
+        </svg>),
+      // Blog: diagonal lines
+      blog: (c1,c2,bg) => (
+        <svg viewBox="0 0 400 500" className="kwb-tpl-svg">
+          {Array.from({length:20}).map((_,i)=><line key={i} x1={-100+i*40} y1="0" x2={-100+i*40+500} y2="500" stroke={i%3===0?c2:c1} strokeWidth={i%2===0?12:8} opacity={i%4===0?.5:.3}><animateTransform attributeName="transform" type="translate" values={`0,0;${i%2===0?15:-15},0;0,0`} dur={`${7+i%4}s`} repeatCount="indefinite"/></line>)}
+        </svg>),
+      // Podcast: stacked wave lines
+      podcast: (c1,c2,bg) => (
+        <svg viewBox="0 0 400 500" className="kwb-tpl-svg">
+          {Array.from({length:10}).map((_,i)=>{
+            const y=50+i*45;const a=i%2===0?30:25;
+            return <path key={i} d={`M0,${y} Q100,${y-a} 200,${y} T400,${y}`} fill="none" stroke={i%2===0?c1:c2} strokeWidth={i%3===0?14:10} strokeLinecap="round" opacity={.5+i*.04}>
+              <animateTransform attributeName="transform" type="translate" values={`0,0;0,${i%2===0?12:-12};0,0`} dur={`${4+i*.5}s`} repeatCount="indefinite"/>
+            </path>;
+          })}
+        </svg>),
+      // Cinema: checkerboard
+      cinema: (c1,c2,bg) => (
+        <svg viewBox="0 0 400 500" className="kwb-tpl-svg">
+          {Array.from({length:6}).map((_,r)=>Array.from({length:5}).map((_,c)=>{
+            const on=(r+c)%2===0;
+            return <rect key={`${r}-${c}`} x={c*80} y={r*84} width="80" height="84" fill={on?c1:c2} opacity={on?.8:.5}>
+              <animateTransform attributeName="transform" type="scale" values={`1;${on?1.05:.95};1`} dur={`${3+r*.5+c*.3}s`} repeatCount="indefinite" additive="sum"/>
+            </rect>;
+          }))}
+        </svg>),
+      // Education: diamond grid
+      education: (c1,c2,bg) => (
+        <svg viewBox="0 0 400 500" className="kwb-tpl-svg">
+          {Array.from({length:8}).map((_,r)=>Array.from({length:6}).map((_,c)=>{
+            const cx=c*72+36;const cy=r*68+34;
+            return <rect key={`${r}-${c}`} x={cx-24} y={cy-24} width="48" height="48" rx="6" fill={(r+c)%2===0?c1:c2} opacity={(r+c)%3===0?.7:.4} transform={`rotate(45,${cx},${cy})`}>
+              <animateTransform attributeName="transform" type="rotate" values={`45,${cx},${cy};50,${cx},${cy};45,${cx},${cy}`} dur={`${5+r%3}s`} repeatCount="indefinite"/>
+            </rect>;
+          }))}
+        </svg>),
+      // Store: stacked rounded rectangles
+      store: (c1,c2,bg) => (
+        <svg viewBox="0 0 400 500" className="kwb-tpl-svg">
+          {Array.from({length:7}).map((_,i)=>{
+            const w=360-i*30;const h=50;const y=i*70+10;const x=(400-w)/2;
+            return <rect key={i} x={x} y={y} width={w} height={h} rx={h/2} fill={i%2===0?c1:c2} opacity={.6-i*.05}>
+              <animateTransform attributeName="transform" type="translate" values={`0,0;${i%2===0?12:-12},0;0,0`} dur={`${5+i*.7}s`} repeatCount="indefinite"/>
+            </rect>;
+          })}
+        </svg>),
+      // Coach: large overlapping circles
+      coach: (c1,c2,bg) => (
+        <svg viewBox="0 0 400 500" className="kwb-tpl-svg">
+          <circle cx="130" cy="180" r="140" fill={c1} opacity=".5"><animateTransform attributeName="transform" type="translate" values="0,0;15,10;0,0" dur="7s" repeatCount="indefinite"/></circle>
+          <circle cx="280" cy="180" r="120" fill={c2} opacity=".45"><animateTransform attributeName="transform" type="translate" values="0,0;-12,8;0,0" dur="8s" repeatCount="indefinite"/></circle>
+          <circle cx="200" cy="340" r="130" fill={c1} opacity=".4"><animateTransform attributeName="transform" type="translate" values="0,0;8,-12;0,0" dur="9s" repeatCount="indefinite"/></circle>
+          <circle cx="100" cy="400" r="80" fill={c2} opacity=".35"><animateTransform attributeName="transform" type="translate" values="0,0;-8,10;0,0" dur="6s" repeatCount="indefinite"/></circle>
+          <circle cx="320" cy="420" r="90" fill={c1} opacity=".3"><animateTransform attributeName="transform" type="translate" values="0,0;10,-8;0,0" dur="10s" repeatCount="indefinite"/></circle>
+        </svg>),
+      // Portfolio: vertical stripes
+      portfolio: (c1,c2,bg) => (
+        <svg viewBox="0 0 400 500" className="kwb-tpl-svg">
+          {Array.from({length:12}).map((_,i)=><rect key={i} x={i*34} y="0" width="18" height="500" fill={i%3===0?c1:i%3===1?c2:c1} opacity={i%2===0?.6:.35}>
+            <animateTransform attributeName="transform" type="translate" values={`0,0;0,${i%2===0?18:-18};0,0`} dur={`${5+i%4}s`} repeatCount="indefinite"/>
+          </rect>)}
+        </svg>),
     };
 
     return (
@@ -2119,46 +2125,21 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
               const bgColor = b.bgColor || "#fff";
               const isDark = b.darkMode || ["#0","#1","#2"].some(p => bgColor.toLowerCase().startsWith(p));
               const font = b.fontFamily || "IBM Plex Sans Arabic";
-              const shapes = shapeConfigs[t.id] || shapeConfigs.media;
+              const patternFn = geoPatterns[t.id] || geoPatterns.media;
 
               return (
               <div key={t.id} className="kwb-tpl-card" onClick={() => createFromTemplate(t.id)}>
                 <div className="kwb-tpl-preview" style={{background:bgColor}}>
-                  {shapes.shapes.map((sh,i) => {
-                    const animName = `kwb-float-${t.id}-${i}`;
-                    const color1 = i % 2 === 0 ? accent : btn;
-                    const opacity = sh.type === "dot" ? 0.6 : sh.type === "ring" ? 0.25 : 0.15;
-                    const style: React.CSSProperties = {
-                      position:"absolute",
-                      left:`${sh.x}%`,top:`${sh.y}%`,
-                      animation:`${animName} ${sh.dur}s ease-in-out ${sh.delay}s infinite alternate`,
-                    };
-                    const keyframes = `@keyframes ${animName}{0%{transform:translate(0,0)${sh.rot?` rotate(0deg)`:""}}100%{transform:translate(${sh.dx}px,${sh.dy}px)${sh.rot?` rotate(${sh.rot}deg)`:""}}}`;
-
-                    let shapeEl: React.ReactNode;
-                    if (sh.type === "circle") {
-                      shapeEl = <div style={{...style,width:sh.size,height:sh.size,borderRadius:"50%",background:color1,opacity}} />;
-                    } else if (sh.type === "rect") {
-                      shapeEl = <div style={{...style,width:sh.size,height:sh.size*0.65,borderRadius:sh.size*0.12,background:color1,opacity}} />;
-                    } else if (sh.type === "ring") {
-                      shapeEl = <div style={{...style,width:sh.size,height:sh.size,borderRadius:"50%",border:`2px solid ${color1}`,opacity:opacity+0.15}} />;
-                    } else if (sh.type === "dot") {
-                      shapeEl = <div style={{...style,width:sh.size,height:sh.size,borderRadius:"50%",background:color1,opacity}} />;
-                    } else {
-                      shapeEl = <div style={{...style,width:sh.size,height:3,borderRadius:2,background:color1,opacity:opacity+0.1}} />;
-                    }
-                    return <React.Fragment key={i}><style>{keyframes}</style>{shapeEl}</React.Fragment>;
-                  })}
-                  {/* Template name centered in the preview */}
-                  <div className="kwb-tpl-preview-label" style={{color:isDark?"rgba(255,255,255,.85)":"rgba(0,0,0,.7)",fontFamily:font}}>
-                    <span className="kwb-tpl-preview-name">{t.name}</span>
+                  {patternFn(accent, btn, bgColor)}
+                  <div className="kwb-tpl-preview-label" style={{fontFamily:`'${font}', sans-serif`}}>
+                    <span className="kwb-tpl-preview-name" style={{color:isDark?"#fff":"#000",textShadow:isDark?"0 2px 20px rgba(0,0,0,.5)":"0 2px 20px rgba(255,255,255,.8)"}}>{t.name}</span>
                   </div>
                 </div>
                 <div className="kwb-tpl-overlay">
                   <button className="kwb-tpl-use-btn" style={{background:btn}}>ابدأ بهذا القالب</button>
                 </div>
                 <div className="kwb-tpl-meta">
-                  <h3 className="kwb-tpl-name" style={{fontFamily:font}}>{t.name}</h3>
+                  <h3 className="kwb-tpl-name" style={{fontFamily:`'${font}', sans-serif`}}>{t.name}</h3>
                   <p className="kwb-tpl-desc">{t.description}</p>
                 </div>
               </div>
@@ -4430,8 +4411,9 @@ const CSS_STYLES = `
 .kwb-tpl-card{position:relative;cursor:pointer;border-radius:16px;overflow:hidden;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.06);transition:transform .25s ease,box-shadow .25s ease;}
 .kwb-tpl-card:hover{transform:translateY(-4px);box-shadow:0 12px 40px rgba(0,0,0,.12);}
 .kwb-tpl-preview{height:380px;overflow:hidden;position:relative;}
+.kwb-tpl-svg{position:absolute;inset:0;width:100%;height:100%;}
 .kwb-tpl-preview-label{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;z-index:1;pointer-events:none;}
-.kwb-tpl-preview-name{font-size:28px;font-weight:800;letter-spacing:-.02em;text-align:center;line-height:1.2;}
+.kwb-tpl-preview-name{font-size:36px;font-weight:900;letter-spacing:-.02em;text-align:center;line-height:1.2;}
 .kwb-tpl-overlay{position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0);display:flex;align-items:center;justify-content:center;transition:background .25s ease;pointer-events:none;z-index:2;}
 .kwb-tpl-card:hover .kwb-tpl-overlay{background:rgba(0,0,0,.35);pointer-events:auto;}
 .kwb-tpl-use-btn{color:#fff;font-size:14px;font-weight:600;padding:12px 28px;border:none;border-radius:10px;cursor:pointer;opacity:0;transform:translateY(8px);transition:opacity .25s ease,transform .25s ease;font-family:inherit;}
