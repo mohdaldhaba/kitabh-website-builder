@@ -1299,7 +1299,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
 .pv-footer-link:hover{opacity:1;}
 .pv-footer-bottom{border-top:1px solid rgba(255,255,255,0.15);padding:20px 0;text-align:center;font-size:12px;color:var(--pv-bg);margin-top:28px;display:flex;flex-direction:column;align-items:center;gap:12px;}
 .pv-footer-bottom > span{opacity:0.4;}
-.pv-kitabh-badge{display:inline-flex;align-items:center;gap:10px;font-size:15px;font-weight:700;direction:rtl;padding:12px 24px;border-radius:50px;text-decoration:none;transition:all .2s ease;}
+.pv-kitabh-badge{display:inline-flex;align-items:center;gap:10px;font-size:15px;font-weight:700;direction:rtl;padding:12px 24px;border-radius:50px;text-decoration:none;transition:all .2s ease;position:relative;z-index:10;isolation:isolate;}
 .pv-kitabh-badge:hover{transform:translateY(-1px);}
 .pv-kitabh-badge svg{flex-shrink:0;width:24px;height:24px;}
 .pv-badge-black{background:#000;color:#fff;border:1px solid #000;}
@@ -4646,7 +4646,7 @@ const CSS_STYLES = `
 .kwb-p-footer-custom-text{font-size:12px;color:var(--kwb-bg,#fff);opacity:0.5;margin:8px 0 0;line-height:1.6;}
 .kwb-p-footer-bottom{border-top:1px solid rgba(255,255,255,0.15);padding:20px 0;text-align:center;font-size:11px;color:var(--kwb-bg,#fff);display:flex;flex-direction:column;align-items:center;gap:12px;}
 .kwb-p-footer-bottom > span{opacity:0.4;}
-.kwb-p-footer-kitabh-badge{display:inline-flex;align-items:center;gap:10px;font-size:15px;font-weight:700;direction:rtl;padding:12px 24px;border-radius:50px;text-decoration:none;transition:all .2s ease;cursor:pointer;letter-spacing:0.3px;opacity:1 !important;}
+.kwb-p-footer-kitabh-badge{display:inline-flex;align-items:center;gap:10px;font-size:15px;font-weight:700;direction:rtl;padding:12px 24px;border-radius:50px;text-decoration:none;transition:all .2s ease;cursor:pointer;letter-spacing:0.3px;opacity:1 !important;position:relative;z-index:10;isolation:isolate;}
 .kwb-p-footer-kitabh-badge:hover{transform:translateY(-1px);}
 .kwb-p-footer-kitabh-badge svg{flex-shrink:0;width:24px;height:24px;}
 .kwb-badge-black{background:#000;color:#fff;border:1px solid #000;}
