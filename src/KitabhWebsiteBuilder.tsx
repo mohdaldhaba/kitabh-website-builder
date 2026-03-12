@@ -2113,9 +2113,9 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
         <style>{CSS_STYLES}</style>
         <div className="kwb-tpl-picker">
           <div className="kwb-tpl-picker-header">
-            <button className="kwb-back-link" onClick={() => setView("sites")}>رجوع</button>
-            <h1 className="kwb-tpl-picker-title">ابدأ بقالب جاهز</h1>
-            <p className="kwb-tpl-picker-subtitle">اختر قالبًا وخصّصه كما تشاء — الألوان والخطوط والمحتوى كلها قابلة للتعديل</p>
+            <button className="kwb-back-link" style={{fontFamily:"'Alyamama', sans-serif"}} onClick={() => setView("sites")}>رجوع</button>
+            <h1 className="kwb-tpl-picker-title" style={{fontFamily:"'Alyamama', sans-serif"}}>ابدأ بقالب جاهز</h1>
+            <p className="kwb-tpl-picker-subtitle" style={{fontFamily:"'Alyamama', sans-serif"}}>اختر قالبًا وخصّصه كما تشاء — الألوان والخطوط والمحتوى كلها قابلة للتعديل</p>
           </div>
           <div className="kwb-tpl-grid">
             {TEMPLATES.map(t => {
@@ -2132,7 +2132,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                 <div className="kwb-tpl-preview" style={{background:bgColor}}>
                   {patternFn(accent, btn, bgColor)}
                   <div className="kwb-tpl-preview-label" style={{fontFamily:`'${font}', sans-serif`}}>
-                    <span className="kwb-tpl-preview-name" style={{color:isDark?"#fff":"#000",textShadow:isDark?"0 2px 20px rgba(0,0,0,.5)":"0 2px 20px rgba(255,255,255,.8)"}}>{t.name}</span>
+                    <span className="kwb-tpl-preview-name" style={{color:isDark?"#fff":"#000",background:isDark?"rgba(0,0,0,.45)":"rgba(255,255,255,.55)",backdropFilter:"blur(8px)",WebkitBackdropFilter:"blur(8px)",padding:"8px 24px",borderRadius:12}}>{t.name}</span>
                   </div>
                 </div>
                 <div className="kwb-tpl-overlay">
@@ -2141,6 +2141,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                 <div className="kwb-tpl-meta">
                   <h3 className="kwb-tpl-name" style={{fontFamily:`'${font}', sans-serif`}}>{t.name}</h3>
                   <p className="kwb-tpl-desc">{t.description}</p>
+                  <button className="kwb-tpl-mobile-btn" style={{background:btn}}>ابدأ بهذا القالب</button>
                 </div>
               </div>
               );})}
@@ -4420,7 +4421,8 @@ const CSS_STYLES = `
 .kwb-tpl-card:hover .kwb-tpl-use-btn{opacity:1;transform:translateY(0);}
 .kwb-tpl-meta{padding:16px 18px 18px;text-align:right;background:#fff;position:relative;z-index:1;}
 .kwb-tpl-name{font-size:16px;font-weight:700;margin:0 0 2px;color:#1a1a1a;}
-.kwb-tpl-desc{font-size:13px;color:#999;margin:0;line-height:1.4;}
+.kwb-tpl-desc{font-size:13px;color:#999;margin:0 0 0;line-height:1.4;}
+.kwb-tpl-mobile-btn{display:none;width:100%;padding:10px;border:none;border-radius:8px;color:#fff;font-size:14px;font-weight:600;cursor:pointer;margin-top:12px;font-family:inherit;}
 
 /* ─── BUILDER ─── */
 .kwb-builder{position:absolute;top:0;left:0;right:0;bottom:0;background:#F2F2F2;display:flex;flex-direction:column;z-index:50;}
@@ -5376,8 +5378,8 @@ const CSS_STYLES = `
   .kwb-tpl-picker-title{font-size:24px;}
   .kwb-tpl-picker-header{margin-bottom:28px;}
   .kwb-tpl-preview{height:300px;}
-  .kwb-tpl-overlay{background:rgba(0,0,0,.25)!important;pointer-events:auto!important;}
-  .kwb-tpl-use-btn{opacity:1!important;transform:none!important;}
+  .kwb-tpl-overlay{display:none!important;}
+  .kwb-tpl-mobile-btn{display:block!important;}
   .kwb-p-hero-sub-form{flex-direction:column;}
   .kwb-p-cta-form{flex-direction:column;}
   .kwb-p-footer-form{flex-direction:column;}
