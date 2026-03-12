@@ -1572,10 +1572,7 @@ export default function KitabhSocial({premium:premiumProp=false}:{premium?:boole
           </div>
           {error&&<div className="ks-error">{error}<button className="ks-error-dismiss" onClick={()=>setError(null)}>إغلاق</button></div>}
           <div className="ks-card">
-            <div className="ks-card-top">
-              <div className="ks-card-title">حوّل مقالك لمحتوى اجتماعي</div>
-              {/* counter hidden in v15 */}
-            </div>
+            <div className="ks-card-top"></div>
             <textarea className="ks-ta" value={text} onChange={e=>setText(e.target.value)} onPaste={e=>e.stopPropagation()} placeholder={"ضع المقال هنا...\n\nالحد الأدنى 50 كلمة."}/>
 
             {detectNote && (
