@@ -21,6 +21,10 @@ if (path === '/hub' || path.startsWith('/hub/')) {
   import('./tools/KitabhOutline').then(({ default: KitabhOutline }) => {
     root.render(<React.StrictMode><KitabhOutline /></React.StrictMode>)
   })
+} else if (path === '/social') {
+  import('./tools/KitabhSocial').then(({ default: KitabhSocial }) => {
+    root.render(<React.StrictMode><KitabhSocial /></React.StrictMode>)
+  })
 } else if (path === '/dashboard') {
   import('./components/OwnerDashboard').then(({ default: OwnerDashboard }) => {
     root.render(<React.StrictMode><OwnerDashboard /></React.StrictMode>)
