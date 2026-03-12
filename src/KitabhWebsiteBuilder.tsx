@@ -2626,11 +2626,6 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                   <label className="kwb-label" style={{ marginTop: 16 }}>اسم الموقع</label>
                   <input className="kwb-input" value={activeSite.branding.siteName} onChange={e => updateSite(activeSite.id, { branding: { ...activeSite.branding, siteName: e.target.value } })} />
 
-                  <label className="kwb-label" style={{ marginTop: 16 }}>نافذة الاشتراك</label>
-                  <input className="kwb-input" placeholder="عنوان النافذة" value={activeSite.branding.popupTitle || ""} onChange={e => updateSite(activeSite.id, { branding: { ...activeSite.branding, popupTitle: e.target.value } })} style={{ marginBottom: 6 }} />
-                  <input className="kwb-input" placeholder="وصف النافذة" value={activeSite.branding.popupDesc || ""} onChange={e => updateSite(activeSite.id, { branding: { ...activeSite.branding, popupDesc: e.target.value } })} style={{ marginBottom: 6 }} />
-                  <input className="kwb-input" placeholder="نص الزر (مثال: اشتراك)" value={activeSite.branding.popupButtonText || ""} onChange={e => updateSite(activeSite.id, { branding: { ...activeSite.branding, popupButtonText: e.target.value } })} />
-
                   <label className="kwb-label" style={{ marginTop: 16 }}>الخط</label>
                   <div className="kwb-font-picker">
                     {[
@@ -2885,6 +2880,11 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                                 <button className="kwb-btn-outline kwb-btn-full" style={{ marginTop: 8 }} onClick={() => updateNavLinks([...navLinks, { id: genId(), label: "رابط جديد", linkType: "page", target: "", visible: true }])}>
                                   + إضافة رابط
                                 </button>
+
+                                <label className="kwb-label" style={{ marginTop: 16 }}>نافذة الاشتراك</label>
+                                <input className="kwb-input" placeholder="عنوان النافذة" value={activeSite.branding.popupTitle || ""} onChange={e => updateSite(activeSite.id, { branding: { ...activeSite.branding, popupTitle: e.target.value } })} style={{ marginBottom: 6 }} />
+                                <input className="kwb-input" placeholder="وصف النافذة" value={activeSite.branding.popupDesc || ""} onChange={e => updateSite(activeSite.id, { branding: { ...activeSite.branding, popupDesc: e.target.value } })} style={{ marginBottom: 6 }} />
+                                <input className="kwb-input" placeholder="نص الزر (مثال: اشتراك)" value={activeSite.branding.popupButtonText || ""} onChange={e => updateSite(activeSite.id, { branding: { ...activeSite.branding, popupButtonText: e.target.value } })} />
                               </>
                               );
                             })()}
