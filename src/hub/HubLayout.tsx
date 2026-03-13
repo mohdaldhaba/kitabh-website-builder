@@ -112,24 +112,20 @@ const icons = {
       <polyline points="20 6 9 17 4 12" />
     </svg>
   ),
+  outline: (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <line x1="8" y1="6" x2="21" y2="6" /><line x1="8" y1="12" x2="21" y2="12" /><line x1="8" y1="18" x2="21" y2="18" /><line x1="3" y1="6" x2="3.01" y2="6" /><line x1="3" y1="12" x2="3.01" y2="12" /><line x1="3" y1="18" x2="3.01" y2="18" />
+    </svg>
+  ),
+  checker: (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M9 11l3 3L22 4" /><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+    </svg>
+  ),
 };
 
 // ─── Types ───────────────────────────────────────────────
 type Page = 'dashboard' | 'posts' | 'newsletters' | 'email-template' | 'notifications' | 'grow' | 'website' | 'writers' | 'subscribers' | 'email-journeys' | 'analyze' | 'settings';
-
-interface SubItem {
-  id: string;
-  label: string;
-  comingSoon?: boolean;
-}
-
-interface NavItem {
-  id: Page;
-  label: string;
-  icon: React.ReactNode;
-  subItems?: SubItem[];
-  comingSoon?: boolean;
-}
 
 interface Publication {
   id: string;
@@ -149,44 +145,58 @@ interface HubLayoutProps {
   onSwitchPublication?: (id: string) => void;
 }
 
-const navItems: NavItem[] = [
-  { id: 'dashboard', label: 'لوحة التحكم', icon: icons.dashboard },
+// ─── Section-based sidebar structure ─────────────────────
+type SidebarItem = {
+  page: Page;
+  subPage?: string;
+  label: string;
+  icon: React.ReactNode;
+  comingSoon?: boolean;
+};
+
+type SidebarSection = {
+  label: string;
+  items: SidebarItem[];
+};
+
+const sidebarSections: SidebarSection[] = [
   {
-    id: 'posts',
-    label: 'المحتوى',
-    icon: icons.posts,
-    subItems: [
-      { id: 'all-posts', label: 'كل المنشورات' },
-      { id: 'outline', label: 'مخطط المقال' },
-      { id: 'checker', label: 'فحص المقال' },
+    label: 'اكتب',
+    items: [
+      { page: 'posts', subPage: 'all-posts', label: 'المنشورات', icon: icons.posts },
+      { page: 'posts', subPage: 'outline', label: 'مخطط المقال', icon: icons.outline },
+      { page: 'posts', subPage: 'checker', label: 'فحص المقال', icon: icons.checker },
     ],
   },
-  { id: 'newsletters', label: 'النشرات', icon: icons.emailJourney },
-  { id: 'email-template', label: 'قالب البريد', icon: icons.posts },
-  { id: 'notifications', label: 'الإشعارات', icon: icons.notification },
   {
-    id: 'grow',
-    label: 'النمو',
-    icon: icons.grow,
-    subItems: [
-      { id: 'carousel', label: 'مولّد الكاروسيل' },
-      { id: 'social', label: 'محوّل اجتماعي' },
-      { id: 'magic-link', label: 'رابط سحري' },
+    label: 'انشر',
+    items: [
+      { page: 'newsletters', label: 'النشرات', icon: icons.emailJourney },
+      { page: 'email-template', label: 'قالب البريد', icon: icons.posts },
+      { page: 'email-journeys', label: 'رحلات البريد', icon: icons.emailJourney, comingSoon: true },
     ],
   },
-  { id: 'website', label: 'المواقع', icon: icons.website },
-  { id: 'writers', label: 'كتّابك', icon: icons.members },
-  { id: 'subscribers', label: 'المشتركين', icon: icons.audience },
-  { id: 'email-journeys', label: 'رحلات البريد', icon: icons.emailJourney, comingSoon: true },
   {
-    id: 'analyze',
-    label: 'الإحصائيات',
-    icon: icons.analyze,
-    subItems: [
-      { id: 'newsletter-stats', label: 'إحصائيات النشرة' },
-      { id: 'website-stats', label: 'إحصائيات الموقع' },
+    label: 'انمو',
+    items: [
+      { page: 'subscribers', label: 'المشتركين', icon: icons.audience },
+      { page: 'grow', subPage: 'carousel', label: 'مولّد الكاروسيل', icon: icons.grow },
+      { page: 'grow', subPage: 'social', label: 'محوّل اجتماعي', icon: icons.grow },
+      { page: 'grow', subPage: 'magic-link', label: 'رابط سحري', icon: icons.grow },
     ],
   },
+  {
+    label: 'ابنِ',
+    items: [
+      { page: 'website', label: 'المواقع', icon: icons.website },
+      { page: 'writers', label: 'كتّابك', icon: icons.members },
+    ],
+  },
+];
+
+const utilityItems: SidebarItem[] = [
+  { page: 'analyze', label: 'الإحصائيات', icon: icons.analyze },
+  { page: 'notifications', label: 'الإشعارات', icon: icons.notification },
 ];
 
 // ─── Theme ──────────────────────────────────────────────
@@ -244,6 +254,7 @@ const pageTitles: Record<Page, string> = {
   writers: 'كتّابك',
   subscribers: 'المشتركين',
   'email-journeys': 'رحلات البريد',
+  analyze: 'الإحصائيات',
   settings: 'الإعدادات',
 };
 
@@ -413,7 +424,6 @@ const HubLayout: React.FC<HubLayoutProps> = ({
   activePublicationId,
   onSwitchPublication,
 }) => {
-  const [expandedItems, setExpandedItems] = useState<Set<string>>(new Set(['posts']));
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [dark, setDark] = useState(() => {
     try { return localStorage.getItem('kb_hub_theme') === 'dark'; } catch { return false; }
@@ -424,15 +434,6 @@ const HubLayout: React.FC<HubLayoutProps> = ({
   useEffect(() => {
     try { localStorage.setItem('kb_hub_theme', dark ? 'dark' : 'light'); } catch {}
   }, [dark]);
-
-  const toggleExpand = (id: string) => {
-    setExpandedItems((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      return next;
-    });
-  };
 
   const comingSoonBadge = (
     <span
@@ -501,121 +502,137 @@ const HubLayout: React.FC<HubLayoutProps> = ({
 
       {/* Navigation */}
       <nav style={{ padding: '8px 8px', flex: 1, overflowY: 'auto' }}>
-        {navItems.map((item) => {
-          const isActive = activePage === item.id;
-          const isExpanded = expandedItems.has(item.id);
-          const hasSubItems = item.subItems && item.subItems.length > 0;
-          const isComingSoon = item.comingSoon;
-
+        {/* Dashboard - standalone at top */}
+        {(() => {
+          const isDashActive = activePage === 'dashboard';
           return (
-            <div key={item.id} style={{ marginBottom: 1 }}>
-              <button
-                onClick={() => {
-                  if (isComingSoon) return;
-                  if (hasSubItems) {
-                    toggleExpand(item.id);
-                    if (!isActive) {
-                      const firstActive = item.subItems!.find((s) => !s.comingSoon);
-                      onNavigate(item.id, firstActive?.id || item.subItems![0].id);
-                    }
-                  } else {
-                    onNavigate(item.id);
-                  }
-                  setMobileMenuOpen(false);
-                }}
-                style={{
-                  width: '100%',
-                  padding: '8px 12px',
-                  background: isActive && !isComingSoon ? c.activeItem : 'transparent',
-                  color: isComingSoon ? (dark ? '#444' : '#C0C0C0') : isActive ? c.activeText : c.text,
-                  border: 'none',
-                  borderRadius: 6,
-                  fontSize: 14,
-                  fontWeight: isActive && !isComingSoon ? 600 : 400,
-                  fontFamily: 'IBM Plex Sans Arabic, sans-serif',
-                  cursor: isComingSoon ? 'default' : 'pointer',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 10,
-                  transition: 'background 0.1s',
-                  textAlign: 'right',
-                  opacity: isComingSoon ? 0.5 : 1,
-                }}
-                onMouseEnter={(e) => {
-                  if (!isActive && !isComingSoon) e.currentTarget.style.background = c.hoverBg;
-                }}
-                onMouseLeave={(e) => {
-                  if (!isActive && !isComingSoon) e.currentTarget.style.background = 'transparent';
-                }}
-              >
-                <span style={{ display: 'flex', alignItems: 'center', color: isActive ? c.activeText : c.textMuted }}>
-                  {item.icon}
-                </span>
-                <span style={{ flex: 1, textAlign: 'right' }}>{item.label}</span>
-                {isComingSoon && comingSoonBadge}
-                {hasSubItems && !isComingSoon && (
-                  <span
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      transform: isExpanded ? 'rotate(180deg)' : 'rotate(0)',
-                      transition: 'transform 0.2s',
-                      color: c.textMuted,
-                    }}
-                  >
-                    {icons.chevron}
-                  </span>
-                )}
-              </button>
+            <button
+              onClick={() => { onNavigate('dashboard'); setMobileMenuOpen(false); }}
+              style={{
+                width: '100%',
+                padding: '8px 12px',
+                background: isDashActive ? c.activeItem : 'transparent',
+                color: isDashActive ? c.activeText : c.text,
+                border: 'none',
+                borderRadius: 6,
+                fontSize: 14,
+                fontWeight: isDashActive ? 600 : 400,
+                fontFamily: 'IBM Plex Sans Arabic, sans-serif',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 10,
+                transition: 'background 0.1s',
+                textAlign: 'right',
+                marginBottom: 4,
+              }}
+              onMouseEnter={(e) => { if (!isDashActive) e.currentTarget.style.background = c.hoverBg; }}
+              onMouseLeave={(e) => { if (!isDashActive) e.currentTarget.style.background = 'transparent'; }}
+            >
+              <span style={{ display: 'flex', alignItems: 'center', color: isDashActive ? c.activeText : c.textMuted }}>
+                {icons.dashboard}
+              </span>
+              <span style={{ flex: 1, textAlign: 'right' }}>لوحة التحكم</span>
+            </button>
+          );
+        })()}
 
-              {/* Sub-items */}
-              {hasSubItems && isExpanded && !isComingSoon && (
-                <div style={{ paddingRight: 40, paddingTop: 2 }}>
-                  {item.subItems!.map((sub) => {
-                    const isSubActive = activePage === item.id && activeSubPage === sub.id;
-                    const isSubComingSoon = sub.comingSoon;
-                    return (
-                      <button
-                        key={sub.id}
-                        onClick={() => {
-                          if (isSubComingSoon) return;
-                          onNavigate(item.id, sub.id);
-                          setMobileMenuOpen(false);
-                        }}
-                        style={{
-                          width: '100%',
-                          padding: '6px 12px',
-                          background: isSubActive && !isSubComingSoon ? c.activeItem : 'transparent',
-                          color: isSubComingSoon ? (dark ? '#444' : '#C0C0C0') : isSubActive ? c.activeText : c.textMuted,
-                          border: 'none',
-                          borderRadius: 6,
-                          fontSize: 13,
-                          fontWeight: isSubActive && !isSubComingSoon ? 600 : 400,
-                          fontFamily: 'IBM Plex Sans Arabic, sans-serif',
-                          cursor: isSubComingSoon ? 'default' : 'pointer',
-                          textAlign: 'right',
-                          transition: 'background 0.1s',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
-                          marginBottom: 1,
-                          opacity: isSubComingSoon ? 0.5 : 1,
-                        }}
-                        onMouseEnter={(e) => {
-                          if (!isSubActive && !isSubComingSoon) e.currentTarget.style.background = c.hoverBg;
-                        }}
-                        onMouseLeave={(e) => {
-                          if (!isSubActive && !isSubComingSoon) e.currentTarget.style.background = 'transparent';
-                        }}
-                      >
-                        <span>{sub.label}</span>
-                        {isSubComingSoon && comingSoonBadge}
-                      </button>
-                    );
-                  })}
-                </div>
-              )}
+        {/* Sections */}
+        {sidebarSections.map((section) => (
+          <div key={section.label} style={{ marginBottom: 4 }}>
+            {/* Section label */}
+            <div style={{
+              padding: '12px 12px 4px',
+              fontSize: 11,
+              fontWeight: 700,
+              fontFamily: 'IBM Plex Sans Arabic, sans-serif',
+              color: c.textMuted,
+              letterSpacing: '0.02em',
+              textTransform: 'uppercase' as const,
+            }}>
+              {section.label}
             </div>
+            {/* Section items */}
+            {section.items.map((item) => {
+              const isActive = activePage === item.page && (item.subPage ? activeSubPage === item.subPage : !activeSubPage || activePage !== 'posts' && activePage !== 'grow');
+              const isComingSoon = item.comingSoon;
+              return (
+                <button
+                  key={`${item.page}-${item.subPage || ''}`}
+                  onClick={() => {
+                    if (isComingSoon) return;
+                    onNavigate(item.page, item.subPage);
+                    setMobileMenuOpen(false);
+                  }}
+                  style={{
+                    width: '100%',
+                    padding: '7px 12px',
+                    background: isActive && !isComingSoon ? c.activeItem : 'transparent',
+                    color: isComingSoon ? (dark ? '#444' : '#C0C0C0') : isActive ? c.activeText : c.text,
+                    border: 'none',
+                    borderRadius: 6,
+                    fontSize: 13,
+                    fontWeight: isActive && !isComingSoon ? 600 : 400,
+                    fontFamily: 'IBM Plex Sans Arabic, sans-serif',
+                    cursor: isComingSoon ? 'default' : 'pointer',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 10,
+                    transition: 'background 0.1s',
+                    textAlign: 'right',
+                    opacity: isComingSoon ? 0.5 : 1,
+                    marginBottom: 1,
+                  }}
+                  onMouseEnter={(e) => { if (!isActive && !isComingSoon) e.currentTarget.style.background = c.hoverBg; }}
+                  onMouseLeave={(e) => { if (!isActive && !isComingSoon) e.currentTarget.style.background = 'transparent'; }}
+                >
+                  <span style={{ display: 'flex', alignItems: 'center', color: isActive ? c.activeText : c.textMuted }}>
+                    {item.icon}
+                  </span>
+                  <span style={{ flex: 1, textAlign: 'right' }}>{item.label}</span>
+                  {isComingSoon && comingSoonBadge}
+                </button>
+              );
+            })}
+          </div>
+        ))}
+
+        {/* Utility divider */}
+        <div style={{ borderTop: `1px solid ${c.border}`, margin: '8px 12px 4px' }} />
+
+        {/* Utility items */}
+        {utilityItems.map((item) => {
+          const isActive = activePage === item.page;
+          return (
+            <button
+              key={item.page}
+              onClick={() => { onNavigate(item.page); setMobileMenuOpen(false); }}
+              style={{
+                width: '100%',
+                padding: '7px 12px',
+                background: isActive ? c.activeItem : 'transparent',
+                color: isActive ? c.activeText : c.text,
+                border: 'none',
+                borderRadius: 6,
+                fontSize: 13,
+                fontWeight: isActive ? 600 : 400,
+                fontFamily: 'IBM Plex Sans Arabic, sans-serif',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 10,
+                transition: 'background 0.1s',
+                textAlign: 'right',
+                marginBottom: 1,
+              }}
+              onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.background = c.hoverBg; }}
+              onMouseLeave={(e) => { if (!isActive) e.currentTarget.style.background = 'transparent'; }}
+            >
+              <span style={{ display: 'flex', alignItems: 'center', color: isActive ? c.activeText : c.textMuted }}>
+                {item.icon}
+              </span>
+              <span style={{ flex: 1, textAlign: 'right' }}>{item.label}</span>
+            </button>
           );
         })}
       </nav>
@@ -671,7 +688,7 @@ const HubLayout: React.FC<HubLayoutProps> = ({
             color: activePage === 'settings' ? c.activeText : c.text,
             border: 'none',
             borderRadius: 6,
-            fontSize: 14,
+            fontSize: 13,
             fontWeight: 400,
             fontFamily: 'IBM Plex Sans Arabic, sans-serif',
             cursor: 'pointer',
