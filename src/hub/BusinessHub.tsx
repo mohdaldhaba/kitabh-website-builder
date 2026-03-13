@@ -10,9 +10,8 @@ import SettingsPage from './SettingsPage';
 import AudiencePage from './AudiencePage';
 import NewslettersPage from './NewslettersPage';
 import EmailTemplatePage from './EmailTemplatePage';
-import { MOCK_NEWSLETTER } from '../mockData';
-import { colors } from './HubLayout';
-import type { Page } from './HubLayout';
+import { useTheme } from './HubLayout';
+import type { Page, Publication } from './HubLayout';
 
 // Lazy-load the actual tool components
 const KitabhOutline = lazy(() => import('../tools/KitabhOutline'));
@@ -22,7 +21,7 @@ const KitabhSocial = lazy(() => import('../tools/KitabhSocial'));
 // Loading spinner for lazy components
 const ToolLoader: React.FC = () => (
   <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '80px 0' }}>
-    <div style={{ fontSize: 14, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>
+    <div style={{ fontSize: 14, color: '#6B7280', fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>
       جارٍ التحميل...
     </div>
   </div>
@@ -40,10 +39,10 @@ const ComingSoonPage: React.FC<{ title: string; description: string }> = ({ titl
         <circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" />
       </svg>
     </div>
-    <h2 style={{ fontSize: 20, fontWeight: 700, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 8px' }}>
+    <h2 style={{ fontSize: 20, fontWeight: 700, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 8px' }}>
       {title}
     </h2>
-    <p style={{ fontSize: 14, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 24px', lineHeight: 1.7 }}>
+    <p style={{ fontSize: 14, color: '#6B7280', fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 24px', lineHeight: 1.7 }}>
       {description}
     </p>
     <span
@@ -63,9 +62,16 @@ const ComingSoonPage: React.FC<{ title: string; description: string }> = ({ titl
   </div>
 );
 
+// ─── Mock publications ──────────────────────────────────
+const mockPublications: Publication[] = [
+  { id: 'pub_1', name: 'رسالة السبت', slug: 'saturday-letter', subscriberCount: 1920 },
+  { id: 'pub_2', name: 'نشرة التقنية', slug: 'tech-weekly', subscriberCount: 480 },
+];
+
 const BusinessHub: React.FC = () => {
   const [activePage, setActivePage] = useState<Page>('dashboard');
   const [activeSubPage, setActiveSubPage] = useState<string | undefined>();
+  const [activePublicationId, setActivePublicationId] = useState(mockPublications[0].id);
 
   const handleNavigate = (page: Page, subPage?: string) => {
     setActivePage(page);
@@ -116,7 +122,14 @@ const BusinessHub: React.FC = () => {
   };
 
   return (
-    <HubLayout activePage={activePage} activeSubPage={activeSubPage} onNavigate={handleNavigate} displayName={MOCK_NEWSLETTER.displayName}>
+    <HubLayout
+      activePage={activePage}
+      activeSubPage={activeSubPage}
+      onNavigate={handleNavigate}
+      publications={mockPublications}
+      activePublicationId={activePublicationId}
+      onSwitchPublication={setActivePublicationId}
+    >
       {renderPage()}
     </HubLayout>
   );
