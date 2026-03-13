@@ -2033,82 +2033,114 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
   //  RENDER: TEMPLATE PICKER
   // ═══════════════════════════════════════════════════════
   if (view === "templates") {
-    // Bold geometric CSS-animated patterns per template
+    // Bauhaus / bold geometric poster-inspired patterns per template
     const geoPatterns: Record<string, (c1:string,c2:string,bg:string) => React.ReactNode> = {
-      // Media: bold horizontal stripes
-      media: (c1,c2) => {
-        const css = Array.from({length:14}).map((_,i)=>`@keyframes kwb-m${i}{0%,100%{transform:translateX(0)}50%{transform:translateX(${i%2===0?20:-20}px)}}`).join("");
-        return <><style>{css}</style><svg viewBox="0 0 400 500" className="kwb-tpl-svg">
-          {Array.from({length:14}).map((_,i)=><rect key={i} x="0" y={i*36} width="400" height="20" fill={i%2===0?c1:c2} opacity={i%3===0?.9:.7} style={{animation:`kwb-m${i} ${6+i%3}s ease-in-out infinite`}}/>)}
-        </svg></>;
-      },
-      // Newsletter: concentric circles
-      newsletter: (c1,c2) => {
-        const css = [200,170,140,110,80,50,20].map((_,i)=>`@keyframes kwb-n${i}{0%,100%{transform:scale(1)}50%{transform:scale(${1+i*.03})}}`).join("");
-        return <><style>{css}</style><svg viewBox="0 0 400 500" className="kwb-tpl-svg">
-          {[200,170,140,110,80,50,20].map((r,i)=><circle key={i} cx="200" cy="250" r={r} fill="none" stroke={i%2===0?c1:c2} strokeWidth={i<3?16:12} opacity={.6+i*.05} style={{transformOrigin:"200px 250px",animation:`kwb-n${i} ${5+i}s ease-in-out infinite`}}/>)}
-        </svg></>;
-      },
-      // Blog: diagonal lines
-      blog: (c1,c2) => {
-        const css = Array.from({length:20}).map((_,i)=>`@keyframes kwb-b${i}{0%,100%{transform:translateX(0)}50%{transform:translateX(${i%2===0?15:-15}px)}}`).join("");
-        return <><style>{css}</style><svg viewBox="0 0 400 500" className="kwb-tpl-svg">
-          {Array.from({length:20}).map((_,i)=><line key={i} x1={-100+i*40} y1="0" x2={-100+i*40+500} y2="500" stroke={i%3===0?c2:c1} strokeWidth={i%2===0?12:8} opacity={i%4===0?.5:.3} style={{animation:`kwb-b${i} ${7+i%4}s ease-in-out infinite`}}/>)}
-        </svg></>;
-      },
-      // Podcast: stacked wave lines
-      podcast: (c1,c2) => {
-        const css = Array.from({length:10}).map((_,i)=>`@keyframes kwb-p${i}{0%,100%{transform:translateY(0)}50%{transform:translateY(${i%2===0?12:-12}px)}}`).join("");
-        return <><style>{css}</style><svg viewBox="0 0 400 500" className="kwb-tpl-svg">
-          {Array.from({length:10}).map((_,i)=>{
-            const y=50+i*45;const a=i%2===0?30:25;
-            return <path key={i} d={`M0,${y} Q100,${y-a} 200,${y} T400,${y}`} fill="none" stroke={i%2===0?c1:c2} strokeWidth={i%3===0?14:10} strokeLinecap="round" opacity={.5+i*.04} style={{animation:`kwb-p${i} ${4+i*.5}s ease-in-out infinite`}}/>;
-          })}
-        </svg></>;
-      },
-      // Cinema: checkerboard
+      // Media: large semicircle stack with horizontal band
+      media: (c1,c2) => (
+        <svg viewBox="0 0 400 500" className="kwb-tpl-svg">
+          <rect x="0" y="200" width="400" height="100" fill={c1} opacity=".85"/>
+          <path d="M0,500 A200,200 0 0,1 400,500" fill={c2} opacity=".75"/>
+          <circle cx="200" cy="200" r="140" fill={c1} opacity=".6"/>
+          <path d="M0,0 L0,200 A200,200 0 0,0 400,200 L400,0 Z" fill={c2} opacity=".35"/>
+          <circle cx="320" cy="120" r="60" fill={c1} opacity=".9"/>
+          <circle cx="80" cy="400" r="45" fill={c2} opacity=".5"/>
+          <rect x="160" y="320" width="80" height="80" fill={c1} opacity=".4" transform="rotate(45,200,360)"/>
+        </svg>),
+      // Newsletter: concentric rings offset with quarter-circle
+      newsletter: (c1,c2) => (
+        <svg viewBox="0 0 400 500" className="kwb-tpl-svg">
+          <path d="M0,0 L0,250 A250,250 0 0,0 250,0 Z" fill={c1} opacity=".7"/>
+          <circle cx="280" cy="350" r="160" fill="none" stroke={c2} strokeWidth="28" opacity=".6"/>
+          <circle cx="280" cy="350" r="110" fill="none" stroke={c1} strokeWidth="22" opacity=".5"/>
+          <circle cx="280" cy="350" r="60" fill={c2} opacity=".7"/>
+          <rect x="0" y="420" width="200" height="80" fill={c1} opacity=".5"/>
+          <circle cx="60" cy="380" r="35" fill={c2} opacity=".8"/>
+          <path d="M400,0 L400,120 L280,0 Z" fill={c2} opacity=".45"/>
+        </svg>),
+      // Blog: bold overlapping circles Bauhaus composition
+      blog: (c1,c2) => (
+        <svg viewBox="0 0 400 500" className="kwb-tpl-svg">
+          <circle cx="120" cy="150" r="150" fill={c1} opacity=".65"/>
+          <circle cx="300" cy="200" r="120" fill={c2} opacity=".55"/>
+          <rect x="0" y="350" width="400" height="150" fill={c1} opacity=".3"/>
+          <path d="M400,500 A200,200 0 0,1 200,500 L400,500 Z" fill={c2} opacity=".7"/>
+          <circle cx="200" cy="350" r="80" fill={c1} opacity=".5"/>
+          <rect x="50" y="0" width="60" height="500" fill={c2} opacity=".15"/>
+          <circle cx="340" cy="80" r="40" fill={c2} opacity=".8"/>
+        </svg>),
+      // Podcast: sound wave arcs with geometric blocks
+      podcast: (c1,c2) => (
+        <svg viewBox="0 0 400 500" className="kwb-tpl-svg">
+          <path d="M200,250 m-180,0 a180,180 0 1,1 360,0" fill="none" stroke={c1} strokeWidth="24" opacity=".5"/>
+          <path d="M200,250 m-130,0 a130,130 0 1,1 260,0" fill="none" stroke={c2} strokeWidth="20" opacity=".45"/>
+          <path d="M200,250 m-80,0 a80,80 0 1,1 160,0" fill="none" stroke={c1} strokeWidth="16" opacity=".6"/>
+          <circle cx="200" cy="250" r="35" fill={c2} opacity=".85"/>
+          <rect x="0" y="380" width="180" height="120" fill={c1} opacity=".5"/>
+          <rect x="220" y="400" width="180" height="100" fill={c2} opacity=".4"/>
+          <path d="M0,0 L120,0 L0,120 Z" fill={c2} opacity=".5"/>
+          <path d="M400,0 L400,90 L310,0 Z" fill={c1} opacity=".35"/>
+        </svg>),
+      // Cinema: bold diagonal split with circle overlay
       cinema: (c1,c2) => (
         <svg viewBox="0 0 400 500" className="kwb-tpl-svg">
-          {Array.from({length:6}).map((_,r)=>Array.from({length:5}).map((_,c)=>{
-            const on=(r+c)%2===0;
-            return <rect key={`${r}-${c}`} x={c*80} y={r*84} width="80" height="84" fill={on?c1:c2} opacity={on?.8:.5}/>;
-          }))}
+          <path d="M0,0 L400,0 L400,500 Z" fill={c1} opacity=".6"/>
+          <path d="M0,0 L0,500 L400,500 Z" fill={c2} opacity=".4"/>
+          <circle cx="200" cy="220" r="130" fill={c1} opacity=".7"/>
+          <circle cx="200" cy="220" r="80" fill={c2} opacity=".6"/>
+          <circle cx="200" cy="220" r="35" fill={c1} opacity=".9"/>
+          <rect x="50" y="400" width="300" height="60" rx="30" fill={c2} opacity=".5"/>
+          <path d="M0,0 L0,80 L80,0 Z" fill={c2} opacity=".7"/>
+          <path d="M400,500 L400,420 L320,500 Z" fill={c1} opacity=".5"/>
         </svg>),
-      // Education: diamond grid
+      // Education: stacked geometric blocks with circle accent
       education: (c1,c2) => (
         <svg viewBox="0 0 400 500" className="kwb-tpl-svg">
-          {Array.from({length:8}).map((_,r)=>Array.from({length:6}).map((_,c)=>{
-            const cx=c*72+36;const cy=r*68+34;
-            return <rect key={`${r}-${c}`} x={cx-24} y={cy-24} width="48" height="48" rx="6" fill={(r+c)%2===0?c1:c2} opacity={(r+c)%3===0?.7:.4} transform={`rotate(45,${cx},${cy})`}/>;
-          }))}
+          <rect x="0" y="0" width="200" height="250" fill={c1} opacity=".6"/>
+          <rect x="200" y="0" width="200" height="250" fill={c2} opacity=".45"/>
+          <rect x="0" y="250" width="200" height="250" fill={c2} opacity=".5"/>
+          <rect x="200" y="250" width="200" height="250" fill={c1} opacity=".35"/>
+          <circle cx="200" cy="250" r="120" fill={c1} opacity=".55"/>
+          <circle cx="200" cy="250" r="70" fill={c2} opacity=".65"/>
+          <circle cx="200" cy="250" r="25" fill={c1} opacity=".9"/>
+          <path d="M0,0 L80,0 L0,80 Z" fill={c2} opacity=".7"/>
+          <path d="M400,500 L320,500 L400,420 Z" fill={c1} opacity=".7"/>
         </svg>),
-      // Store: stacked rounded rectangles
-      store: (c1,c2) => {
-        const css = Array.from({length:7}).map((_,i)=>`@keyframes kwb-s${i}{0%,100%{transform:translateX(0)}50%{transform:translateX(${i%2===0?12:-12}px)}}`).join("");
-        return <><style>{css}</style><svg viewBox="0 0 400 500" className="kwb-tpl-svg">
-          {Array.from({length:7}).map((_,i)=>{
-            const w=360-i*30;const h=50;const y=i*70+10;const x=(400-w)/2;
-            return <rect key={i} x={x} y={y} width={w} height={h} rx={h/2} fill={i%2===0?c1:c2} opacity={.6-i*.05} style={{animation:`kwb-s${i} ${5+i*.7}s ease-in-out infinite`}}/>;
-          })}
-        </svg></>;
-      },
-      // Coach: large overlapping circles
-      coach: (c1,c2) => (<>
-        <style>{`@keyframes kwb-c0{0%,100%{transform:translate(0,0)}50%{transform:translate(15px,10px)}}@keyframes kwb-c1{0%,100%{transform:translate(0,0)}50%{transform:translate(-12px,8px)}}@keyframes kwb-c2{0%,100%{transform:translate(0,0)}50%{transform:translate(8px,-12px)}}@keyframes kwb-c3{0%,100%{transform:translate(0,0)}50%{transform:translate(-8px,10px)}}@keyframes kwb-c4{0%,100%{transform:translate(0,0)}50%{transform:translate(10px,-8px)}}`}</style>
+      // Store: bold archway with dot grid
+      store: (c1,c2) => (
         <svg viewBox="0 0 400 500" className="kwb-tpl-svg">
-          <circle cx="130" cy="180" r="140" fill={c1} opacity=".5" style={{animation:"kwb-c0 7s ease-in-out infinite"}}/>
-          <circle cx="280" cy="180" r="120" fill={c2} opacity=".45" style={{animation:"kwb-c1 8s ease-in-out infinite"}}/>
-          <circle cx="200" cy="340" r="130" fill={c1} opacity=".4" style={{animation:"kwb-c2 9s ease-in-out infinite"}}/>
-          <circle cx="100" cy="400" r="80" fill={c2} opacity=".35" style={{animation:"kwb-c3 6s ease-in-out infinite"}}/>
-          <circle cx="320" cy="420" r="90" fill={c1} opacity=".3" style={{animation:"kwb-c4 10s ease-in-out infinite"}}/>
-        </svg></>),
-      // Portfolio: vertical stripes
-      portfolio: (c1,c2) => {
-        const css = Array.from({length:12}).map((_,i)=>`@keyframes kwb-v${i}{0%,100%{transform:translateY(0)}50%{transform:translateY(${i%2===0?18:-18}px)}}`).join("");
-        return <><style>{css}</style><svg viewBox="0 0 400 500" className="kwb-tpl-svg">
-          {Array.from({length:12}).map((_,i)=><rect key={i} x={i*34} y="0" width="18" height="500" fill={i%3===0?c1:i%3===1?c2:c1} opacity={i%2===0?.6:.35} style={{animation:`kwb-v${i} ${5+i%4}s ease-in-out infinite`}}/>)}
-        </svg></>;
-      },
+          <rect x="0" y="200" width="400" height="300" fill={c1} opacity=".5"/>
+          <path d="M60,500 L60,250 A140,140 0 0,1 340,250 L340,500 Z" fill={c2} opacity=".6"/>
+          <path d="M110,500 L110,270 A90,90 0 0,1 290,270 L290,500 Z" fill={c1} opacity=".4"/>
+          <circle cx="200" cy="100" r="70" fill={c2} opacity=".7"/>
+          <circle cx="200" cy="100" r="35" fill={c1} opacity=".5"/>
+          {Array.from({length:5}).map((_,r)=>Array.from({length:6}).map((_,c)=>
+            <circle key={`${r}-${c}`} cx={50+c*65} cy={30+r*45} r="5" fill={c2} opacity=".3"/>
+          ))}
+        </svg>),
+      // Coach: large overlapping bold shapes — Bauhaus poster style
+      coach: (c1,c2) => (
+        <svg viewBox="0 0 400 500" className="kwb-tpl-svg">
+          <path d="M0,0 Q200,100 400,0 L400,200 Q200,300 0,200 Z" fill={c1} opacity=".5"/>
+          <circle cx="130" cy="300" r="150" fill={c2} opacity=".5"/>
+          <circle cx="300" cy="280" r="120" fill={c1} opacity=".45"/>
+          <path d="M0,400 L400,350 L400,500 L0,500 Z" fill={c2} opacity=".6"/>
+          <circle cx="200" cy="320" r="50" fill={c1} opacity=".7"/>
+          <circle cx="200" cy="320" r="20" fill={c2} opacity=".9"/>
+          <rect x="340" y="0" width="60" height="180" fill={c2} opacity=".35"/>
+        </svg>),
+      // Portfolio: asymmetric geometric blocks — Swiss poster grid
+      portfolio: (c1,c2) => (
+        <svg viewBox="0 0 400 500" className="kwb-tpl-svg">
+          <rect x="0" y="0" width="160" height="300" fill={c1} opacity=".6"/>
+          <rect x="160" y="0" width="240" height="180" fill={c2} opacity=".45"/>
+          <rect x="160" y="180" width="240" height="120" fill={c1} opacity=".35"/>
+          <rect x="0" y="300" width="250" height="200" fill={c2} opacity=".55"/>
+          <rect x="250" y="300" width="150" height="200" fill={c1} opacity=".4"/>
+          <circle cx="160" cy="300" r="90" fill={c1} opacity=".5"/>
+          <circle cx="160" cy="300" r="45" fill={c2} opacity=".65"/>
+          <path d="M400,0 L400,100 L300,0 Z" fill={c1} opacity=".7"/>
+          <circle cx="70" cy="430" r="30" fill={c1} opacity=".8"/>
+        </svg>),
     };
 
     return (
