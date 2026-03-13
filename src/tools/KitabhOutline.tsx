@@ -917,12 +917,13 @@ const CSS = `
 `
 
 // ─── Main Component ──────────────────────────────────
-export default function KitabhOutline(props: { premium?: boolean }) {
+export default function KitabhOutline(props: { premium?: boolean; embedded?: boolean }) {
   type Tool  = "article" | "story" | "literary"
   type Phase = "record" | "transcribing" | "transcribe" | "loading" | "results"
 
   const { authenticated, premium: authPremium } = getKitabhUser()
   const isPremium = !!props.premium || authPremium
+  const isEmbedded = !!props.embedded
   const [showPopup, setShowPopup] = useState(false)
   const [popupEmail, setPopupEmail] = useState("")
   const [showPaywall, setShowPaywall] = useState(false)
@@ -1245,7 +1246,7 @@ export default function KitabhOutline(props: { premium?: boolean }) {
       })()}
 
       {/* HEADER LOGO */}
-      {phase === "record" && (
+      {phase === "record" && !isEmbedded && (
         <div className="kdl-head">
           <div className="kdl-icons">
             <span className="kdl-ico kdl-ico-1"><img src={KDL_SCRIBBLE} alt="" /></span>
@@ -1313,7 +1314,7 @@ export default function KitabhOutline(props: { premium?: boolean }) {
               <div className="kb-rec-wc"><b>{twc}</b> كلمة</div>
             </div>
           </div>
-                    {!isPremium && (
+                    {!isPremium && !isEmbedded && (
             <div className="kb-trial">
               <div className="kb-trial-info">
                 <div className="kb-trial-bar"><div className="kb-trial-fill" style={{width:`${Math.min(100,((KTK_FREE_USES-remaining)/KTK_FREE_USES)*100)}%`}}/></div>
@@ -1505,7 +1506,7 @@ export default function KitabhOutline(props: { premium?: boolean }) {
               <div className="kb-load-prog"><div className="kb-load-prog-fill" style={{width:`${prog}%`}}/></div>
               <div className="kb-load-pct">{prog}% مكتمل</div>
             </div>
-            {showPopup && !authenticated && (
+            {showPopup && !authenticated && !isEmbedded && (
   <div className="ktk-popup-overlay">
     <div className="ktk-popup-card">
       <div className="ktk-popup-icons">
@@ -1572,7 +1573,7 @@ export default function KitabhOutline(props: { premium?: boolean }) {
         )
       })()}
 
-      {showPaywall && (
+      {showPaywall && !isEmbedded && (
         <div className="ktk-paywall" onClick={()=>setShowPaywall(false)}>
           <div className="ktk-pw-card" onClick={e=>e.stopPropagation()}>
             <button className="ktk-pw-close" onClick={()=>setShowPaywall(false)} type="button">
@@ -1606,7 +1607,7 @@ export default function KitabhOutline(props: { premium?: boolean }) {
       )}
 
       {/* ── Upgrade popup (signed-in free users) ── */}
-      {showUpgrade && authenticated && !isPremium && (
+      {showUpgrade && authenticated && !isPremium && !isEmbedded && (
         <div className="ktk-paywall" onClick={()=>setShowUpgrade(false)}>
           <div className="ktk-pw-card" onClick={e=>e.stopPropagation()}>
             <button className="ktk-pw-close" onClick={()=>setShowUpgrade(false)} type="button">

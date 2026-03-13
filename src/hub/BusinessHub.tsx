@@ -84,7 +84,7 @@ const BusinessHub: React.FC = () => {
         return <DashboardPage />;
       case 'posts':
         if (activeSubPage === 'outline') {
-          return <Suspense fallback={<ToolLoader />}><KitabhOutline premium /></Suspense>;
+          return <Suspense fallback={<ToolLoader />}><KitabhOutline embedded premium /></Suspense>;
         }
         if (activeSubPage === 'checker') {
           return <Suspense fallback={<ToolLoader />}><KitabhChecker /></Suspense>;
