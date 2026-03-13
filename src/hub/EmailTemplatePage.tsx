@@ -85,7 +85,7 @@ const labelStyle: React.CSSProperties = {
 const inputStyle: React.CSSProperties = {
   width: '100%',
   padding: '10px 14px',
-  border: '1px solid #E5E7EB',
+  border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)',
   borderRadius: 8,
   fontSize: 14,
   fontFamily: 'IBM Plex Sans Arabic, sans-serif',
@@ -99,7 +99,7 @@ const inputStyle: React.CSSProperties = {
 const colorInputStyle: React.CSSProperties = {
   width: 40,
   height: 34,
-  border: '1px solid #E5E7EB',
+  border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)',
   borderRadius: 6,
   cursor: 'pointer',
   padding: 2,
@@ -109,7 +109,7 @@ const colorInputStyle: React.CSSProperties = {
 const sectionStyle: React.CSSProperties = {
   background: '#fff',
   borderRadius: 12,
-  border: '1px solid #E5E7EB',
+  border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)',
   padding: 20,
   marginBottom: 16,
 };

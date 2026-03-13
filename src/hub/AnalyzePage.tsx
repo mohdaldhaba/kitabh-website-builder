@@ -47,7 +47,7 @@ const NewsletterStats: React.FC = () => {
           { label: 'ارتدادات', value: stats.totalBounces },
           { label: 'إلغاء اشتراك', value: stats.totalUnsubscribes },
         ].map((item, i) => (
-          <div key={i} style={{ background: '#fff', borderRadius: 12, border: '1px solid #E5E7EB', padding: '16px 18px' }}>
+          <div key={i} style={{ background: '#fff', borderRadius: 12, border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)', padding: '16px 18px' }}>
             <div style={{ fontSize: 12, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif', marginBottom: 6 }}>{item.label}</div>
             <div style={{ fontSize: 22, fontWeight: 700, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>
               {item.value.toLocaleString('en')}
@@ -57,7 +57,7 @@ const NewsletterStats: React.FC = () => {
       </div>
 
       {/* Per-article breakdown */}
-      <div style={{ background: '#fff', borderRadius: 12, border: '1px solid #E5E7EB', padding: 24 }}>
+      <div style={{ background: '#fff', borderRadius: 12, border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)', padding: 24 }}>
         <h3 style={{ fontSize: 15, fontWeight: 600, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 20px' }}>
           أداء كل منشور
         </h3>
@@ -151,7 +151,7 @@ const WebsiteStats: React.FC = () => {
           { label: 'متوسط مدة الزيارة', value: '2:35 د' },
           { label: 'معدل الارتداد', value: '32%' },
         ].map((item, i) => (
-          <div key={i} style={{ flex: 1, minWidth: 160, background: '#fff', borderRadius: 12, border: '1px solid #E5E7EB', padding: '16px 18px' }}>
+          <div key={i} style={{ flex: 1, minWidth: 160, background: '#fff', borderRadius: 12, border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)', padding: '16px 18px' }}>
             <div style={{ fontSize: 12, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif', marginBottom: 6 }}>{item.label}</div>
             <div style={{ fontSize: 22, fontWeight: 700, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>{item.value}</div>
           </div>
@@ -160,7 +160,7 @@ const WebsiteStats: React.FC = () => {
 
       <div className="hub-analyze-charts" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
         {/* Page views */}
-        <div style={{ background: '#fff', borderRadius: 12, border: '1px solid #E5E7EB', padding: 24 }}>
+        <div style={{ background: '#fff', borderRadius: 12, border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)', padding: 24 }}>
           <h3 style={{ fontSize: 15, fontWeight: 600, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 20px' }}>
             أكثر الصفحات زيارة
           </h3>
@@ -170,7 +170,7 @@ const WebsiteStats: React.FC = () => {
         </div>
 
         {/* Traffic sources */}
-        <div style={{ background: '#fff', borderRadius: 12, border: '1px solid #E5E7EB', padding: 24 }}>
+        <div style={{ background: '#fff', borderRadius: 12, border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)', padding: 24 }}>
           <h3 style={{ fontSize: 15, fontWeight: 600, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 20px' }}>
             مصادر الزيارات
           </h3>

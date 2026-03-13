@@ -64,7 +64,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ newsletter, onClose, acti
   const inputStyle: React.CSSProperties = {
     width: '100%',
     padding: '12px 16px',
-    border: '1px solid #E5E7EB',
+    border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)',
     borderRadius: 8,
     fontSize: 14,
     fontFamily: 'IBM Plex Sans Arabic, sans-serif',
@@ -343,7 +343,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ newsletter, onClose, acti
                 padding: '14px 16px',
                 background: '#F9FAFB',
                 borderRadius: 8,
-                border: '1px solid #E5E7EB',
+                border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)',
                 marginBottom: 20,
                 opacity: welcEnabled ? 1 : 0.5,
               }}>
@@ -400,7 +400,7 @@ const NewsletterCard: React.FC<CardProps> = ({ newsletter, onEdit }) => {
   };
 
   return (
-    <div style={{ background: '#fff', borderRadius: 14, border: '1px solid #E5E7EB', overflow: 'hidden' }}>
+    <div style={{ background: '#fff', borderRadius: 14, border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)', overflow: 'hidden' }}>
       {/* Top bar with status */}
       <div style={{ padding: '20px 24px', borderBottom: '1px solid #F3F4F6' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
@@ -469,7 +469,7 @@ const NewsletterCard: React.FC<CardProps> = ({ newsletter, onEdit }) => {
             padding: '8px 14px',
             background: '#F9FAFB',
             borderRadius: 8,
-            border: '1px solid #E5E7EB',
+            border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)',
             fontSize: 13,
             fontFamily: 'monospace',
             color: colors.textMuted,
@@ -505,7 +505,7 @@ const NewsletterCard: React.FC<CardProps> = ({ newsletter, onEdit }) => {
               padding: '8px 16px',
               background: 'transparent',
               color: colors.text,
-              border: '1px solid #E5E7EB',
+              border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)',
               borderRadius: 8,
               fontSize: 13,
               fontWeight: 600,
@@ -525,7 +525,7 @@ const NewsletterCard: React.FC<CardProps> = ({ newsletter, onEdit }) => {
               padding: '8px 16px',
               background: 'transparent',
               color: colors.text,
-              border: '1px solid #E5E7EB',
+              border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)',
               borderRadius: 8,
               fontSize: 13,
               fontWeight: 600,

@@ -26,7 +26,7 @@ const OutlineCreator: React.FC = () => (
       أنشئ مخططا لمنشورك قبل البدء بالكتابة
     </p>
 
-    <div style={{ background: '#fff', borderRadius: 14, border: '1px solid #E5E7EB', padding: 24 }}>
+    <div style={{ background: '#fff', borderRadius: 14, border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)', padding: 24 }}>
       {/* Topic */}
       <div style={{ marginBottom: 20 }}>
         <label style={{ display: 'block', fontSize: 14, fontWeight: 600, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', marginBottom: 8 }}>
@@ -196,7 +196,7 @@ const ArticlesList: React.FC<{ defaultFilter?: FilterStatus }> = ({ defaultFilte
               padding: '9px 16px',
               background: '#fff',
               color: colors.text,
-              border: '1px solid #E5E7EB',
+              border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)',
               borderRadius: 8,
               fontSize: 14,
               fontWeight: 500,
@@ -239,7 +239,7 @@ const ArticlesList: React.FC<{ defaultFilter?: FilterStatus }> = ({ defaultFilte
             alignItems: 'center',
             gap: 8,
             padding: '9px 14px',
-            border: '1px solid #E5E7EB',
+            border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)',
             borderRadius: 8,
             background: '#fff',
           }}
@@ -268,7 +268,7 @@ const ArticlesList: React.FC<{ defaultFilter?: FilterStatus }> = ({ defaultFilte
           style={{
             padding: '9px 16px',
             background: '#fff',
-            border: '1px solid #E5E7EB',
+            border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)',
             borderRadius: 8,
             fontSize: 14,
             fontWeight: 500,
@@ -291,7 +291,7 @@ const ArticlesList: React.FC<{ defaultFilter?: FilterStatus }> = ({ defaultFilte
           onChange={(e) => setSort(e.target.value as SortBy)}
           style={{
             padding: '9px 14px',
-            border: '1px solid #E5E7EB',
+            border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)',
             borderRadius: 8,
             fontSize: 14,
             fontFamily: 'IBM Plex Sans Arabic, sans-serif',

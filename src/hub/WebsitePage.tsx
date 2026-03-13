@@ -15,7 +15,7 @@ const WebsitePage: React.FC = () => {
       </p>
 
       {/* Website preview card */}
-      <div style={{ background: '#fff', borderRadius: 12, border: '1px solid #E5E7EB', overflow: 'hidden', marginBottom: 20 }}>
+      <div style={{ background: '#fff', borderRadius: 12, border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)', overflow: 'hidden', marginBottom: 20 }}>
         {/* Browser mockup */}
         <div style={{ background: '#F3F4F6', padding: '10px 16px', borderBottom: '1px solid #E5E7EB', display: 'flex', alignItems: 'center', gap: 8 }}>
           <div style={{ display: 'flex', gap: 6 }}>
@@ -92,7 +92,7 @@ const WebsitePage: React.FC = () => {
             padding: '16px 20px',
             background: '#fff',
             color: colors.text,
-            border: '1px solid #E5E7EB',
+            border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)',
             borderRadius: 12,
             fontSize: 15,
             fontWeight: 600,
@@ -110,7 +110,7 @@ const WebsitePage: React.FC = () => {
       </div>
 
       {/* Website settings summary */}
-      <div style={{ background: '#fff', borderRadius: 12, border: '1px solid #E5E7EB', padding: 24 }}>
+      <div style={{ background: '#fff', borderRadius: 12, border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)', padding: 24 }}>
         <h3 style={{ fontSize: 15, fontWeight: 600, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 16px' }}>
           إعدادات الموقع
         </h3>

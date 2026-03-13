@@ -40,7 +40,7 @@ const NotificationsPage: React.FC = () => {
             padding: '8px 16px',
             background: 'transparent',
             color: colors.text,
-            border: '1px solid #E5E7EB',
+            border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)',
             borderRadius: 8,
             fontSize: 13,
             fontWeight: 600,
@@ -52,7 +52,7 @@ const NotificationsPage: React.FC = () => {
         </button>
       </div>
 
-      <div style={{ background: '#fff', borderRadius: 12, border: '1px solid #E5E7EB', overflow: 'hidden' }}>
+      <div style={{ background: '#fff', borderRadius: 12, border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)', overflow: 'hidden' }}>
         {mockNotifications.map((notif, index) => (
           <div
             key={notif._id}

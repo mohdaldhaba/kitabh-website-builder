@@ -182,40 +182,40 @@ const navItems: NavItem[] = [
 
 // ─── Theme ──────────────────────────────────────────────
 const lightColors = {
-  sidebarBg: '#FFFFFF',
-  sidebarBorder: '#E5E7EB',
-  activeItem: '#F3F4F6',
+  sidebarBg: 'rgba(255,255,255,0.82)',
+  sidebarBorder: 'rgba(0,0,0,0.06)',
+  activeItem: 'rgba(0,0,0,0.04)',
   activeText: '#111827',
   text: '#111827',
   textMuted: '#6B7280',
   white: '#FFFFFF',
   primary: '#1A1A1A',
   primaryHover: '#111111',
-  topBarBg: '#FFFFFF',
-  topBarBorder: '#E5E7EB',
-  contentBg: '#FFFFFF',
-  hoverBg: '#F9FAFB',
-  border: '#E5E7EB',
+  topBarBg: 'rgba(255,255,255,0.72)',
+  topBarBorder: 'rgba(0,0,0,0.06)',
+  contentBg: '#F6F6F7',
+  hoverBg: 'rgba(0,0,0,0.03)',
+  border: 'rgba(0,0,0,0.08)',
   cardBg: '#FFFFFF',
   accent: '#E11D48',
 };
 
 const darkColors = {
-  sidebarBg: '#111111',
-  sidebarBorder: '#2A2A2A',
-  activeItem: '#1F1F1F',
+  sidebarBg: 'rgba(20,20,20,0.85)',
+  sidebarBorder: 'rgba(255,255,255,0.06)',
+  activeItem: 'rgba(255,255,255,0.06)',
   activeText: '#F9FAFB',
   text: '#F9FAFB',
   textMuted: '#9CA3AF',
   white: '#111111',
   primary: '#F9FAFB',
   primaryHover: '#E5E7EB',
-  topBarBg: '#111111',
-  topBarBorder: '#2A2A2A',
-  contentBg: '#0A0A0A',
-  hoverBg: '#1A1A1A',
-  border: '#2A2A2A',
-  cardBg: '#141414',
+  topBarBg: 'rgba(17,17,17,0.72)',
+  topBarBorder: 'rgba(255,255,255,0.06)',
+  contentBg: '#0D0D0D',
+  hoverBg: 'rgba(255,255,255,0.04)',
+  border: 'rgba(255,255,255,0.08)',
+  cardBg: '#161616',
   accent: '#E11D48',
 };
 
@@ -689,6 +689,8 @@ const HubLayout: React.FC<HubLayoutProps> = ({
           style={{
             width: 260,
             background: c.sidebarBg,
+            backdropFilter: 'blur(20px) saturate(180%)',
+            WebkitBackdropFilter: 'blur(20px) saturate(180%)',
             borderLeft: `1px solid ${c.sidebarBorder}`,
             display: 'flex',
             flexDirection: 'column',
@@ -721,11 +723,13 @@ const HubLayout: React.FC<HubLayoutProps> = ({
             bottom: 0,
             width: 270,
             background: c.sidebarBg,
+            backdropFilter: 'blur(20px) saturate(180%)',
+            WebkitBackdropFilter: 'blur(20px) saturate(180%)',
             zIndex: 50,
             transition: 'right 0.3s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s',
             display: 'flex',
             flexDirection: 'column',
-            boxShadow: mobileMenuOpen ? '-4px 0 20px rgba(0,0,0,0.15)' : 'none',
+            boxShadow: mobileMenuOpen ? '-4px 0 30px rgba(0,0,0,0.2)' : 'none',
           }}
           className="hub-sidebar-mobile"
         >
@@ -739,6 +743,8 @@ const HubLayout: React.FC<HubLayoutProps> = ({
             style={{
               height: 56,
               background: c.topBarBg,
+              backdropFilter: 'blur(16px) saturate(180%)',
+              WebkitBackdropFilter: 'blur(16px) saturate(180%)',
               borderBottom: `1px solid ${c.topBarBorder}`,
               display: 'flex',
               alignItems: 'center',
@@ -844,7 +850,7 @@ const HubLayout: React.FC<HubLayoutProps> = ({
           <main style={{ padding: '32px 40px' }}>{children}</main>
         </div>
 
-        {/* Responsive CSS */}
+        {/* Responsive + Premium CSS */}
         <style>{`
           @media (max-width: 768px) {
             .hub-sidebar-desktop { display: none !important; }
@@ -856,6 +862,11 @@ const HubLayout: React.FC<HubLayoutProps> = ({
             .hub-sidebar-mobile { display: none !important; }
             .hub-mobile-menu-btn { display: none !important; }
           }
+          ${dark ? `
+          /* ── Dark mode form elements ── */
+          .hub-main-content input, .hub-main-content textarea, .hub-main-content select {
+            color-scheme: dark;
+          }` : ''}
         `}</style>
       </div>
     </ThemeContext.Provider>
