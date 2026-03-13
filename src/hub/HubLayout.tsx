@@ -307,10 +307,10 @@ const PublicationSwitcher: React.FC<{
               right: 0,
               left: 0,
               marginTop: 4,
-              background: colors.sidebarBg,
+              background: colors.cardBg,
               border: `1px solid ${colors.border}`,
               borderRadius: 10,
-              boxShadow: '0 8px 30px rgba(0,0,0,0.15)',
+              boxShadow: '0 8px 30px rgba(0,0,0,0.2)',
               zIndex: 100,
               overflow: 'hidden',
             }}
@@ -863,10 +863,68 @@ const HubLayout: React.FC<HubLayoutProps> = ({
             .hub-mobile-menu-btn { display: none !important; }
           }
           ${dark ? `
-          /* ── Dark mode form elements ── */
+          /* ── Dark mode overrides ── */
           .hub-main-content input, .hub-main-content textarea, .hub-main-content select {
             color-scheme: dark;
-          }` : ''}
+          }
+          /* White backgrounds → dark card bg */
+          .hub-main-content div[style*="background: rgb(255, 255, 255)"],
+          .hub-main-content div[style*="background: rgb(249, 250, 251)"],
+          .hub-main-content div[style*="background: rgb(250, 250, 250)"] {
+            background: #161616 !important;
+            border-color: rgba(255,255,255,0.08) !important;
+          }
+          /* Light gray backgrounds → dark subtle bg */
+          .hub-main-content div[style*="background: rgb(243, 244, 246)"],
+          .hub-main-content span[style*="background: rgb(243, 244, 246)"] {
+            background: #1F1F1F !important;
+          }
+          /* Green/status backgrounds stay */
+          .hub-main-content span[style*="background: rgb(236, 253, 245)"] {
+            background: rgba(5,150,105,0.15) !important;
+          }
+          /* All text inside main content */
+          .hub-main-content h2, .hub-main-content h3,
+          .hub-main-content p, .hub-main-content span,
+          .hub-main-content div, .hub-main-content label,
+          .hub-main-content button, .hub-main-content a {
+            color: inherit;
+          }
+          /* Override hardcoded dark text */
+          .hub-main-content [style*="color: rgb(17, 24, 39)"],
+          .hub-main-content [style*="color: rgb(17, 17, 17)"],
+          .hub-main-content [style*="color: rgb(55, 29, 18)"] {
+            color: #F9FAFB !important;
+          }
+          .hub-main-content [style*="color: rgb(107, 114, 128)"],
+          .hub-main-content [style*="color: rgb(55, 65, 81)"],
+          .hub-main-content [style*="color: rgb(156, 163, 175)"] {
+            color: #9CA3AF !important;
+          }
+          /* Borders */
+          .hub-main-content [style*="border-bottom: 1px solid rgb(243, 244, 246)"] {
+            border-bottom-color: rgba(255,255,255,0.06) !important;
+          }
+          .hub-main-content [style*="border: 1px solid rgba(0, 0, 0"] {
+            border-color: rgba(255,255,255,0.08) !important;
+          }
+          /* Inputs */
+          .hub-main-content input[style], .hub-main-content textarea[style], .hub-main-content select[style] {
+            background: #1A1A1A !important;
+            color: #F9FAFB !important;
+            border-color: rgba(255,255,255,0.1) !important;
+          }
+          /* Dark buttons that should invert */
+          .hub-main-content button[style*="background: rgb(17, 17, 17)"],
+          .hub-main-content button[style*="background: rgb(26, 26, 26)"] {
+            background: #F9FAFB !important;
+            color: #111 !important;
+          }
+          /* Progress bars */
+          .hub-main-content div[style*="background: rgb(229, 231, 235)"] {
+            background: #2A2A2A !important;
+          }
+          ` : ''}
         `}</style>
       </div>
     </ThemeContext.Provider>
