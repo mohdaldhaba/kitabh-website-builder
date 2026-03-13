@@ -155,13 +155,17 @@ type SidebarItem = {
 };
 
 type SidebarSection = {
+  id: string;
   label: string;
+  icon: React.ReactNode;
   items: SidebarItem[];
 };
 
 const sidebarSections: SidebarSection[] = [
   {
+    id: 'create',
     label: 'اكتب',
+    icon: icons.write,
     items: [
       { page: 'posts', subPage: 'all-posts', label: 'المنشورات', icon: icons.posts },
       { page: 'posts', subPage: 'outline', label: 'مخطط المقال', icon: icons.outline },
@@ -169,7 +173,9 @@ const sidebarSections: SidebarSection[] = [
     ],
   },
   {
+    id: 'publish',
     label: 'انشر',
+    icon: icons.emailJourney,
     items: [
       { page: 'newsletters', label: 'النشرات', icon: icons.emailJourney },
       { page: 'email-template', label: 'قالب البريد', icon: icons.posts },
@@ -177,7 +183,9 @@ const sidebarSections: SidebarSection[] = [
     ],
   },
   {
+    id: 'grow',
     label: 'انمو',
+    icon: icons.grow,
     items: [
       { page: 'subscribers', label: 'المشتركين', icon: icons.audience },
       { page: 'grow', subPage: 'carousel', label: 'مولّد الكاروسيل', icon: icons.grow },
@@ -186,7 +194,9 @@ const sidebarSections: SidebarSection[] = [
     ],
   },
   {
+    id: 'build',
     label: 'ابنِ',
+    icon: icons.website,
     items: [
       { page: 'website', label: 'المواقع', icon: icons.website },
       { page: 'writers', label: 'كتّابك', icon: icons.members },
@@ -424,6 +434,7 @@ const HubLayout: React.FC<HubLayoutProps> = ({
   activePublicationId,
   onSwitchPublication,
 }) => {
+  const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(['create']));
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [dark, setDark] = useState(() => {
     try { return localStorage.getItem('kb_hub_theme') === 'dark'; } catch { return false; }
@@ -524,7 +535,7 @@ const HubLayout: React.FC<HubLayoutProps> = ({
                 gap: 10,
                 transition: 'background 0.1s',
                 textAlign: 'right',
-                marginBottom: 4,
+                marginBottom: 2,
               }}
               onMouseEnter={(e) => { if (!isDashActive) e.currentTarget.style.background = c.hoverBg; }}
               onMouseLeave={(e) => { if (!isDashActive) e.currentTarget.style.background = 'transparent'; }}
@@ -537,70 +548,110 @@ const HubLayout: React.FC<HubLayoutProps> = ({
           );
         })()}
 
-        {/* Sections */}
-        {sidebarSections.map((section) => (
-          <div key={section.label} style={{ marginBottom: 4 }}>
-            {/* Section label */}
-            <div style={{
-              padding: '12px 12px 4px',
-              fontSize: 11,
-              fontWeight: 700,
-              fontFamily: 'IBM Plex Sans Arabic, sans-serif',
-              color: c.textMuted,
-              letterSpacing: '0.02em',
-              textTransform: 'uppercase' as const,
-            }}>
-              {section.label}
-            </div>
-            {/* Section items */}
-            {section.items.map((item) => {
-              const isActive = activePage === item.page && (item.subPage ? activeSubPage === item.subPage : !activeSubPage || activePage !== 'posts' && activePage !== 'grow');
-              const isComingSoon = item.comingSoon;
-              return (
-                <button
-                  key={`${item.page}-${item.subPage || ''}`}
-                  onClick={() => {
-                    if (isComingSoon) return;
-                    onNavigate(item.page, item.subPage);
-                    setMobileMenuOpen(false);
-                  }}
+        {/* Collapsible Sections */}
+        {sidebarSections.map((section) => {
+          const isExpanded = expandedSections.has(section.id);
+          const hasSectionActive = section.items.some(
+            (item) => activePage === item.page && (!item.subPage || activeSubPage === item.subPage)
+          );
+
+          return (
+            <div key={section.id} style={{ marginBottom: 2 }}>
+              {/* Section header — clickable to expand/collapse */}
+              <button
+                onClick={() => {
+                  setExpandedSections((prev) => {
+                    const next = new Set(prev);
+                    if (next.has(section.id)) next.delete(section.id);
+                    else next.add(section.id);
+                    return next;
+                  });
+                }}
+                style={{
+                  width: '100%',
+                  padding: '8px 12px',
+                  background: 'transparent',
+                  color: hasSectionActive ? c.activeText : c.text,
+                  border: 'none',
+                  borderRadius: 6,
+                  fontSize: 14,
+                  fontWeight: hasSectionActive ? 600 : 500,
+                  fontFamily: 'IBM Plex Sans Arabic, sans-serif',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 10,
+                  transition: 'background 0.1s',
+                  textAlign: 'right',
+                }}
+                onMouseEnter={(e) => (e.currentTarget.style.background = c.hoverBg)}
+                onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
+              >
+                <span style={{ display: 'flex', alignItems: 'center', color: hasSectionActive ? c.activeText : c.textMuted }}>
+                  {section.icon}
+                </span>
+                <span style={{ flex: 1, textAlign: 'right' }}>{section.label}</span>
+                <span
                   style={{
-                    width: '100%',
-                    padding: '7px 12px',
-                    background: isActive && !isComingSoon ? c.activeItem : 'transparent',
-                    color: isComingSoon ? (dark ? '#444' : '#C0C0C0') : isActive ? c.activeText : c.text,
-                    border: 'none',
-                    borderRadius: 6,
-                    fontSize: 13,
-                    fontWeight: isActive && !isComingSoon ? 600 : 400,
-                    fontFamily: 'IBM Plex Sans Arabic, sans-serif',
-                    cursor: isComingSoon ? 'default' : 'pointer',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: 10,
-                    transition: 'background 0.1s',
-                    textAlign: 'right',
-                    opacity: isComingSoon ? 0.5 : 1,
-                    marginBottom: 1,
+                    color: c.textMuted,
+                    transform: isExpanded ? 'rotate(180deg)' : 'rotate(0)',
+                    transition: 'transform 0.2s',
                   }}
-                  onMouseEnter={(e) => { if (!isActive && !isComingSoon) e.currentTarget.style.background = c.hoverBg; }}
-                  onMouseLeave={(e) => { if (!isActive && !isComingSoon) e.currentTarget.style.background = 'transparent'; }}
                 >
-                  <span style={{ display: 'flex', alignItems: 'center', color: isActive ? c.activeText : c.textMuted }}>
-                    {item.icon}
-                  </span>
-                  <span style={{ flex: 1, textAlign: 'right' }}>{item.label}</span>
-                  {isComingSoon && comingSoonBadge}
-                </button>
-              );
-            })}
-          </div>
-        ))}
+                  {icons.chevron}
+                </span>
+              </button>
 
-        {/* Utility divider */}
-        <div style={{ borderTop: `1px solid ${c.border}`, margin: '8px 12px 4px' }} />
+              {/* Expanded child items */}
+              {isExpanded && (
+                <div style={{ paddingRight: 20, paddingTop: 2 }}>
+                  {section.items.map((item) => {
+                    const isActive = activePage === item.page && (item.subPage ? activeSubPage === item.subPage : !activeSubPage || (activePage !== 'posts' && activePage !== 'grow'));
+                    const isComingSoon = item.comingSoon;
+                    return (
+                      <button
+                        key={`${item.page}-${item.subPage || ''}`}
+                        onClick={() => {
+                          if (isComingSoon) return;
+                          onNavigate(item.page, item.subPage);
+                          setMobileMenuOpen(false);
+                        }}
+                        style={{
+                          width: '100%',
+                          padding: '7px 12px',
+                          background: isActive && !isComingSoon ? c.activeItem : 'transparent',
+                          color: isComingSoon ? (dark ? '#444' : '#C0C0C0') : isActive ? c.activeText : c.text,
+                          border: 'none',
+                          borderRadius: 6,
+                          fontSize: 13,
+                          fontWeight: isActive && !isComingSoon ? 600 : 400,
+                          fontFamily: 'IBM Plex Sans Arabic, sans-serif',
+                          cursor: isComingSoon ? 'default' : 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: 10,
+                          transition: 'background 0.1s',
+                          textAlign: 'right',
+                          opacity: isComingSoon ? 0.5 : 1,
+                          marginBottom: 1,
+                        }}
+                        onMouseEnter={(e) => { if (!isActive && !isComingSoon) e.currentTarget.style.background = c.hoverBg; }}
+                        onMouseLeave={(e) => { if (!isActive && !isComingSoon) e.currentTarget.style.background = 'transparent'; }}
+                      >
+                        <span style={{ flex: 1, textAlign: 'right' }}>{item.label}</span>
+                        {isComingSoon && comingSoonBadge}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          );
+        })}
 
-        {/* Utility items */}
+        {/* Utility items — flat, below sections */}
         {utilityItems.map((item) => {
           const isActive = activePage === item.page;
           return (
@@ -609,12 +660,12 @@ const HubLayout: React.FC<HubLayoutProps> = ({
               onClick={() => { onNavigate(item.page); setMobileMenuOpen(false); }}
               style={{
                 width: '100%',
-                padding: '7px 12px',
+                padding: '8px 12px',
                 background: isActive ? c.activeItem : 'transparent',
                 color: isActive ? c.activeText : c.text,
                 border: 'none',
                 borderRadius: 6,
-                fontSize: 13,
+                fontSize: 14,
                 fontWeight: isActive ? 600 : 400,
                 fontFamily: 'IBM Plex Sans Arabic, sans-serif',
                 cursor: 'pointer',
@@ -623,7 +674,7 @@ const HubLayout: React.FC<HubLayoutProps> = ({
                 gap: 10,
                 transition: 'background 0.1s',
                 textAlign: 'right',
-                marginBottom: 1,
+                marginBottom: 2,
               }}
               onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.background = c.hoverBg; }}
               onMouseLeave={(e) => { if (!isActive) e.currentTarget.style.background = 'transparent'; }}
