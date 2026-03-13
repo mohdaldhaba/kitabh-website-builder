@@ -1200,7 +1200,7 @@ export default function KitabhOutline(props: { premium?: boolean; embedded?: boo
 
   // ── JSX ──
   return (
-    <div className="kb" style={{width:"100%",alignSelf:"stretch",display:"block"}}>
+    <div className="kb" style={{width:"100%",alignSelf:"stretch",display:"block",...(isEmbedded ? {background:"transparent"} : {})}}>
       <style>{CSS}</style>
 
       {/* SHAPE MODAL */}
