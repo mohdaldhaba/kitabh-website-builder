@@ -95,7 +95,7 @@ const icons = {
 };
 
 // ─── Types ───────────────────────────────────────────────
-type Page = 'dashboard' | 'posts' | 'newsletters' | 'notifications' | 'grow' | 'website' | 'writers' | 'subscribers' | 'email-journeys' | 'settings';
+type Page = 'dashboard' | 'posts' | 'newsletters' | 'email-template' | 'notifications' | 'grow' | 'website' | 'writers' | 'subscribers' | 'email-journeys' | 'settings';
 
 interface SubItem {
   id: string;
@@ -132,6 +132,7 @@ const navItems: NavItem[] = [
     ],
   },
   { id: 'newsletters', label: 'النشرات', icon: icons.emailJourney },
+  { id: 'email-template', label: 'قالب البريد', icon: icons.posts },
   { id: 'notifications', label: 'الإشعارات', icon: icons.notification },
   {
     id: 'grow',
@@ -173,6 +174,7 @@ const pageTitles: Record<Page, string> = {
   dashboard: 'لوحة التحكم',
   posts: 'المحتوى',
   newsletters: 'النشرات',
+  'email-template': 'قالب البريد',
   notifications: 'الإشعارات',
   grow: 'النمو',
   website: 'المواقع',

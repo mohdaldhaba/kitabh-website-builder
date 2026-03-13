@@ -9,6 +9,7 @@ import MembersPage from './MembersPage';
 import SettingsPage from './SettingsPage';
 import AudiencePage from './AudiencePage';
 import NewslettersPage from './NewslettersPage';
+import EmailTemplatePage from './EmailTemplatePage';
 import { MOCK_NEWSLETTER } from '../mockData';
 import { colors } from './HubLayout';
 import type { Page } from './HubLayout';
@@ -85,6 +86,8 @@ const BusinessHub: React.FC = () => {
         return <PostsPage subPage={activeSubPage} />;
       case 'newsletters':
         return <NewslettersPage />;
+      case 'email-template':
+        return <EmailTemplatePage />;
       case 'notifications':
         return <NotificationsPage />;
       case 'grow':
