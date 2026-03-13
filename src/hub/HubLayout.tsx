@@ -115,7 +115,7 @@ const icons = {
 };
 
 // ─── Types ───────────────────────────────────────────────
-type Page = 'dashboard' | 'posts' | 'newsletters' | 'email-template' | 'notifications' | 'grow' | 'website' | 'writers' | 'subscribers' | 'email-journeys' | 'settings';
+type Page = 'dashboard' | 'posts' | 'newsletters' | 'email-template' | 'notifications' | 'grow' | 'website' | 'writers' | 'subscribers' | 'email-journeys' | 'analyze' | 'settings';
 
 interface SubItem {
   id: string;
@@ -178,6 +178,15 @@ const navItems: NavItem[] = [
   { id: 'writers', label: 'كتّابك', icon: icons.members },
   { id: 'subscribers', label: 'المشتركين', icon: icons.audience },
   { id: 'email-journeys', label: 'رحلات البريد', icon: icons.emailJourney, comingSoon: true },
+  {
+    id: 'analyze',
+    label: 'الإحصائيات',
+    icon: icons.analyze,
+    subItems: [
+      { id: 'newsletter-stats', label: 'إحصائيات النشرة' },
+      { id: 'website-stats', label: 'إحصائيات الموقع' },
+    ],
+  },
 ];
 
 // ─── Theme ──────────────────────────────────────────────

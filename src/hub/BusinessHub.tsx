@@ -10,6 +10,7 @@ import SettingsPage from './SettingsPage';
 import AudiencePage from './AudiencePage';
 import NewslettersPage from './NewslettersPage';
 import EmailTemplatePage from './EmailTemplatePage';
+import AnalyzePage from './AnalyzePage';
 import { useTheme } from './HubLayout';
 import type { Page, Publication } from './HubLayout';
 
@@ -107,6 +108,8 @@ const BusinessHub: React.FC = () => {
         return <MembersPage />;
       case 'subscribers':
         return <AudiencePage />;
+      case 'analyze':
+        return <AnalyzePage subPage={activeSubPage} />;
       case 'email-journeys':
         return (
           <ComingSoonPage
