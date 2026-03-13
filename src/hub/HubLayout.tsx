@@ -723,26 +723,36 @@ const HubLayout: React.FC<HubLayoutProps> = ({
           />
         )}
 
-        {/* Mobile Sidebar */}
+        {/* Mobile Bottom Sheet Sidebar */}
         <aside
           style={{
             position: 'fixed',
-            top: 0,
-            right: mobileMenuOpen ? 0 : -280,
+            left: 0,
+            right: 0,
             bottom: 0,
-            width: 270,
-            background: c.sidebarBg,
+            maxHeight: mobileMenuOpen ? '80vh' : 0,
+            width: '100%',
+            background: c.cardBg,
             backdropFilter: 'blur(20px) saturate(180%)',
             WebkitBackdropFilter: 'blur(20px) saturate(180%)',
             zIndex: 50,
-            transition: 'right 0.3s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s',
+            transition: 'max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1)',
             display: 'flex',
             flexDirection: 'column',
-            boxShadow: mobileMenuOpen ? '-4px 0 30px rgba(0,0,0,0.2)' : 'none',
+            boxShadow: mobileMenuOpen ? '0 -4px 30px rgba(0,0,0,0.15)' : 'none',
+            borderTopLeftRadius: 20,
+            borderTopRightRadius: 20,
+            overflow: 'hidden',
           }}
           className="hub-sidebar-mobile"
         >
-          {sidebarContent}
+          {/* Drag handle */}
+          <div style={{ display: 'flex', justifyContent: 'center', padding: '10px 0 4px' }} onClick={() => setMobileMenuOpen(false)}>
+            <div style={{ width: 36, height: 4, borderRadius: 2, background: dark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.15)' }} />
+          </div>
+          <div style={{ flex: 1, overflowY: 'auto', WebkitOverflowScrolling: 'touch' as any }}>
+            {sidebarContent}
+          </div>
         </aside>
 
         {/* Main content area */}
@@ -866,9 +876,12 @@ const HubLayout: React.FC<HubLayoutProps> = ({
             .hub-sidebar-mobile { display: flex !important; }
             .hub-mobile-menu-btn { display: flex !important; }
             .hub-main-content { margin-right: 0 !important; }
+            .hub-main-content main { padding: 16px 14px !important; }
+            .hub-main-content h1 { font-size: 18px !important; }
+            .hub-main-content h2 { font-size: 15px !important; }
           }
           @media (min-width: 769px) {
-            .hub-sidebar-mobile { display: none !important; }
+            .hub-sidebar-mobile { display: none !important; max-height: 0 !important; }
             .hub-mobile-menu-btn { display: none !important; }
           }
           ${dark ? `

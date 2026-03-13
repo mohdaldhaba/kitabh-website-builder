@@ -50,25 +50,28 @@ const timeframes = [
 
 // ─── SVG Line Chart ─────────────────────────────────────
 const SubscriberChart: React.FC<{ data: { date: string; subs: number; unsubs: number }[] }> = ({ data }) => {
-  const W = 520, H = 200, PX = 0, PY = 20;
+  const W = 520, H = 200, PX = 10, PY = 20;
   const maxVal = Math.max(...data.map(d => d.subs)) * 1.1;
   const minVal = Math.min(...data.map(d => d.subs)) * 0.9;
   const range = maxVal - minVal || 1;
 
+  // RTL: oldest on the RIGHT, newest on the LEFT
   const points = data.map((d, i) => ({
-    x: PX + (i / (data.length - 1)) * (W - PX * 2),
+    x: (W - PX) - (i / (data.length - 1)) * (W - PX * 2),
     y: PY + (1 - (d.subs - minVal) / range) * (H - PY * 2),
   }));
 
-  // Smooth curve
-  const linePath = points.map((p, i) => {
+  // Sort points left-to-right for valid SVG path
+  const sorted = [...points].sort((a, b) => a.x - b.x);
+
+  const linePath = sorted.map((p, i) => {
     if (i === 0) return `M${p.x},${p.y}`;
-    const prev = points[i - 1];
+    const prev = sorted[i - 1];
     const cpx = (prev.x + p.x) / 2;
     return `C${cpx},${prev.y} ${cpx},${p.y} ${p.x},${p.y}`;
   }).join(' ');
 
-  const areaPath = `${linePath} L${points[points.length - 1].x},${H} L${points[0].x},${H} Z`;
+  const areaPath = `${linePath} L${sorted[sorted.length - 1].x},${H} L${sorted[0].x},${H} Z`;
 
   return (
     <svg width="100%" viewBox={`0 0 ${W} ${H + 30}`} style={{ display: 'block' }}>
@@ -78,22 +81,17 @@ const SubscriberChart: React.FC<{ data: { date: string; subs: number; unsubs: nu
           <stop offset="100%" stopColor="#111" stopOpacity="0" />
         </linearGradient>
       </defs>
-      {/* Grid lines */}
       {[0.25, 0.5, 0.75].map(frac => {
         const y = PY + frac * (H - PY * 2);
         return <line key={frac} x1={PX} y1={y} x2={W - PX} y2={y} stroke="#F3F4F6" strokeWidth="1" />;
       })}
-      {/* Area fill */}
       <path d={areaPath} fill="url(#subGrad)" />
-      {/* Line */}
       <path d={linePath} fill="none" stroke="#111" strokeWidth="2.5" strokeLinecap="round" />
-      {/* Dots */}
       {points.map((p, i) => (
         <circle key={i} cx={p.x} cy={p.y} r="4" fill="#fff" stroke="#111" strokeWidth="2" />
       ))}
-      {/* Date labels */}
       {data.map((d, i) => (
-        <text key={i} x={points[i].x} y={H + 20} textAnchor="middle" fontSize="10" fontFamily={F} fill="#9CA3AF">
+        <text key={i} x={points[i].x} y={H + 22} textAnchor="middle" fontSize="11" fontFamily={F} fill="#9CA3AF">
           {d.date}
         </text>
       ))}
