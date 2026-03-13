@@ -914,6 +914,56 @@ const CSS = `
 .ktk-pw-apple{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;background:#000;color:#FFF;font-family:inherit;font-size:14px;font-weight:600;text-decoration:none;border-radius:12px;margin-top:8px;transition:all .2s;text-align:center;box-sizing:border-box;}
 .ktk-pw-apple:hover{background:#222;}
 .ktk-pw-proof{font-size:10px;color:#94A3B8;margin-top:10px;}
+
+/* ── Embedded hub overrides: blue → black/grey ── */
+.kb-embedded .kb-sel-btn:hover,.kb-embedded .kb-sel-btn.open{background:#F3F4F6;border-color:#111;color:#111;}
+.kb-embedded .kb-sel-btn.pulse{animation:none;border-color:#111;color:#111;background:#F3F4F6;}
+.kb-embedded .kb-sel-check{color:#111;}
+.kb-embedded .kb-sel-item.sel .kb-sel-item-name{color:#111;}
+.kb-embedded .kb-type-pill:hover{border-color:#111;color:#111;background:#F3F4F6;}
+.kb-embedded .kb-type-pill.on{border-color:#111;background:#111;color:#FFF;}
+.kb-embedded .kb-subtype-pill:hover{border-color:#374151;color:#374151;background:#F3F4F6;}
+.kb-embedded .kb-subtype-pill.on{border-color:#111;background:#F3F4F6;color:#111;}
+.kb-embedded .kb-subtype-custom-input:focus{border-color:#111;}
+.kb-embedded .kb-mic-btn{border-color:#111;}
+.kb-embedded .kb-rec-ta:focus{border-color:#111;}
+.kb-embedded .kb-trans-ta:focus{border-color:#111;}
+.kb-embedded .kb-btn-primary{background:#111;}
+.kb-embedded .kb-btn-primary:hover{background:#333;}
+.kb-embedded .kb-btn-go.on{background:#111;border-color:#111;}
+.kb-embedded .kb-load-step.active{background:#F3F4F6;border-color:#111;}
+.kb-embedded .kb-load-step.active .kb-load-step-txt{color:#111;}
+.kb-embedded .kb-load-prog-fill{background:#111;}
+.kb-embedded .kb-cap-inp:focus{border-color:#111;}
+.kb-embedded .kb-cap-btn{background:#111;}
+.kb-embedded .kb-btn-editor{background:#111;box-shadow:0 2px 8px rgba(0,0,0,.15);}
+.kb-embedded .kb-btn-icon:hover{border-color:#111;color:#111;background:#F3F4F6;}
+.kb-embedded .kb-share-copy:hover{border-color:#111;color:#111;}
+.kb-embedded .kb-title-card:hover{border-color:#111;background:#F3F4F6;box-shadow:0 4px 16px rgba(0,0,0,.06);}
+.kb-embedded .kb-outline-card-num{color:#111;background:#E5E7EB;}
+.kb-embedded .kb-struct-label{color:#374151;}
+.kb-embedded .kb-arc-dot{background:#111;}
+.kb-embedded .kb-arc-phase{color:#111;}
+.kb-embedded .kb-step-num{background:#111;}
+.kb-embedded .kb-cta-accent{color:#111;}
+.kb-embedded .kb-cta-btn-web:hover{border-color:#111;color:#111;}
+.kb-embedded .kb-btn-retry:hover{border-color:#111;color:#111;}
+.kb-embedded .kb-history-item:hover{border-color:#D1D5DB;background:#FAFAFA;}
+.kb-embedded .kb-history-badge{color:#111;background:#F3F4F6;}
+.kb-embedded .kb-method-badge{color:#111;}
+.kb-embedded .kb-method-tab:hover{border-color:#111;color:#111;}
+.kb-embedded .kb-method-tab.active{color:#111;background:#F3F4F6;border-color:#111;}
+.kb-embedded .kb-method-card.clickable:hover{border-color:#111;}
+.kb-embedded .kb-method-ring-num{color:#111;}
+.kb-embedded .kb-trial-fill{background:linear-gradient(90deg,#111,#374151);}
+.kb-embedded .ktk-pw-btn{background:linear-gradient(135deg,#111,#333);box-shadow:0 4px 14px rgba(0,0,0,.2);}
+.kb-embedded .ktk-pw-btn:hover{box-shadow:0 6px 20px rgba(0,0,0,.3);}
+.kb-embedded .ktk-popup-input:focus{border-color:#111;}
+.kb-embedded .ktk-popup-btn{background:#111;}
+/* Override inline SVG stroke/fill via CSS where possible */
+.kb-embedded svg[stroke="#0000FF"]{stroke:#111 !important;}
+.kb-embedded svg [stroke="#0000FF"]{stroke:#111 !important;}
+.kb-embedded svg [fill="#0000FF"]{fill:#111 !important;}
 `
 
 // ─── Main Component ──────────────────────────────────
@@ -1200,7 +1250,7 @@ export default function KitabhOutline(props: { premium?: boolean; embedded?: boo
 
   // ── JSX ──
   return (
-    <div className="kb" style={{width:"100%",alignSelf:"stretch",display:"block",...(isEmbedded ? {background:"transparent"} : {})}}>
+    <div className={`kb${isEmbedded ? " kb-embedded" : ""}`} style={{width:"100%",alignSelf:"stretch",display:"block",...(isEmbedded ? {background:"transparent"} : {})}}>
       <style>{CSS}</style>
 
       {/* SHAPE MODAL */}
@@ -1237,7 +1287,7 @@ export default function KitabhOutline(props: { premium?: boolean; embedded?: boo
                 </div>
                 <button className="kb-modal-close" onClick={() => setInfoPillar(null)} aria-label="إغلاق">✕</button>
               </div>
-              <div style={{fontSize:14,color:"#0000FF",lineHeight:1.8,padding:"10px 14px",background:"#F0F0FF",borderRadius:10,borderRight:"3px solid #0000FF",fontWeight:600}}>
+              <div style={{fontSize:14,color:isEmbedded?"#111":"#0000FF",lineHeight:1.8,padding:"10px 14px",background:isEmbedded?"#F3F4F6":"#F0F0FF",borderRadius:10,borderRight:`3px solid ${isEmbedded?"#111":"#0000FF"}`,fontWeight:600}}>
                 {defs[infoPillar]}
               </div>
             </div>
@@ -1275,10 +1325,10 @@ export default function KitabhOutline(props: { premium?: boolean; embedded?: boo
                 <svg width="32" height="32" viewBox="0 0 24 24" fill="#E82222"><rect x="6" y="6" width="12" height="12" rx="2"/></svg>
               ) : (
                 <svg width="36" height="36" viewBox="0 0 24 24" fill="none">
-                  <path d="M12 2a3 3 0 013 3v7a3 3 0 01-6 0V5a3 3 0 013-3z" fill="#0000FF" fillOpacity=".15" stroke="#0000FF" strokeWidth="2"/>
-                  <path d="M19 10v2a7 7 0 01-14 0v-2" stroke="#0000FF" strokeWidth="2" strokeLinecap="round"/>
-                  <line x1="12" y1="19" x2="12" y2="23" stroke="#0000FF" strokeWidth="2" strokeLinecap="round"/>
-                  <line x1="8" y1="23" x2="16" y2="23" stroke="#0000FF" strokeWidth="2" strokeLinecap="round"/>
+                  <path d="M12 2a3 3 0 013 3v7a3 3 0 01-6 0V5a3 3 0 013-3z" fill={isEmbedded?"#111":"#0000FF"} fillOpacity=".15" stroke={isEmbedded?"#111":"#0000FF"} strokeWidth="2"/>
+                  <path d="M19 10v2a7 7 0 01-14 0v-2" stroke={isEmbedded?"#111":"#0000FF"} strokeWidth="2" strokeLinecap="round"/>
+                  <line x1="12" y1="19" x2="12" y2="23" stroke={isEmbedded?"#111":"#0000FF"} strokeWidth="2" strokeLinecap="round"/>
+                  <line x1="8" y1="23" x2="16" y2="23" stroke={isEmbedded?"#111":"#0000FF"} strokeWidth="2" strokeLinecap="round"/>
                 </svg>
               )}
             </button>
@@ -1356,7 +1406,7 @@ export default function KitabhOutline(props: { premium?: boolean; embedded?: boo
           <div className="kb-method">
             <div className="kb-method-header">
               <div className="kb-method-badge">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#0000FF" strokeWidth="2" strokeLinecap="round">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke={isEmbedded?"#111":"#0000FF"} strokeWidth="2" strokeLinecap="round">
                   <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
                 </svg>
                 كيف نبني مخططك
@@ -1453,13 +1503,13 @@ export default function KitabhOutline(props: { premium?: boolean; embedded?: boo
       {phase === "transcribing" && (
         <div className="kb-load">
           <div className="kb-load-card" style={{textAlign:"center",padding:"48px 24px"}}>
-            <div style={{width:56,height:56,background:"#EBEBFF",border:"2px solid #C5C5FF",borderRadius:16,display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 20px"}}>
+            <div style={{width:56,height:56,background:isEmbedded?"#F3F4F6":"#EBEBFF",border:`2px solid ${isEmbedded?"#D1D5DB":"#C5C5FF"}`,borderRadius:16,display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 20px"}}>
               {STEP_ICO.mic}
             </div>
             <div style={{fontSize:18,fontWeight:800,color:"#371D12",marginBottom:8}}>سنحوّل صوتك إلى نص أولاً</div>
             <div style={{fontSize:14,color:"#818181",marginBottom:20}}>يرجى الانتظار بضع ثوانٍ...</div>
             <div style={{display:"flex",justifyContent:"center"}}>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#0000FF" strokeWidth="2.5" style={{animation:"kb-spin 1s linear infinite"}}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={isEmbedded?"#111":"#0000FF"} strokeWidth="2.5" style={{animation:"kb-spin 1s linear infinite"}}>
                 <circle cx="12" cy="12" r="10" strokeOpacity=".2"/><path d="M12 2a10 10 0 0110 10" strokeLinecap="round"/>
               </svg>
             </div>
@@ -1495,7 +1545,7 @@ export default function KitabhOutline(props: { premium?: boolean; embedded?: boo
                       </div>
                       <div className="kb-load-step-txt">{step.text}</div>
                       {status === "active" && (
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#0000FF" strokeWidth="2.5" style={{animation:"kb-spin 1s linear infinite",flexShrink:0}}>
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={isEmbedded?"#111":"#0000FF"} strokeWidth="2.5" style={{animation:"kb-spin 1s linear infinite",flexShrink:0}}>
                           <circle cx="12" cy="12" r="10" strokeOpacity=".2"/><path d="M12 2a10 10 0 0110 10" strokeLinecap="round"/>
                         </svg>
                       )}
@@ -1717,9 +1767,9 @@ export default function KitabhOutline(props: { premium?: boolean; embedded?: boo
                     const displayName = shape?.name || (sh.name || "").replace(/\s*\([\w_]+\)\s*/g, "").trim()
                     return [
                       i > 0 && <div key={`or-${i}`} style={{textAlign:"center",fontSize:18,fontWeight:800,color:"#818181",padding:"6px 0"}}>أو</div>,
-                      <div key={i} className="kb-shape-scard" style={{borderTop: `4px solid ${shape?.color || "#0000FF"}`}}>
+                      <div key={i} className="kb-shape-scard" style={{borderTop: `4px solid ${shape?.color || (isEmbedded?"#111":"#0000FF")}`}}>
                         {shape && <div style={{marginBottom:10,background:"#F8F8F8",borderRadius:10,padding:"10px 8px 6px",overflow:"hidden"}}><Sparkline data={shape.arc} color={shape.color} width={280} height={98} showLabels showArrow/></div>}
-                        <div className="kb-shape-scard-name" style={{color: shape?.color || "#0000FF"}}>{displayName}</div>
+                        <div className="kb-shape-scard-name" style={{color: shape?.color || (isEmbedded?"#111":"#0000FF")}}>{displayName}</div>
                         {shape && <div style={{fontSize:12,color:"#818181",marginBottom:6}}>{shape.desc}</div>}
                         <div className="kb-shape-scard-why">{sh.why}</div>
                       </div>
@@ -1871,7 +1921,7 @@ export default function KitabhOutline(props: { premium?: boolean; embedded?: boo
                 <div className="kb-arc-list">
                   {outline.arc_outline.map((a: any, i: number) => (
                     <div key={i} className="kb-arc-item">
-                      <div className="kb-arc-dot" style={{background: SHAPES.find(s => s.id === outline.suggested_shapes?.[0]?.id)?.color || "#0000FF"}}/>
+                      <div className="kb-arc-dot" style={{background: SHAPES.find(s => s.id === outline.suggested_shapes?.[0]?.id)?.color || (isEmbedded?"#111":"#0000FF")}}/>
                       <div>
                         <div className="kb-arc-phase">{a.phase}</div>
                         <div className="kb-arc-desc">{a.description}</div>
