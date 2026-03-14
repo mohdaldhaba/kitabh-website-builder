@@ -801,9 +801,9 @@ const CSS_STYLES = `
 .klp{font-family:'IBM Plex Sans Arabic',system-ui,sans-serif;direction:rtl;text-align:right;color:#111;line-height:1.6;width:100%;min-height:100vh;background:transparent;}
 
 /* ─── List View ─── */
-.klp-header{display:flex;align-items:center;justify-content:space-between;padding:24px 32px;border-bottom:1px solid rgba(0,0,0,0.06);background:#fff;}
+.klp-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;}
 .klp-title{font-size:24px;font-weight:700;margin:0;color:#111;}
-.klp-list{}
+.klp-list{max-width:900px;margin:0 auto;}
 .klp-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 20px;gap:12px;color:#888;}
 .klp-empty h3{font-size:18px;color:#111;margin:8px 0 0;}
 .klp-empty p{font-size:14px;color:#888;margin:0 0 16px;}
@@ -941,6 +941,6 @@ const CSS_STYLES = `
   .klp-editor-form{width:100%;min-width:unset;max-height:unset;border-left:none;border-bottom:1px solid rgba(0,0,0,0.06);}
   .klp-preview-container{max-height:unset;}
   .klp-grid{grid-template-columns:1fr;padding:16px;}
-  .klp-header{padding:16px 20px;}
+  .klp-header{margin-bottom:16px;}
 }
 `;

@@ -944,10 +944,10 @@ function SubscriberDetailModal({ subscriber, onUpdate, onDelete, onClose, allTag
 // ═══════════════════════════════════════════════════════
 const CSS_STYLES = `
 /* Base */
-.ksm{font-family:'IBM Plex Sans Arabic',system-ui,sans-serif;direction:rtl;text-align:right;color:#111;line-height:1.6;width:100%;background:transparent;}
+.ksm{font-family:'IBM Plex Sans Arabic',system-ui,sans-serif;direction:rtl;text-align:right;color:#111;line-height:1.6;width:100%;background:transparent;max-width:900px;margin:0 auto;}
 
 /* Header */
-.ksm-header{display:flex;align-items:center;justify-content:space-between;padding:20px 28px;border-bottom:1px solid rgba(0,0,0,0.06);}
+.ksm-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;}
 .ksm-header-right{display:flex;align-items:center;gap:10px;}
 .ksm-header-left{display:flex;align-items:center;gap:8px;}
 .ksm-title{font-size:24px;font-weight:700;margin:0;color:#111;}

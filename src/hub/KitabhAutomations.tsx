@@ -927,7 +927,7 @@ const CSS_STYLES = `
 .ka{width:100%;max-width:900px;margin:0 auto;padding:0 24px 60px;}
 
 /* ─── LIST VIEW ─── */
-.ka-list-header{display:flex;align-items:center;justify-content:space-between;padding:28px 0 20px;}
+.ka-list-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;}
 .ka-page-title{font-size:24px;font-weight:700;margin:0;color:#111;}
 
 .ka-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:80px 20px;text-align:center;}

@@ -883,6 +883,8 @@ const HubLayout: React.FC<HubLayoutProps> = ({
 
         {/* Responsive + Premium CSS */}
         <style>{`
+          .hub-sidebar-desktop button,
+          .hub-sidebar-mobile button { outline: none; }
           @media (max-width: 768px) {
             .hub-sidebar-desktop { display: none !important; }
             .hub-sidebar-mobile { display: flex !important; }
