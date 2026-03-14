@@ -4440,12 +4440,12 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
         };
         return (
           <div className="kwb-overlay" onClick={() => setShowTemplateModal(false)}>
-            <div className="kwb-modal" style={{ maxWidth: 720, width: '90vw' }} onClick={e => e.stopPropagation()}>
+            <div className="kwb-modal" style={{ maxWidth: 560, width: '90vw' }} onClick={e => e.stopPropagation()}>
               <div className="kwb-modal-header">
                 <h2 style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif" }}>قوالب جاهزة</h2>
                 <button className="kwb-btn-icon" onClick={() => setShowTemplateModal(false)}>{Icons.x}</button>
               </div>
-              <div style={{ padding: 20, display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, maxHeight: '70vh', overflowY: 'auto' }}>
+              <div style={{ padding: 20, display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 12, maxHeight: '70vh', overflowY: 'auto' }}>
                 {TEMPLATES.map(tpl => {
                   const b = { ...SKELETON.defaultBranding, ...(tpl.defaultBranding || {}) };
                   const btn = b.buttonColor || "#E82222";
@@ -4464,7 +4464,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                         transition: 'border-color 0.15s',
                       }}
                     >
-                      <div style={{ height: 120, background: bgColor, position: 'relative', overflow: 'hidden' }}>
+                      <div style={{ height: 160, background: bgColor, position: 'relative', overflow: 'hidden' }}>
                         {patternFn(accent, btn)}
                       </div>
                       <div style={{ padding: '10px 12px' }}>
@@ -5518,6 +5518,21 @@ const CSS_STYLES = `
   .kwb-p-articles-grid{grid-template-columns:repeat(2,1fr);}
   .kwb-p-bento{grid-template-columns:1fr!important;}
   .kwb-p-bento .kwb-p-bento-card{grid-column:auto!important;}
+}
+@media(max-width:768px){
+  .kwb-builder-body{flex-direction:column-reverse;}
+  .kwb-sidebar{width:100%;max-height:45vh;border-left:none;border-top:1px solid #E8E8E8;}
+  .kwb-preview-area{padding:10px 4px 20px;}
+  .kwb-preview-frame{max-width:100%;}
+  .kwb-sidebar-top-btns-col{padding:8px 12px 0;}
+  .kwb-sidebar-top-btns{display:flex;gap:6px;position:sticky;top:0;z-index:10;background:#fff;padding-bottom:8px;}
+  .kwb-sidebar-top-btns .kwb-btn-outline,
+  .kwb-sidebar-top-btns .kwb-btn-primary{flex:1;font-size:13px;padding:8px 0;}
+  .kwb-sidebar-body{padding:12px;}
+  .kwb-sidebar-tabs .kwb-stab{font-size:12px;padding:8px 0;}
+  .kwb-back-builder-btn{font-size:12px;}
+  .kwb-last-published{font-size:11px;}
+  .kwb-sidebar-top-btns-col > div[style]{display:none!important;}
 }
 @media(max-width:600px){
   .kwb{padding:16px 12px 40px;}
