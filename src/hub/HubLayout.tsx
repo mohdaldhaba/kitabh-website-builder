@@ -92,16 +92,6 @@ const icons = {
       <path d="M12 2L2 7l10 5 10-5-10-5z" /><path d="M2 17l10 5 10-5" /><path d="M2 12l10 5 10-5" />
     </svg>
   ),
-  sun: (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <circle cx="12" cy="12" r="5" /><line x1="12" y1="1" x2="12" y2="3" /><line x1="12" y1="21" x2="12" y2="23" /><line x1="4.22" y1="4.22" x2="5.64" y2="5.64" /><line x1="18.36" y1="18.36" x2="19.78" y2="19.78" /><line x1="1" y1="12" x2="3" y2="12" /><line x1="21" y1="12" x2="23" y2="12" /><line x1="4.22" y1="19.78" x2="5.64" y2="18.36" /><line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
-    </svg>
-  ),
-  moon: (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
-    </svg>
-  ),
   plus: (
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
       <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
@@ -233,28 +223,9 @@ const lightColors = {
   accent: '#E11D48',
 };
 
-const darkColors = {
-  sidebarBg: 'rgba(20,20,20,0.85)',
-  sidebarBorder: 'rgba(255,255,255,0.06)',
-  activeItem: 'rgba(255,255,255,0.06)',
-  activeText: '#F9FAFB',
-  text: '#F9FAFB',
-  textMuted: '#9CA3AF',
-  white: '#111111',
-  primary: '#F9FAFB',
-  primaryHover: '#E5E7EB',
-  topBarBg: 'rgba(17,17,17,0.72)',
-  topBarBorder: 'rgba(255,255,255,0.06)',
-  contentBg: '#0D0D0D',
-  hoverBg: 'rgba(255,255,255,0.04)',
-  border: 'rgba(255,255,255,0.08)',
-  cardBg: '#161616',
-  accent: '#E11D48',
-};
-
 // ─── Theme Context ──────────────────────────────────────
 type ThemeColors = typeof lightColors;
-const ThemeContext = createContext<{ dark: boolean; colors: ThemeColors }>({ dark: false, colors: lightColors });
+const ThemeContext = createContext<{ colors: ThemeColors }>({ colors: lightColors });
 const useTheme = () => useContext(ThemeContext);
 
 const pageTitles: Record<Page, string> = {
@@ -443,18 +414,10 @@ const HubLayout: React.FC<HubLayoutProps> = ({
 }) => {
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(['create']));
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [dark, setDark] = useState(() => {
-    try { return localStorage.getItem('kb_hub_theme') === 'dark'; } catch { return false; }
-  });
-
-  const c = dark ? darkColors : lightColors;
+  const c = lightColors;
 
   const activeSidebarSections = customSidebarSections || sidebarSections;
   const activeUtilityItems = customUtilityItems || utilityItems;
-
-  useEffect(() => {
-    try { localStorage.setItem('kb_hub_theme', dark ? 'dark' : 'light'); } catch {}
-  }, [dark]);
 
   const comingSoonBadge = (
     <span
@@ -462,8 +425,8 @@ const HubLayout: React.FC<HubLayoutProps> = ({
         fontSize: 10,
         fontWeight: 600,
         fontFamily: 'IBM Plex Sans Arabic, sans-serif',
-        color: dark ? '#555' : '#9CA3AF',
-        background: dark ? '#1F1F1F' : '#F3F4F6',
+        color: '#9CA3AF',
+        background: '#F3F4F6',
         padding: '2px 6px',
         borderRadius: 4,
         whiteSpace: 'nowrap',
@@ -498,7 +461,7 @@ const HubLayout: React.FC<HubLayoutProps> = ({
             width: '100%',
             padding: '9px 14px',
             background: c.primary,
-            color: dark ? '#111' : '#fff',
+            color: '#fff',
             border: 'none',
             borderRadius: 8,
             fontSize: 14,
@@ -632,7 +595,7 @@ const HubLayout: React.FC<HubLayoutProps> = ({
                           width: '100%',
                           padding: '7px 12px',
                           background: isActive && !isComingSoon ? c.activeItem : 'transparent',
-                          color: isComingSoon ? (dark ? '#444' : '#C0C0C0') : isActive ? c.activeText : c.text,
+                          color: isComingSoon ? '#C0C0C0' : isActive ? c.activeText : c.text,
                           border: 'none',
                           borderRadius: 6,
                           fontSize: 13,
@@ -728,8 +691,8 @@ const HubLayout: React.FC<HubLayoutProps> = ({
           <div style={{ fontSize: 12, color: c.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif', marginBottom: 6 }}>
             المشتركون
           </div>
-          <div style={{ height: 4, background: dark ? '#2A2A2A' : '#E5E7EB', borderRadius: 2, overflow: 'hidden' }}>
-            <div style={{ height: '100%', width: '38%', background: dark ? '#F9FAFB' : c.primary, borderRadius: 2 }} />
+          <div style={{ height: 4, background: '#E5E7EB', borderRadius: 2, overflow: 'hidden' }}>
+            <div style={{ height: '100%', width: '38%', background: c.primary, borderRadius: 2 }} />
           </div>
           <div style={{ fontSize: 11, color: c.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif', marginTop: 4 }}>
             0 of 2,500 مشترك
@@ -769,8 +732,8 @@ const HubLayout: React.FC<HubLayoutProps> = ({
   );
 
   return (
-    <ThemeContext.Provider value={{ dark, colors: c }}>
-      <div style={{ direction: 'rtl', display: 'flex', minHeight: '100vh', fontFamily: 'IBM Plex Sans Arabic, sans-serif', background: c.contentBg, color: c.text, transition: 'background 0.3s, color 0.3s' }}>
+    <ThemeContext.Provider value={{ colors: c }}>
+      <div style={{ direction: 'rtl', display: 'flex', minHeight: '100vh', fontFamily: 'IBM Plex Sans Arabic, sans-serif', background: c.contentBg, color: c.text }}>
         {/* Desktop Sidebar */}
         <aside
           style={{
@@ -826,7 +789,7 @@ const HubLayout: React.FC<HubLayoutProps> = ({
         >
           {/* Drag handle */}
           <div style={{ display: 'flex', justifyContent: 'center', padding: '10px 0 4px' }} onClick={() => setMobileMenuOpen(false)}>
-            <div style={{ width: 36, height: 4, borderRadius: 2, background: dark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.15)' }} />
+            <div style={{ width: 36, height: 4, borderRadius: 2, background: 'rgba(0,0,0,0.15)' }} />
           </div>
           <div style={{ flex: 1, overflowY: 'auto', WebkitOverflowScrolling: 'touch' as any }}>
             {sidebarContent}
@@ -853,7 +816,7 @@ const HubLayout: React.FC<HubLayoutProps> = ({
               transition: 'background 0.3s, border-color 0.3s',
             }}
           >
-            {/* Left side: dark mode toggle + mobile menu */}
+            {/* Left side: mobile menu */}
             <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
               {/* Mobile menu button */}
               <button
@@ -869,28 +832,6 @@ const HubLayout: React.FC<HubLayoutProps> = ({
                 className="hub-mobile-menu-btn"
               >
                 {icons.menu}
-              </button>
-
-              {/* Dark/Light toggle */}
-              <button
-                onClick={() => setDark(!dark)}
-                title={dark ? 'الوضع النهاري' : 'الوضع الليلي'}
-                style={{
-                  background: dark ? '#1F1F1F' : '#F3F4F6',
-                  border: 'none',
-                  cursor: 'pointer',
-                  padding: '6px 8px',
-                  borderRadius: 8,
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: 6,
-                  color: c.text,
-                  transition: 'background 0.2s',
-                }}
-                onMouseEnter={(e) => (e.currentTarget.style.background = dark ? '#2A2A2A' : '#E5E7EB')}
-                onMouseLeave={(e) => (e.currentTarget.style.background = dark ? '#1F1F1F' : '#F3F4F6')}
-              >
-                {dark ? icons.sun : icons.moon}
               </button>
             </div>
 
@@ -921,7 +862,7 @@ const HubLayout: React.FC<HubLayoutProps> = ({
                   width: 30,
                   height: 30,
                   borderRadius: '50%',
-                  background: dark ? '#2A2A2A' : '#E5E7EB',
+                  background: '#E5E7EB',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -955,298 +896,6 @@ const HubLayout: React.FC<HubLayoutProps> = ({
             .hub-sidebar-mobile { display: none !important; max-height: 0 !important; }
             .hub-mobile-menu-btn { display: none !important; }
           }
-          ${dark ? `
-          /* ── Dark mode overrides ── */
-          .hub-main-content input, .hub-main-content textarea, .hub-main-content select {
-            color-scheme: dark;
-          }
-          /* ── White / near-white backgrounds → dark card bg ── */
-          .hub-main-content div[style*="background: rgb(255, 255, 255)"],
-          .hub-main-content div[style*="background: rgb(249, 250, 251)"],
-          .hub-main-content div[style*="background: rgb(250, 250, 250)"],
-          .hub-main-content div[style*="background: rgba(255, 255, 255"] {
-            background: #161616 !important;
-            border-color: rgba(255,255,255,0.08) !important;
-          }
-          /* ── Light gray backgrounds → dark subtle bg ── */
-          .hub-main-content div[style*="background: rgb(243, 244, 246)"],
-          .hub-main-content span[style*="background: rgb(243, 244, 246)"],
-          .hub-main-content button[style*="background: rgb(243, 244, 246)"] {
-            background: #1F1F1F !important;
-            color: #D1D5DB !important;
-          }
-          .hub-main-content div[style*="background: rgb(249, 250, 251)"] {
-            background: #1A1A1A !important;
-          }
-          /* ── Status badge backgrounds ── */
-          .hub-main-content span[style*="background: rgb(236, 253, 245)"] {
-            background: rgba(5,150,105,0.15) !important;
-          }
-          .hub-main-content span[style*="background: rgb(254, 242, 242)"] {
-            background: rgba(220,38,38,0.15) !important;
-          }
-          .hub-main-content span[style*="background: rgb(254, 243, 199)"] {
-            background: rgba(217,119,6,0.15) !important;
-          }
-          .hub-main-content span[style*="background: rgb(55, 65, 81)"] {
-            background: #374151 !important;
-          }
-          .hub-main-content div[style*="background: rgb(255, 251, 235)"] {
-            background: rgba(217,119,6,0.1) !important;
-            border-color: rgba(217,119,6,0.2) !important;
-          }
-          /* ── Avatar backgrounds ── */
-          .hub-main-content div[style*="background: rgb(224, 231, 255)"] {
-            background: #2A2A40 !important;
-          }
-          /* ── Text color overrides ── */
-          .hub-main-content [style*="color: rgb(17, 24, 39)"],
-          .hub-main-content [style*="color: rgb(17, 17, 17)"],
-          .hub-main-content [style*="color: rgb(55, 29, 18)"] {
-            color: #F9FAFB !important;
-          }
-          .hub-main-content [style*="color: rgb(107, 114, 128)"],
-          .hub-main-content [style*="color: rgb(55, 65, 81)"],
-          .hub-main-content [style*="color: rgb(156, 163, 175)"] {
-            color: #9CA3AF !important;
-          }
-          .hub-main-content [style*="color: rgb(0, 0, 255)"] {
-            color: #93C5FD !important;
-          }
-          /* ── Borders ── */
-          .hub-main-content [style*="border-bottom: 1px solid rgb(243, 244, 246)"],
-          .hub-main-content [style*="border-top: 1px solid rgb(243, 244, 246)"] {
-            border-color: rgba(255,255,255,0.06) !important;
-          }
-          .hub-main-content [style*="border: 1px solid rgba(0, 0, 0"],
-          .hub-main-content [style*="border-color: rgba(0, 0, 0"] {
-            border-color: rgba(255,255,255,0.08) !important;
-          }
-          .hub-main-content [style*="border: 1px solid rgb(229, 231, 235)"] {
-            border-color: rgba(255,255,255,0.1) !important;
-          }
-          .hub-main-content [style*="border: 1.5px solid rgb(229, 231, 235)"] {
-            border-color: rgba(255,255,255,0.1) !important;
-          }
-          .hub-main-content [style*="border-bottom: 1px solid rgb(229, 231, 235)"] {
-            border-bottom-color: rgba(255,255,255,0.08) !important;
-          }
-          .hub-main-content div[style*="border: 1px solid rgba(255, 255, 255, 0.5)"],
-          .hub-main-content div[style*="border-bottom: 1px solid rgba(255, 255, 255, 0.5)"] {
-            border-color: rgba(255,255,255,0.08) !important;
-          }
-          /* ── Inputs ── */
-          .hub-main-content input[style], .hub-main-content textarea[style], .hub-main-content select[style] {
-            background: #1A1A1A !important;
-            color: #F9FAFB !important;
-            border-color: rgba(255,255,255,0.1) !important;
-          }
-          /* ── White outline buttons → dark surface ── */
-          .hub-main-content button[style*="background: rgb(255, 255, 255)"] {
-            background: #1F1F1F !important;
-            color: #F9FAFB !important;
-            border-color: rgba(255,255,255,0.1) !important;
-          }
-          .hub-main-content button[style*="background: transparent"] {
-            color: #D1D5DB !important;
-            border-color: rgba(255,255,255,0.1) !important;
-          }
-          /* ── Dark solid buttons → invert ── */
-          .hub-main-content button[style*="background: rgb(17, 17, 17)"],
-          .hub-main-content button[style*="background: rgb(26, 26, 26)"] {
-            background: #F9FAFB !important;
-            color: #111 !important;
-          }
-          .hub-main-content button[style*="background: rgb(17, 17, 17)"] svg,
-          .hub-main-content button[style*="background: rgb(26, 26, 26)"] svg {
-            stroke: #111 !important;
-          }
-          /* ── Green buttons stay green ── */
-          .hub-main-content button[style*="background: rgb(5, 150, 105)"] {
-            background: #059669 !important;
-            color: #fff !important;
-          }
-          /* ── Progress bar tracks ── */
-          .hub-main-content div[style*="background: rgb(229, 231, 235)"],
-          .hub-main-content div[style*="background: rgb(243, 244, 246)"][style*="border-radius: 3"] {
-            background: #2A2A2A !important;
-          }
-          /* ── Code / monospace blocks ── */
-          .hub-main-content code {
-            background: #1A1A1A !important;
-            color: #D1D5DB !important;
-          }
-          /* ── Box shadows → subtle dark shadows ── */
-          .hub-main-content [style*="box-shadow: rgba(0, 0, 0, 0.04)"],
-          .hub-main-content [style*="box-shadow: 0px 1px 3px rgba(0, 0, 0"] {
-            box-shadow: 0 1px 3px rgba(0,0,0,0.3), 0 4px 16px rgba(0,0,0,0.2) !important;
-          }
-          /* ── Gradient backgrounds (linear-gradient with dark colors) ── */
-          .hub-main-content div[style*="background: linear-gradient(135deg, rgb(51, 51, 51)"] {
-            background: linear-gradient(135deg, #2A2A2A 0%, #1F1F1F 100%) !important;
-          }
-          /* ── Horizontal rules / dividers ── */
-          .hub-main-content div[style*="background: rgb(229, 231, 235)"][style*="height: 1px"],
-          .hub-main-content div[style*="height: 1px"][style*="background: rgb(229, 231, 235)"] {
-            background: rgba(255,255,255,0.08) !important;
-          }
-          /* ── Modal overlay ── */
-          .hub-main-content div[style*="background: rgba(0, 0, 0, 0.4)"] > div[style*="background: rgb(255, 255, 255)"] {
-            background: #1F1F1F !important;
-            border-color: rgba(255,255,255,0.1) !important;
-          }
-          /* ── Tab active states ── */
-          .hub-main-content button[style*="box-shadow: rgba(0, 0, 0, 0.06)"] {
-            box-shadow: 0 1px 2px rgba(0,0,0,0.3) !important;
-          }
-
-          /* ═══ Dark mode: KitabhDomainSettings (.kds) ═══ */
-          .kds{color:#F9FAFB !important;}
-          .kds-page-title,.kds-section-title,.kds-edit-nl-name,.kds-info-nl-name{color:#F9FAFB !important;}
-          .kds-section-desc,.kds-info-label,.kds-label,.kds-hint-text{color:#9CA3AF !important;}
-          .kds-hint-text strong{color:#D1D5DB !important;}
-          .kds-info-card,.kds-edit-card,.kds-locked-card,.kds-setup-card{background:#161616 !important;border-color:rgba(255,255,255,0.1) !important;}
-          .kds-info-row+.kds-info-row{border-top-color:rgba(255,255,255,0.06) !important;}
-          .kds-url{color:#D1D5DB !important;}
-          .kds-input{background:#1A1A1A !important;color:#F9FAFB !important;border-color:rgba(255,255,255,0.1) !important;}
-          .kds-subdomain-input{border-color:rgba(255,255,255,0.1) !important;background:#1A1A1A !important;}
-          .kds-subdomain-suffix{background:#161616 !important;color:#9CA3AF !important;border-left-color:rgba(255,255,255,0.06) !important;}
-          .kds-preview-url{color:#9CA3AF !important;}
-          .kds-btn-primary{background:#F9FAFB !important;color:#111 !important;}
-          .kds-btn-primary:hover{background:#E5E7EB !important;}
-          .kds-btn-outline{background:#161616 !important;color:#D1D5DB !important;border-color:rgba(255,255,255,0.12) !important;}
-          .kds-btn-outline:hover{background:#1F1F1F !important;border-color:rgba(255,255,255,0.2) !important;}
-          .kds-btn-ghost-sm{color:#9CA3AF !important;}
-          .kds-btn-ghost-sm:hover{background:#1F1F1F !important;color:#F9FAFB !important;}
-          .kds-btn-icon-sm{background:#161616 !important;border-color:rgba(255,255,255,0.1) !important;color:#9CA3AF !important;}
-          .kds-btn-icon-sm:hover{border-color:rgba(255,255,255,0.2) !important;color:#F9FAFB !important;}
-          .kds-status{background:#1F1F1F !important;color:#9CA3AF !important;}
-          .kds-status-live{background:rgba(18,183,106,0.15) !important;color:#12B76A !important;}
-          .kds-dropdown{background:#161616 !important;border-color:rgba(255,255,255,0.1) !important;box-shadow:0 6px 20px rgba(0,0,0,0.4) !important;}
-          .kds-dropdown-item{color:#D1D5DB !important;}
-          .kds-dropdown-item:hover{background:#1F1F1F !important;}
-          .kds-divider{background:rgba(255,255,255,0.06) !important;}
-          .kds-soon-badge{background:#1F1F1F !important;color:#6B7280 !important;}
-
-          /* ═══ Dark mode: KitabhSubscribers (.ksm) ═══ */
-          .ksm{color:#F9FAFB !important;}
-          .ksm-title,.ksm-count{color:#F9FAFB !important;}
-          .ksm-btn-primary{background:#F9FAFB !important;color:#111 !important;}
-          .ksm-btn-primary:hover{background:#E5E7EB !important;}
-          .ksm-btn-outline{background:#161616 !important;color:#D1D5DB !important;border-color:rgba(255,255,255,0.12) !important;}
-          .ksm-btn-outline:hover{background:#1F1F1F !important;}
-          .ksm-btn-sm{background:#161616 !important;color:#D1D5DB !important;border-color:rgba(255,255,255,0.12) !important;}
-          .ksm-btn-icon,.ksm-btn-icon-danger{background:#161616 !important;border-color:rgba(255,255,255,0.1) !important;color:#9CA3AF !important;}
-          .ksm-btn-icon:hover{border-color:rgba(255,255,255,0.2) !important;color:#F9FAFB !important;}
-          .ksm-btn-filtered{background:#1F1F1F !important;color:#D1D5DB !important;border-color:rgba(255,255,255,0.12) !important;}
-          .ksm-table{border-color:rgba(255,255,255,0.06) !important;}
-          .ksm-table th{background:#161616 !important;color:#9CA3AF !important;border-color:rgba(255,255,255,0.06) !important;}
-          .ksm-row{border-color:rgba(255,255,255,0.06) !important;}
-          .ksm-row:hover{background:#1A1A1A !important;}
-          .ksm-row td{color:#D1D5DB !important;}
-          .ksm-td-email{color:#F9FAFB !important;}
-          .ksm-empty-row td{color:#6B7280 !important;}
-          .ksm-search-input{background:#1A1A1A !important;color:#F9FAFB !important;border-color:rgba(255,255,255,0.1) !important;}
-          .ksm-dropdown{background:#161616 !important;border-color:rgba(255,255,255,0.1) !important;box-shadow:0 6px 20px rgba(0,0,0,0.4) !important;}
-          .ksm-dropdown-item{color:#D1D5DB !important;}
-          .ksm-dropdown-item:hover{background:#1F1F1F !important;}
-          .ksm-dropdown-title{color:#9CA3AF !important;}
-          .ksm-dropdown-input{background:#1A1A1A !important;color:#F9FAFB !important;border-color:rgba(255,255,255,0.1) !important;}
-          .ksm-modal,.ksm-modal-sm,.ksm-modal-detail{background:#161616 !important;color:#F9FAFB !important;border-color:rgba(255,255,255,0.1) !important;}
-          .ksm-modal-header{border-color:rgba(255,255,255,0.06) !important;}
-          .ksm-modal-footer{border-color:rgba(255,255,255,0.06) !important;}
-          .ksm-input,.ksm-textarea{background:#1A1A1A !important;color:#F9FAFB !important;border-color:rgba(255,255,255,0.1) !important;}
-          .ksm-label{color:#9CA3AF !important;}
-          .ksm-overlay{background:rgba(0,0,0,0.6) !important;}
-          .ksm-tag-chip{background:#1F1F1F !important;color:#D1D5DB !important;border-color:rgba(255,255,255,0.1) !important;}
-          .ksm-bulk-bar{background:#161616 !important;border-color:rgba(255,255,255,0.1) !important;color:#F9FAFB !important;}
-          .ksm-upload-area{background:#1A1A1A !important;border-color:rgba(255,255,255,0.15) !important;color:#9CA3AF !important;}
-          .ksm-checkbox{border-color:rgba(255,255,255,0.2) !important;background:#1A1A1A !important;}
-          .ksm-detail-avatar{background:#1F1F1F !important;color:#9CA3AF !important;}
-          .ksm-detail-tabs{border-color:rgba(255,255,255,0.06) !important;}
-          .ksm-detail-tab{color:#9CA3AF !important;}
-          .ksm-detail-tab.active{color:#F9FAFB !important;border-color:#F9FAFB !important;}
-
-          /* ═══ Dark mode: KitabhAutomations (.ka) ═══ */
-          .ka{color:#F9FAFB !important;}
-          .ka-list-header h2{color:#F9FAFB !important;}
-          .ka-list-item{background:#161616 !important;border-color:rgba(255,255,255,0.1) !important;}
-          .ka-list-item:hover{border-color:rgba(255,255,255,0.2) !important;}
-          .ka-list-item-info span,.ka-list-item-info div{color:#D1D5DB !important;}
-          .ka-empty{color:#6B7280 !important;}
-          .ka-empty h3{color:#F9FAFB !important;}
-          .ka-btn-primary{background:#F9FAFB !important;color:#111 !important;}
-          .ka-btn-ghost{background:#161616 !important;color:#D1D5DB !important;border-color:rgba(255,255,255,0.12) !important;}
-          .ka-btn-ghost:hover{background:#1F1F1F !important;}
-          .ka-builder{background:#0D0D0D !important;}
-          .ka-builder-topbar{background:#161616 !important;border-color:rgba(255,255,255,0.06) !important;}
-          .ka-name-input{background:transparent !important;color:#F9FAFB !important;}
-          .ka-sidebar{background:#161616 !important;border-color:rgba(255,255,255,0.06) !important;color:#F9FAFB !important;}
-          .ka-sidebar-tab{color:#9CA3AF !important;}
-          .ka-sidebar-tab.active{color:#F9FAFB !important;border-color:#F9FAFB !important;}
-          .ka-node{background:#161616 !important;border-color:rgba(255,255,255,0.1) !important;}
-          .ka-node-label,.ka-node-sublabel{color:#D1D5DB !important;}
-          .ka-connector-add{background:#1F1F1F !important;border-color:rgba(255,255,255,0.15) !important;color:#9CA3AF !important;}
-          .ka-connector-add:hover{border-color:rgba(255,255,255,0.3) !important;color:#F9FAFB !important;}
-          .ka-field-input,.ka-field-select{background:#1A1A1A !important;color:#F9FAFB !important;border-color:rgba(255,255,255,0.1) !important;}
-          .ka-field-label{color:#9CA3AF !important;}
-          .ka-analyze-card{background:#1A1A1A !important;border-color:rgba(255,255,255,0.06) !important;}
-          .ka-analyze-card h4,.ka-analyze-card .ka-stat-num{color:#F9FAFB !important;}
-          .ka-day-btn{background:#161616 !important;color:#9CA3AF !important;border-color:rgba(255,255,255,0.1) !important;}
-          .ka-day-btn.on{background:#F9FAFB !important;color:#111 !important;}
-          .ka-trigger-menu,.ka-action-menu{background:#161616 !important;border-color:rgba(255,255,255,0.1) !important;box-shadow:0 8px 24px rgba(0,0,0,0.5) !important;}
-          .ka-dropdown{background:#161616 !important;border-color:rgba(255,255,255,0.1) !important;box-shadow:0 6px 20px rgba(0,0,0,0.4) !important;}
-          .ka-dropdown-item{color:#D1D5DB !important;}
-          .ka-dropdown-item:hover{background:#1F1F1F !important;}
-          .ka-badge{background:#1F1F1F !important;color:#9CA3AF !important;}
-          .ka-step-editor{background:#161616 !important;border-color:rgba(255,255,255,0.06) !important;}
-          .ka-step-editor-header{border-color:rgba(255,255,255,0.06) !important;color:#F9FAFB !important;}
-          .ka-btn-save{background:#F9FAFB !important;color:#111 !important;}
-          .ka-sidebar-action-btn{background:#1A1A1A !important;border-color:rgba(255,255,255,0.08) !important;color:#D1D5DB !important;}
-          .ka-sidebar-action-btn:hover{border-color:rgba(255,255,255,0.2) !important;}
-
-          /* ═══ Dark mode: KitabhLandingPages (.klp) ═══ */
-          .klp{color:#F9FAFB !important;}
-          .klp-title,.klp-section-title{color:#F9FAFB !important;}
-          .klp-header{background:#161616 !important;border-color:rgba(255,255,255,0.06) !important;}
-          .klp-empty h3{color:#F9FAFB !important;}
-          .klp-empty p{color:#6B7280 !important;}
-          .klp-page-card{background:#161616 !important;border-color:rgba(255,255,255,0.1) !important;}
-          .klp-page-card:hover{border-color:rgba(255,255,255,0.2) !important;}
-          .klp-page-card-name{color:#F9FAFB !important;}
-          .klp-page-card-actions{border-color:rgba(255,255,255,0.06) !important;}
-          .klp-mini-preview{background:#1A1A1A !important;}
-          .klp-mini-headline{color:#F9FAFB !important;}
-          .klp-mini-img-placeholder{background:#1F1F1F !important;}
-          .klp-btn-primary{background:#F9FAFB !important;color:#111 !important;}
-          .klp-btn-primary:hover{background:#E5E7EB !important;}
-          .klp-btn-ghost{background:#161616 !important;color:#D1D5DB !important;border-color:rgba(255,255,255,0.12) !important;}
-          .klp-btn-ghost:hover{background:#1F1F1F !important;}
-          .klp-btn-ghost.active{background:#1F1F1F !important;border-color:#F9FAFB !important;color:#F9FAFB !important;}
-          .klp-btn-icon{background:#161616 !important;border-color:rgba(255,255,255,0.1) !important;color:#9CA3AF !important;}
-          .klp-btn-icon:hover{border-color:rgba(255,255,255,0.2) !important;color:#F9FAFB !important;background:#1F1F1F !important;}
-          .klp-btn-sm{background:#161616 !important;color:#D1D5DB !important;border-color:rgba(255,255,255,0.12) !important;}
-          .klp-status{background:#1F1F1F !important;color:#9CA3AF !important;}
-          .klp-status-live{background:rgba(18,183,106,0.15) !important;color:#12B76A !important;}
-          .klp-editor-topbar{background:#161616 !important;border-color:rgba(255,255,255,0.06) !important;}
-          .klp-editor-form{background:#161616 !important;border-color:rgba(255,255,255,0.06) !important;}
-          .klp-label{color:#9CA3AF !important;}
-          .klp-input,.klp-textarea{background:#1A1A1A !important;color:#F9FAFB !important;border-color:rgba(255,255,255,0.1) !important;}
-          .klp-input:focus,.klp-textarea:focus{border-color:#F9FAFB !important;}
-          .klp-slug-input{border-color:rgba(255,255,255,0.1) !important;}
-          .klp-slug-prefix{background:#0D0D0D !important;color:#9CA3AF !important;border-color:rgba(255,255,255,0.06) !important;}
-          .klp-radio-btn{background:#161616 !important;color:#9CA3AF !important;border-color:rgba(255,255,255,0.12) !important;}
-          .klp-radio-btn.active{background:#1F1F1F !important;color:#F9FAFB !important;border-color:#F9FAFB !important;}
-          .klp-toggle.active{background:#F9FAFB !important;}
-          .klp-color-swatch.active{border-color:#F9FAFB !important;}
-          .klp-upload-area{background:#1A1A1A !important;border-color:rgba(255,255,255,0.15) !important;color:#9CA3AF !important;}
-          .klp-image-controls{background:#161616 !important;border-color:rgba(255,255,255,0.06) !important;}
-          .klp-zoom-btn{background:#161616 !important;border-color:rgba(255,255,255,0.12) !important;color:#9CA3AF !important;}
-          .klp-image-actions{background:#161616 !important;}
-          .klp-divider{background:rgba(255,255,255,0.06) !important;}
-          .klp-preview-container{background:#0D0D0D !important;}
-          .klp-image-preview{border-color:rgba(255,255,255,0.1) !important;}
-          ` : ''}
         `}</style>
       </div>
     </ThemeContext.Provider>
