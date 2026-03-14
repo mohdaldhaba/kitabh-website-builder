@@ -10,7 +10,7 @@ import SettingsPage from './SettingsPage';
 import AudiencePage from './AudiencePage';
 import NewslettersPage from './NewslettersPage';
 import AnalyzePage from './AnalyzePage';
-import { sidebarSections as defaultSections, utilityItems as defaultUtility } from './HubLayout';
+import { icons, utilityItems as defaultUtility } from './HubLayout';
 import type { Page, Publication, SidebarSection } from './HubLayout';
 
 // Lazy-load tool components
@@ -58,22 +58,43 @@ const ComingSoonPage: React.FC<{ title: string; description: string }> = ({ titl
 // ─── Base path ─────────────────────────────────────────
 const BASE = '/hub_v1';
 
-// ─── V1 sidebar: Email Template, Email Journeys, Magic Link → comingSoon ──
-const v1SidebarSections: SidebarSection[] = defaultSections.map((section) => ({
-  ...section,
-  items: section.items.map((item) => {
-    // Email Template → قريبًا
-    if (item.page === 'email-template') {
-      return { ...item, comingSoon: true };
-    }
-    // Magic Link → قريبًا
-    if (item.page === 'grow' && item.subPage === 'magic-link') {
-      return { ...item, comingSoon: true };
-    }
-    // Email Journeys already has comingSoon: true
-    return item;
-  }),
-}));
+// ─── V1 sidebar sections ──────────────────────────────
+const v1SidebarSections: SidebarSection[] = [
+  {
+    id: 'create',
+    label: 'اكتب',
+    icon: icons.write,
+    items: [
+      { page: 'posts', subPage: 'all-posts', label: 'المنشورات', icon: icons.posts },
+      { page: 'posts', subPage: 'outline', label: 'مساعد كتابة', icon: icons.outline },
+      { page: 'posts', subPage: 'checker', label: 'محرر كتابة', icon: icons.checker },
+    ],
+  },
+  {
+    id: 'publish',
+    label: 'انشر',
+    icon: icons.emailJourney,
+    items: [
+      { page: 'newsletters', label: 'النشرات', icon: icons.emailJourney },
+      { page: 'subscribers', label: 'المشتركون', icon: icons.audience },
+      { page: 'grow', subPage: 'carousel', label: 'ستوديو كتابة', icon: icons.grow },
+      { page: 'grow', subPage: 'social', label: 'محتوى كتابة', icon: icons.grow },
+      { page: 'grow', subPage: 'linktree', label: 'صفحة الروابط', icon: icons.magicLink },
+      { page: 'email-template', label: 'قالب البريد', icon: icons.posts, comingSoon: true },
+      { page: 'email-journeys', label: 'رحلات البريد', icon: icons.emailJourney, comingSoon: true },
+      { page: 'grow', subPage: 'magic-link', label: 'رابط سحري', icon: icons.grow, comingSoon: true },
+    ],
+  },
+  {
+    id: 'design',
+    label: 'صمّم',
+    icon: icons.website,
+    items: [
+      { page: 'website', label: 'الموقع', icon: icons.website },
+      { page: 'writers', label: 'الكتّاب', icon: icons.members },
+    ],
+  },
+];
 
 // ─── URL → page/subPage mapping ──────────────────────
 function parseUrl(): { page: Page; subPage?: string } {
