@@ -546,7 +546,11 @@ const NewsletterCard: React.FC<CardProps> = ({ newsletter, onEdit }) => {
 };
 
 // ─── Newsletters Page ───────────────────────────────────
-const NewslettersPage: React.FC = () => {
+interface NewslettersPageProps {
+  activePublicationIndex?: number;
+}
+
+const NewslettersPage: React.FC<NewslettersPageProps> = ({ activePublicationIndex }) => {
   const [editingNl, setEditingNl] = useState<typeof mockNewsletters[0] | null>(null);
   const [editTab, setEditTab] = useState<'settings' | 'welcome-email'>('settings');
 
@@ -555,40 +559,49 @@ const NewslettersPage: React.FC = () => {
     setEditTab(tab);
   };
 
+  const isSingleMode = activePublicationIndex !== undefined;
+  const visibleNewsletters = isSingleMode
+    ? [mockNewsletters[activePublicationIndex] || mockNewsletters[0]]
+    : mockNewsletters;
+
   return (
     <div style={{ maxWidth: 900, margin: '0 auto' }}>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
         <div>
           <p style={{ fontSize: 14, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: 0 }}>
-            أدر نشراتك البريدية، عدّل إعداداتها، وفعّل رسائل الترحيب
+            {isSingleMode
+              ? 'عدّل إعدادات نشرتك وفعّل رسالة الترحيب'
+              : 'أدر نشراتك البريدية، عدّل إعداداتها، وفعّل رسائل الترحيب'}
           </p>
         </div>
-        <button
-          style={{
-            padding: '10px 20px',
-            background: '#111',
-            color: '#fff',
-            border: 'none',
-            borderRadius: 8,
-            fontSize: 14,
-            fontWeight: 600,
-            fontFamily: 'IBM Plex Sans Arabic, sans-serif',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 8,
-            whiteSpace: 'nowrap',
-          }}
-        >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
-          </svg>
-          نشرة جديدة
-        </button>
+        {!isSingleMode && (
+          <button
+            style={{
+              padding: '10px 20px',
+              background: '#111',
+              color: '#fff',
+              border: 'none',
+              borderRadius: 8,
+              fontSize: 14,
+              fontWeight: 600,
+              fontFamily: 'IBM Plex Sans Arabic, sans-serif',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 8,
+              whiteSpace: 'nowrap',
+            }}
+          >
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" />
+            </svg>
+            نشرة جديدة
+          </button>
+        )}
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-        {mockNewsletters.map((nl) => (
+        {visibleNewsletters.map((nl) => (
           <NewsletterCard
             key={nl._id}
             newsletter={nl}

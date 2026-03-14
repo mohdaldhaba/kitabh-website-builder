@@ -75,7 +75,7 @@ const v1SidebarSections: SidebarSection[] = [
     label: 'انشر',
     icon: icons.emailJourney,
     items: [
-      { page: 'newsletters', label: 'النشرات', icon: icons.emailJourney },
+      { page: 'newsletters', label: 'النشرة', icon: icons.emailJourney },
       { page: 'subscribers', label: 'المشتركون', icon: icons.audience },
       { page: 'grow', subPage: 'carousel', label: 'ستوديو كتابة', icon: icons.grow },
       { page: 'grow', subPage: 'social', label: 'محتوى كتابة', icon: icons.grow },
@@ -215,8 +215,10 @@ const BusinessHubV1: React.FC = () => {
           return <Suspense fallback={<ToolLoader />}><KitabhChecker /></Suspense>;
         }
         return <PostsPage subPage={activeSubPage} />;
-      case 'newsletters':
-        return <NewslettersPage />;
+      case 'newsletters': {
+        const pubIndex = mockPublications.findIndex(p => p.id === activePublicationId);
+        return <NewslettersPage activePublicationIndex={pubIndex >= 0 ? pubIndex : 0} />;
+      }
       case 'email-template':
         return (
           <ComingSoonPage
