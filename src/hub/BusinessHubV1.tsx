@@ -13,10 +13,13 @@ import AnalyzePage from './AnalyzePage';
 import { icons, utilityItems as defaultUtility } from './HubLayout';
 import type { Page, Publication, SidebarSection } from './HubLayout';
 
+import HubToolWrapper from './components/HubToolWrapper';
+
 // Lazy-load tool components
 const KitabhOutline = lazy(() => import('../tools/KitabhOutline'));
 const KitabhChecker = lazy(() => import('../tools/KitabhChecker'));
 const KitabhSocial = lazy(() => import('../tools/KitabhSocial'));
+const KitabhCarousel = lazy(() => import('../tools/KitabhCarousel'));
 const LinktreePage = lazy(() => import('./LinktreePage'));
 
 const ToolLoader: React.FC = () => (
@@ -209,10 +212,10 @@ const BusinessHubV1: React.FC = () => {
         return <DashboardPage />;
       case 'posts':
         if (activeSubPage === 'outline') {
-          return <Suspense fallback={<ToolLoader />}><KitabhOutline embedded premium /></Suspense>;
+          return <HubToolWrapper><Suspense fallback={<ToolLoader />}><KitabhOutline embedded premium /></Suspense></HubToolWrapper>;
         }
         if (activeSubPage === 'checker') {
-          return <Suspense fallback={<ToolLoader />}><KitabhChecker /></Suspense>;
+          return <HubToolWrapper><Suspense fallback={<ToolLoader />}><KitabhChecker /></Suspense></HubToolWrapper>;
         }
         return <PostsPage subPage={activeSubPage} />;
       case 'newsletters': {
@@ -229,8 +232,11 @@ const BusinessHubV1: React.FC = () => {
       case 'notifications':
         return <NotificationsPage />;
       case 'grow':
+        if (activeSubPage === 'carousel') {
+          return <HubToolWrapper><Suspense fallback={<ToolLoader />}><KitabhCarousel premium /></Suspense></HubToolWrapper>;
+        }
         if (activeSubPage === 'social') {
-          return <Suspense fallback={<ToolLoader />}><KitabhSocial premium /></Suspense>;
+          return <HubToolWrapper><Suspense fallback={<ToolLoader />}><KitabhSocial premium /></Suspense></HubToolWrapper>;
         }
         if (activeSubPage === 'linktree') {
           return <Suspense fallback={<ToolLoader />}><LinktreePage /></Suspense>;
