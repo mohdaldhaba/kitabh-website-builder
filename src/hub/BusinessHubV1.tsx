@@ -74,8 +74,8 @@ const v1SidebarSections: SidebarSection[] = [
       { page: 'posts', subPage: 'all-posts', label: 'المنشورات', icon: icons.posts },
       { page: 'posts', subPage: 'outline', label: 'مساعد كتابة', icon: icons.outline },
       { page: 'posts', subPage: 'checker', label: 'محرر كتابة', icon: icons.checker },
-      { page: 'grow', subPage: 'carousel', label: 'ستوديو كتابة', icon: icons.grow },
-      { page: 'grow', subPage: 'social', label: 'محتوى كتابة', icon: icons.grow },
+      { page: 'grow', subPage: 'carousel', label: 'ستوديو كتابة', icon: icons.carousel },
+      { page: 'grow', subPage: 'social', label: 'محتوى كتابة', icon: icons.social },
     ],
   },
   {
@@ -86,9 +86,9 @@ const v1SidebarSections: SidebarSection[] = [
       { page: 'newsletters', label: 'النشرة', icon: icons.emailJourney },
       { page: 'subscribers', label: 'المشتركون', icon: icons.audience },
       { page: 'grow', subPage: 'linktree', label: 'صفحة الروابط', icon: icons.magicLink },
-      { page: 'landing-pages' as Page, label: 'صفحات الاشتراك', icon: icons.grow },
+      { page: 'landing-pages' as Page, label: 'صفحات الاشتراك', icon: icons.landingPage },
       { page: 'email-journeys', label: 'رحلات البريد', icon: icons.emailJourney },
-      { page: 'grow', subPage: 'magic-link', label: 'رابط سحري', icon: icons.grow, comingSoon: true },
+      { page: 'grow', subPage: 'magic-link', label: 'رابط سحري', icon: icons.magicLink, comingSoon: true },
     ],
   },
   {
@@ -97,8 +97,8 @@ const v1SidebarSections: SidebarSection[] = [
     icon: icons.website,
     items: [
       { page: 'website', label: 'الموقع', icon: icons.website },
-      { page: 'domain-settings' as Page, label: 'إعدادات النطاق', icon: icons.website },
-      { page: 'email-template', label: 'قالب البريد', icon: icons.posts, comingSoon: true },
+      { page: 'domain-settings' as Page, label: 'إعدادات النطاق', icon: icons.domainSettings },
+      { page: 'email-template', label: 'قالب البريد', icon: icons.emailTemplate, comingSoon: true },
     ],
   },
 ];
