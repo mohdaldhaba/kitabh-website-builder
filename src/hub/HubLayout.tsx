@@ -960,30 +960,46 @@ const HubLayout: React.FC<HubLayoutProps> = ({
           .hub-main-content input, .hub-main-content textarea, .hub-main-content select {
             color-scheme: dark;
           }
-          /* White backgrounds → dark card bg */
+          /* ── White / near-white backgrounds → dark card bg ── */
           .hub-main-content div[style*="background: rgb(255, 255, 255)"],
           .hub-main-content div[style*="background: rgb(249, 250, 251)"],
-          .hub-main-content div[style*="background: rgb(250, 250, 250)"] {
+          .hub-main-content div[style*="background: rgb(250, 250, 250)"],
+          .hub-main-content div[style*="background: rgba(255, 255, 255"] {
             background: #161616 !important;
             border-color: rgba(255,255,255,0.08) !important;
           }
-          /* Light gray backgrounds → dark subtle bg */
+          /* ── Light gray backgrounds → dark subtle bg ── */
           .hub-main-content div[style*="background: rgb(243, 244, 246)"],
-          .hub-main-content span[style*="background: rgb(243, 244, 246)"] {
+          .hub-main-content span[style*="background: rgb(243, 244, 246)"],
+          .hub-main-content button[style*="background: rgb(243, 244, 246)"] {
             background: #1F1F1F !important;
+            color: #D1D5DB !important;
           }
-          /* Green/status backgrounds stay */
+          .hub-main-content div[style*="background: rgb(249, 250, 251)"] {
+            background: #1A1A1A !important;
+          }
+          /* ── Status badge backgrounds ── */
           .hub-main-content span[style*="background: rgb(236, 253, 245)"] {
             background: rgba(5,150,105,0.15) !important;
           }
-          /* All text inside main content */
-          .hub-main-content h2, .hub-main-content h3,
-          .hub-main-content p, .hub-main-content span,
-          .hub-main-content div, .hub-main-content label,
-          .hub-main-content button, .hub-main-content a {
-            color: inherit;
+          .hub-main-content span[style*="background: rgb(254, 242, 242)"] {
+            background: rgba(220,38,38,0.15) !important;
           }
-          /* Override hardcoded dark text */
+          .hub-main-content span[style*="background: rgb(254, 243, 199)"] {
+            background: rgba(217,119,6,0.15) !important;
+          }
+          .hub-main-content span[style*="background: rgb(55, 65, 81)"] {
+            background: #374151 !important;
+          }
+          .hub-main-content div[style*="background: rgb(255, 251, 235)"] {
+            background: rgba(217,119,6,0.1) !important;
+            border-color: rgba(217,119,6,0.2) !important;
+          }
+          /* ── Avatar backgrounds ── */
+          .hub-main-content div[style*="background: rgb(224, 231, 255)"] {
+            background: #2A2A40 !important;
+          }
+          /* ── Text color overrides ── */
           .hub-main-content [style*="color: rgb(17, 24, 39)"],
           .hub-main-content [style*="color: rgb(17, 17, 17)"],
           .hub-main-content [style*="color: rgb(55, 29, 18)"] {
@@ -994,28 +1010,94 @@ const HubLayout: React.FC<HubLayoutProps> = ({
           .hub-main-content [style*="color: rgb(156, 163, 175)"] {
             color: #9CA3AF !important;
           }
-          /* Borders */
-          .hub-main-content [style*="border-bottom: 1px solid rgb(243, 244, 246)"] {
-            border-bottom-color: rgba(255,255,255,0.06) !important;
+          .hub-main-content [style*="color: rgb(0, 0, 255)"] {
+            color: #93C5FD !important;
           }
-          .hub-main-content [style*="border: 1px solid rgba(0, 0, 0"] {
+          /* ── Borders ── */
+          .hub-main-content [style*="border-bottom: 1px solid rgb(243, 244, 246)"],
+          .hub-main-content [style*="border-top: 1px solid rgb(243, 244, 246)"] {
+            border-color: rgba(255,255,255,0.06) !important;
+          }
+          .hub-main-content [style*="border: 1px solid rgba(0, 0, 0"],
+          .hub-main-content [style*="border-color: rgba(0, 0, 0"] {
             border-color: rgba(255,255,255,0.08) !important;
           }
-          /* Inputs */
+          .hub-main-content [style*="border: 1px solid rgb(229, 231, 235)"] {
+            border-color: rgba(255,255,255,0.1) !important;
+          }
+          .hub-main-content [style*="border: 1.5px solid rgb(229, 231, 235)"] {
+            border-color: rgba(255,255,255,0.1) !important;
+          }
+          .hub-main-content [style*="border-bottom: 1px solid rgb(229, 231, 235)"] {
+            border-bottom-color: rgba(255,255,255,0.08) !important;
+          }
+          .hub-main-content div[style*="border: 1px solid rgba(255, 255, 255, 0.5)"],
+          .hub-main-content div[style*="border-bottom: 1px solid rgba(255, 255, 255, 0.5)"] {
+            border-color: rgba(255,255,255,0.08) !important;
+          }
+          /* ── Inputs ── */
           .hub-main-content input[style], .hub-main-content textarea[style], .hub-main-content select[style] {
             background: #1A1A1A !important;
             color: #F9FAFB !important;
             border-color: rgba(255,255,255,0.1) !important;
           }
-          /* Dark buttons that should invert */
+          /* ── White outline buttons → dark surface ── */
+          .hub-main-content button[style*="background: rgb(255, 255, 255)"] {
+            background: #1F1F1F !important;
+            color: #F9FAFB !important;
+            border-color: rgba(255,255,255,0.1) !important;
+          }
+          .hub-main-content button[style*="background: transparent"] {
+            color: #D1D5DB !important;
+            border-color: rgba(255,255,255,0.1) !important;
+          }
+          /* ── Dark solid buttons → invert ── */
           .hub-main-content button[style*="background: rgb(17, 17, 17)"],
           .hub-main-content button[style*="background: rgb(26, 26, 26)"] {
             background: #F9FAFB !important;
             color: #111 !important;
           }
-          /* Progress bars */
-          .hub-main-content div[style*="background: rgb(229, 231, 235)"] {
+          .hub-main-content button[style*="background: rgb(17, 17, 17)"] svg,
+          .hub-main-content button[style*="background: rgb(26, 26, 26)"] svg {
+            stroke: #111 !important;
+          }
+          /* ── Green buttons stay green ── */
+          .hub-main-content button[style*="background: rgb(5, 150, 105)"] {
+            background: #059669 !important;
+            color: #fff !important;
+          }
+          /* ── Progress bar tracks ── */
+          .hub-main-content div[style*="background: rgb(229, 231, 235)"],
+          .hub-main-content div[style*="background: rgb(243, 244, 246)"][style*="border-radius: 3"] {
             background: #2A2A2A !important;
+          }
+          /* ── Code / monospace blocks ── */
+          .hub-main-content code {
+            background: #1A1A1A !important;
+            color: #D1D5DB !important;
+          }
+          /* ── Box shadows → subtle dark shadows ── */
+          .hub-main-content [style*="box-shadow: rgba(0, 0, 0, 0.04)"],
+          .hub-main-content [style*="box-shadow: 0px 1px 3px rgba(0, 0, 0"] {
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3), 0 4px 16px rgba(0,0,0,0.2) !important;
+          }
+          /* ── Gradient backgrounds (linear-gradient with dark colors) ── */
+          .hub-main-content div[style*="background: linear-gradient(135deg, rgb(51, 51, 51)"] {
+            background: linear-gradient(135deg, #2A2A2A 0%, #1F1F1F 100%) !important;
+          }
+          /* ── Horizontal rules / dividers ── */
+          .hub-main-content div[style*="background: rgb(229, 231, 235)"][style*="height: 1px"],
+          .hub-main-content div[style*="height: 1px"][style*="background: rgb(229, 231, 235)"] {
+            background: rgba(255,255,255,0.08) !important;
+          }
+          /* ── Modal overlay ── */
+          .hub-main-content div[style*="background: rgba(0, 0, 0, 0.4)"] > div[style*="background: rgb(255, 255, 255)"] {
+            background: #1F1F1F !important;
+            border-color: rgba(255,255,255,0.1) !important;
+          }
+          /* ── Tab active states ── */
+          .hub-main-content button[style*="box-shadow: rgba(0, 0, 0, 0.06)"] {
+            box-shadow: 0 1px 2px rgba(0,0,0,0.3) !important;
           }
           ` : ''}
         `}</style>
