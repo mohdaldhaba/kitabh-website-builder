@@ -891,9 +891,6 @@ const HubLayout: React.FC<HubLayoutProps> = ({
                 onMouseLeave={(e) => (e.currentTarget.style.background = dark ? '#1F1F1F' : '#F3F4F6')}
               >
                 {dark ? icons.sun : icons.moon}
-                <span style={{ fontSize: 12, fontWeight: 600, fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>
-                  {dark ? 'فاتح' : 'داكن'}
-                </span>
               </button>
             </div>
 
@@ -904,15 +901,17 @@ const HubLayout: React.FC<HubLayoutProps> = ({
             <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
               <button
                 onClick={() => window.open('/', '_blank')}
-                style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 14, fontWeight: 400, fontFamily: 'IBM Plex Sans Arabic, sans-serif', color: c.text, padding: 0 }}
+                title="عرض الموقع"
+                style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, color: c.textMuted, display: 'flex', alignItems: 'center' }}
               >
-                عرض الموقع
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
               </button>
               <button
                 onClick={() => window.open('https://help.kitabh.com', '_blank')}
-                style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 14, fontWeight: 400, fontFamily: 'IBM Plex Sans Arabic, sans-serif', color: c.text, padding: 0 }}
+                title="المساعدة"
+                style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, color: c.textMuted, display: 'flex', alignItems: 'center' }}
               >
-                المساعدة
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
               </button>
 
               <div style={{ width: 1, height: 20, background: c.border }} />
