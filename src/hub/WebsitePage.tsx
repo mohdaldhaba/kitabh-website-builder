@@ -220,7 +220,7 @@ const WebsitePage: React.FC<WebsitePageProps> = ({
       </div>
 
       {/* Website settings */}
-      <div style={{ ...card, padding: 24 }}>
+      <div style={{ ...card, padding: 16 }}>
         <h3 style={{ fontSize: 15, fontWeight: 600, color: c.text, fontFamily: F, margin: '0 0 16px' }}>
           إعدادات الموقع
         </h3>

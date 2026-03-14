@@ -44,7 +44,7 @@ const AudiencePage: React.FC = () => {
               background: '#fff',
               borderRadius: 12,
               border: '1px solid rgba(255,255,255,0.5)',
-              padding: '18px 20px',
+              padding: '14px 16px',
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
@@ -61,7 +61,7 @@ const AudiencePage: React.FC = () => {
       {/* Subscriber list */}
       <div style={{ background: 'rgba(255,255,255,0.6)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)', borderRadius: 14, border: '1px solid rgba(255,255,255,0.5)', overflow: 'hidden' }}>
         {/* Tabs + actions */}
-        <div style={{ padding: '16px 20px', borderBottom: '1px solid rgba(255,255,255,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
+        <div style={{ padding: '12px 16px', borderBottom: '1px solid rgba(255,255,255,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
           <div style={{ display: 'flex', gap: 4, background: '#F3F4F6', borderRadius: 8, padding: 3 }}>
             {([
               { value: 'all', label: 'الكل' },
@@ -111,7 +111,7 @@ const AudiencePage: React.FC = () => {
           style={{
             display: 'grid',
             gridTemplateColumns: '1fr 1fr 140px 120px 100px',
-            padding: '12px 20px',
+            padding: '12px 16px',
             borderBottom: '1px solid #F3F4F6',
             background: '#FAFAFA',
             minWidth: 600,
@@ -131,7 +131,7 @@ const AudiencePage: React.FC = () => {
             style={{
               display: 'grid',
               gridTemplateColumns: '1fr 1fr 140px 120px 100px',
-              padding: '14px 20px',
+              padding: '14px 16px',
               borderBottom: index < filtered.length - 1 ? '1px solid #F3F4F6' : 'none',
               alignItems: 'center',
               cursor: 'pointer',

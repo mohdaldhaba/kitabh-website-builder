@@ -113,7 +113,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ newsletter, onClose, acti
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '20px 24px', borderBottom: '1px solid #E5E7EB' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px', borderBottom: '1px solid #E5E7EB' }}>
           <h2 style={{ fontSize: 18, fontWeight: 700, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: 0 }}>
             {newsletter.displayName}
           </h2>
@@ -126,7 +126,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ newsletter, onClose, acti
         </div>
 
         {/* Tabs */}
-        <div style={{ display: 'flex', gap: 4, background: '#F3F4F6', borderRadius: 8, padding: 3, margin: '16px 24px', width: 'fit-content' }}>
+        <div style={{ display: 'flex', gap: 4, background: '#F3F4F6', borderRadius: 8, padding: 3, margin: '16px', width: 'fit-content' }}>
           {([
             { id: 'settings' as const, label: 'الإعدادات' },
             { id: 'welcome-email' as const, label: 'رسالة الترحيب' },
@@ -154,7 +154,7 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ newsletter, onClose, acti
         </div>
 
         {/* Content */}
-        <div style={{ padding: '8px 24px 24px' }}>
+        <div style={{ padding: '8px 16px 16px' }}>
           {tab === 'settings' && (
             <>
               {/* Name */}

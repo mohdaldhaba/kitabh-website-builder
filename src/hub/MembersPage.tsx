@@ -15,7 +15,7 @@ const roleColors: Record<string, { bg: string; color: string }> = {
 
 const MembersPage: React.FC = () => (
   <div style={{ maxWidth: 800, margin: '0 auto' }}>
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24, flexWrap: 'wrap', gap: 12 }}>
       <p style={{ fontSize: 14, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: 0 }}>
         أدر فريقك والمساهمين في نشرتك وموقعك
       </p>
@@ -50,7 +50,7 @@ const MembersPage: React.FC = () => (
               display: 'flex',
               alignItems: 'center',
               gap: 14,
-              padding: '18px 20px',
+              padding: '14px 16px',
               borderBottom: index < mockMembers.length - 1 ? '1px solid #F3F4F6' : 'none',
               transition: 'background 0.15s',
             }}
@@ -125,7 +125,7 @@ const MembersPage: React.FC = () => (
     </div>
 
     {/* Roles explanation */}
-    <div style={{ marginTop: 24, background: '#fff', borderRadius: 12, border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)', padding: 24 }}>
+    <div style={{ marginTop: 24, background: '#fff', borderRadius: 12, border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)', padding: 16 }}>
       <h3 style={{ fontSize: 15, fontWeight: 600, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 16px' }}>
         الأدوار والصلاحيات
       </h3>

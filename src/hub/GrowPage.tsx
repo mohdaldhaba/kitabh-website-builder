@@ -18,7 +18,7 @@ const CarouselSection: React.FC = () => (
       أنشئ كاروسيلات جذابة لمشاركتها على وسائل التواصل الاجتماعي لجذب مشتركين جدد
     </p>
 
-    <div style={{ background: '#fff', borderRadius: 12, border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)', padding: 24, marginBottom: 20 }}>
+    <div style={{ background: '#fff', borderRadius: 12, border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)', padding: 16, marginBottom: 20 }}>
       {/* Topic input */}
       <div style={{ marginBottom: 20 }}>
         <label style={{ display: 'block', fontSize: 14, fontWeight: 600, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', marginBottom: 8 }}>
@@ -142,7 +142,7 @@ const MagicLinkSection: React.FC = () => (
       أنشئ روابط اشتراك سريعة لمشاركتها في أي مكان — بايو إنستغرام، تويتر، يوتيوب، أو أي منصة أخرى
     </p>
 
-    <div style={{ background: '#fff', borderRadius: 12, border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)', padding: 24, marginBottom: 20 }}>
+    <div style={{ background: '#fff', borderRadius: 12, border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)', padding: 16, marginBottom: 20 }}>
       <div style={{ marginBottom: 20 }}>
         <label style={{ display: 'block', fontSize: 14, fontWeight: 600, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', marginBottom: 8 }}>
           رابط الاشتراك الخاص بك

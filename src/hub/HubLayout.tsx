@@ -846,7 +846,7 @@ const HubLayout: React.FC<HubLayoutProps> = ({
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-              padding: '0 28px',
+              padding: '0 16px',
               position: 'sticky',
               top: 0,
               zIndex: 30,

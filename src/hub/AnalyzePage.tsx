@@ -147,7 +147,7 @@ const NewsletterStats: React.FC = () => {
                 onMouseEnter={e => { (e.currentTarget as HTMLDivElement).style.transform = 'translateY(-2px)'; (e.currentTarget as HTMLDivElement).style.boxShadow = '0 4px 24px rgba(0,0,0,0.08)'; }}
                 onMouseLeave={e => { (e.currentTarget as HTMLDivElement).style.transform = ''; (e.currentTarget as HTMLDivElement).style.boxShadow = card.boxShadow; }}
               >
-                <div style={{ padding: '20px 24px 16px' }}>
+                <div style={{ padding: '16px 16px 12px' }}>
                   {/* Header */}
                   <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 16 }}>
                     <div>
@@ -215,7 +215,7 @@ const NewsletterStats: React.FC = () => {
 
                 {/* Issues alert */}
                 {((stats.totalBounces || 0) > 0 || (stats.totalUnsubscribes || 0) > 0) && (
-                  <div style={{ margin: '0 24px 16px', padding: '10px 14px', background: '#FFFBEB', borderRadius: 8, border: '1px solid #FDE68A', display: 'flex', alignItems: 'center', gap: 10 }}>
+                  <div style={{ margin: '0 16px 16px', padding: '10px 14px', background: '#FFFBEB', borderRadius: 8, border: '1px solid #FDE68A', display: 'flex', alignItems: 'center', gap: 10 }}>
                     <span style={{ color: '#D97706' }}><IconAlert /></span>
                     <div>
                       <div style={{ fontSize: 12, fontWeight: 600, color: '#92400E', fontFamily: F }}>مسائل تحتاج انتباه</div>
@@ -229,7 +229,7 @@ const NewsletterStats: React.FC = () => {
                 )}
 
                 {/* CTA */}
-                <div style={{ padding: '12px 24px 20px' }}>
+                <div style={{ padding: '12px 16px 20px' }}>
                   <button style={{ width: '100%', padding: '10px 16px', background: '#111', color: '#fff', border: 'none', borderRadius: 8, fontSize: 14, fontWeight: 600, fontFamily: F, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}
                     onClick={(e) => { e.stopPropagation(); setSelectedId(nl._id || 'default'); }}>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
@@ -278,8 +278,8 @@ const NewsletterStats: React.FC = () => {
       </div>
 
       {/* Overview bar */}
-      <div style={{ ...card, padding: '16px 24px', marginBottom: 20, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' as const }}>
+      <div style={{ ...card, padding: '16px', marginBottom: 20, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' as const }}>
           {[
             { label: 'المشتركون', value: fmt(nl.emailStats?.totalSubscribers || 0), icon: <IconUsers />, bg: '#F3F4F6', color: '#111' },
             { label: 'إجمالي المرسل', value: fmt(stats.totalSent || 0), icon: <IconSend />, bg: '#ECFDF5', color: '#059669' },
@@ -321,7 +321,7 @@ const NewsletterStats: React.FC = () => {
               onMouseEnter={e => (e.currentTarget.style.boxShadow = '0 4px 24px rgba(0,0,0,0.08)')}
               onMouseLeave={e => (e.currentTarget.style.boxShadow = card.boxShadow)}>
               {/* Article header */}
-              <div style={{ padding: '18px 24px 14px', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between' }}>
+              <div style={{ padding: '16px 16px 14px', display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8 }}>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ fontSize: 16, fontWeight: 700, color: colors.text, fontFamily: F, marginBottom: 4 }}>{article.title}</div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 12, color: colors.textMuted, fontFamily: F }}>
@@ -335,7 +335,7 @@ const NewsletterStats: React.FC = () => {
               </div>
 
               {/* Stats grid */}
-              <div style={{ padding: '0 24px 14px', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 10 }}>
+              <div style={{ padding: '0 16px 14px', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: 10 }}>
                 {/* Delivery */}
                 <div style={{ border: '1.5px solid #E5E7EB', borderRadius: 10, padding: '12px 14px' }}>
                   <div style={{ fontSize: 12, fontWeight: 600, color: colors.text, fontFamily: F, marginBottom: 8, display: 'flex', alignItems: 'center', gap: 6 }}>
@@ -384,7 +384,7 @@ const NewsletterStats: React.FC = () => {
               </div>
 
               {/* Performance indicators */}
-              <div className="hub-perf-indicators" style={{ padding: '0 24px 18px', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 8 }}>
+              <div className="hub-perf-indicators" style={{ padding: '0 16px 18px', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: 8 }}>
                 {[
                   { label: 'معدل القراءة', value: pct(aOpenRate), bench: openBench, desc: 'نسبة من قرأ النشرة' },
                   { label: 'معدل النقر', value: pct(aClickRate), bench: clickBench, desc: 'نسبة من نقر على الروابط' },
@@ -447,25 +447,25 @@ const WebsiteStats: React.FC = () => {
     <div>
       <h2 style={{ fontSize: 18, fontWeight: 700, color: colors.text, fontFamily: F, margin: '0 0 8px' }}>إحصائيات الموقع</h2>
       <p style={{ fontSize: 14, color: colors.textMuted, fontFamily: F, margin: '0 0 24px' }}>أداء موقعك — آخر 30 يوما</p>
-      <div style={{ display: 'flex', gap: 16, marginBottom: 24, flexWrap: 'wrap' }}>
+      <div style={{ display: 'flex', gap: 12, marginBottom: 24, flexWrap: 'wrap' }}>
         {[
           { label: 'زيارات الموقع', value: '7,800' },
           { label: 'زوار فريدون', value: '4,200' },
           { label: 'متوسط مدة الزيارة', value: '2:35 د' },
           { label: 'معدل الارتداد', value: '32%' },
         ].map((item, i) => (
-          <div key={i} style={{ flex: 1, minWidth: 160, ...card, padding: '16px 18px' }}>
+          <div key={i} style={{ flex: 1, minWidth: 140, ...card, padding: '14px 16px' }}>
             <div style={{ fontSize: 12, color: colors.textMuted, fontFamily: F, marginBottom: 6 }}>{item.label}</div>
             <div style={{ fontSize: 22, fontWeight: 700, color: colors.text, fontFamily: F }}>{item.value}</div>
           </div>
         ))}
       </div>
-      <div className="hub-analyze-charts" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
-        <div style={{ ...card, padding: 24 }}>
-          <h3 style={{ fontSize: 15, fontWeight: 600, color: colors.text, fontFamily: F, margin: '0 0 20px' }}>أكثر الصفحات زيارة</h3>
+      <div className="hub-analyze-charts" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+        <div style={{ ...card, padding: 16 }}>
+          <h3 style={{ fontSize: 15, fontWeight: 600, color: colors.text, fontFamily: F, margin: '0 0 16px' }}>أكثر الصفحات زيارة</h3>
           {pageViews.map((p) => <HorizontalBar key={p.page} label={p.page} value={p.views} max={maxViews} />)}
         </div>
-        <div style={{ ...card, padding: 24 }}>
+        <div style={{ ...card, padding: 16 }}>
           <h3 style={{ fontSize: 15, fontWeight: 600, color: colors.text, fontFamily: F, margin: '0 0 20px' }}>مصادر الزيارات</h3>
           {sources.map((s) => <HorizontalBar key={s.source} label={s.source} value={s.visits} max={maxVisits} color={s.color} />)}
         </div>
