@@ -32,7 +32,7 @@ const QuickLinks: React.FC = () => {
   ];
 
   return (
-    <div style={{ ...card, padding: '20px 24px', marginBottom: 20 }}>
+    <div style={{ ...card, padding: '16px', marginBottom: 20 }}>
       {links.map((link, i) => (
         <div key={link.id}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
@@ -225,7 +225,7 @@ const DashboardPage: React.FC = () => {
   };
 
   return (
-    <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+    <div style={{ maxWidth: 1100, margin: '0 auto', overflow: 'hidden', boxSizing: 'border-box' }}>
       {/* Welcome Card */}
       <div style={{ ...card, padding: '20px 16px', marginBottom: 16 }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20, flexWrap: 'wrap', gap: 12 }}>
@@ -299,7 +299,7 @@ const DashboardPage: React.FC = () => {
       <div className="hub-dashboard-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
 
         {/* Subscriber Growth Chart */}
-        <div style={{ ...card, padding: '20px 24px' }}>
+        <div style={{ ...card, padding: '16px', overflow: 'hidden' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
             <h2 style={{ fontSize: 15, fontWeight: 700, color: colors.text, fontFamily: F, margin: 0 }}>نمو المشتركين</h2>
           </div>
@@ -325,8 +325,8 @@ const DashboardPage: React.FC = () => {
         </div>
 
         {/* Last Post Performance */}
-        <div style={{ ...card, padding: '20px 24px' }}>
-          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 16 }}>
+        <div style={{ ...card, padding: '16px', overflow: 'hidden' }}>
+          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 16, flexWrap: 'wrap', gap: 8 }}>
             <div>
               <h2 style={{ fontSize: 15, fontWeight: 700, color: colors.text, fontFamily: F, margin: 0 }}>أداء آخر منشور</h2>
               {lastPost && (

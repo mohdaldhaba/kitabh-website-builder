@@ -834,7 +834,7 @@ const HubLayout: React.FC<HubLayoutProps> = ({
         </aside>
 
         {/* Main content area */}
-        <div className="hub-main-content" style={{ flex: 1, marginRight: 260, minHeight: '100vh' }}>
+        <div className="hub-main-content" style={{ flex: 1, marginRight: 260, minHeight: '100vh', overflowX: 'hidden' }}>
           {/* Top bar */}
           <header
             style={{
@@ -943,7 +943,7 @@ const HubLayout: React.FC<HubLayoutProps> = ({
           </header>
 
           {/* Content */}
-          <main style={{ padding: '32px 40px' }}>{children}</main>
+          <main style={{ padding: '32px 40px', boxSizing: 'border-box', overflowX: 'hidden' }}>{children}</main>
         </div>
 
         {/* Responsive + Premium CSS */}
