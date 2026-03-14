@@ -929,7 +929,7 @@ export default function KitabhAutomations() {
 const CSS_STYLES = `
 /* Base */
 .ka,.ka-builder{font-family:'IBM Plex Sans Arabic',system-ui,sans-serif;direction:rtl;text-align:right;color:#111;line-height:1.6;}
-.ka{width:100%;max-width:900px;margin:0 auto;padding:0 24px 60px;}
+.ka{width:100%;max-width:900px;margin:0 auto;}
 
 /* ─── LIST VIEW ─── */
 .ka-list-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;}

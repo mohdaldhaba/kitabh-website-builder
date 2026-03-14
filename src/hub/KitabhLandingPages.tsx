@@ -813,7 +813,7 @@ const CSS_STYLES = `
 .klp-empty h3{font-size:18px;color:#111;margin:8px 0 0;}
 .klp-empty p{font-size:14px;color:#888;margin:0 0 16px;}
 .klp-empty-icon{color:#C0C0C0;}
-.klp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px;padding:24px 32px;}
+.klp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:20px;}
 
 /* ─── Page Card ─── */
 .klp-page-card{background:#fff;border:1px solid rgba(0,0,0,0.06);border-radius:14px;overflow:hidden;transition:border-color .2s;box-shadow:0 1px 3px rgba(0,0,0,0.04),0 4px 16px rgba(0,0,0,0.03);}

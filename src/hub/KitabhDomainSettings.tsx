@@ -347,10 +347,10 @@ export default function KitabhDomainSettings() {
 // ═══════════════════════════════════════════════════════
 const CSS_STYLES = `
 /* Base */
-.kds{font-family:'IBM Plex Sans Arabic',system-ui,sans-serif;direction:rtl;text-align:right;color:#111;line-height:1.6;width:100%;max-width:900px;margin:0 auto;padding:0 24px 60px;}
+.kds{font-family:'IBM Plex Sans Arabic',system-ui,sans-serif;direction:rtl;text-align:right;color:#111;line-height:1.6;width:100%;max-width:900px;margin:0 auto;}
 
 /* Page Header */
-.kds-page-header{padding:28px 0 8px;}
+.kds-page-header{padding:0;}
 .kds-page-title{font-size:24px;font-weight:700;margin:0;color:#111;}
 
 /* Section */
