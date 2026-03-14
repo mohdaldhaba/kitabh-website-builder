@@ -12,27 +12,30 @@ interface WebsitePageProps {
   publicationSlug?: string;
 }
 
+const TEMPLATES = [
+  { id: 'media', name: 'مؤسسة إعلامية', description: 'مثالي للناشرين وصنّاع المحتوى' },
+  { id: 'newsletter', name: 'نشرة بريدية', description: 'صفحة هبوط أنيقة لنشرتك' },
+  { id: 'blog', name: 'مدونة شخصية', description: 'بسيط ونظيف — المحتوى هو البطل' },
+  { id: 'podcast', name: 'بودكاست', description: 'لصنّاع المحتوى الصوتي' },
+  { id: 'cinema', name: 'سينما ومراجعات', description: 'لعشّاق الأفلام والمراجعات' },
+  { id: 'education', name: 'تعليم ودورات', description: 'للمحتوى التعليمي والدورات' },
+  { id: 'store', name: 'متجر إلكتروني', description: 'لبيع الكتب والمنتجات الرقمية' },
+];
+
 const WebsitePage: React.FC<WebsitePageProps> = ({
   publicationName = MOCK_NEWSLETTER.name,
   publicationSlug = MOCK_AUTHOR.username,
 }) => {
   const { colors: c } = useTheme();
   const [mode, setMode] = useState<'overview' | 'builder'>('overview');
+  const [selectedTemplate, setSelectedTemplate] = useState('newsletter');
   const websiteUrl = `https://${publicationSlug}.kitabh.com`;
-  const [copied, setCopied] = useState(false);
 
   const card = {
     background: c.cardBg,
     borderRadius: 14,
     border: `1px solid ${c.border}`,
     boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)',
-  };
-
-  const handleCopy = () => {
-    navigator.clipboard.writeText(websiteUrl).then(() => {
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    });
   };
 
   // ── Builder mode: embed the full website builder ──────
@@ -115,161 +118,110 @@ const WebsitePage: React.FC<WebsitePageProps> = ({
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 24, flexWrap: 'wrap', gap: 12 }}>
         <div>
           <h1 style={{ fontSize: 24, fontWeight: 700, color: c.text, fontFamily: F, margin: '0 0 6px' }}>
-            موقع {publicationName}
+            الموقع
           </h1>
           <p style={{ fontSize: 14, color: c.textMuted, fontFamily: F, margin: 0 }}>
-            موقعك مرتبط بنشرتك البريدية — عدّله وخصصه ليعكس هويتك
+            عدّل موقعك وخصصه ليعكس هويتك
           </p>
         </div>
-      </div>
-
-      {/* Subdomain / URL bar */}
-      <div style={{ ...card, padding: '14px 12px', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 10, overflow: 'hidden' }}>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={c.textMuted} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <circle cx="12" cy="12" r="10" /><line x1="2" y1="12" x2="22" y2="12" /><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
-        </svg>
-        <span style={{ fontSize: 14, fontWeight: 600, fontFamily: 'monospace', color: '#0000FF', direction: 'ltr', flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', minWidth: 0 }}>
-          {websiteUrl}
-        </span>
-        <button
-          onClick={handleCopy}
-          style={{
-            padding: '6px 12px',
-            background: copied ? '#059669' : 'transparent',
-            color: copied ? '#fff' : c.textMuted,
-            border: `1px solid ${copied ? '#059669' : c.border}`,
-            borderRadius: 10,
-            fontSize: 12,
-            fontWeight: 600,
-            fontFamily: F,
-            cursor: 'pointer',
-            transition: 'all 0.2s',
-          }}
-        >
-          {copied ? 'تم النسخ' : 'نسخ'}
-        </button>
-      </div>
-
-      {/* Website preview card */}
-      <div style={{ ...card, overflow: 'hidden', marginBottom: 20 }}>
-        {/* Browser chrome */}
-        <div style={{ background: c.border, padding: '10px 16px', borderBottom: `1px solid ${c.border}`, display: 'flex', alignItems: 'center', gap: 8 }}>
-          <div style={{ display: 'flex', gap: 6 }}>
-            <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#FCA5A5' }} />
-            <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#FDE68A' }} />
-            <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#86EFAC' }} />
-          </div>
-          <div style={{ flex: 1, padding: '6px 12px', background: c.cardBg, borderRadius: 6, fontSize: 12, fontFamily: 'monospace', color: c.textMuted, textAlign: 'center', direction: 'ltr', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', minWidth: 0 }}>
-            {websiteUrl}
-          </div>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <button
+            onClick={() => window.open(websiteUrl, '_blank')}
+            style={{
+              height: 38,
+              padding: '0 16px',
+              background: c.cardBg,
+              color: c.text,
+              border: `1px solid ${c.border}`,
+              borderRadius: 10,
+              fontSize: 14,
+              fontWeight: 600,
+              fontFamily: F,
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 8,
+            }}
+          >
+            {icons.website}
+            معاينة
+          </button>
+          <button
+            onClick={() => setMode('builder')}
+            style={{
+              height: 38,
+              padding: '0 20px',
+              background: '#111',
+              color: '#fff',
+              border: 'none',
+              borderRadius: 10,
+              fontSize: 14,
+              fontWeight: 600,
+              fontFamily: F,
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 8,
+            }}
+          >
+            {icons.write}
+            تعديل الموقع
+          </button>
         </div>
-        {/* Preview area */}
-        <div style={{ height: 260, background: c.contentBg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 12 }}>
+      </div>
+
+      {/* Website preview — click to edit */}
+      <div
+        onClick={() => setMode('builder')}
+        style={{ ...card, overflow: 'hidden', cursor: 'pointer', transition: 'box-shadow 0.15s' }}
+        onMouseEnter={(e) => { e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.08), 0 8px 24px rgba(0,0,0,0.06)'; }}
+        onMouseLeave={(e) => { e.currentTarget.style.boxShadow = '0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)'; }}
+      >
+        <div style={{ padding: '48px 24px', background: c.contentBg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 12 }}>
           <div style={{ width: 56, height: 56, borderRadius: 12, background: '#111', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <span style={{ color: '#fff', fontSize: 24, fontWeight: 700, fontFamily: F }}>{publicationName.charAt(0)}</span>
           </div>
           <div style={{ fontSize: 18, fontWeight: 700, color: c.text, fontFamily: F }}>{publicationName}</div>
           <div style={{ fontSize: 13, color: c.textMuted, fontFamily: F }}>{MOCK_AUTHOR.bio.slice(0, 60)}...</div>
         </div>
+        <div style={{ padding: '12px 16px', borderTop: `1px solid ${c.border}`, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+          <span style={{ display: 'flex', alignItems: 'center', color: c.textMuted }}>{icons.write}</span>
+          <span style={{ fontSize: 13, fontWeight: 600, color: c.textMuted, fontFamily: F }}>اضغط لتعديل الموقع</span>
+        </div>
       </div>
 
-      {/* Action buttons */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 16, marginBottom: 24 }}>
-        <button
-          onClick={() => setMode('builder')}
-          style={{
-            padding: '10px 20px',
-            background: c.text,
-            color: c.cardBg,
-            border: 'none',
-            borderRadius: 10,
-            fontSize: 14,
-            fontWeight: 600,
-            fontFamily: F,
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: 10,
-          }}
-        >
-          {icons.write}
-          تعديل الموقع
-        </button>
-        <button
-          onClick={() => window.open(websiteUrl, '_blank')}
-          style={{
-            padding: '10px 20px',
-            background: c.cardBg,
-            color: c.text,
-            border: `1px solid ${c.border}`,
-            borderRadius: 10,
-            fontSize: 14,
-            fontWeight: 600,
-            fontFamily: F,
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: 10,
-          }}
-        >
-          {icons.website}
-          معاينة الموقع
-        </button>
-      </div>
-
-      {/* Website settings */}
-      <div style={{ ...card, padding: 16 }}>
-        <h3 style={{ fontSize: 15, fontWeight: 600, color: c.text, fontFamily: F, margin: '0 0 16px' }}>
-          إعدادات الموقع
+      {/* Template selection */}
+      <div style={{ marginTop: 24 }}>
+        <h3 style={{ fontSize: 15, fontWeight: 600, color: c.text, fontFamily: F, margin: '0 0 12px' }}>
+          القالب
         </h3>
-
-        {[
-          { label: 'النشرة المرتبطة', value: publicationName },
-          { label: 'النطاق الفرعي', value: `${publicationSlug}.kitabh.com`, dir: 'ltr' as const },
-          { label: 'النطاق المخصص', value: 'لم يتم الربط بعد', action: 'ربط نطاق' },
-          { label: 'القالب', value: 'الحداثة — أزرق' },
-          { label: 'عدد الصفحات', value: '4 صفحات' },
-          { label: 'آخر تحديث', value: 'اليوم، 2:30 م' },
-        ].map((setting, i, arr) => (
-          <div
-            key={i}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              padding: '12px 0',
-              borderBottom: i < arr.length - 1 ? `1px solid ${c.border}` : 'none',
-            }}
-          >
-            <div>
-              <div style={{ fontSize: 13, color: c.textMuted, fontFamily: F, marginBottom: 2 }}>
-                {setting.label}
-              </div>
-              <div style={{ fontSize: 14, fontWeight: 500, color: c.text, fontFamily: F, direction: setting.dir || 'rtl', textAlign: 'right' }}>
-                {setting.value}
-              </div>
-            </div>
-            {setting.action && (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 10 }}>
+          {TEMPLATES.map((tpl) => {
+            const isSelected = selectedTemplate === tpl.id;
+            return (
               <button
+                key={tpl.id}
+                onClick={() => setSelectedTemplate(tpl.id)}
                 style={{
-                  padding: '6px 14px',
-                  background: `rgba(0,0,0,0.05)`,
-                  color: c.text,
-                  border: 'none',
-                  borderRadius: 10,
-                  fontSize: 13,
-                  fontWeight: 600,
-                  fontFamily: F,
+                  ...card,
+                  padding: '14px 12px',
                   cursor: 'pointer',
+                  textAlign: 'right',
+                  border: isSelected ? '2px solid #111' : `1px solid ${c.border}`,
+                  background: isSelected ? '#FAFAFA' : c.cardBg,
+                  transition: 'border-color 0.15s',
                 }}
               >
-                {setting.action}
+                <div style={{ fontSize: 14, fontWeight: 600, color: c.text, fontFamily: F, marginBottom: 2 }}>
+                  {tpl.name}
+                </div>
+                <div style={{ fontSize: 12, color: c.textMuted, fontFamily: F, lineHeight: 1.4 }}>
+                  {tpl.description}
+                </div>
               </button>
-            )}
-          </div>
-        ))}
+            );
+          })}
+        </div>
       </div>
     </div>
   );
