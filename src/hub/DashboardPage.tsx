@@ -5,6 +5,107 @@ import { colors } from './HubLayout';
 const F = 'IBM Plex Sans Arabic, sans-serif';
 const card = { background: '#fff', borderRadius: 14, border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)' } as const;
 
+// ─── Quick Links Section ────────────────────────────────
+const QuickLinks: React.FC = () => {
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+
+  const handleCopy = (id: string, url: string) => {
+    navigator.clipboard.writeText(url).then(() => {
+      setCopiedId(id);
+      setTimeout(() => setCopiedId(null), 2000);
+    });
+  };
+
+  const links = [
+    {
+      id: 'newsletter',
+      label: 'رابط نشرتك البريدية',
+      sublabel: MOCK_NEWSLETTER.name,
+      url: `https://kitabh.com/n/${MOCK_AUTHOR.username}`,
+    },
+    {
+      id: 'profile',
+      label: 'رابط حسابك على كتابة',
+      sublabel: null,
+      url: `https://kitabh.com/@${MOCK_AUTHOR.username}`,
+    },
+  ];
+
+  return (
+    <div style={{ ...card, padding: '20px 24px', marginBottom: 20 }}>
+      {links.map((link, i) => (
+        <div key={link.id}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 8 }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#6B7280" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
+              <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
+            </svg>
+            <span style={{ fontSize: 13, fontWeight: 600, color: colors.text, fontFamily: F }}>{link.label}</span>
+          </div>
+          {link.sublabel && (
+            <div style={{
+              padding: '10px 14px',
+              background: '#F3F4F6',
+              borderRadius: 8,
+              fontSize: 14,
+              fontWeight: 600,
+              fontFamily: F,
+              color: colors.text,
+              textAlign: 'center',
+              marginBottom: 8,
+            }}>
+              {link.sublabel}
+            </div>
+          )}
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: i < links.length - 1 ? 20 : 0 }}>
+            <button
+              onClick={() => handleCopy(link.id, link.url)}
+              style={{
+                padding: '8px 14px',
+                background: copiedId === link.id ? '#059669' : '#fff',
+                color: copiedId === link.id ? '#fff' : colors.text,
+                border: `1px solid ${copiedId === link.id ? '#059669' : '#E5E7EB'}`,
+                borderRadius: 8,
+                fontSize: 13,
+                fontWeight: 600,
+                fontFamily: F,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 6,
+                flexShrink: 0,
+                transition: 'all 0.2s',
+              }}
+            >
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2" /><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+              </svg>
+              {copiedId === link.id ? 'تم النسخ' : 'نسخ'}
+            </button>
+            <div style={{
+              flex: 1,
+              padding: '8px 14px',
+              background: '#FAFAFA',
+              border: '1px solid #E5E7EB',
+              borderRadius: 8,
+              fontSize: 13,
+              fontFamily: 'monospace',
+              color: colors.textMuted,
+              direction: 'ltr',
+              textAlign: 'left',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
+              whiteSpace: 'nowrap',
+            }}>
+              {link.url}
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+};
+
 // ─── Mock subscriber growth data by timeframe ───────────
 const growthData: Record<string, { date: string; subs: number; unsubs: number }[]> = {
   '4w': [
@@ -190,6 +291,9 @@ const DashboardPage: React.FC = () => {
           ))}
         </div>
       </div>
+
+      {/* Quick Links */}
+      <QuickLinks />
 
       {/* Two columns: Subscriber Growth + Last Post Performance */}
       <div className="hub-dashboard-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>

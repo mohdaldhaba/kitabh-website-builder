@@ -190,6 +190,7 @@ const sidebarSections: SidebarSection[] = [
       { page: 'subscribers', label: 'المشتركين', icon: icons.audience },
       { page: 'grow', subPage: 'carousel', label: 'مولّد الكاروسيل', icon: icons.grow },
       { page: 'grow', subPage: 'social', label: 'محوّل اجتماعي', icon: icons.grow },
+      { page: 'grow', subPage: 'linktree', label: 'صفحة الروابط', icon: icons.magicLink },
       { page: 'grow', subPage: 'magic-link', label: 'رابط سحري', icon: icons.grow },
     ],
   },

@@ -1,81 +1,191 @@
-import React from 'react';
-import { MOCK_AUTHOR } from '../mockData';
-import { colors, icons } from './HubLayout';
+import React, { useState, lazy, Suspense } from 'react';
+import { MOCK_AUTHOR, MOCK_NEWSLETTER } from '../mockData';
+import { useTheme, icons } from './HubLayout';
 
-const WebsitePage: React.FC = () => {
-  const websiteUrl = `https://${MOCK_AUTHOR.username}.kitabh.com`;
+const F = 'IBM Plex Sans Arabic, sans-serif';
 
+// Lazy-load the actual website builder
+const KitabhWebsiteBuilder = lazy(() => import('../KitabhWebsiteBuilder'));
+
+interface WebsitePageProps {
+  publicationName?: string;
+  publicationSlug?: string;
+}
+
+const WebsitePage: React.FC<WebsitePageProps> = ({
+  publicationName = MOCK_NEWSLETTER.name,
+  publicationSlug = MOCK_AUTHOR.username,
+}) => {
+  const { colors: c } = useTheme();
+  const [mode, setMode] = useState<'overview' | 'builder'>('overview');
+  const websiteUrl = `https://${publicationSlug}.kitabh.com`;
+  const [copied, setCopied] = useState(false);
+
+  const card = {
+    background: c.cardBg,
+    borderRadius: 14,
+    border: `1px solid ${c.border}`,
+    boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)',
+  };
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(websiteUrl).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
+  };
+
+  // ── Builder mode: embed the full website builder ──────
+  if (mode === 'builder') {
+    return (
+      <div style={{ margin: '-32px -40px', height: 'calc(100vh - 56px)', position: 'relative' }}>
+        {/* Top bar with back button */}
+        <div
+          style={{
+            height: 48,
+            background: c.cardBg,
+            borderBottom: `1px solid ${c.border}`,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            padding: '0 16px',
+            zIndex: 10,
+            position: 'relative',
+          }}
+        >
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <button
+              onClick={() => setMode('overview')}
+              style={{
+                padding: '6px 14px',
+                background: 'transparent',
+                color: c.text,
+                border: `1px solid ${c.border}`,
+                borderRadius: 8,
+                fontSize: 13,
+                fontWeight: 600,
+                fontFamily: F,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 6,
+              }}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+              رجوع
+            </button>
+            <span style={{ fontSize: 14, fontWeight: 600, fontFamily: F, color: c.text }}>
+              تعديل موقع: {publicationName}
+            </span>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <span style={{ fontSize: 12, fontFamily: 'monospace', color: c.textMuted, direction: 'ltr' }}>
+              {websiteUrl}
+            </span>
+          </div>
+        </div>
+
+        {/* Embedded builder */}
+        <div style={{ height: 'calc(100% - 48px)' }}>
+          <Suspense
+            fallback={
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+                <span style={{ fontSize: 14, color: c.textMuted, fontFamily: F }}>جارٍ تحميل منشئ المواقع...</span>
+              </div>
+            }
+          >
+            <KitabhWebsiteBuilder
+              style={{ width: '100%', height: '100%' }}
+              embedded
+              publicationSlug={publicationSlug}
+              publicationName={publicationName}
+            />
+          </Suspense>
+        </div>
+      </div>
+    );
+  }
+
+  // ── Overview mode ─────────────────────────────────────
   return (
     <div style={{ maxWidth: 900, margin: '0 auto' }}>
-      <h2 style={{ fontSize: 18, fontWeight: 700, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 8px' }}>
-        موقعك الإلكتروني
-      </h2>
-      <p style={{ fontSize: 14, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 24px' }}>
-        عدّل موقعك، أضف صفحات، وخصص التصميم ليعكس هويتك
-      </p>
+      {/* Header */}
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24, flexWrap: 'wrap', gap: 12 }}>
+        <div>
+          <h2 style={{ fontSize: 18, fontWeight: 700, color: c.text, fontFamily: F, margin: '0 0 4px' }}>
+            موقع {publicationName}
+          </h2>
+          <p style={{ fontSize: 14, color: c.textMuted, fontFamily: F, margin: 0 }}>
+            موقعك مرتبط بنشرتك البريدية — عدّله وخصصه ليعكس هويتك
+          </p>
+        </div>
+      </div>
+
+      {/* Subdomain / URL bar */}
+      <div style={{ ...card, padding: '14px 18px', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 10 }}>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={c.textMuted} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="12" r="10" /><line x1="2" y1="12" x2="22" y2="12" /><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+        </svg>
+        <span style={{ fontSize: 14, fontWeight: 600, fontFamily: 'monospace', color: '#0000FF', direction: 'ltr', flex: 1 }}>
+          {websiteUrl}
+        </span>
+        <button
+          onClick={handleCopy}
+          style={{
+            padding: '6px 12px',
+            background: copied ? '#059669' : 'transparent',
+            color: copied ? '#fff' : c.textMuted,
+            border: `1px solid ${copied ? '#059669' : c.border}`,
+            borderRadius: 6,
+            fontSize: 12,
+            fontWeight: 600,
+            fontFamily: F,
+            cursor: 'pointer',
+            transition: 'all 0.2s',
+          }}
+        >
+          {copied ? 'تم النسخ' : 'نسخ'}
+        </button>
+      </div>
 
       {/* Website preview card */}
-      <div style={{ background: '#fff', borderRadius: 12, border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)', overflow: 'hidden', marginBottom: 20 }}>
-        {/* Browser mockup */}
-        <div style={{ background: '#F3F4F6', padding: '10px 16px', borderBottom: '1px solid #E5E7EB', display: 'flex', alignItems: 'center', gap: 8 }}>
+      <div style={{ ...card, overflow: 'hidden', marginBottom: 20 }}>
+        {/* Browser chrome */}
+        <div style={{ background: c.border, padding: '10px 16px', borderBottom: `1px solid ${c.border}`, display: 'flex', alignItems: 'center', gap: 8 }}>
           <div style={{ display: 'flex', gap: 6 }}>
             <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#FCA5A5' }} />
             <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#FDE68A' }} />
             <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#86EFAC' }} />
           </div>
-          <div
-            style={{
-              flex: 1,
-              padding: '6px 12px',
-              background: '#fff',
-              borderRadius: 6,
-              fontSize: 12,
-              fontFamily: 'monospace',
-              color: colors.textMuted,
-              textAlign: 'center',
-              direction: 'ltr',
-            }}
-          >
+          <div style={{ flex: 1, padding: '6px 12px', background: c.cardBg, borderRadius: 6, fontSize: 12, fontFamily: 'monospace', color: c.textMuted, textAlign: 'center', direction: 'ltr' }}>
             {websiteUrl}
           </div>
         </div>
         {/* Preview area */}
-        <div
-          style={{
-            height: 280,
-            background: '#F9FAFB',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            flexDirection: 'column',
-            gap: 12,
-          }}
-        >
-          <div style={{ width: 60, height: 60, borderRadius: 12, background: '#111', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <span style={{ color: '#fff', fontSize: 28, fontWeight: 700, fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>ك</span>
+        <div style={{ height: 260, background: c.contentBg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 12 }}>
+          <div style={{ width: 56, height: 56, borderRadius: 12, background: '#111', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <span style={{ color: '#fff', fontSize: 24, fontWeight: 700, fontFamily: F }}>{publicationName.charAt(0)}</span>
           </div>
-          <div style={{ fontSize: 20, fontWeight: 700, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>
-            {MOCK_AUTHOR.name}
-          </div>
-          <div style={{ fontSize: 14, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>
-            {MOCK_AUTHOR.bio.slice(0, 50)}...
-          </div>
+          <div style={{ fontSize: 18, fontWeight: 700, color: c.text, fontFamily: F }}>{publicationName}</div>
+          <div style={{ fontSize: 13, color: c.textMuted, fontFamily: F }}>{MOCK_AUTHOR.bio.slice(0, 60)}...</div>
         </div>
       </div>
 
       {/* Action buttons */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 24 }}>
         <button
-          onClick={() => window.open('/', '_blank')}
+          onClick={() => setMode('builder')}
           style={{
             padding: '16px 20px',
-            background: '#111',
-            color: '#fff',
+            background: c.text,
+            color: c.cardBg,
             border: 'none',
             borderRadius: 12,
             fontSize: 15,
             fontWeight: 600,
-            fontFamily: 'IBM Plex Sans Arabic, sans-serif',
+            fontFamily: F,
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
@@ -90,13 +200,13 @@ const WebsitePage: React.FC = () => {
           onClick={() => window.open(websiteUrl, '_blank')}
           style={{
             padding: '16px 20px',
-            background: '#fff',
-            color: colors.text,
-            border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)',
+            background: c.cardBg,
+            color: c.text,
+            border: `1px solid ${c.border}`,
             borderRadius: 12,
             fontSize: 15,
             fontWeight: 600,
-            fontFamily: 'IBM Plex Sans Arabic, sans-serif',
+            fontFamily: F,
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
@@ -109,19 +219,20 @@ const WebsitePage: React.FC = () => {
         </button>
       </div>
 
-      {/* Website settings summary */}
-      <div style={{ background: '#fff', borderRadius: 12, border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)', padding: 24 }}>
-        <h3 style={{ fontSize: 15, fontWeight: 600, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 16px' }}>
+      {/* Website settings */}
+      <div style={{ ...card, padding: 24 }}>
+        <h3 style={{ fontSize: 15, fontWeight: 600, color: c.text, fontFamily: F, margin: '0 0 16px' }}>
           إعدادات الموقع
         </h3>
 
         {[
-          { label: 'عنوان الموقع', value: websiteUrl, editable: true },
-          { label: 'النطاق المخصص', value: 'لم يتم الربط بعد', editable: true, action: 'ربط نطاق' },
-          { label: 'القالب', value: 'الحداثة — أزرق', editable: true },
-          { label: 'عدد الصفحات', value: '4 صفحات', editable: false },
-          { label: 'آخر تحديث', value: 'اليوم، 2:30 م', editable: false },
-        ].map((setting, i) => (
+          { label: 'النشرة المرتبطة', value: publicationName },
+          { label: 'النطاق الفرعي', value: `${publicationSlug}.kitabh.com`, dir: 'ltr' as const },
+          { label: 'النطاق المخصص', value: 'لم يتم الربط بعد', action: 'ربط نطاق' },
+          { label: 'القالب', value: 'الحداثة — أزرق' },
+          { label: 'عدد الصفحات', value: '4 صفحات' },
+          { label: 'آخر تحديث', value: 'اليوم، 2:30 م' },
+        ].map((setting, i, arr) => (
           <div
             key={i}
             style={{
@@ -129,14 +240,14 @@ const WebsitePage: React.FC = () => {
               alignItems: 'center',
               justifyContent: 'space-between',
               padding: '12px 0',
-              borderBottom: i < 4 ? '1px solid #F3F4F6' : 'none',
+              borderBottom: i < arr.length - 1 ? `1px solid ${c.border}` : 'none',
             }}
           >
             <div>
-              <div style={{ fontSize: 13, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif', marginBottom: 2 }}>
+              <div style={{ fontSize: 13, color: c.textMuted, fontFamily: F, marginBottom: 2 }}>
                 {setting.label}
               </div>
-              <div style={{ fontSize: 14, fontWeight: 500, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', direction: setting.label.includes('عنوان') ? 'ltr' : 'rtl', textAlign: 'right' }}>
+              <div style={{ fontSize: 14, fontWeight: 500, color: c.text, fontFamily: F, direction: setting.dir || 'rtl', textAlign: 'right' }}>
                 {setting.value}
               </div>
             </div>
@@ -144,13 +255,13 @@ const WebsitePage: React.FC = () => {
               <button
                 style={{
                   padding: '6px 14px',
-                  background: 'rgba(17,17,17,0.1)',
-                  color: '#111',
+                  background: `rgba(0,0,0,0.05)`,
+                  color: c.text,
                   border: 'none',
                   borderRadius: 6,
                   fontSize: 13,
                   fontWeight: 600,
-                  fontFamily: 'IBM Plex Sans Arabic, sans-serif',
+                  fontFamily: F,
                   cursor: 'pointer',
                 }}
               >

@@ -596,8 +596,13 @@ const Icons = {
 //  MAIN COMPONENT
 // ═══════════════════════════════════════════════════════
 export default function KitabhWebsiteBuilder(props: any) {
+  // When embedded in the hub, skip sites list and scope to one publication
+  const isEmbedded = !!props.embedded;
+  const pubSlug = props.publicationSlug || "";
+  const pubName = props.publicationName || "";
+
   const [sites, setSites] = useState<Site[]>([]);
-  const [view, setView] = useState<ViewMode>("sites");
+  const [view, setView] = useState<ViewMode>(isEmbedded ? "templates" : "sites");
   const [activeSiteId, setActiveSiteId] = useState<string | null>(null);
   const [sidebarTab, setSidebarTab] = useState<SidebarTab>("components");
   const [previewDevice, setPreviewDevice] = useState<PreviewDevice>("desktop");
@@ -824,9 +829,9 @@ export default function KitabhWebsiteBuilder(props: any) {
 
     const site: Site = {
       id: genId(),
-      name: "موقع جديد",
+      name: isEmbedded && pubName ? `موقع ${pubName}` : "موقع جديد",
       description: "",
-      customDomain: "",
+      customDomain: isEmbedded && pubSlug ? `${pubSlug}.kitabh.com` : "",
       status: "draft",
       templateId,
       branding,
@@ -2148,7 +2153,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
         <style>{CSS_STYLES}</style>
         <div className="kwb-tpl-picker">
           <div className="kwb-tpl-picker-header">
-            <button className="kwb-back-link" style={{fontFamily:"'Alyamama', sans-serif"}} onClick={() => setView("sites")}>رجوع</button>
+            {!isEmbedded && <button className="kwb-back-link" style={{fontFamily:"'Alyamama', sans-serif"}} onClick={() => setView("sites")}>رجوع</button>}
             <h1 className="kwb-tpl-picker-title" style={{fontFamily:"'Alyamama', sans-serif"}}>ابدأ بقالب جاهز</h1>
             <p className="kwb-tpl-picker-subtitle" style={{fontFamily:"'Alyamama', sans-serif"}}>اختر قالبًا وخصّصه كما تشاء — الألوان والخطوط والمحتوى كلها قابلة للتعديل</p>
           </div>
@@ -3144,10 +3149,10 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
           <div className="kwb-sidebar">
             {/* Back / Preview / Publish buttons */}
             <div className="kwb-sidebar-top-btns-col">
-              <button className="kwb-back-builder-btn" onClick={() => setView("sites")}>
+              {!isEmbedded && <button className="kwb-back-builder-btn" onClick={() => setView("sites")}>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
                 رجوع للمواقع
-              </button>
+              </button>}
               <div className="kwb-sidebar-top-btns">
                 <button className="kwb-btn-outline kwb-btn-half" onClick={openPreviewTab}>
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>

@@ -102,8 +102,10 @@ const BusinessHub: React.FC = () => {
           return <Suspense fallback={<ToolLoader />}><KitabhSocial premium /></Suspense>;
         }
         return <GrowPage subPage={activeSubPage} />;
-      case 'website':
-        return <WebsitePage />;
+      case 'website': {
+        const activePub = mockPublications.find(p => p.id === activePublicationId) || mockPublications[0];
+        return <WebsitePage publicationName={activePub.name} publicationSlug={activePub.slug} />;
+      }
       case 'writers':
         return <MembersPage />;
       case 'subscribers':

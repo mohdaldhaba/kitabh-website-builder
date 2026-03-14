@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, lazy, Suspense } from 'react';
 import { MOCK_AUTHOR } from '../mockData';
 import { colors, icons } from './HubLayout';
+
+const LinktreePage = lazy(() => import('./LinktreePage'));
 
 interface GrowPageProps {
   subPage?: string;
@@ -219,8 +221,13 @@ const MagicLinkSection: React.FC = () => (
 
 // ─── Grow Page ───────────────────────────────────────────
 const GrowPage: React.FC<GrowPageProps> = ({ subPage = 'carousel' }) => (
-  <div style={{ maxWidth: 900, margin: '0 auto' }}>
+  <div style={{ maxWidth: subPage === 'linktree' ? 1100 : 900, margin: '0 auto' }}>
     {subPage === 'carousel' && <CarouselSection />}
+    {subPage === 'linktree' && (
+      <Suspense fallback={<div style={{ padding: 40, textAlign: 'center', fontFamily: 'IBM Plex Sans Arabic, sans-serif', color: '#6B7280', fontSize: 14 }}>جارٍ التحميل...</div>}>
+        <LinktreePage />
+      </Suspense>
+    )}
     {subPage === 'magic-link' && <MagicLinkSection />}
   </div>
 );
