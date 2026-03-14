@@ -916,12 +916,6 @@ const HubLayout: React.FC<HubLayoutProps> = ({
 
               <div style={{ width: 1, height: 20, background: c.border }} />
 
-              <button
-                onClick={() => onNavigate('notifications')}
-                style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 4, color: c.textMuted, display: 'flex', alignItems: 'center' }}
-              >
-                {icons.notification}
-              </button>
               <div
                 style={{
                   width: 30,
