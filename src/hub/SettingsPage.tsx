@@ -136,7 +136,7 @@ const BillingSection: React.FC = () => (
         </div>
       </div>
 
-      <div style={{ display: 'flex', gap: 10 }}>
+      <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
         <button
           style={{
             padding: '10px 20px',
@@ -299,7 +299,7 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ subPage = 'account' }) => {
   return (
     <div style={{ maxWidth: 900, margin: '0 auto' }}>
       {/* Tabs */}
-      <div style={{ display: 'flex', gap: 4, background: '#F3F4F6', borderRadius: 8, padding: 3, marginBottom: 24, width: 'fit-content' }}>
+      <div style={{ display: 'flex', gap: 4, background: '#F3F4F6', borderRadius: 8, padding: 3, marginBottom: 24, width: 'fit-content', maxWidth: '100%', overflowX: 'auto' }}>
         {tabs.map((tab) => (
           <button
             key={tab.id}

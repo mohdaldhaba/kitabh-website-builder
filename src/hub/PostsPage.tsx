@@ -181,7 +181,7 @@ const ArticlesList: React.FC<{ defaultFilter?: FilterStatus }> = ({ defaultFilte
   return (
     <div>
       {/* Page header — Beehiiv style: title + subtitle + buttons */}
-      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 24 }}>
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 24, flexWrap: 'wrap', gap: 12 }}>
         <div>
           <h1 style={{ fontSize: 24, fontWeight: 700, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 6px' }}>
             المنشورات
@@ -230,7 +230,7 @@ const ArticlesList: React.FC<{ defaultFilter?: FilterStatus }> = ({ defaultFilte
       </div>
 
       {/* Search bar row — Beehiiv style */}
-      <div style={{ display: 'flex', gap: 10, marginBottom: 16, alignItems: 'center' }}>
+      <div style={{ display: 'flex', gap: 10, marginBottom: 16, alignItems: 'center', flexWrap: 'wrap' }}>
         {/* Search input */}
         <div
           style={{
@@ -346,11 +346,14 @@ const ArticlesList: React.FC<{ defaultFilter?: FilterStatus }> = ({ defaultFilte
                   color: colors.text,
                   fontFamily: 'IBM Plex Sans Arabic, sans-serif',
                   marginBottom: 6,
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                  whiteSpace: 'nowrap',
                 }}
               >
                 {article.title}
               </div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
                 <span
                   style={{
                     padding: '2px 8px',
@@ -360,6 +363,7 @@ const ArticlesList: React.FC<{ defaultFilter?: FilterStatus }> = ({ defaultFilte
                     fontSize: 12,
                     fontWeight: 600,
                     fontFamily: 'IBM Plex Sans Arabic, sans-serif',
+                    whiteSpace: 'nowrap',
                   }}
                 >
                   {status.label}

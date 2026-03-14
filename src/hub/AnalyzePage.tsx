@@ -132,7 +132,7 @@ const NewsletterStats: React.FC = () => {
           </span>
         </div>
 
-        <div className="hub-newsletter-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(440px, 1fr))', gap: 16 }}>
+        <div className="hub-newsletter-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 16 }}>
           {newsletters.map((nl) => {
             const stats = nl.emailStats || {} as any;
             const deliveryRate = stats.totalSent > 0 ? (stats.totalDelivered / stats.totalSent) * 100 : 0;
@@ -160,7 +160,7 @@ const NewsletterStats: React.FC = () => {
                   </div>
 
                   {/* Quick stats */}
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8, marginBottom: 16 }}>
+                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))', gap: 8, marginBottom: 16 }}>
                     {[
                       { label: 'مشترك', value: fmt(nl.emailStats?.totalSubscribers || 0), bg: '#F3F4F6', color: '#111' },
                       { label: 'مرسل', value: fmt(stats.totalSent || 0), bg: '#ECFDF5', color: '#059669' },
@@ -175,7 +175,7 @@ const NewsletterStats: React.FC = () => {
                   </div>
 
                   {/* Performance rings */}
-                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+                  <div className="hub-perf-rings" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 16 }}>
                     <div>
                       <div style={{ fontSize: 12, fontWeight: 600, color: colors.text, fontFamily: F, marginBottom: 10 }}>الأداء الأساسي</div>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 8 }}>
@@ -245,6 +245,9 @@ const NewsletterStats: React.FC = () => {
           @media (max-width: 500px) {
             .hub-newsletter-grid { grid-template-columns: 1fr !important; }
           }
+          @media (max-width: 700px) {
+            .hub-analyze-charts { grid-template-columns: 1fr !important; }
+          }
         `}</style>
       </div>
     );
@@ -276,7 +279,7 @@ const NewsletterStats: React.FC = () => {
 
       {/* Overview bar */}
       <div style={{ ...card, padding: '16px 24px', marginBottom: 20, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 16 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16, flexWrap: 'wrap' as const }}>
           {[
             { label: 'المشتركون', value: fmt(nl.emailStats?.totalSubscribers || 0), icon: <IconUsers />, bg: '#F3F4F6', color: '#111' },
             { label: 'إجمالي المرسل', value: fmt(stats.totalSent || 0), icon: <IconSend />, bg: '#ECFDF5', color: '#059669' },

@@ -265,7 +265,8 @@ const PhonePreview: React.FC<{
     <div style={{ display: 'flex', justifyContent: 'center' }}>
       <div
         style={{
-          width: 320,
+          maxWidth: 320,
+          width: '100%',
           height: 580,
           borderRadius: 36,
           border: '8px solid #1a1a1a',
@@ -808,7 +809,7 @@ const LinktreePage: React.FC = () => {
         </div>
 
         {/* Right: Phone Preview */}
-        <div style={{ position: 'sticky', top: 80 }}>
+        <div className="linktree-preview-sidebar" style={{ position: 'sticky', top: 80 }}>
           <PhonePreview links={links} config={config} />
         </div>
       </div>
@@ -816,6 +817,7 @@ const LinktreePage: React.FC = () => {
       <style>{`
         @media (max-width: 900px) {
           .linktree-layout { grid-template-columns: 1fr !important; }
+          .linktree-preview-sidebar { position: static !important; }
         }
       `}</style>
     </div>

@@ -227,7 +227,7 @@ const DashboardPage: React.FC = () => {
   return (
     <div style={{ maxWidth: 1100, margin: '0 auto' }}>
       {/* Welcome Card */}
-      <div style={{ ...card, padding: '24px 28px', marginBottom: 20 }}>
+      <div style={{ ...card, padding: '20px 16px', marginBottom: 16 }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20, flexWrap: 'wrap', gap: 12 }}>
           <div>
             <h1 style={{ fontSize: 20, fontWeight: 700, color: colors.text, fontFamily: F, margin: 0 }}>
@@ -277,7 +277,7 @@ const DashboardPage: React.FC = () => {
         </div>
 
         {/* Stats row */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 12 }}>
+        <div className="hub-stats-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(140px, 1fr))', gap: 12 }}>
           {[
             { label: 'المشتركون الفعّالون', value: MOCK_STATS.totalSubscribers.toLocaleString('en') },
             { label: 'معدل القراءة', value: `${MOCK_STATS.avgOpenRate}%` },
@@ -296,7 +296,7 @@ const DashboardPage: React.FC = () => {
       <QuickLinks />
 
       {/* Two columns: Subscriber Growth + Last Post Performance */}
-      <div className="hub-dashboard-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 20 }}>
+      <div className="hub-dashboard-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
 
         {/* Subscriber Growth Chart */}
         <div style={{ ...card, padding: '20px 24px' }}>
@@ -312,7 +312,7 @@ const DashboardPage: React.FC = () => {
 
           <SubscriberChart data={data} />
 
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 20, marginTop: 12, borderTop: '1px solid #F3F4F6', paddingTop: 12 }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 14, marginTop: 12, borderTop: '1px solid #F3F4F6', paddingTop: 12 }}>
             <span style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: colors.textMuted, fontFamily: F }}>
               <span style={{ width: 8, height: 8, borderRadius: '50%', background: '#111' }} />
               مشترك
@@ -413,6 +413,10 @@ const DashboardPage: React.FC = () => {
       <style>{`
         @media (max-width: 900px) {
           .hub-dashboard-grid { grid-template-columns: 1fr !important; }
+        }
+        @media (max-width: 480px) {
+          .hub-dashboard-grid { gap: 12px !important; }
+          .hub-stats-grid { grid-template-columns: repeat(2, 1fr) !important; gap: 8px !important; }
         }
       `}</style>
     </div>

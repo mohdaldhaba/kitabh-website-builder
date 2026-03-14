@@ -27,7 +27,7 @@ const AudiencePage: React.FC = () => {
   const formatDate = (d: string) => new Date(d).toLocaleDateString('ar-u-nu-latn', { year: 'numeric', month: 'short', day: 'numeric' });
 
   return (
-    <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+    <div style={{ maxWidth: 1100, margin: '0 auto', overflow: 'hidden' }}>
       {/* Stats cards */}
       <div style={{ display: 'flex', gap: 16, marginBottom: 24, flexWrap: 'wrap' }}>
         {[
@@ -40,7 +40,7 @@ const AudiencePage: React.FC = () => {
             key={i}
             style={{
               flex: 1,
-              minWidth: 180,
+              minWidth: 140,
               background: '#fff',
               borderRadius: 12,
               border: '1px solid rgba(255,255,255,0.5)',
@@ -59,7 +59,7 @@ const AudiencePage: React.FC = () => {
       </div>
 
       {/* Subscriber list */}
-      <div style={{ background: 'rgba(255,255,255,0.6)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)', borderRadius: 14, border: '1px solid rgba(255,255,255,0.5)' }}>
+      <div style={{ background: 'rgba(255,255,255,0.6)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)', borderRadius: 14, border: '1px solid rgba(255,255,255,0.5)', overflow: 'hidden' }}>
         {/* Tabs + actions */}
         <div style={{ padding: '16px 20px', borderBottom: '1px solid rgba(255,255,255,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
           <div style={{ display: 'flex', gap: 4, background: '#F3F4F6', borderRadius: 8, padding: 3 }}>

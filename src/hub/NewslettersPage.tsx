@@ -102,12 +102,13 @@ const SettingsModal: React.FC<SettingsModalProps> = ({ newsletter, onClose, acti
         style={{
           background: '#fff',
           borderRadius: 16,
-          width: '100%',
+          width: 'calc(100% - 32px)',
           maxWidth: 640,
           maxHeight: '90vh',
           overflow: 'auto',
           boxShadow: '0 24px 80px rgba(0,0,0,0.18)',
           margin: 16,
+          boxSizing: 'border-box' as const,
         }}
         onClick={(e) => e.stopPropagation()}
       >
@@ -402,8 +403,8 @@ const NewsletterCard: React.FC<CardProps> = ({ newsletter, onEdit }) => {
   return (
     <div style={{ background: '#fff', borderRadius: 14, border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)', overflow: 'hidden' }}>
       {/* Top bar with status */}
-      <div style={{ padding: '20px 24px', borderBottom: '1px solid #F3F4F6' }}>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
+      <div style={{ padding: '16px 16px 16px 16px', borderBottom: '1px solid #F3F4F6' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12, flexWrap: 'wrap', gap: 8 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
             <div style={{
               width: 44,
@@ -447,7 +448,7 @@ const NewsletterCard: React.FC<CardProps> = ({ newsletter, onEdit }) => {
       </div>
 
       {/* Stats row */}
-      <div style={{ display: 'flex', padding: '16px 24px', gap: 32, borderBottom: '1px solid #F3F4F6' }}>
+      <div style={{ display: 'flex', flexWrap: 'wrap', padding: '16px', gap: '12px 24px', borderBottom: '1px solid #F3F4F6' }}>
         {[
           { label: 'المشتركون', value: newsletter.emailStats.totalSubscribers.toLocaleString('en') },
           { label: 'معدل الفتح', value: `${newsletter.emailStats.avgOpenRate}%` },
@@ -462,9 +463,9 @@ const NewsletterCard: React.FC<CardProps> = ({ newsletter, onEdit }) => {
       </div>
 
       {/* Link + Actions */}
-      <div style={{ padding: '16px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
+      <div style={{ padding: '16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
         {/* Copy link */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, minWidth: 0, flex: '1 1 auto' }}>
           <div style={{
             padding: '8px 14px',
             background: '#F9FAFB',
@@ -474,6 +475,10 @@ const NewsletterCard: React.FC<CardProps> = ({ newsletter, onEdit }) => {
             fontFamily: 'monospace',
             color: colors.textMuted,
             direction: 'ltr',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+            minWidth: 0,
           }}>
             {siteUrl}
           </div>
@@ -498,7 +503,7 @@ const NewsletterCard: React.FC<CardProps> = ({ newsletter, onEdit }) => {
         </div>
 
         {/* Action buttons */}
-        <div style={{ display: 'flex', gap: 8 }}>
+        <div style={{ display: 'flex', gap: 8, flexShrink: 0, flexWrap: 'wrap' }}>
           <button
             onClick={() => onEdit('welcome-email')}
             style={{

@@ -38,7 +38,7 @@ const WebsitePage: React.FC<WebsitePageProps> = ({
   // ── Builder mode: embed the full website builder ──────
   if (mode === 'builder') {
     return (
-      <div style={{ margin: '-32px -40px', height: 'calc(100vh - 56px)', position: 'relative' }}>
+      <div style={{ margin: '-16px -16px', height: 'calc(100vh - 56px)', position: 'relative' }}>
         {/* Top bar with back button */}
         <div
           style={{
@@ -80,8 +80,8 @@ const WebsitePage: React.FC<WebsitePageProps> = ({
               تعديل موقع: {publicationName}
             </span>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <span style={{ fontSize: 12, fontFamily: 'monospace', color: c.textMuted, direction: 'ltr' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, overflow: 'hidden', minWidth: 0 }}>
+            <span style={{ fontSize: 12, fontFamily: 'monospace', color: c.textMuted, direction: 'ltr', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
               {websiteUrl}
             </span>
           </div>
@@ -124,11 +124,11 @@ const WebsitePage: React.FC<WebsitePageProps> = ({
       </div>
 
       {/* Subdomain / URL bar */}
-      <div style={{ ...card, padding: '14px 18px', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 10 }}>
+      <div style={{ ...card, padding: '14px 12px', marginBottom: 20, display: 'flex', alignItems: 'center', gap: 10, overflow: 'hidden' }}>
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={c.textMuted} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
           <circle cx="12" cy="12" r="10" /><line x1="2" y1="12" x2="22" y2="12" /><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
         </svg>
-        <span style={{ fontSize: 14, fontWeight: 600, fontFamily: 'monospace', color: '#0000FF', direction: 'ltr', flex: 1 }}>
+        <span style={{ fontSize: 14, fontWeight: 600, fontFamily: 'monospace', color: '#0000FF', direction: 'ltr', flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', minWidth: 0 }}>
           {websiteUrl}
         </span>
         <button
@@ -159,7 +159,7 @@ const WebsitePage: React.FC<WebsitePageProps> = ({
             <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#FDE68A' }} />
             <div style={{ width: 12, height: 12, borderRadius: '50%', background: '#86EFAC' }} />
           </div>
-          <div style={{ flex: 1, padding: '6px 12px', background: c.cardBg, borderRadius: 6, fontSize: 12, fontFamily: 'monospace', color: c.textMuted, textAlign: 'center', direction: 'ltr' }}>
+          <div style={{ flex: 1, padding: '6px 12px', background: c.cardBg, borderRadius: 6, fontSize: 12, fontFamily: 'monospace', color: c.textMuted, textAlign: 'center', direction: 'ltr', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', minWidth: 0 }}>
             {websiteUrl}
           </div>
         </div>
@@ -174,7 +174,7 @@ const WebsitePage: React.FC<WebsitePageProps> = ({
       </div>
 
       {/* Action buttons */}
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 24 }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))', gap: 16, marginBottom: 24 }}>
         <button
           onClick={() => setMode('builder')}
           style={{
