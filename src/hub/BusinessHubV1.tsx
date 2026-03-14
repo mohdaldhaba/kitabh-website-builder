@@ -71,6 +71,8 @@ const v1SidebarSections: SidebarSection[] = [
       { page: 'posts', subPage: 'all-posts', label: 'المنشورات', icon: icons.posts },
       { page: 'posts', subPage: 'outline', label: 'مساعد كتابة', icon: icons.outline },
       { page: 'posts', subPage: 'checker', label: 'محرر كتابة', icon: icons.checker },
+      { page: 'grow', subPage: 'carousel', label: 'ستوديو كتابة', icon: icons.grow },
+      { page: 'grow', subPage: 'social', label: 'محتوى كتابة', icon: icons.grow },
     ],
   },
   {
@@ -80,8 +82,6 @@ const v1SidebarSections: SidebarSection[] = [
     items: [
       { page: 'newsletters', label: 'النشرة', icon: icons.emailJourney },
       { page: 'subscribers', label: 'المشتركون', icon: icons.audience },
-      { page: 'grow', subPage: 'carousel', label: 'ستوديو كتابة', icon: icons.grow },
-      { page: 'grow', subPage: 'social', label: 'محتوى كتابة', icon: icons.grow },
       { page: 'grow', subPage: 'linktree', label: 'صفحة الروابط', icon: icons.magicLink },
       { page: 'email-template', label: 'قالب البريد', icon: icons.posts, comingSoon: true },
       { page: 'email-journeys', label: 'رحلات البريد', icon: icons.emailJourney, comingSoon: true },
@@ -215,7 +215,7 @@ const BusinessHubV1: React.FC = () => {
           return <HubToolWrapper><Suspense fallback={<ToolLoader />}><KitabhOutline embedded premium /></Suspense></HubToolWrapper>;
         }
         if (activeSubPage === 'checker') {
-          return <HubToolWrapper><Suspense fallback={<ToolLoader />}><KitabhChecker embedded /></Suspense></HubToolWrapper>;
+          return <HubToolWrapper><Suspense fallback={<ToolLoader />}><KitabhChecker embedded premium /></Suspense></HubToolWrapper>;
         }
         return <PostsPage subPage={activeSubPage} />;
       case 'newsletters': {

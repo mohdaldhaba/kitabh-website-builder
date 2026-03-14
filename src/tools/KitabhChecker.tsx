@@ -1125,12 +1125,14 @@ function normalizePillars(data: any, tool: string): any {
 }
 
 // ─── Main Component ────────────────────────────────────
-export default function KitabhChecker(props:{embedded?:boolean}) {
+export default function KitabhChecker(props:{embedded?:boolean;premium?:boolean}) {
   const isEmbedded = props?.embedded ?? false;
+  const forcePremium = props?.premium ?? false;
   type Tool  = "article" | "story" | "literary"
   type Phase = "input" | "loading" | "capture" | "results"
 
-  const { authenticated, premium: isPremium } = getKitabhUser()
+  const { authenticated, premium: _isPremium } = getKitabhUser()
+  const isPremium = forcePremium || _isPremium
   const [showPopup, setShowPopup] = useState(false)
   const [popupEmail, setPopupEmail] = useState("")
   const [showPaywall, setShowPaywall] = useState(false)
