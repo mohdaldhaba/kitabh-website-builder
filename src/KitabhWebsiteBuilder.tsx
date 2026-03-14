@@ -602,9 +602,10 @@ export default function KitabhWebsiteBuilder(props: any) {
   const pubName = props.publicationName || "";
 
   const [sites, setSites] = useState<Site[]>([]);
-  const [view, setView] = useState<ViewMode>(isEmbedded ? "templates" : "sites");
+  const [view, setView] = useState<ViewMode>(isEmbedded ? "builder" : "sites");
   const [activeSiteId, setActiveSiteId] = useState<string | null>(null);
   const [sidebarTab, setSidebarTab] = useState<SidebarTab>("components");
+  const [showTemplatePickerModal, setShowTemplatePickerModal] = useState(false);
   const [previewDevice, setPreviewDevice] = useState<PreviewDevice>("desktop");
   const [expandedComponent, setExpandedComponent] = useState<string | null>(null);
   const [showAddComponent, setShowAddComponent] = useState(false);
@@ -848,6 +849,21 @@ export default function KitabhWebsiteBuilder(props: any) {
     setActivePageId(site.pages[0].id);
     setView("builder");
     setSidebarTab("components");
+  };
+
+  // Auto-create default site when embedded and no sites exist
+  const hasAutoCreated = useRef(false);
+  useEffect(() => {
+    if (isEmbedded && hasLoaded.current && sites.length === 0 && !hasAutoCreated.current) {
+      hasAutoCreated.current = true;
+      createFromTemplate("media");
+    }
+  }, [isEmbedded, sites.length]);
+
+  // Switch template: replace the active site with a new one from the selected template
+  const switchTemplate = (templateId: string) => {
+    createFromTemplate(templateId);
+    setShowTemplatePickerModal(false);
   };
 
   function getDefaultSettings(type: ComponentType): Record<string, any> {
@@ -3175,6 +3191,10 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
               {activeSite?.publishedAt && publishStatus === "idle" && (
                 <div className="kwb-last-published">آخر نشر: {new Date(activeSite.publishedAt).toLocaleDateString("ar-SA", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}</div>
               )}
+              <button className="kwb-btn-outline" style={{ width: '100%', marginTop: 6 }} onClick={() => setShowTemplatePickerModal(true)}>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+                قوالب جاهزة
+              </button>
             </div>
 
             {/* Tabs */}
@@ -4374,6 +4394,42 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
           </div>
         );
       })()}
+
+      {/* ─── Template Picker Modal ─── */}
+      {showTemplatePickerModal && (
+        <div className="kwb-overlay" onClick={() => setShowTemplatePickerModal(false)}>
+          <div className="kwb-modal" style={{ maxWidth: 600 }} onClick={e => e.stopPropagation()}>
+            <div className="kwb-modal-header">
+              <h2>قوالب جاهزة</h2>
+              <button className="kwb-btn-icon" onClick={() => setShowTemplatePickerModal(false)}>{Icons.x}</button>
+            </div>
+            <div className="kwb-modal-body" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 10, padding: 16 }}>
+              {TEMPLATES.map(tpl => {
+                const isActive = activeSite?.templateId === tpl.id;
+                return (
+                  <button
+                    key={tpl.id}
+                    onClick={() => switchTemplate(tpl.id)}
+                    style={{
+                      padding: '16px 12px',
+                      background: isActive ? '#F3F4F6' : '#fff',
+                      border: isActive ? '2px solid #111' : '1px solid #E5E7EB',
+                      borderRadius: 10,
+                      cursor: 'pointer',
+                      textAlign: 'right',
+                      transition: 'border-color 0.15s',
+                    }}
+                  >
+                    <div style={{ fontSize: 14, fontWeight: 600, color: '#111', fontFamily: 'IBM Plex Sans Arabic, sans-serif', marginBottom: 4 }}>{tpl.name}</div>
+                    <div style={{ fontSize: 12, color: '#6B7280', fontFamily: 'IBM Plex Sans Arabic, sans-serif', lineHeight: 1.4 }}>{tpl.description}</div>
+                    {isActive && <div style={{ fontSize: 11, color: '#059669', fontWeight: 600, fontFamily: 'IBM Plex Sans Arabic, sans-serif', marginTop: 6 }}>القالب الحالي</div>}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ─── Subscribe Popup (portal-style, fixed overlay) ─── */}
       {showSubscribePopup && activeSite && (
