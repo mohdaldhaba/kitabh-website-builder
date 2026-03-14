@@ -143,6 +143,9 @@ interface HubLayoutProps {
   publications?: Publication[];
   activePublicationId?: string;
   onSwitchPublication?: (id: string) => void;
+  customSidebarSections?: SidebarSection[];
+  customUtilityItems?: SidebarItem[];
+  onWriteClick?: () => void;
 }
 
 // ─── Section-based sidebar structure ─────────────────────
@@ -434,6 +437,9 @@ const HubLayout: React.FC<HubLayoutProps> = ({
   publications,
   activePublicationId,
   onSwitchPublication,
+  customSidebarSections,
+  customUtilityItems,
+  onWriteClick,
 }) => {
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(['create']));
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -442,6 +448,9 @@ const HubLayout: React.FC<HubLayoutProps> = ({
   });
 
   const c = dark ? darkColors : lightColors;
+
+  const activeSidebarSections = customSidebarSections || sidebarSections;
+  const activeUtilityItems = customUtilityItems || utilityItems;
 
   useEffect(() => {
     try { localStorage.setItem('kb_hub_theme', dark ? 'dark' : 'light'); } catch {}
@@ -504,7 +513,7 @@ const HubLayout: React.FC<HubLayoutProps> = ({
           }}
           onMouseEnter={(e) => (e.currentTarget.style.background = c.primaryHover)}
           onMouseLeave={(e) => (e.currentTarget.style.background = c.primary)}
-          onClick={() => console.log('Navigate to Kitabh editor')}
+          onClick={() => onWriteClick ? onWriteClick() : console.log('Navigate to Kitabh editor')}
         >
           {icons.write}
           ابدأ بالكتابة
@@ -550,7 +559,7 @@ const HubLayout: React.FC<HubLayoutProps> = ({
         })()}
 
         {/* Collapsible Sections */}
-        {sidebarSections.map((section) => {
+        {activeSidebarSections.map((section) => {
           const isExpanded = expandedSections.has(section.id);
           const hasSectionActive = section.items.some(
             (item) => activePage === item.page && (!item.subPage || activeSubPage === item.subPage)
@@ -653,7 +662,7 @@ const HubLayout: React.FC<HubLayoutProps> = ({
         })}
 
         {/* Utility items — flat, below sections */}
-        {utilityItems.map((item) => {
+        {activeUtilityItems.map((item) => {
           const isActive = activePage === item.page;
           return (
             <button
@@ -1023,5 +1032,5 @@ const HubLayout: React.FC<HubLayoutProps> = ({
 };
 
 export default HubLayout;
-export { icons, lightColors as colors, useTheme };
-export type { Page, Publication };
+export { icons, lightColors as colors, useTheme, sidebarSections, utilityItems };
+export type { Page, Publication, SidebarSection, SidebarItem };
