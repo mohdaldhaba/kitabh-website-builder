@@ -83,7 +83,6 @@ const v1SidebarSections: SidebarSection[] = [
       { page: 'newsletters', label: 'النشرة', icon: icons.emailJourney },
       { page: 'subscribers', label: 'المشتركون', icon: icons.audience },
       { page: 'grow', subPage: 'linktree', label: 'صفحة الروابط', icon: icons.magicLink },
-      { page: 'email-template', label: 'قالب البريد', icon: icons.posts, comingSoon: true },
       { page: 'email-journeys', label: 'رحلات البريد', icon: icons.emailJourney, comingSoon: true },
       { page: 'grow', subPage: 'magic-link', label: 'رابط سحري', icon: icons.grow, comingSoon: true },
     ],
@@ -94,7 +93,7 @@ const v1SidebarSections: SidebarSection[] = [
     icon: icons.website,
     items: [
       { page: 'website', label: 'الموقع', icon: icons.website },
-      { page: 'writers', label: 'الكتّاب', icon: icons.members },
+      { page: 'email-template', label: 'قالب البريد', icon: icons.posts, comingSoon: true },
     ],
   },
 ];
@@ -283,7 +282,7 @@ const BusinessHubV1: React.FC = () => {
       activePublicationId={activePublicationId}
       onSwitchPublication={setActivePublicationId}
       customSidebarSections={v1SidebarSections}
-      customUtilityItems={defaultUtility}
+      customUtilityItems={[...defaultUtility, { page: 'writers' as Page, label: 'الكتّاب', icon: icons.members }]}
       onWriteClick={handleWriteClick}
     >
       {renderPage()}
