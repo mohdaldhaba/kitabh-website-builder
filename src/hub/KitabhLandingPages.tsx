@@ -263,12 +263,17 @@ interface PagesListProps {
 function PagesList({ pages, onEdit, onCreate, onDelete, onDuplicate, onCopyLink, copiedSlug, onTogglePublish }: PagesListProps) {
   return (
     <div className="klp-list">
-      <div className="klp-header">
-        <h1 className="klp-title">صفحات الاشتراك</h1>
-        <button className="klp-btn-primary" onClick={onCreate}>
-          {Icons.plus}
-          <span>صفحة جديدة</span>
-        </button>
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 24, flexWrap: 'wrap', gap: 12 }}>
+        <div>
+          <h1 style={{ fontSize: 24, fontWeight: 700, color: '#111', fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 6px' }}>صفحات الاشتراك</h1>
+          <p style={{ fontSize: 14, color: '#6B7280', fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: 0 }}>أنشئ صفحات اشتراك مخصصة لنشراتك البريدية</p>
+        </div>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <button className="klp-btn-primary" onClick={onCreate}>
+            {Icons.plus}
+            <span>صفحة جديدة</span>
+          </button>
+        </div>
       </div>
 
       {pages.length === 0 ? (

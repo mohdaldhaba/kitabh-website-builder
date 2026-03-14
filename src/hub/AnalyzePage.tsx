@@ -79,18 +79,20 @@ const NewsletterStats: React.FC = () => {
 
     return (
       <div>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 24, flexWrap: 'wrap', gap: 12 }}>
           <div>
-            <h2 style={{ fontSize: 17, fontWeight: 700, color: colors.text, fontFamily: F, margin: '0 0 4px' }}>
+            <h1 style={{ fontSize: 24, fontWeight: 700, color: colors.text, fontFamily: F, margin: '0 0 6px' }}>
               إحصائيات النشرات البريدية
-            </h2>
+            </h1>
             <p style={{ fontSize: 14, color: colors.textMuted, fontFamily: F, margin: 0 }}>
               تتبع أداء نشراتك البريدية
             </p>
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '4px 12px', background: '#ECFDF5', borderRadius: 20, fontSize: 12, fontWeight: 600, color: '#059669', fontFamily: F }}>
-            <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#059669' }} />
-            مباشر
+          <div style={{ display: 'flex', gap: 8 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '4px 12px', background: '#ECFDF5', borderRadius: 20, fontSize: 12, fontWeight: 600, color: '#059669', fontFamily: F }}>
+              <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#059669' }} />
+              مباشر
+            </div>
           </div>
         </div>
 

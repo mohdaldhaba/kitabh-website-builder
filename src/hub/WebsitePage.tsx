@@ -110,13 +110,13 @@ const WebsitePage: React.FC<WebsitePageProps> = ({
 
   // ── Overview mode ─────────────────────────────────────
   return (
-    <div style={{ maxWidth: 900, margin: '0 auto' }}>
+    <div>
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24, flexWrap: 'wrap', gap: 12 }}>
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 24, flexWrap: 'wrap', gap: 12 }}>
         <div>
-          <h2 style={{ fontSize: 17, fontWeight: 700, color: c.text, fontFamily: F, margin: '0 0 4px' }}>
+          <h1 style={{ fontSize: 24, fontWeight: 700, color: c.text, fontFamily: F, margin: '0 0 6px' }}>
             موقع {publicationName}
-          </h2>
+          </h1>
           <p style={{ fontSize: 14, color: c.textMuted, fontFamily: F, margin: 0 }}>
             موقعك مرتبط بنشرتك البريدية — عدّله وخصصه ليعكس هويتك
           </p>

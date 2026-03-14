@@ -157,8 +157,11 @@ export default function KitabhDomainSettings() {
       <style>{CSS_STYLES}</style>
       <div className="kds">
         {/* Page Header */}
-        <div className="kds-page-header">
-          <h1 className="kds-page-title">إعدادات النطاق</h1>
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 24, flexWrap: 'wrap', gap: 12 }}>
+          <div>
+            <h1 style={{ fontSize: 24, fontWeight: 700, color: '#111', fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 6px' }}>إعدادات النطاق</h1>
+            <p style={{ fontSize: 14, color: '#6B7280', fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: 0 }}>أدر النطاقات الفرعية والنطاقات الخاصة لنشراتك</p>
+          </div>
         </div>
 
         {/* Section 1: Subdomain per Newsletter */}

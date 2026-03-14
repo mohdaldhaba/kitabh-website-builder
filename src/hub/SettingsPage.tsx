@@ -9,12 +9,16 @@ interface SettingsPageProps {
 // ─── Account Settings ────────────────────────────────────
 const AccountSection: React.FC = () => (
   <div>
-    <h2 style={{ fontSize: 24, fontWeight: 700, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 8px' }}>
-      إعدادات الحساب
-    </h2>
-    <p style={{ fontSize: 14, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 24px' }}>
-      أدر معلوماتك الشخصية وإعدادات حسابك
-    </p>
+    <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 24, flexWrap: 'wrap', gap: 12 }}>
+      <div>
+        <h1 style={{ fontSize: 24, fontWeight: 700, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 6px' }}>
+          إعدادات الحساب
+        </h1>
+        <p style={{ fontSize: 14, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: 0 }}>
+          أدر معلوماتك الشخصية وإعدادات حسابك
+        </p>
+      </div>
+    </div>
 
     <div style={{ background: '#fff', borderRadius: 12, border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)', padding: 16 }}>
       {/* Profile section */}

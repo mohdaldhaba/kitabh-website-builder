@@ -14,11 +14,15 @@ const roleColors: Record<string, { bg: string; color: string }> = {
 };
 
 const MembersPage: React.FC = () => (
-  <div style={{ maxWidth: 800, margin: '0 auto' }}>
-    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24, flexWrap: 'wrap', gap: 12 }}>
-      <p style={{ fontSize: 14, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: 0 }}>
-        أدر فريقك والمساهمين في نشرتك وموقعك
-      </p>
+  <div style={{ maxWidth: 900, margin: '0 auto' }}>
+    <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 24, flexWrap: 'wrap', gap: 12 }}>
+      <div>
+        <h1 style={{ fontSize: 24, fontWeight: 700, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 6px' }}>الكتّاب</h1>
+        <p style={{ fontSize: 14, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: 0 }}>
+          أدر فريقك والمساهمين في نشرتك وموقعك
+        </p>
+      </div>
+      <div style={{ display: 'flex', gap: 8 }}>
       <button
         style={{
           padding: '10px 20px',
@@ -38,6 +42,7 @@ const MembersPage: React.FC = () => (
         {icons.members}
         دعوة عضو
       </button>
+      </div>
     </div>
 
     <div style={{ background: '#fff', borderRadius: 12, border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)', overflow: 'hidden' }}>

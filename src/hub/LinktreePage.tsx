@@ -445,11 +445,11 @@ const LinktreePage: React.FC = () => {
   return (
     <div style={{ maxWidth: 900, margin: '0 auto' }}>
       {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24, flexWrap: 'wrap', gap: 12 }}>
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 24, flexWrap: 'wrap', gap: 12 }}>
         <div>
-          <h2 style={{ fontSize: 24, fontWeight: 700, color: c.text, fontFamily: F, margin: '0 0 4px' }}>
+          <h1 style={{ fontSize: 24, fontWeight: 700, color: c.text, fontFamily: F, margin: '0 0 6px' }}>
             صفحة الروابط
-          </h2>
+          </h1>
           <p style={{ fontSize: 14, color: c.textMuted, fontFamily: F, margin: 0 }}>
             أنشئ صفحة روابط احترافية لمشاركتها في البايو وفي كل مكان
           </p>

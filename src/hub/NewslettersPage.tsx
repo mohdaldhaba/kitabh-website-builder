@@ -571,8 +571,9 @@ const NewslettersPage: React.FC<NewslettersPageProps> = ({ activePublicationInde
 
   return (
     <div style={{ maxWidth: 900, margin: '0 auto' }}>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
+      <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 24, flexWrap: 'wrap', gap: 12 }}>
         <div>
+          <h1 style={{ fontSize: 24, fontWeight: 700, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 6px' }}>النشرات البريدية</h1>
           <p style={{ fontSize: 14, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: 0 }}>
             {isSingleMode
               ? 'عدّل إعدادات نشرتك وفعّل رسالة الترحيب'
@@ -580,6 +581,7 @@ const NewslettersPage: React.FC<NewslettersPageProps> = ({ activePublicationInde
           </p>
         </div>
         {!isSingleMode && (
+          <div style={{ display: 'flex', gap: 8 }}>
           <button
             style={{
               padding: '10px 20px',
@@ -602,6 +604,7 @@ const NewslettersPage: React.FC<NewslettersPageProps> = ({ activePublicationInde
             </svg>
             نشرة جديدة
           </button>
+          </div>
         )}
       </div>
 

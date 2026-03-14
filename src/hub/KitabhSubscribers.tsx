@@ -253,12 +253,15 @@ export default function KitabhSubscribers() {
       <style>{CSS_STYLES}</style>
       <div className="ksm">
         {/* Header */}
-        <div className="ksm-header">
-          <div className="ksm-header-right">
-            <h1 className="ksm-title">إدارة مشتركي النشرة</h1>
-            <span className="ksm-count">{subscribers.length}</span>
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 24, flexWrap: 'wrap', gap: 12 }}>
+          <div>
+            <h1 style={{ fontSize: 24, fontWeight: 700, color: '#111', fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 6px' }}>
+              إدارة مشتركي النشرة
+              <span style={{ fontSize: 14, fontWeight: 600, color: '#999', background: '#F0F0F0', padding: '2px 10px', borderRadius: 9999, marginRight: 10, verticalAlign: 'middle' }}>{subscribers.length}</span>
+            </h1>
+            <p style={{ fontSize: 14, color: '#6B7280', fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: 0 }}>عرض وإدارة مشتركي نشرتك البريدية</p>
           </div>
-          <div className="ksm-header-left">
+          <div style={{ display: 'flex', gap: 8 }}>
             {/* Status Filter */}
             <div className="ksm-dropdown-wrap">
               <button
