@@ -966,6 +966,16 @@ const CSS = `
 .kb-embedded svg [fill="#0000FF"]{fill:#111 !important;}
 .kb-embedded .kdl-h{font-size:22px;font-weight:700;color:#111;font-family:'IBM Plex Sans Arabic',sans-serif;letter-spacing:0;}
 .kb-embedded .kdl-s{font-size:14px;color:#6B7280;font-family:'IBM Plex Sans Arabic',sans-serif;}
+/* ═══ Hub card style normalization ═══ */
+.kb-embedded,.kb-embedded .kb-sel-item,.kb-embedded .kb-sel-item-name,.kb-embedded .kb-sel-tog-name,.kb-embedded .kb-sec-lbl,.kb-embedded .kb-shape-nm,.kb-embedded .kb-sm-long-desc,.kb-embedded .kb-sm-ex-list li,.kb-embedded .kb-card-title,.kb-embedded .kb-ta,.kb-embedded .kb-load-title,.kb-embedded .kb-load-step-txt,.kb-embedded .kb-modal-name,.kb-embedded .kb-pi-name,.kb-embedded .kb-cat-title,.kb-embedded .kb-ic-title,.kb-embedded .kb-pc-title,.kb-embedded .kb-sc-title,.kb-embedded .kb-grule,.kb-embedded .kb-btn-back:hover{color:#111;}
+.kb-embedded .kb-card,.kb-embedded .kb-cat,.kb-embedded .kb-ic,.kb-embedded .kb-pc,.kb-embedded .kb-qc,.kb-embedded .kb-rwc,.kb-embedded .kb-gc,.kb-embedded .kb-smc,.kb-embedded .kb-arc-card,.kb-embedded .kb-cta-card,.kb-embedded .kb-load-card,.kb-embedded .kb-modal,.kb-embedded .kb-shape{border-color:#E5E7EB;box-shadow:0 1px 3px rgba(0,0,0,.04);}
+.kb-embedded .kb-card{border-radius:12px;}
+.kb-embedded .kb-card-foot{border-top-color:#E5E7EB;}
+.kb-embedded .kb-sel-btn{border-color:#E5E7EB;}
+.kb-embedded .kb-btn-back{border-color:#E5E7EB;color:#6B7280;}
+.kb-embedded .kb-exp-btn{border-color:#E5E7EB;}
+.kb-embedded .kb-share-copy{border-color:#E5E7EB;color:#111;}
+.kb-embedded .kb-load-step{border-color:#E5E7EB;}
 `
 
 // ─── Main Component ──────────────────────────────────

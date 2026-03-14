@@ -1182,6 +1182,16 @@ const CSS = `
 .ks-embedded .ks-hero-s{font-size:14px;color:#6B7280;font-family:'IBM Plex Sans Arabic',sans-serif;}
 .ks-embedded .ks-res-title{font-size:22px;font-weight:700;color:#111;font-family:'IBM Plex Sans Arabic',sans-serif;}
 .ks-embedded .ks-res-sub{font-size:14px;color:#6B7280;font-family:'IBM Plex Sans Arabic',sans-serif;}
+/* ═══ Hub card style normalization ═══ */
+.ks-embedded,.ks-embedded .ks-card-title,.ks-embedded .ks-ta,.ks-embedded .ks-sec-info b,.ks-embedded .ks-sg-inp,.ks-embedded .ks-stepper-val,.ks-embedded .ks-links-inp,.ks-embedded .ks-load-title,.ks-embedded .ks-load-step-txt,.ks-embedded .ks-cap-title,.ks-embedded .ks-cap-lbl,.ks-embedded .ks-cap-inp,.ks-embedded .ks-res-title,.ks-embedded .ks-pcard-name,.ks-embedded .ks-pcard-content,.ks-embedded .ks-btn-back:hover,.ks-embedded .ks-sec-act:hover,.ks-embedded .ks-cap-skip:hover{color:#111;}
+.ks-embedded .ks-card,.ks-embedded .ks-pcard,.ks-embedded .ks-cta-card,.ks-embedded .ks-qa,.ks-embedded .ks-modal{border-color:#E5E7EB;box-shadow:0 1px 3px rgba(0,0,0,.04);}
+.ks-embedded .ks-card{border-radius:12px;}
+.ks-embedded .ks-pc,.ks-embedded .ks-sc{border-color:#E5E7EB;}
+.ks-embedded .ks-pc[aria-pressed="true"]{border-color:#111;background:#111;}
+.ks-embedded .ks-tabs-wrap{border-color:#E5E7EB;}
+.ks-embedded .ks-links-inp{border-color:#E5E7EB;}
+.ks-embedded .ks-links-inp:focus{border-color:#111;}
+.ks-embedded .ks-btn-back{border-color:#E5E7EB;color:#6B7280;}
 `
 
 // ─── Icons ───────────────────────────────────────────

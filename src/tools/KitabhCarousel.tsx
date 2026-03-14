@@ -2041,4 +2041,7 @@ const CSS = `
 .kc-embedded svg [fill="#0000FF"]{fill:#111 !important;}
 .kc-embedded .kc-head-t{font-size:22px !important;font-weight:700;color:#111;font-family:'IBM Plex Sans Arabic',sans-serif;letter-spacing:0;}
 .kc-embedded .kc-head-s{font-size:14px !important;color:#6B7280;font-family:'IBM Plex Sans Arabic',sans-serif;}
+/* ═══ Hub card style normalization ═══ */
+.kc-embedded,.kc-embedded .kc-head-t,.kc-embedded .kc-load-title,.kc-embedded .kc-load-step-txt{color:#111;}
+.kc-embedded .kc-load-card{border-color:#E5E7EB;box-shadow:0 1px 3px rgba(0,0,0,.04);border-radius:12px;}
 `

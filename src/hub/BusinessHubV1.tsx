@@ -7,7 +7,10 @@ import GrowPage from './GrowPage';
 import WebsitePage from './WebsitePage';
 import MembersPage from './MembersPage';
 import SettingsPage from './SettingsPage';
-import AudiencePage from './AudiencePage';
+import KitabhSubscribers from './KitabhSubscribers';
+import KitabhAutomations from './KitabhAutomations';
+import KitabhLandingPages from './KitabhLandingPages';
+import KitabhDomainSettings from './KitabhDomainSettings';
 import NewslettersPage from './NewslettersPage';
 import AnalyzePage from './AnalyzePage';
 import { icons, utilityItems as defaultUtility } from './HubLayout';
@@ -83,7 +86,8 @@ const v1SidebarSections: SidebarSection[] = [
       { page: 'newsletters', label: 'النشرة', icon: icons.emailJourney },
       { page: 'subscribers', label: 'المشتركون', icon: icons.audience },
       { page: 'grow', subPage: 'linktree', label: 'صفحة الروابط', icon: icons.magicLink },
-      { page: 'email-journeys', label: 'رحلات البريد', icon: icons.emailJourney, comingSoon: true },
+      { page: 'landing-pages' as Page, label: 'صفحات الاشتراك', icon: icons.grow },
+      { page: 'email-journeys', label: 'رحلات البريد', icon: icons.emailJourney },
       { page: 'grow', subPage: 'magic-link', label: 'رابط سحري', icon: icons.grow, comingSoon: true },
     ],
   },
@@ -93,6 +97,7 @@ const v1SidebarSections: SidebarSection[] = [
     icon: icons.website,
     items: [
       { page: 'website', label: 'الموقع', icon: icons.website },
+      { page: 'domain-settings' as Page, label: 'إعدادات النطاق', icon: icons.website },
       { page: 'email-template', label: 'قالب البريد', icon: icons.posts, comingSoon: true },
     ],
   },
@@ -115,7 +120,9 @@ function parseUrl(): { page: Page; subPage?: string } {
       if (second === 'outline') return { page: 'posts', subPage: 'outline' };
       if (second === 'checker') return { page: 'posts', subPage: 'checker' };
       return { page: 'posts', subPage: 'all-posts' };
-    case 'newsletters': return { page: 'newsletters' };
+    case 'newsletters':
+      if (second === 'journeys') return { page: 'email-journeys' };
+      return { page: 'newsletters' };
     case 'subscribers': return { page: 'subscribers' };
     case 'grow':
       if (second === 'carousel') return { page: 'grow', subPage: 'carousel' };
@@ -124,6 +131,8 @@ function parseUrl(): { page: Page; subPage?: string } {
       if (second === 'magic-link') return { page: 'grow', subPage: 'magic-link' };
       return { page: 'grow', subPage: 'carousel' };
     case 'website': return { page: 'website' };
+    case 'landing-pages': return { page: 'landing-pages' };
+    case 'domain-settings': return { page: 'domain-settings' };
     case 'members': return { page: 'writers' };
     case 'analyze': return { page: 'analyze', subPage: second };
     case 'notifications': return { page: 'notifications' };
@@ -151,6 +160,8 @@ function buildUrl(page: Page, subPage?: string): string {
       if (subPage === 'magic-link') return `${BASE}/grow/magic-link`;
       return `${BASE}/grow/carousel`;
     case 'website': return `${BASE}/website`;
+    case 'landing-pages': return `${BASE}/landing-pages`;
+    case 'domain-settings': return `${BASE}/domain-settings`;
     case 'writers': return `${BASE}/members`;
     case 'analyze':
       if (subPage) return `${BASE}/analyze/${subPage}`;
@@ -256,16 +267,15 @@ const BusinessHubV1: React.FC = () => {
       case 'writers':
         return <MembersPage />;
       case 'subscribers':
-        return <AudiencePage />;
+        return <KitabhSubscribers />;
       case 'analyze':
         return <AnalyzePage subPage={activeSubPage} />;
       case 'email-journeys':
-        return (
-          <ComingSoonPage
-            title="رحلات البريد الإلكتروني"
-            description="قريبًا ستتمكن من إنشاء تسلسلات بريدية تلقائية لاستقبال المشتركين الجدد وتنمية جمهورك"
-          />
-        );
+        return <KitabhAutomations />;
+      case 'landing-pages':
+        return <KitabhLandingPages />;
+      case 'domain-settings':
+        return <KitabhDomainSettings />;
       case 'settings':
         return <SettingsPage subPage={activeSubPage} />;
       default:

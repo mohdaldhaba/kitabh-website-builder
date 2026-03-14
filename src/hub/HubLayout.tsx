@@ -125,7 +125,7 @@ const icons = {
 };
 
 // ─── Types ───────────────────────────────────────────────
-type Page = 'dashboard' | 'posts' | 'newsletters' | 'email-template' | 'notifications' | 'grow' | 'website' | 'writers' | 'subscribers' | 'email-journeys' | 'analyze' | 'settings';
+type Page = 'dashboard' | 'posts' | 'newsletters' | 'email-template' | 'notifications' | 'grow' | 'website' | 'writers' | 'subscribers' | 'email-journeys' | 'analyze' | 'settings' | 'landing-pages' | 'domain-settings';
 
 interface Publication {
   id: string;
