@@ -337,7 +337,7 @@ const NewsletterStats: React.FC = () => {
               {/* Stats grid */}
               <div style={{ padding: '0 16px 14px', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 1fr))', gap: 10 }}>
                 {/* Delivery */}
-                <div style={{ border: '1.5px solid #E5E7EB', borderRadius: 10, padding: '12px 14px' }}>
+                <div style={{ border: '1px solid rgba(0,0,0,0.06)', borderRadius: 10, padding: '12px 14px' }}>
                   <div style={{ fontSize: 12, fontWeight: 600, color: colors.text, fontFamily: F, marginBottom: 8, display: 'flex', alignItems: 'center', gap: 6 }}>
                     <span style={{ color: '#059669' }}><IconSend /></span> إحصائيات التسليم
                   </div>
@@ -353,7 +353,7 @@ const NewsletterStats: React.FC = () => {
                   ))}
                 </div>
                 {/* Opens */}
-                <div style={{ border: '1.5px solid #E5E7EB', borderRadius: 10, padding: '12px 14px' }}>
+                <div style={{ border: '1px solid rgba(0,0,0,0.06)', borderRadius: 10, padding: '12px 14px' }}>
                   <div style={{ fontSize: 12, fontWeight: 600, color: colors.text, fontFamily: F, marginBottom: 8, display: 'flex', alignItems: 'center', gap: 6 }}>
                     <span style={{ color: '#374151' }}><IconEye /></span> إحصائيات القراءة
                   </div>
@@ -368,7 +368,7 @@ const NewsletterStats: React.FC = () => {
                   ))}
                 </div>
                 {/* Clicks */}
-                <div style={{ border: '1.5px solid #E5E7EB', borderRadius: 10, padding: '12px 14px' }}>
+                <div style={{ border: '1px solid rgba(0,0,0,0.06)', borderRadius: 10, padding: '12px 14px' }}>
                   <div style={{ fontSize: 12, fontWeight: 600, color: colors.text, fontFamily: F, marginBottom: 8, display: 'flex', alignItems: 'center', gap: 6 }}>
                     <span style={{ color: '#EA580C' }}><IconClick /></span> إحصائيات النقر
                   </div>
