@@ -211,6 +211,27 @@ const HubToolWrapper: React.FC<{ children: React.ReactNode }> = ({ children }) =
           color: #F9FAFB !important;
         }
 
+        /* ── Tool headlines → white in dark mode ── */
+        .hub-tool-wrap .kb .kel-h,
+        .hub-tool-wrap .kb .kel-s,
+        .hub-tool-wrap .kb .kdl-h,
+        .hub-tool-wrap .kb .kdl-s,
+        .hub-tool-wrap .ks .ks-hero-h,
+        .hub-tool-wrap .ks .ks-hero-s,
+        .hub-tool-wrap .ks .ks-res-title,
+        .hub-tool-wrap .ks .ks-res-sub,
+        .hub-tool-wrap .kc .kc-head-t,
+        .hub-tool-wrap .kc .kc-head-s {
+          color: #F9FAFB !important;
+        }
+        .hub-tool-wrap .kb .kel-s,
+        .hub-tool-wrap .kb .kdl-s,
+        .hub-tool-wrap .ks .ks-hero-s,
+        .hub-tool-wrap .ks .ks-res-sub,
+        .hub-tool-wrap .kc .kc-head-s {
+          color: #9CA3AF !important;
+        }
+
         /* ── White backgrounds → dark card ── */
         .hub-tool-wrap .kb .kb-card,
         .hub-tool-wrap .kb .kb-sel-menu,
