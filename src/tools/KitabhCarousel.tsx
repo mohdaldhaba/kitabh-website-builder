@@ -2039,4 +2039,6 @@ const CSS = `
 .kc-embedded svg[stroke="#0000FF"]{stroke:#111 !important;}
 .kc-embedded svg [stroke="#0000FF"]{stroke:#111 !important;}
 .kc-embedded svg [fill="#0000FF"]{fill:#111 !important;}
+.kc-embedded .kc-head-t{font-size:22px !important;font-weight:700;color:#111;font-family:'IBM Plex Sans Arabic',sans-serif;letter-spacing:0;}
+.kc-embedded .kc-head-s{font-size:14px !important;color:#6B7280;font-family:'IBM Plex Sans Arabic',sans-serif;}
 `

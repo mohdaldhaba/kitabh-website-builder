@@ -913,6 +913,8 @@ const CSS = `
 .kb-embedded svg[stroke="#0000FF"]{stroke:#111 !important;}
 .kb-embedded svg [stroke="#0000FF"]{stroke:#111 !important;}
 .kb-embedded svg [fill="#0000FF"]{fill:#111 !important;}
+.kb-embedded .kel-h{font-size:22px;font-weight:700;color:#111;font-family:'IBM Plex Sans Arabic',sans-serif;letter-spacing:0;}
+.kb-embedded .kel-s{font-size:14px;color:#6B7280;font-family:'IBM Plex Sans Arabic',sans-serif;}
 `
 
 // ─── CAT SVG icons ─────────────────────────────────────
