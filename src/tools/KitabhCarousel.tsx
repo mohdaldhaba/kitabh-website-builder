@@ -291,8 +291,9 @@ ${text}`
 }
 
 // ═══════════════════════════════════════════════════════
-export default function KitabhCarousel(props: { premium?: boolean }) {
+export default function KitabhCarousel(props: { premium?: boolean; embedded?: boolean }) {
   const isPremium = !!props.premium
+  const isEmbedded = props?.embedded ?? false
   const [fontsReady, setFontsReady] = useState(false)
   useEffect(()=>{document.fonts.ready.then(()=>setFontsReady(true))},[])
   const [page, setPage] = useState<"input"|"loading"|"results">("input")
@@ -949,7 +950,7 @@ export default function KitabhCarousel(props: { premium?: boolean }) {
   }, [exporting, slides, sizeInfo, fontFamily, bgColor, textColor, accentColor, shapeColor, slideSize, showLogo, shapeIntensity, templateIdx, audioFile, slideDuration])
 
   return (
-    <div className="kc" style={{opacity:fontsReady?1:0,transition:"opacity .2s ease"}}>
+    <div className={`kc${isEmbedded ? " kc-embedded" : ""}`} style={{width:"100%",alignSelf:"stretch",display:"block",opacity:fontsReady?1:0,transition:"opacity .2s ease",...(isEmbedded ? {background:"transparent"} : {})}}>
       <style>{CSS}</style>
 
       {page === "input" && (
@@ -1982,4 +1983,60 @@ const CSS = `
 .kc-trial-btn:hover{transform:translateY(-1px);box-shadow:0 2px 10px rgba(232,34,34,.25);background:#D41E1E;opacity:1;}
 .kc-trial-btn:focus-visible{outline:2px solid #E82222;outline-offset:2px;}
 .kc-trial-res{margin-top:20px;}
+
+/* ═══ Embedded mode overrides ═══ */
+.kc-embedded .kc-geo-1{background:#111;}
+.kc-embedded .kc-ta-wrap:focus-within{border-color:#111;}
+.kc-embedded .kc-ta-step:hover:not(:disabled){border-color:#111;color:#111;}
+.kc-embedded .kc-step-btn:hover:not(:disabled){border-color:#111;color:#111;}
+.kc-embedded .kc-tmpls-arr:hover{border-color:#111;color:#111;background:#F3F4F6;}
+.kc-embedded .kc-tmpl.on{border-color:#111;box-shadow:0 0 0 2px rgba(17,17,17,.15),0 4px 16px rgba(0,0,0,.08);}
+.kc-embedded .kc-font-dd:focus{border-color:#111;color:#111;}
+.kc-embedded .kc-ft.on{border-color:#111;background:#F3F4F6;box-shadow:0 0 0 2px rgba(17,17,17,.12);}
+.kc-embedded .kc-author:focus{border-color:#111;}
+.kc-embedded .kc-go{background:#111;}
+.kc-embedded .kc-go:hover{background:#333;}
+.kc-embedded .kc-load-step.active{background:#F3F4F6;border-color:#111;}
+.kc-embedded .kc-load-step.active .kc-load-step-txt{color:#111;}
+.kc-embedded .kc-load-prog-fill{background:#111;}
+.kc-embedded .kc-back:hover{border-color:#111;color:#111;}
+.kc-embedded .kc-dl-all{background:#111;}
+.kc-embedded .kc-dl-all:hover{background:#333;}
+.kc-embedded .kc-dl-pdf{border-color:#111;color:#111;}
+.kc-embedded .kc-dl-pdf:hover{background:#111;color:#FFF;}
+.kc-embedded .kc-tools-tog{background:linear-gradient(135deg,#111 0%,#374151 40%,#111 100%);box-shadow:0 2px 8px rgba(17,17,17,.3);}
+.kc-embedded .kc-tools-tog:hover{box-shadow:0 4px 16px rgba(17,17,17,.45);}
+.kc-embedded .kc-tools-tog.on{background:linear-gradient(135deg,#111 0%,#374151 50%,#111 100%);box-shadow:0 4px 16px rgba(17,17,17,.45);}
+.kc-embedded .kc-res-tmpl.on{border-color:#111;box-shadow:0 0 0 2px rgba(17,17,17,.15);}
+.kc-embedded .kc-res-shp.on{border-color:#111;color:#111;background:#F3F4F6;}
+.kc-embedded .kc-size-sm.on{border-color:#111;color:#111;background:#F3F4F6;}
+.kc-embedded .kc-int-btn.on{border-color:#111;color:#111;background:#F3F4F6;}
+.kc-embedded .kc-res-font:focus{border-color:#111;color:#111;}
+.kc-embedded .kc-cl-btn.on{border-color:#111;color:#111;background:#F3F4F6;}
+.kc-embedded .kc-cover-img-add:hover{border-color:#111;color:#111;background:#F3F4F6;}
+.kc-embedded .kc-cover-img-info{background:#F3F4F6;border-color:#D1D5DB;}
+.kc-embedded .kc-img-pos-r::-webkit-slider-thumb{background:#111;}
+.kc-embedded .kc-img-lay-btn.on{border-color:#111;background:#F3F4F6;}
+.kc-embedded .kc-audio-btn:hover{border-color:#111;color:#111;background:#F3F4F6;}
+.kc-embedded .kc-audio-info{background:#F3F4F6;border-color:#D1D5DB;}
+.kc-embedded .kc-export-btn{background:linear-gradient(135deg,#374151,#111);}
+.kc-embedded .kc-export-btn:hover:not(:disabled){box-shadow:0 4px 16px rgba(17,17,17,.25);}
+.kc-embedded .kc-logo-tog.on{border-color:#111;color:#111;background:#F3F4F6;}
+.kc-embedded .kc-add-card:hover{border-color:#111;color:#111;background:#F3F4F6;}
+.kc-embedded .kc-lay-sel:focus{border-color:#111;color:#111;}
+.kc-embedded .kc-abtn:hover{border-color:#111;color:#111;}
+.kc-embedded .kc-fs-btn:hover{color:#111;background:#F3F4F6;}
+.kc-embedded .kc-edit-tog.on{border-color:#111;color:#111;background:#F3F4F6;}
+.kc-embedded .kc-edit-i:focus{border-color:#111;}
+.kc-embedded .kc-edit-ta:focus{border-color:#111;}
+.kc-embedded .ktk-pw-btn{background:linear-gradient(135deg,#111,#333);box-shadow:0 4px 14px rgba(17,17,17,.25);}
+.kc-embedded .ktk-pw-btn:hover{box-shadow:0 6px 20px rgba(17,17,17,.35);}
+.kc-embedded .ktk-pw-app:hover{border-color:#111;color:#111;}
+.kc-embedded .kc-signin-input:focus{border-color:#111;}
+.kc-embedded .kc-signin-btn{background:#111;}
+.kc-embedded .kc-signin-btn:hover{background:#333;}
+.kc-embedded .kc-trial-fill{background:linear-gradient(90deg,#111,#374151);}
+.kc-embedded svg[stroke="#0000FF"]{stroke:#111 !important;}
+.kc-embedded svg [stroke="#0000FF"]{stroke:#111 !important;}
+.kc-embedded svg [fill="#0000FF"]{fill:#111 !important;}
 `

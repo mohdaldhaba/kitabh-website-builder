@@ -1098,6 +1098,86 @@ const CSS = `
 .ks-hero-icons-sm .ks-hero-ico-3{width:42px;height:42px;}
 @keyframes ks-popup-fadein{from{opacity:0}to{opacity:1}}
 @keyframes ks-popup-slideup{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.ks-embedded .ks-card:focus-within{border-color:#111;}
+.ks-embedded .ks-sec-act:focus-visible{outline-color:#111;}
+.ks-embedded .ks-sc[aria-pressed="true"]{border-color:#111;background:#F3F4F6;color:#111;}
+.ks-embedded .ks-sc:focus-visible{box-shadow:0 0 0 2.5px rgba(17,17,17,.22);}
+.ks-embedded .ks-pc:focus-visible{box-shadow:0 0 0 2.5px rgba(17,17,17,.22);}
+.ks-embedded .ks-adv-toggle:focus-visible{outline-color:#111;}
+.ks-embedded .ks-sg-inp:focus{border-color:#111;}
+.ks-embedded .ks-sg-sel:focus{border-color:#111;}
+.ks-embedded .ks-tog-track.on{background:#111;}
+.ks-embedded .ks-links-inp:focus{border-color:#111;}
+.ks-embedded .ks-links-add{border-color:#111;background:#F3F4F6;color:#111;}
+.ks-embedded .ks-btn-go{background:#111;}
+.ks-embedded .ks-btn-go:hover{background:#333;}
+.ks-embedded .ks-load-step.active{background:#F3F4F6;border-color:#111;}
+.ks-embedded .ks-load-step.active .ks-load-step-ico{background:#F3F4F6;}
+.ks-embedded .ks-load-step.active .ks-load-step-txt{color:#111;}
+.ks-embedded .ks-load-prog-fill{background:#111;}
+.ks-embedded .ks-load-hicon{background:#F3F4F6;border-color:#D1D5DB;}
+.ks-embedded .ks-cap-inp:focus{border-color:#111;}
+.ks-embedded .ks-cap-btn{background:#111;}
+.ks-embedded .ks-cap-btn:hover{background:#333;}
+.ks-embedded .ks-cap-icon{background:#F3F4F6;border-color:#D1D5DB;}
+.ks-embedded .ks-act-btn:focus-visible{box-shadow:0 0 0 2.5px rgba(17,17,17,.22);}
+.ks-embedded .ks-act-btn.regen{color:#111;border-color:#D1D5DB;background:#F3F4F6;}
+.ks-embedded .ks-act-btn.regen:hover{background:#E5E7EB;border-color:#111;}
+.ks-embedded .ks-copy-btn{color:#111;background:#F3F4F6;border-color:#D1D5DB;}
+.ks-embedded .ks-copy-btn:hover{background:#E5E7EB;border-color:#111;}
+.ks-embedded .ks-pub-copy:focus-visible{box-shadow:0 0 0 2.5px rgba(17,17,17,.22);}
+.ks-embedded .ks-cta-accent{color:#111;}
+.ks-embedded .ks-btn-retry:hover{border-color:#111;color:#111;}
+.ks-embedded .ks-detect-note{background:#F3F4F6;border-top-color:#D1D5DB;color:#111;}
+.ks-embedded .ks-detect-note-x{color:#111;}
+.ks-embedded .ks-detect-note-x:hover{background:rgba(17,17,17,.1);}
+.ks-embedded .ks-hook-btn.active{border-color:#111;background:#F3F4F6;color:#111;}
+.ks-embedded .ks-hook-btn:focus-visible{box-shadow:0 0 0 2.5px rgba(17,17,17,.22);}
+.ks-embedded .ks-slider::-webkit-slider-thumb{background:#111;}
+.ks-embedded .ks-slider::-moz-range-thumb{background:#111;}
+.ks-embedded .ks-slider::-webkit-slider-thumb:hover{box-shadow:0 0 0 4px rgba(17,17,17,.12);}
+.ks-embedded .ks-slider:focus-visible::-webkit-slider-thumb{box-shadow:0 0 0 4px rgba(17,17,17,.22);}
+.ks-embedded .ks-slider-label.active{color:#111;}
+.ks-embedded .ks-mini-chip[aria-pressed="true"]{border-color:#111;background:#F3F4F6;color:#111;}
+.ks-embedded .ks-mini-chip:focus-visible{box-shadow:0 0 0 2.5px rgba(17,17,17,.22);}
+.ks-embedded .ks-mini-refresh{border-color:#D1D5DB;background:#F3F4F6;color:#111;}
+.ks-embedded .ks-mini-refresh:hover{background:#E5E7EB;border-color:#111;}
+.ks-embedded .ks-mini-refresh:focus-visible{box-shadow:0 0 0 2.5px rgba(17,17,17,.22);}
+.ks-embedded .ks-qa-toggle:focus-visible{outline-color:#111;}
+.ks-embedded .ks-qa-badge.great{background:#F3F4F6;color:#111;border-color:#D1D5DB;}
+.ks-embedded .ks-settings-tog{background:linear-gradient(135deg,#111 0%,#374151 40%,#111 100%);box-shadow:0 2px 8px rgba(17,17,17,.3);}
+.ks-embedded .ks-settings-tog:hover{box-shadow:0 4px 16px rgba(17,17,17,.45);}
+.ks-embedded .ks-settings-tog.on{box-shadow:0 4px 16px rgba(17,17,17,.45);}
+.ks-embedded .ks-tab.active{border-color:#111;box-shadow:0 0 0 3px rgba(17,17,17,.15);}
+.ks-embedded .ks-tab:focus-visible{box-shadow:0 0 0 3px rgba(17,17,17,.2);}
+.ks-embedded .ks-tab-add:hover{border-color:#111;background:#F3F4F6;color:#111;}
+.ks-embedded .ks-modal-ta:focus{border-color:#111;}
+.ks-embedded .ks-modal-datetime input:focus{border-color:#111;}
+.ks-embedded .ks-studio-tog{background:linear-gradient(135deg,#111 0%,#374151 40%,#111 100%);box-shadow:0 2px 8px rgba(17,17,17,.3);}
+.ks-embedded .ks-studio-tog:hover{box-shadow:0 4px 16px rgba(17,17,17,.45);}
+.ks-embedded .ks-studio-tog.on{box-shadow:0 4px 16px rgba(17,17,17,.45);}
+.ks-embedded .ks-studio-tmpl.on{border-color:#111;box-shadow:0 0 0 2px rgba(17,17,17,.15);}
+.ks-embedded .ks-studio-shp.on{border-color:#111;color:#111;background:#F3F4F6;}
+.ks-embedded .ks-studio-int-btn.on{border-color:#111;color:#111;background:#F3F4F6;}
+.ks-embedded .ks-studio-font:focus{border-color:#111;color:#111;}
+.ks-embedded .ks-studio-size-btn.on{border-color:#111;color:#111;background:#F3F4F6;}
+.ks-embedded .ks-studio-logo-tog.on{border-color:#111;color:#111;background:#F3F4F6;}
+.ks-embedded .ks-studio-lay-sel:focus{border-color:#111;color:#111;}
+.ks-embedded .ks-studio-abtn:hover{border-color:#111;color:#111;}
+.ks-embedded .ks-studio-fs-btn:hover{color:#111;background:#F3F4F6;}
+.ks-embedded .ks-studio-cover-add:hover{border-color:#111;color:#111;background:#F3F4F6;}
+.ks-embedded .ks-studio-cover-info{background:#F3F4F6;border-color:#D1D5DB;}
+.ks-embedded .ks-studio-img-pos-r::-webkit-slider-thumb{background:#111;}
+.ks-embedded .ks-studio-img-lay.on{border-color:#111;background:#F3F4F6;}
+.ks-embedded .ks-studio-img-lay.on .ks-studio-cl-ico{color:#111;}
+.ks-embedded .ks-studio-edit-i:focus{border-color:#111;}
+.ks-embedded .ks-studio-edit-ta:focus{border-color:#111;}
+.ks-embedded .ks-studio-add-card:hover{border-color:#111;color:#111;background:#F3F4F6;}
+.ks-embedded .ks-studio-dl-all{background:#111;}
+.ks-embedded .ks-studio-dl-all:hover{box-shadow:0 4px 16px rgba(17,17,17,.25);}
+.ks-embedded svg[stroke="#0000FF"]{stroke:#111 !important;}
+.ks-embedded svg [stroke="#0000FF"]{stroke:#111 !important;}
+.ks-embedded svg [fill="#0000FF"]{fill:#111 !important;}
 `
 
 // ─── Icons ───────────────────────────────────────────
@@ -1143,7 +1223,8 @@ function Toggle({label,checked,onChange}:{label:string;checked:boolean;onChange:
 }
 
 // ─── Main Component ───────────────────────────────────
-export default function KitabhSocial({premium:premiumProp=false}:{premium?:boolean}) {
+export default function KitabhSocial({premium:premiumProp=false,embedded:embeddedProp=false}:{premium?:boolean;embedded?:boolean}) {
+  const isEmbedded = embeddedProp;
   type Phase = "input"|"loading"|"results"
   const [phase,setPhase] = useState<Phase>("input")
   const [text,setText] = useState("")
@@ -1554,7 +1635,7 @@ export default function KitabhSocial({premium:premiumProp=false}:{premium?:boole
   }
 
   return (
-    <div className="ks" style={{width:"100%",alignSelf:"stretch",display:"block"}}>
+    <div className={`ks${isEmbedded ? " ks-embedded" : ""}`} style={{width:"100%",alignSelf:"stretch",display:"block",...(isEmbedded ? {background:"transparent"} : {})}}>
       <style>{CSS}</style>
       {comingSoon && <div className="ks-coming-soon">قريبًا</div>}
 

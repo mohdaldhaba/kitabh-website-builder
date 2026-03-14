@@ -865,6 +865,54 @@ const CSS = `
 .kb-share-divider span{font-size:12px;color:#AAAAAA;}
 .kb-share-copy{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;background:#fff;border:1.5px solid #E5E5E5;border-radius:10px;font-size:14px;font-weight:600;color:#371D12;cursor:pointer;font-family:inherit;transition:all .15s;}
 .kb-share-copy:hover{border-color:#0000FF;color:#0000FF;}
+
+/* ═══ Embedded mode overrides ═══ */
+.kb-embedded .kb-sel-btn:hover,.kb-embedded .kb-sel-btn.open{background:#F3F4F6;border-color:#111;color:#111;}
+.kb-embedded .kb-sel-item.sel{background:#F3F4F6;}
+.kb-embedded .kb-sel-item.sel .kb-sel-item-name{color:#111;}
+.kb-embedded .kb-sel-check{color:#111;}
+.kb-embedded .kb-tog.on{background:#111;}
+.kb-embedded .kb-exp-pdf:not(:disabled):hover{border-color:#111;background:#F3F4F6;color:#111;}
+.kb-embedded .kb-shape.matched{border-color:#111;background:#F3F4F6;}
+.kb-embedded .kb-card:focus-within{border-color:#111;}
+.kb-embedded .kb-load-step.active{background:#F3F4F6;border-color:#111;}
+.kb-embedded .kb-load-step.active .kb-load-step-ico{background:#F3F4F6;}
+.kb-embedded .kb-load-step.active .kb-load-step-txt{color:#111;}
+.kb-embedded .kb-load-prog-fill{background:#111;}
+.kb-embedded .kb-pi:hover{background:#F3F4F6;border-color:#111;box-shadow:0 3px 10px rgba(0,0,0,.10);}
+.kb-embedded .kb-qc{border-top-color:#111;}
+.kb-embedded .kb-ql{color:#111;}
+.kb-embedded .kb-cf-fill{background:#111;}
+.kb-embedded .kb-arc-label{color:#111;}
+.kb-embedded .kb-btn-retry:hover{border-color:#111;color:#111;}
+.kb-embedded .kb-cta-accent{color:#111;}
+.kb-embedded .kb-cta-btn-web:hover{border-color:#111;color:#111;}
+.kb-embedded .kb-cap-inp:focus{border-color:#111;}
+.kb-embedded .kb-cap-btn{background:#111;}
+.kb-embedded .kb-cap-btn:hover:not(:disabled){filter:brightness(1.3);}
+.kb-embedded .kb-learn-tab.active{color:#111;background:#F3F4F6;border-color:#111;}
+.kb-embedded .kb-learn-shape:hover{border-color:#111;box-shadow:0 2px 10px rgba(0,0,0,.08);}
+.kb-embedded .kb-method-badge{color:#111;}
+.kb-embedded .kb-method-tab:hover{border-color:#111;color:#111;}
+.kb-embedded .kb-method-tab.active{color:#111;background:#F3F4F6;border-color:#111;}
+.kb-embedded .kb-method-card.clickable:hover{border-color:#111;}
+.kb-embedded .kb-method-ring{background:rgba(17,17,17,.05);border-color:rgba(17,17,17,.15);}
+.kb-embedded .kb-method-card:hover .kb-method-ring{box-shadow:0 0 0 5px rgba(17,17,17,.06);}
+.kb-embedded .kb-method-ring-num{color:#111;}
+.kb-embedded .ktk-popup-input:focus{border-color:#111;}
+.kb-embedded .ktk-popup-btn{background:#111;}
+.kb-embedded .kb-trial-fill{background:linear-gradient(90deg,#111,#374151);}
+.kb-embedded .kb-history-item:hover{border-color:#111;background:#F9FAFB;}
+.kb-embedded .kb-history-badge{color:#111;background:#F3F4F6;}
+.kb-embedded .ktk-pw-btn{background:linear-gradient(135deg,#111,#374151);box-shadow:0 4px 14px rgba(0,0,0,.25);}
+.kb-embedded .ktk-pw-btn:hover{box-shadow:0 6px 20px rgba(0,0,0,.35);}
+.kb-embedded .kb-btn-share-main{background:#111;box-shadow:0 2px 8px rgba(0,0,0,.2);}
+.kb-embedded .kb-btn-share-main:hover{background:#333;box-shadow:0 4px 12px rgba(0,0,0,.3);}
+.kb-embedded .kb-share-copy:hover{border-color:#111;color:#111;}
+.kb-embedded .kb-badge-good{background:rgba(17,17,17,.12);color:#6B7280;}
+.kb-embedded svg[stroke="#0000FF"]{stroke:#111 !important;}
+.kb-embedded svg [stroke="#0000FF"]{stroke:#111 !important;}
+.kb-embedded svg [fill="#0000FF"]{fill:#111 !important;}
 `
 
 // ─── CAT SVG icons ─────────────────────────────────────
@@ -1077,7 +1125,8 @@ function normalizePillars(data: any, tool: string): any {
 }
 
 // ─── Main Component ────────────────────────────────────
-export default function KitabhChecker() {
+export default function KitabhChecker(props:{embedded?:boolean}) {
+  const isEmbedded = props?.embedded ?? false;
   type Tool  = "article" | "story" | "literary"
   type Phase = "input" | "loading" | "capture" | "results"
 
@@ -1741,7 +1790,7 @@ export default function KitabhChecker() {
 
   // ── JSX ───────────────────────────────────────────────
   return (
-    <div className="kb" style={{width:"100%",maxWidth:"100vw",alignSelf:"stretch",display:"block",overflowX:"hidden"}}>
+    <div className={`kb${isEmbedded ? " kb-embedded" : ""}`} style={{width:"100%",alignSelf:"stretch",display:"block",...(isEmbedded ? {background:"transparent"} : {maxWidth:"100vw",overflowX:"hidden"})}}>
       <style>{CSS}</style>
 
       {/* PILLAR MODAL */}

@@ -215,7 +215,7 @@ const BusinessHubV1: React.FC = () => {
           return <HubToolWrapper><Suspense fallback={<ToolLoader />}><KitabhOutline embedded premium /></Suspense></HubToolWrapper>;
         }
         if (activeSubPage === 'checker') {
-          return <HubToolWrapper><Suspense fallback={<ToolLoader />}><KitabhChecker /></Suspense></HubToolWrapper>;
+          return <HubToolWrapper><Suspense fallback={<ToolLoader />}><KitabhChecker embedded /></Suspense></HubToolWrapper>;
         }
         return <PostsPage subPage={activeSubPage} />;
       case 'newsletters': {
@@ -233,10 +233,10 @@ const BusinessHubV1: React.FC = () => {
         return <NotificationsPage />;
       case 'grow':
         if (activeSubPage === 'carousel') {
-          return <HubToolWrapper><Suspense fallback={<ToolLoader />}><KitabhCarousel premium /></Suspense></HubToolWrapper>;
+          return <HubToolWrapper><Suspense fallback={<ToolLoader />}><KitabhCarousel premium embedded /></Suspense></HubToolWrapper>;
         }
         if (activeSubPage === 'social') {
-          return <HubToolWrapper><Suspense fallback={<ToolLoader />}><KitabhSocial premium /></Suspense></HubToolWrapper>;
+          return <HubToolWrapper><Suspense fallback={<ToolLoader />}><KitabhSocial premium embedded /></Suspense></HubToolWrapper>;
         }
         if (activeSubPage === 'linktree') {
           return <Suspense fallback={<ToolLoader />}><LinktreePage /></Suspense>;
