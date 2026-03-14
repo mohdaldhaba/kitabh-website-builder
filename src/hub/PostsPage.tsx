@@ -19,7 +19,7 @@ const statusConfig: Record<string, { label: string; bg: string; color: string }>
 // ─── Outline Creator ─────────────────────────────────────
 const OutlineCreator: React.FC = () => (
   <div style={{ maxWidth: 800, margin: '0 auto' }}>
-    <h2 style={{ fontSize: 18, fontWeight: 700, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 8px' }}>
+    <h2 style={{ fontSize: 17, fontWeight: 700, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 8px' }}>
       إنشاء مخطط
     </h2>
     <p style={{ fontSize: 14, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 24px' }}>
@@ -89,9 +89,9 @@ const OutlineCreator: React.FC = () => (
                 padding: '8px 16px',
                 background: '#F3F4F6',
                 border: 'none',
-                borderRadius: 8,
+                borderRadius: 10,
                 fontSize: 13,
-                fontWeight: 500,
+                fontWeight: 600,
                 fontFamily: 'IBM Plex Sans Arabic, sans-serif',
                 color: colors.text,
                 cursor: 'pointer',
@@ -108,11 +108,11 @@ const OutlineCreator: React.FC = () => (
 
       <button
         style={{
-          padding: '12px 24px',
+          padding: '10px 20px',
           background: '#111',
           color: '#fff',
           border: 'none',
-          borderRadius: 8,
+          borderRadius: 10,
           fontSize: 14,
           fontWeight: 600,
           fontFamily: 'IBM Plex Sans Arabic, sans-serif',
@@ -193,13 +193,13 @@ const ArticlesList: React.FC<{ defaultFilter?: FilterStatus }> = ({ defaultFilte
         <div style={{ display: 'flex', gap: 8 }}>
           <button
             style={{
-              padding: '9px 16px',
+              padding: '8px 16px',
               background: '#fff',
               color: colors.text,
               border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)',
-              borderRadius: 8,
-              fontSize: 14,
-              fontWeight: 500,
+              borderRadius: 10,
+              fontSize: 13,
+              fontWeight: 600,
               fontFamily: 'IBM Plex Sans Arabic, sans-serif',
               cursor: 'pointer',
             }}
@@ -208,11 +208,11 @@ const ArticlesList: React.FC<{ defaultFilter?: FilterStatus }> = ({ defaultFilte
           </button>
           <button
             style={{
-              padding: '9px 16px',
+              padding: '10px 20px',
               background: colors.primary,
               color: '#fff',
               border: 'none',
-              borderRadius: 8,
+              borderRadius: 10,
               fontSize: 14,
               fontWeight: 600,
               fontFamily: 'IBM Plex Sans Arabic, sans-serif',
@@ -266,12 +266,12 @@ const ArticlesList: React.FC<{ defaultFilter?: FilterStatus }> = ({ defaultFilte
         {/* Filters button */}
         <button
           style={{
-            padding: '9px 16px',
+            padding: '8px 16px',
             background: '#fff',
             border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)',
-            borderRadius: 8,
-            fontSize: 14,
-            fontWeight: 500,
+            borderRadius: 10,
+            fontSize: 13,
+            fontWeight: 600,
             fontFamily: 'IBM Plex Sans Arabic, sans-serif',
             color: colors.text,
             cursor: 'pointer',

@@ -25,7 +25,7 @@ const MembersPage: React.FC = () => (
           background: '#111',
           color: '#fff',
           border: 'none',
-          borderRadius: 8,
+          borderRadius: 10,
           fontSize: 14,
           fontWeight: 600,
           fontFamily: 'IBM Plex Sans Arabic, sans-serif',

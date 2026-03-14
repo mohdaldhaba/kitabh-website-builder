@@ -977,7 +977,7 @@ const CSS_STYLES = `
 .ka-name-input:focus{border-color:#111;}
 
 /* Run button */
-.ka-btn-run{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 18px;border:none;border-radius:9px;background:#111;color:#fff;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:background .2s;}
+.ka-btn-run{display:inline-flex;align-items:center;gap:6px;height:38px;padding:0 18px;border:none;border-radius:10px;background:#111;color:#fff;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:background .2s;}
 .ka-btn-run:hover{background:#333;}
 .ka-btn-run-active{background:#F59E0B;color:#fff;}
 .ka-btn-run-active:hover{background:#D97706;}
@@ -1099,9 +1099,9 @@ const CSS_STYLES = `
 /* Buttons */
 .ka-btn-primary{display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 20px;border:none;border-radius:10px;background:#111;color:#fff;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;transition:background .2s;white-space:nowrap;}
 .ka-btn-primary:hover{background:#333;}
-.ka-btn-ghost{display:inline-flex;align-items:center;gap:4px;height:34px;padding:0 10px;border:none;background:none;font-family:inherit;font-size:13px;font-weight:600;color:#888;cursor:pointer;border-radius:8px;transition:all .15s;}
+.ka-btn-ghost{display:inline-flex;align-items:center;gap:4px;height:38px;padding:0 10px;border:none;background:none;font-family:inherit;font-size:13px;font-weight:600;color:#888;cursor:pointer;border-radius:10px;transition:all .15s;}
 .ka-btn-ghost:hover{background:#F0F0F0;color:#111;}
-.ka-btn-icon-sm{display:flex;align-items:center;justify-content:center;width:30px;height:30px;border:1px solid rgba(0,0,0,0.06);border-radius:8px;background:#fff;color:#999;cursor:pointer;padding:0;}
+.ka-btn-icon-sm{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border:1px solid rgba(0,0,0,0.06);border-radius:8px;background:#fff;color:#999;cursor:pointer;padding:0;}
 .ka-btn-icon-sm:hover{border-color:#E82222;color:#E82222;background:#FEF2F2;}
 
 /* Responsive */

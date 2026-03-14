@@ -428,7 +428,7 @@ const CSS_STYLES = `
 .kds-btn-outline:hover{border-color:#BBB;background:#F8F8F8;}
 .kds-btn-ghost-sm{display:inline-flex;align-items:center;gap:4px;height:30px;padding:0 10px;border:none;background:none;font-family:inherit;font-size:12px;font-weight:600;color:#888;cursor:pointer;border-radius:7px;}
 .kds-btn-ghost-sm:hover{background:#F0F0F0;color:#111;}
-.kds-btn-icon-sm{display:flex;align-items:center;justify-content:center;width:28px;height:28px;border:1px solid rgba(0,0,0,0.06);border-radius:7px;background:#fff;color:#888;cursor:pointer;transition:all .15s;padding:0;}
+.kds-btn-icon-sm{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border:1px solid rgba(0,0,0,0.06);border-radius:8px;background:#fff;color:#888;cursor:pointer;transition:all .15s;padding:0;}
 .kds-btn-icon-sm:hover{border-color:#BBB;color:#111;background:#F5F5F5;}
 
 /* Responsive */

@@ -451,7 +451,7 @@ const EmailTemplatePage: React.FC = () => {
       {/* Page header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24, flexWrap: 'wrap', gap: 12 }}>
         <div>
-          <h2 style={{ fontSize: 18, fontWeight: 700, color: c.text, fontFamily: F, margin: '0 0 4px' }}>
+          <h2 style={{ fontSize: 17, fontWeight: 700, color: c.text, fontFamily: F, margin: '0 0 4px' }}>
             قالب البريد الإلكتروني
           </h2>
           <p style={{ fontSize: 14, color: c.textMuted, fontFamily: F, margin: 0 }}>
@@ -460,7 +460,7 @@ const EmailTemplatePage: React.FC = () => {
         </div>
         <button style={{
           padding: '10px 24px', background: c.text, color: c.cardBg,
-          border: 'none', borderRadius: 8, fontSize: 14, fontWeight: 600, fontFamily: F, cursor: 'pointer',
+          border: 'none', borderRadius: 10, fontSize: 14, fontWeight: 600, fontFamily: F, cursor: 'pointer',
         }}>
           حفظ القالب
         </button>

@@ -46,7 +46,7 @@ const QuickLinks: React.FC = () => {
             <div style={{
               padding: '10px 14px',
               background: '#F3F4F6',
-              borderRadius: 8,
+              borderRadius: 10,
               fontSize: 14,
               fontWeight: 600,
               fontFamily: F,
@@ -65,7 +65,7 @@ const QuickLinks: React.FC = () => {
                 background: copiedId === link.id ? '#059669' : '#fff',
                 color: copiedId === link.id ? '#fff' : colors.text,
                 border: `1px solid ${copiedId === link.id ? '#059669' : '#E5E7EB'}`,
-                borderRadius: 8,
+                borderRadius: 10,
                 fontSize: 13,
                 fontWeight: 600,
                 fontFamily: F,
@@ -87,7 +87,7 @@ const QuickLinks: React.FC = () => {
               padding: '8px 14px',
               background: '#FAFAFA',
               border: '1px solid #E5E7EB',
-              borderRadius: 8,
+              borderRadius: 10,
               fontSize: 13,
               fontFamily: 'monospace',
               color: colors.textMuted,
@@ -230,7 +230,7 @@ const DashboardPage: React.FC = () => {
       <div style={{ ...card, padding: '20px 16px', marginBottom: 16 }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20, flexWrap: 'wrap', gap: 12 }}>
           <div>
-            <h1 style={{ fontSize: 20, fontWeight: 700, color: colors.text, fontFamily: F, margin: 0 }}>
+            <h1 style={{ fontSize: 24, fontWeight: 700, color: colors.text, fontFamily: F, margin: 0 }}>
               أهلا، {MOCK_AUTHOR.name.split(' ')[0]}
             </h1>
             <p style={{ fontSize: 13, color: colors.textMuted, fontFamily: F, marginTop: 4 }}>
@@ -242,7 +242,7 @@ const DashboardPage: React.FC = () => {
             <button
               onClick={() => setTfOpen(!tfOpen)}
               style={{
-                padding: '8px 14px', background: '#fff', border: '1px solid #E5E7EB', borderRadius: 8,
+                padding: '8px 16px', background: '#fff', border: '1px solid #E5E7EB', borderRadius: 10,
                 fontSize: 13, fontWeight: 600, fontFamily: F, cursor: 'pointer', color: colors.text,
                 display: 'flex', alignItems: 'center', gap: 8,
               }}
@@ -301,7 +301,7 @@ const DashboardPage: React.FC = () => {
         {/* Subscriber Growth Chart */}
         <div style={{ ...card, padding: '16px', overflow: 'hidden' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
-            <h2 style={{ fontSize: 15, fontWeight: 700, color: colors.text, fontFamily: F, margin: 0 }}>نمو المشتركين</h2>
+            <h2 style={{ fontSize: 17, fontWeight: 700, color: colors.text, fontFamily: F, margin: 0 }}>نمو المشتركين</h2>
           </div>
           <div style={{ fontSize: 28, fontWeight: 700, color: colors.text, fontFamily: F, marginBottom: 4 }}>
             {netGrowth >= 0 ? '+' : ''}{netGrowth.toLocaleString('en')}
@@ -328,7 +328,7 @@ const DashboardPage: React.FC = () => {
         <div style={{ ...card, padding: '16px', overflow: 'hidden' }}>
           <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 16, flexWrap: 'wrap', gap: 8 }}>
             <div>
-              <h2 style={{ fontSize: 15, fontWeight: 700, color: colors.text, fontFamily: F, margin: 0 }}>أداء آخر منشور</h2>
+              <h2 style={{ fontSize: 17, fontWeight: 700, color: colors.text, fontFamily: F, margin: 0 }}>أداء آخر منشور</h2>
               {lastPost && (
                 <div style={{ fontSize: 13, color: colors.textMuted, fontFamily: F, marginTop: 4, fontStyle: 'italic' }}>
                   {lastPost.title.length > 40 ? lastPost.title.slice(0, 40) + '...' : lastPost.title}
@@ -336,8 +336,8 @@ const DashboardPage: React.FC = () => {
               )}
             </div>
             <button style={{
-              padding: '6px 14px', background: '#fff', border: '1px solid #E5E7EB', borderRadius: 8,
-              fontSize: 12, fontWeight: 600, fontFamily: F, cursor: 'pointer', color: colors.text,
+              padding: '8px 16px', background: '#fff', border: '1px solid #E5E7EB', borderRadius: 10,
+              fontSize: 13, fontWeight: 600, fontFamily: F, cursor: 'pointer', color: colors.text,
               display: 'flex', alignItems: 'center', gap: 6, whiteSpace: 'nowrap',
             }}>
               عرض المنشور

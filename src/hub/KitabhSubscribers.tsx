@@ -960,11 +960,11 @@ const CSS_STYLES = `
 /* Buttons */
 .ksm-btn-primary{display:inline-flex;align-items:center;gap:6px;height:40px;padding:0 20px;border:none;border-radius:10px;background:#111;color:#fff;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;transition:background .2s;white-space:nowrap;}
 .ksm-btn-primary:hover{background:#333;}
-.ksm-btn-outline{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 14px;border:1px solid rgba(0,0,0,0.06);border-radius:9px;background:#fff;color:#111;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;white-space:nowrap;}
+.ksm-btn-outline{display:inline-flex;align-items:center;gap:6px;height:38px;padding:0 14px;border:1px solid rgba(0,0,0,0.06);border-radius:10px;background:#fff;color:#111;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;white-space:nowrap;}
 .ksm-btn-outline:hover{border-color:#BBB;background:#F8F8F8;}
 .ksm-btn-outline.active{border-color:#111;background:#F5F0EB;color:#111;}
 .ksm-btn-filtered{border-color:#111;background:#EDEDFF;color:#111;}
-.ksm-btn-sm{height:34px;font-size:12px;padding:0 12px;}
+.ksm-btn-sm{height:38px;font-size:12px;padding:0 14px;border-radius:10px;}
 .ksm-btn-icon{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border:1px solid rgba(0,0,0,0.06);border-radius:8px;background:#fff;color:#888;cursor:pointer;transition:all .15s;}
 .ksm-btn-icon:hover{border-color:#BBB;color:#111;background:#F5F5F5;}
 .ksm-btn-icon-danger{border-color:#E0E0E0;}

@@ -81,7 +81,7 @@ const NewsletterStats: React.FC = () => {
       <div>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24 }}>
           <div>
-            <h2 style={{ fontSize: 18, fontWeight: 700, color: colors.text, fontFamily: F, margin: '0 0 4px' }}>
+            <h2 style={{ fontSize: 17, fontWeight: 700, color: colors.text, fontFamily: F, margin: '0 0 4px' }}>
               إحصائيات النشرات البريدية
             </h2>
             <p style={{ fontSize: 14, color: colors.textMuted, fontFamily: F, margin: 0 }}>
@@ -230,7 +230,7 @@ const NewsletterStats: React.FC = () => {
 
                 {/* CTA */}
                 <div style={{ padding: '12px 16px 20px' }}>
-                  <button style={{ width: '100%', padding: '10px 16px', background: '#111', color: '#fff', border: 'none', borderRadius: 8, fontSize: 14, fontWeight: 600, fontFamily: F, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}
+                  <button style={{ width: '100%', padding: '10px 16px', background: '#111', color: '#fff', border: 'none', borderRadius: 10, fontSize: 14, fontWeight: 600, fontFamily: F, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}
                     onClick={(e) => { e.stopPropagation(); setSelectedId(nl._id || 'default'); }}>
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
                     عرض التحليل المفصّل
@@ -267,7 +267,7 @@ const NewsletterStats: React.FC = () => {
     <div>
       {/* Back + Header */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 24 }}>
-        <button onClick={() => setSelectedId(null)} style={{ padding: '8px 14px', background: '#fff', border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)', borderRadius: 8, fontSize: 13, fontWeight: 600, fontFamily: F, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, color: colors.text }}>
+        <button onClick={() => setSelectedId(null)} style={{ padding: '8px 14px', background: '#fff', border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 1px 3px rgba(0,0,0,0.04)', borderRadius: 10, fontSize: 13, fontWeight: 600, fontFamily: F, cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6, color: colors.text }}>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round"><polyline points="15 18 9 12 15 6"/></svg>
           العودة
         </button>
@@ -445,7 +445,7 @@ const WebsiteStats: React.FC = () => {
 
   return (
     <div>
-      <h2 style={{ fontSize: 18, fontWeight: 700, color: colors.text, fontFamily: F, margin: '0 0 8px' }}>إحصائيات الموقع</h2>
+      <h2 style={{ fontSize: 17, fontWeight: 700, color: colors.text, fontFamily: F, margin: '0 0 8px' }}>إحصائيات الموقع</h2>
       <p style={{ fontSize: 14, color: colors.textMuted, fontFamily: F, margin: '0 0 24px' }}>أداء موقعك — آخر 30 يوما</p>
       <div style={{ display: 'flex', gap: 12, marginBottom: 24, flexWrap: 'wrap' }}>
         {[

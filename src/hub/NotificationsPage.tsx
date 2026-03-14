@@ -41,7 +41,7 @@ const NotificationsPage: React.FC = () => {
             background: 'transparent',
             color: colors.text,
             border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)',
-            borderRadius: 8,
+            borderRadius: 10,
             fontSize: 13,
             fontWeight: 600,
             fontFamily: 'IBM Plex Sans Arabic, sans-serif',

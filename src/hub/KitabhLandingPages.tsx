@@ -840,14 +840,14 @@ const CSS_STYLES = `
 .klp-btn-primary:hover{background:#333;}
 .klp-btn-unpublish{background:#E82222;}
 .klp-btn-unpublish:hover{background:#C41E1E;}
-.klp-btn-ghost{display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 14px;border:1px solid rgba(0,0,0,0.06);border-radius:10px;background:#fff;color:#111;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;}
+.klp-btn-ghost{display:inline-flex;align-items:center;gap:6px;height:38px;padding:0 14px;border:1px solid rgba(0,0,0,0.06);border-radius:10px;background:#fff;color:#111;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;}
 .klp-btn-ghost:hover{border-color:#BBB;background:#F8F8F8;}
 .klp-btn-ghost.active{border-color:#111;background:#F3F4F6;color:#111;}
 .klp-btn-icon{display:flex;align-items:center;justify-content:center;width:34px;height:34px;border:1px solid rgba(0,0,0,0.06);border-radius:8px;background:#fff;color:#888;cursor:pointer;transition:all .15s;}
 .klp-btn-icon:hover{border-color:#BBB;color:#111;background:#F5F5F5;}
 .klp-btn-danger:hover{border-color:#E82222;color:#E82222;background:#FEF2F2;}
 .klp-btn-publish.active{border-color:#12B76A;color:#12B76A;background:#E6F9EE;}
-.klp-btn-sm{font-family:inherit;font-size:12px;font-weight:600;padding:6px 14px;border:1px solid rgba(0,0,0,0.06);border-radius:8px;background:#fff;color:#555;cursor:pointer;}
+.klp-btn-sm{font-family:inherit;font-size:12px;font-weight:600;height:38px;padding:0 14px;border:1px solid rgba(0,0,0,0.06);border-radius:10px;background:#fff;color:#555;cursor:pointer;display:inline-flex;align-items:center;}
 .klp-btn-sm:hover{border-color:#BBB;}
 .klp-btn-sm-danger{color:#E82222;border-color:#FECACA;}
 .klp-btn-sm-danger:hover{background:#FEF2F2;border-color:#E82222;}
@@ -877,7 +877,7 @@ const CSS_STYLES = `
 .klp-slug-field{border:none !important;border-radius:0 !important;height:42px;flex:1;direction:ltr;text-align:left;}
 .klp-slug-field:focus{border:none !important;}
 .klp-divider{height:1px;background:#E8E8E8;margin:24px 0;}
-.klp-section-title{font-size:15px;font-weight:700;color:#111;margin:0 0 16px;}
+.klp-section-title{font-size:17px;font-weight:700;color:#111;margin:0 0 16px;}
 
 /* Image Upload */
 .klp-upload-area{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;width:100%;height:120px;border:2px dashed #D9D9D9;border-radius:12px;background:#FAFAFA;color:#999;font-family:inherit;font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;}

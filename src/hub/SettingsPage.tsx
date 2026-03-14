@@ -9,7 +9,7 @@ interface SettingsPageProps {
 // ─── Account Settings ────────────────────────────────────
 const AccountSection: React.FC = () => (
   <div>
-    <h2 style={{ fontSize: 18, fontWeight: 700, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 8px' }}>
+    <h2 style={{ fontSize: 24, fontWeight: 700, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 8px' }}>
       إعدادات الحساب
     </h2>
     <p style={{ fontSize: 14, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 24px' }}>
@@ -50,7 +50,7 @@ const AccountSection: React.FC = () => (
             background: 'transparent',
             color: colors.text,
             border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)',
-            borderRadius: 8,
+            borderRadius: 10,
             fontSize: 13,
             fontWeight: 600,
             fontFamily: 'IBM Plex Sans Arabic, sans-serif',
@@ -111,7 +111,7 @@ const AccountSection: React.FC = () => (
 // ─── Billing Settings ────────────────────────────────────
 const BillingSection: React.FC = () => (
   <div>
-    <h2 style={{ fontSize: 18, fontWeight: 700, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 8px' }}>
+    <h2 style={{ fontSize: 24, fontWeight: 700, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 8px' }}>
       الفوترة والاشتراك
     </h2>
     <p style={{ fontSize: 14, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 24px' }}>
@@ -143,7 +143,7 @@ const BillingSection: React.FC = () => (
             background: '#111',
             color: '#fff',
             border: 'none',
-            borderRadius: 8,
+            borderRadius: 10,
             fontSize: 14,
             fontWeight: 600,
             fontFamily: 'IBM Plex Sans Arabic, sans-serif',
@@ -158,7 +158,7 @@ const BillingSection: React.FC = () => (
             background: 'transparent',
             color: colors.text,
             border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)',
-            borderRadius: 8,
+            borderRadius: 10,
             fontSize: 14,
             fontWeight: 600,
             fontFamily: 'IBM Plex Sans Arabic, sans-serif',
@@ -210,7 +210,7 @@ const SubdomainSection: React.FC = () => {
 
   return (
     <div>
-      <h2 style={{ fontSize: 18, fontWeight: 700, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 8px' }}>
+      <h2 style={{ fontSize: 24, fontWeight: 700, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 8px' }}>
         النطاق الفرعي
       </h2>
       <p style={{ fontSize: 14, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 24px' }}>

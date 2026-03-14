@@ -114,7 +114,7 @@ const WebsitePage: React.FC<WebsitePageProps> = ({
       {/* Header */}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24, flexWrap: 'wrap', gap: 12 }}>
         <div>
-          <h2 style={{ fontSize: 18, fontWeight: 700, color: c.text, fontFamily: F, margin: '0 0 4px' }}>
+          <h2 style={{ fontSize: 17, fontWeight: 700, color: c.text, fontFamily: F, margin: '0 0 4px' }}>
             موقع {publicationName}
           </h2>
           <p style={{ fontSize: 14, color: c.textMuted, fontFamily: F, margin: 0 }}>
@@ -138,7 +138,7 @@ const WebsitePage: React.FC<WebsitePageProps> = ({
             background: copied ? '#059669' : 'transparent',
             color: copied ? '#fff' : c.textMuted,
             border: `1px solid ${copied ? '#059669' : c.border}`,
-            borderRadius: 6,
+            borderRadius: 10,
             fontSize: 12,
             fontWeight: 600,
             fontFamily: F,
@@ -178,12 +178,12 @@ const WebsitePage: React.FC<WebsitePageProps> = ({
         <button
           onClick={() => setMode('builder')}
           style={{
-            padding: '16px 20px',
+            padding: '10px 20px',
             background: c.text,
             color: c.cardBg,
             border: 'none',
-            borderRadius: 12,
-            fontSize: 15,
+            borderRadius: 10,
+            fontSize: 14,
             fontWeight: 600,
             fontFamily: F,
             cursor: 'pointer',
@@ -199,12 +199,12 @@ const WebsitePage: React.FC<WebsitePageProps> = ({
         <button
           onClick={() => window.open(websiteUrl, '_blank')}
           style={{
-            padding: '16px 20px',
+            padding: '10px 20px',
             background: c.cardBg,
             color: c.text,
             border: `1px solid ${c.border}`,
-            borderRadius: 12,
-            fontSize: 15,
+            borderRadius: 10,
+            fontSize: 14,
             fontWeight: 600,
             fontFamily: F,
             cursor: 'pointer',
@@ -258,7 +258,7 @@ const WebsitePage: React.FC<WebsitePageProps> = ({
                   background: `rgba(0,0,0,0.05)`,
                   color: c.text,
                   border: 'none',
-                  borderRadius: 6,
+                  borderRadius: 10,
                   fontSize: 13,
                   fontWeight: 600,
                   fontFamily: F,
