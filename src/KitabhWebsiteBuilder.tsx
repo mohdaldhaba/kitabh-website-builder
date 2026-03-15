@@ -2245,9 +2245,9 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
           </button>
           <button className="kwb-mobile-fab kwb-mobile-fab-primary" onClick={handlePublish} disabled={publishStatus === "publishing"}>
             {publishStatus === "publishing" ? (
-              <svg className="kwb-spin" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+              <><svg className="kwb-spin" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg></>
             ) : (
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+              <><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg><span style={{fontSize:13,fontWeight:600,fontFamily:"'IBM Plex Sans Arabic',sans-serif"}}>نشر</span></>
             )}
           </button>
         </div>
@@ -5530,7 +5530,7 @@ const CSS_STYLES = `
     color:#374151;transition:background 0.15s;
   }
   .kwb-mobile-fab:active{background:#F3F4F6;}
-  .kwb-mobile-fab-primary{background:#111!important;color:#fff!important;border-color:#111!important;}
+  .kwb-mobile-fab-primary{background:#111!important;color:#fff!important;border-color:#111!important;width:auto!important;padding:0 16px!important;gap:6px;}
   .kwb-mobile-fab-primary:active{background:#333!important;}
 
   /* Overlay behind sidebar */
@@ -5556,7 +5556,11 @@ const CSS_STYLES = `
   .kwb-device-toggle{display:none!important;}
 
   /* Force mobile preview — apply all kwb-preview-mobile styles */
-  .kwb-preview-frame{max-width:100%!important;border:none!important;}
+  .kwb-preview-area{padding:0!important;overflow-x:hidden!important;}
+  .kwb-preview-frame{max-width:100%!important;width:100%!important;border:none!important;overflow:hidden!important;}
+  .kwb-preview-content{overflow-x:hidden!important;max-width:100vw!important;}
+  .kwb-preview-content *{max-width:100%!important;box-sizing:border-box!important;}
+  .kwb-preview-content img{height:auto!important;}
   .kwb-preview-frame .kwb-p-hero-news{grid-template-columns:1fr;}
   .kwb-preview-frame .kwb-p-hero-main{order:-1;}
   .kwb-preview-frame .kwb-p-hero-side-r{flex-direction:row;order:1;}
@@ -5570,6 +5574,14 @@ const CSS_STYLES = `
   .kwb-preview-frame .kwb-p-footer-inner{flex-direction:column;gap:20px;}
   .kwb-preview-frame .kwb-p-cta-inner{flex-direction:column;}
   .kwb-preview-frame .kwb-p-form-row{flex-direction:column;}
+  .kwb-preview-frame .kwb-p-bento{grid-template-columns:1fr!important;}
+  .kwb-preview-frame .kwb-p-bento .kwb-p-bento-card{grid-column:auto!important;}
+  .kwb-preview-frame .kwb-p-movies-grid{grid-template-columns:repeat(2,1fr)!important;}
+  .kwb-preview-frame .kwb-p-podcast-grid{grid-template-columns:1fr!important;}
+  .kwb-preview-frame .kwb-p-products-grid{grid-template-columns:1fr!important;}
+  .kwb-preview-frame .kwb-p-gallery-cards{grid-template-columns:1fr!important;}
+  .kwb-preview-frame .kwb-p-catfeed-body{grid-template-columns:1fr!important;}
+  .kwb-preview-frame .kwb-p-testimonials-grid{grid-template-columns:1fr!important;}
 }
 @media(max-width:600px){
   .kwb{padding:16px 12px 40px;}
