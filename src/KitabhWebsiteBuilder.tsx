@@ -5551,8 +5551,25 @@ const CSS_STYLES = `
     display:flex;justify-content:center;padding:10px 0 4px;cursor:pointer;
   }
 
-  /* Hide top bar undo/redo on very small screens */
+  /* Hide top bar device toggle + compact */
   .kwb-builder-top{padding:8px 12px;}
+  .kwb-device-toggle{display:none!important;}
+
+  /* Force mobile preview — apply all kwb-preview-mobile styles */
+  .kwb-preview-frame{max-width:100%!important;border:none!important;}
+  .kwb-preview-frame .kwb-p-hero-news{grid-template-columns:1fr;}
+  .kwb-preview-frame .kwb-p-hero-main{order:-1;}
+  .kwb-preview-frame .kwb-p-hero-side-r{flex-direction:row;order:1;}
+  .kwb-preview-frame .kwb-p-hero-side-r .kwb-p-hero-side-card{min-width:0;flex:1;}
+  .kwb-preview-frame .kwb-p-hero-side-l{display:none;}
+  .kwb-preview-frame .kwb-p-nav{display:none;}
+  .kwb-preview-frame .kwb-p-header-actions{display:none;}
+  .kwb-preview-frame .kwb-p-hamburger{display:flex!important;}
+  .kwb-preview-frame .kwb-p-articles-grid{grid-template-columns:1fr!important;}
+  .kwb-preview-frame .kwb-p-banner-grid{grid-template-columns:1fr!important;}
+  .kwb-preview-frame .kwb-p-footer-inner{flex-direction:column;gap:20px;}
+  .kwb-preview-frame .kwb-p-cta-inner{flex-direction:column;}
+  .kwb-preview-frame .kwb-p-form-row{flex-direction:column;}
 }
 @media(max-width:600px){
   .kwb{padding:16px 12px 40px;}
