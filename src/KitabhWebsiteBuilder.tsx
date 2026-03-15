@@ -2162,9 +2162,13 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
         <style>{CSS_STYLES}</style>
         <div className="kwb-tpl-picker">
           <div className="kwb-tpl-picker-header">
-            {!isEmbedded && <button className="kwb-back-link" style={{fontFamily:"'Alyamama', sans-serif"}} onClick={() => setView("sites")}>رجوع</button>}
-            <h1 className="kwb-tpl-picker-title" style={{fontFamily:"'Alyamama', sans-serif"}}>ابدأ بقالب جاهز</h1>
-            <p className="kwb-tpl-picker-subtitle" style={{fontFamily:"'Alyamama', sans-serif"}}>اختر قالبًا وخصّصه كما تشاء — الألوان والخطوط والمحتوى كلها قابلة للتعديل</p>
+            {!isEmbedded && !activeSite && <button className="kwb-back-link" style={{fontFamily:"'Alyamama', sans-serif"}} onClick={() => setView("sites")}>رجوع</button>}
+            {activeSite && <button className="kwb-back-link" style={{fontFamily:"'Alyamama', sans-serif"}} onClick={() => setView("builder")}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+              رجوع للمحرر
+            </button>}
+            <h1 className="kwb-tpl-picker-title" style={{fontFamily:"'Alyamama', sans-serif"}}>{activeSite ? 'تغيير القالب' : 'ابدأ بقالب جاهز'}</h1>
+            <p className="kwb-tpl-picker-subtitle" style={{fontFamily:"'Alyamama', sans-serif"}}>{activeSite ? 'اختر قالبًا جديدًا — سيتم تطبيقه على موقعك' : 'اختر قالبًا وخصّصه كما تشاء — الألوان والخطوط والمحتوى كلها قابلة للتعديل'}</p>
           </div>
           <div className="kwb-tpl-grid">
             {TEMPLATES.map(t => {
@@ -2176,21 +2180,23 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
               const font = b.fontFamily || "IBM Plex Sans Arabic";
               const patternFn = geoPatterns[t.id] || geoPatterns.media;
 
+              const isActive = activeSite?.templateId === t.id;
               return (
-              <div key={t.id} className="kwb-tpl-card" onClick={() => createFromTemplate(t.id)}>
-                <div className="kwb-tpl-preview" style={{background:bgColor}}>
+              <div key={t.id} className={`kwb-tpl-card${isActive ? ' kwb-tpl-card-active' : ''}`} onClick={() => createFromTemplate(t.id)} style={isActive ? {border:'3px solid #111', borderRadius:16} : undefined}>
+                <div className="kwb-tpl-preview" style={{background:bgColor, position:'relative'}}>
                   {patternFn(accent, btn, bgColor)}
                   <div className="kwb-tpl-preview-label" style={{fontFamily:`'${font}', sans-serif`}}>
                     <span className="kwb-tpl-preview-name" style={{color:isDark?"#fff":"#000"}}>{t.name}</span>
                   </div>
+                  {isActive && <div style={{position:'absolute', top:12, left:12, background:'#111', color:'#fff', fontSize:11, fontWeight:700, padding:'4px 12px', borderRadius:20, fontFamily:"'IBM Plex Sans Arabic', sans-serif"}}>القالب الحالي</div>}
                 </div>
                 <div className="kwb-tpl-overlay">
-                  <button className="kwb-tpl-use-btn" style={{background:btn}}>ابدأ بهذا القالب</button>
+                  <button className="kwb-tpl-use-btn" style={{background:btn}}>{isActive ? 'القالب الحالي' : 'ابدأ بهذا القالب'}</button>
                 </div>
                 <div className="kwb-tpl-meta">
-                  <h3 className="kwb-tpl-name" style={{fontFamily:`'${font}', sans-serif`}}>{t.name}</h3>
+                  <h3 className="kwb-tpl-name" style={{fontFamily:`'${font}', sans-serif`}}>{t.name}{isActive ? ' ✓' : ''}</h3>
                   <p className="kwb-tpl-desc">{t.description}</p>
-                  <button className="kwb-tpl-mobile-btn" style={{background:btn}}>ابدأ بهذا القالب</button>
+                  <button className="kwb-tpl-mobile-btn" style={{background: isActive ? '#111' : btn}}>{isActive ? 'القالب الحالي' : 'ابدأ بهذا القالب'}</button>
                 </div>
               </div>
               );})}
