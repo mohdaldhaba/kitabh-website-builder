@@ -641,6 +641,7 @@ export default function KitabhWebsiteBuilder(props: any) {
   const [loginTab, setLoginTab] = useState<"signin" | "signup">("signin");
   const [showSeoModal, setShowSeoModal] = useState<string | null>(null);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
+  const [mobileBuilderSidebar, setMobileBuilderSidebar] = useState(false);
   const [articleFilterCategory, setArticleFilterCategory] = useState<string | null>(null);
 
   // ─── Undo/Redo tracking ────────
@@ -2234,6 +2235,28 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
           </div>
         </div>
 
+        {/* Mobile floating controls */}
+        <div className="kwb-mobile-fab-row">
+          <button className="kwb-mobile-fab" onClick={() => setMobileBuilderSidebar(true)}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/></svg>
+          </button>
+          <button className="kwb-mobile-fab" onClick={() => setView("templates")}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          </button>
+          <button className="kwb-mobile-fab kwb-mobile-fab-primary" onClick={handlePublish} disabled={publishStatus === "publishing"}>
+            {publishStatus === "publishing" ? (
+              <svg className="kwb-spin" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+            ) : (
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+            )}
+          </button>
+        </div>
+
+        {/* Mobile sidebar overlay */}
+        {mobileBuilderSidebar && (
+          <div className="kwb-mobile-sidebar-overlay" onClick={() => setMobileBuilderSidebar(false)} />
+        )}
+
         <div className="kwb-builder-body">
           {/* ─── PREVIEW ─── */}
           <div className="kwb-preview-area" onClick={(e) => { if (!(e.target as HTMLElement).closest('.kwb-p-comp-wrap') && !(e.target as HTMLElement).closest('.kwb-p-insert-line')) { setExpandedComponent(null); setInsertAtIndex(null); } }}>
@@ -3161,7 +3184,11 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
           </div>
 
           {/* ─── SIDEBAR ─── */}
-          <div className="kwb-sidebar">
+          <div className={`kwb-sidebar${mobileBuilderSidebar ? ' kwb-sidebar-mobile-open' : ''}`}>
+            {/* Mobile drag handle */}
+            <div className="kwb-sidebar-mobile-handle" onClick={() => setMobileBuilderSidebar(false)}>
+              <div style={{ width: 36, height: 4, borderRadius: 2, background: 'rgba(0,0,0,0.15)', margin: '0 auto' }} />
+            </div>
             {/* Back / Preview / Publish buttons */}
             <div className="kwb-sidebar-top-btns-col">
               {!isEmbedded && <button className="kwb-back-builder-btn" onClick={() => setView("sites")}>
@@ -5452,13 +5479,14 @@ const CSS_STYLES = `
 .kwb-mc-social-links::before,.kwb-mc-social-links::after{content:'';width:10px;height:10px;border-radius:50%;border:1.5px solid #ccc;}
 
 /* ─── RESPONSIVE ─── */
+/* Mobile floating action buttons + sidebar handle — hidden on desktop */
+.kwb-mobile-fab-row{display:none;}
+.kwb-mobile-sidebar-overlay{display:none;}
+.kwb-sidebar-mobile-handle{display:none;}
+
 @media(max-width:900px){
   .kwb-tpl-grid{grid-template-columns:repeat(2,1fr);gap:20px;}
   .kwb-tpl-preview{height:320px;}
-  .kwb-builder-body{flex-direction:column-reverse;}
-  .kwb-sidebar{width:100%;max-height:50vh;border-left:none;border-top:1px solid #E8E8E8;}
-  .kwb-preview-area{padding:0 8px 20px;}
-  .kwb-preview-frame{max-width:100%;}
   .kwb-p-hero-news{grid-template-columns:1fr;}
   .kwb-p-hero-side{display:none;}
   .kwb-p-banner-grid{grid-template-columns:1fr;}
@@ -5468,21 +5496,63 @@ const CSS_STYLES = `
   .kwb-p-articles-grid{grid-template-columns:repeat(2,1fr);}
   .kwb-p-bento{grid-template-columns:1fr!important;}
   .kwb-p-bento .kwb-p-bento-card{grid-column:auto!important;}
-}
-@media(max-width:768px){
-  .kwb-builder-body{flex-direction:column-reverse;}
-  .kwb-sidebar{width:100%;max-height:45vh;border-left:none;border-top:1px solid #E8E8E8;}
-  .kwb-preview-area{padding:10px 4px 20px;}
+
+  /* Sidebar becomes a slide-up bottom sheet, hidden by default */
+  .kwb-builder-body{flex-direction:row-reverse;}
+  .kwb-sidebar{
+    position:fixed;bottom:0;left:0;right:0;top:auto;
+    width:100%!important;height:80vh;max-height:80vh;
+    border-left:none;border-top:1px solid #E8E8E8;
+    border-radius:20px 20px 0 0;
+    box-shadow:0 -4px 30px rgba(0,0,0,0.15);
+    z-index:100;
+    transform:translateY(100%);
+    transition:transform 0.3s cubic-bezier(0.4,0,0.2,1);
+  }
+  .kwb-sidebar.kwb-sidebar-mobile-open{
+    transform:translateY(0);
+  }
+  .kwb-preview-area{flex:1;padding:10px 4px 80px;}
   .kwb-preview-frame{max-width:100%;}
-  .kwb-sidebar-top-btns-col{padding:8px 12px 0;}
-  .kwb-sidebar-top-btns{display:flex;gap:6px;position:sticky;top:0;z-index:10;background:#fff;padding-bottom:8px;}
+
+  /* Show mobile FABs */
+  .kwb-mobile-fab-row{
+    display:flex;gap:8px;
+    position:fixed;bottom:16px;left:50%;transform:translateX(-50%);
+    z-index:90;
+    background:rgba(255,255,255,0.92);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    padding:8px 12px;border-radius:16px;
+    box-shadow:0 2px 16px rgba(0,0,0,0.12);
+  }
+  .kwb-mobile-fab{
+    width:44px;height:44px;border-radius:12px;border:1px solid #E5E7EB;
+    background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;
+    color:#374151;transition:background 0.15s;
+  }
+  .kwb-mobile-fab:active{background:#F3F4F6;}
+  .kwb-mobile-fab-primary{background:#111!important;color:#fff!important;border-color:#111!important;}
+  .kwb-mobile-fab-primary:active{background:#333!important;}
+
+  /* Overlay behind sidebar */
+  .kwb-mobile-sidebar-overlay{
+    display:block;position:fixed;inset:0;z-index:99;
+    background:rgba(0,0,0,0.4);
+  }
+
+  /* Hide desktop-only sidebar elements on mobile */
+  .kwb-sidebar-top-btns-col > div[style]{display:none!important;}
+  .kwb-back-builder-btn{display:none!important;}
+  .kwb-sidebar-top-btns{gap:6px;}
   .kwb-sidebar-top-btns .kwb-btn-outline,
   .kwb-sidebar-top-btns .kwb-btn-primary{flex:1;font-size:13px;padding:8px 0;}
-  .kwb-sidebar-body{padding:12px;}
-  .kwb-sidebar-tabs .kwb-stab{font-size:12px;padding:8px 0;}
-  .kwb-back-builder-btn{font-size:12px;}
-  .kwb-last-published{font-size:11px;}
-  .kwb-sidebar-top-btns-col > div[style]{display:none!important;}
+
+  /* Mobile drag handle */
+  .kwb-sidebar-mobile-handle{
+    display:flex;justify-content:center;padding:10px 0 4px;cursor:pointer;
+  }
+
+  /* Hide top bar undo/redo on very small screens */
+  .kwb-builder-top{padding:8px 12px;}
 }
 @media(max-width:600px){
   .kwb{padding:16px 12px 40px;}
