@@ -822,7 +822,7 @@ const HubLayout: React.FC<HubLayoutProps> = ({
         {/* Mobile overlay */}
         {mobileMenuOpen && (
           <div
-            style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)', zIndex: 49 }}
+            style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)', zIndex: 999 }}
             onClick={() => setMobileMenuOpen(false)}
           />
         )}
@@ -839,7 +839,7 @@ const HubLayout: React.FC<HubLayoutProps> = ({
             background: c.cardBg,
             backdropFilter: 'blur(20px) saturate(180%)',
             WebkitBackdropFilter: 'blur(20px) saturate(180%)',
-            zIndex: 50,
+            zIndex: 1000,
             transition: 'max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1)',
             display: 'flex',
             flexDirection: 'column',
