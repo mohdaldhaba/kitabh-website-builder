@@ -439,6 +439,7 @@ const HubLayout: React.FC<HubLayoutProps> = ({
 }) => {
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(['create']));
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const c = lightColors;
 
   const activeSidebarSections = customSidebarSections || sidebarSections;
@@ -767,11 +768,11 @@ const HubLayout: React.FC<HubLayoutProps> = ({
         {/* Desktop Sidebar */}
         <aside
           style={{
-            width: 260,
+            width: sidebarCollapsed ? 0 : 260,
             background: c.sidebarBg,
             backdropFilter: 'blur(20px) saturate(180%)',
             WebkitBackdropFilter: 'blur(20px) saturate(180%)',
-            borderLeft: `1px solid ${c.sidebarBorder}`,
+            borderLeft: sidebarCollapsed ? 'none' : `1px solid ${c.sidebarBorder}`,
             display: 'flex',
             flexDirection: 'column',
             position: 'fixed',
@@ -779,12 +780,44 @@ const HubLayout: React.FC<HubLayoutProps> = ({
             right: 0,
             bottom: 0,
             zIndex: 40,
-            transition: 'background 0.3s, border-color 0.3s',
+            transition: 'width 0.25s cubic-bezier(0.4, 0, 0.2, 1), background 0.3s, border-color 0.3s',
+            overflow: 'hidden',
           }}
           className="hub-sidebar-desktop"
         >
-          {sidebarContent}
+          <div style={{ width: 260, minWidth: 260, height: '100%', display: 'flex', flexDirection: 'column' }}>
+            {sidebarContent}
+          </div>
         </aside>
+        {/* Sidebar toggle button */}
+        <button
+          onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+          className="hub-sidebar-toggle"
+          style={{
+            position: 'fixed',
+            top: 12,
+            right: sidebarCollapsed ? 12 : 268,
+            zIndex: 41,
+            width: 28,
+            height: 28,
+            borderRadius: '50%',
+            background: c.cardBg,
+            border: `1px solid ${c.sidebarBorder}`,
+            boxShadow: '0 1px 4px rgba(0,0,0,0.08)',
+            cursor: 'pointer',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            transition: 'right 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
+            color: c.textMuted,
+            padding: 0,
+          }}
+          title={sidebarCollapsed ? 'إظهار القائمة' : 'إخفاء القائمة'}
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ transform: sidebarCollapsed ? 'rotate(180deg)' : 'none', transition: 'transform 0.25s' }}>
+            <polyline points="9 18 15 12 9 6" />
+          </svg>
+        </button>
 
         {/* Mobile overlay */}
         {mobileMenuOpen && (
@@ -827,7 +860,7 @@ const HubLayout: React.FC<HubLayoutProps> = ({
         </aside>
 
         {/* Main content area */}
-        <div className="hub-main-content" style={{ flex: 1, marginRight: 260, minHeight: '100vh', overflowX: 'hidden' }}>
+        <div className="hub-main-content" style={{ flex: 1, marginRight: sidebarCollapsed ? 0 : 260, minHeight: '100vh', overflowX: 'hidden', transition: 'margin-right 0.25s cubic-bezier(0.4, 0, 0.2, 1)' }}>
           {/* Top bar */}
           <header
             style={{
@@ -917,6 +950,7 @@ const HubLayout: React.FC<HubLayoutProps> = ({
           .hub-sidebar-mobile button { outline: none; }
           @media (max-width: 768px) {
             .hub-sidebar-desktop { display: none !important; }
+            .hub-sidebar-toggle { display: none !important; }
             .hub-sidebar-mobile { display: flex !important; }
             .hub-mobile-menu-btn { display: flex !important; }
             .hub-main-content { margin-right: 0 !important; }
