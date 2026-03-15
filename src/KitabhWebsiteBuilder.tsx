@@ -612,6 +612,8 @@ export default function KitabhWebsiteBuilder(props: any) {
   const [insertAtIndex, setInsertAtIndex] = useState<number | null>(null);
   const [hoveredCompId, setHoveredCompId] = useState<string | null>(null);
   const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved">("idle");
+  const [lastSavedAt, setLastSavedAt] = useState<Date | null>(null);
+  const [lastSavedDisplay, setLastSavedDisplay] = useState("");
   const [draggedCompId, setDraggedCompId] = useState<string | null>(null);
   const [dragOverCompId, setDragOverCompId] = useState<string | null>(null);
   const [dragOverPosition, setDragOverPosition] = useState<"above" | "below" | null>(null);
@@ -1921,16 +1923,42 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
     previewWindow.document.close();
   };
 
-  const handleSave = () => {
+  const handleSave = useCallback(() => {
     setSaveStatus("saving");
     try {
       if (typeof window !== "undefined" && window.localStorage) localStorage.setItem("kb_websites", JSON.stringify(sites));
     } catch (_) {}
-    setTimeout(() => {
-      setSaveStatus("saved");
-      setTimeout(() => setSaveStatus("idle"), 2000);
-    }, 600);
-  };
+    const now = new Date();
+    setLastSavedAt(now);
+    setSaveStatus("saved");
+    setTimeout(() => setSaveStatus("idle"), 1500);
+  }, [sites]);
+
+  // Autosave: debounce save on sites change
+  const autosaveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const isInitialLoad = useRef(true);
+  useEffect(() => {
+    if (isInitialLoad.current) { isInitialLoad.current = false; return; }
+    if (view !== "builder") return;
+    if (autosaveTimer.current) clearTimeout(autosaveTimer.current);
+    autosaveTimer.current = setTimeout(() => { handleSave(); }, 1500);
+    return () => { if (autosaveTimer.current) clearTimeout(autosaveTimer.current); };
+  }, [sites, view, handleSave]);
+
+  // Update "last saved" display every 30s
+  useEffect(() => {
+    if (!lastSavedAt) return;
+    const update = () => {
+      const diff = Math.floor((Date.now() - lastSavedAt.getTime()) / 1000);
+      if (diff < 10) setLastSavedDisplay("الآن");
+      else if (diff < 60) setLastSavedDisplay(`منذ ${diff} ثانية`);
+      else if (diff < 3600) setLastSavedDisplay(`منذ ${Math.floor(diff / 60)} دقيقة`);
+      else setLastSavedDisplay(lastSavedAt.toLocaleTimeString("ar-SA", { hour: "2-digit", minute: "2-digit" }));
+    };
+    update();
+    const interval = setInterval(update, 30000);
+    return () => clearInterval(interval);
+  }, [lastSavedAt]);
 
   const [publishStatus, setPublishStatus] = useState<"idle" | "publishing" | "done">("idle");
 
@@ -4265,16 +4293,21 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                   </button>
 
                   <div className="kwb-sb-bottom">
-                    <div className="kwb-newsletter-toggle">
-                      <label className="kwb-toggle">
-                        <input type="checkbox" checked={activeSite.hasNewsletter} onChange={e => updateSite(activeSite.id, { hasNewsletter: e.target.checked })} />
-                        <span className="kwb-toggle-track"><span className="kwb-toggle-thumb" /></span>
-                      </label>
-                      <span>نشرة بريدية لهذا الموقع؟</span>
+                    <div className="kwb-autosave-indicator">
+                      {saveStatus === "saving" ? (
+                        <span className="kwb-autosave-saving">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ animation: "kwb-spin 1s linear infinite" }}><path d="M21 12a9 9 0 1 1-6.219-8.56" /></svg>
+                          جاري الحفظ...
+                        </span>
+                      ) : lastSavedAt ? (
+                        <span className="kwb-autosave-saved">
+                          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 6 9 17l-5-5" /></svg>
+                          آخر حفظ: {lastSavedDisplay}
+                        </span>
+                      ) : (
+                        <span className="kwb-autosave-idle">حفظ تلقائي مفعّل</span>
+                      )}
                     </div>
-                    <button className="kwb-btn-primary kwb-btn-full" onClick={handleSave} style={saveStatus === "saved" ? { background: "#10B981" } : saveStatus === "saving" ? { opacity: 0.7 } : {}}>
-                      {saveStatus === "saving" ? "جاري الحفظ..." : saveStatus === "saved" ? "حُفظ" : "حفظ الموقع"}
-                    </button>
                   </div>
                 </div>
               )}
@@ -5070,6 +5103,10 @@ const CSS_STYLES = `
 /* Newsletter toggle + Save bottom */
 .kwb-sb-bottom{margin-top:20px;padding-top:16px;border-top:1px solid #F0F0F0;display:flex;flex-direction:column;gap:12px;}
 .kwb-newsletter-toggle{display:flex;align-items:center;gap:10px;font-size:13px;font-weight:500;color:#555;}
+.kwb-autosave-indicator{display:flex;align-items:center;justify-content:center;padding:8px 0;font-size:12px;font-family:'IBM Plex Sans Arabic',sans-serif;color:#9CA3AF;}
+.kwb-autosave-saving,.kwb-autosave-saved,.kwb-autosave-idle{display:flex;align-items:center;gap:6px;}
+.kwb-autosave-saved{color:#6B7280;}
+@keyframes kwb-spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 
 /* Breadcrumb */
 .kwb-breadcrumb{display:flex;align-items:center;gap:6px;padding:8px 12px;background:#F8F8F8;border-radius:8px;margin-bottom:10px;font-size:12px;}
