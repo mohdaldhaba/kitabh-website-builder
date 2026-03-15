@@ -5558,9 +5558,14 @@ const CSS_STYLES = `
   /* Force mobile preview — constrain everything to viewport */
   .kwb-builder-body{overflow:hidden!important;}
   .kwb-preview-area{padding:0!important;overflow-x:hidden!important;overflow-y:auto!important;display:block!important;}
-  .kwb-preview-frame{max-width:100%!important;width:100%!important;border:none!important;overflow:hidden!important;}
-  .kwb-preview-content{overflow:hidden!important;width:100%!important;}
+  .kwb-preview-frame{max-width:100%!important;width:100%!important;border:none!important;overflow:hidden!important;box-sizing:border-box!important;}
+  .kwb-preview-content{overflow-x:hidden!important;overflow-y:visible!important;width:100%!important;box-sizing:border-box!important;}
   .kwb-preview-content img{max-width:100%!important;height:auto!important;}
+  .kwb-preview-content *{box-sizing:border-box!important;max-width:100%!important;}
+  .kwb-preview-frame .kwb-p-article-card{margin:0!important;padding:8px 0!important;}
+  .kwb-preview-frame .kwb-p-articles{padding:24px 16px!important;}
+  .kwb-preview-frame .kwb-p-cta{padding:20px 16px!important;}
+  .kwb-preview-frame .kwb-p-footer{padding:40px 16px 0!important;}
   /* Hide component toolbars and insert buttons on mobile */
   .kwb-p-comp-toolbar{display:none!important;}
   .kwb-p-insert-line{display:none!important;}
