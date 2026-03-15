@@ -605,7 +605,6 @@ export default function KitabhWebsiteBuilder(props: any) {
   const [view, setView] = useState<ViewMode>(isEmbedded ? "builder" : "sites");
   const [activeSiteId, setActiveSiteId] = useState<string | null>(null);
   const [sidebarTab, setSidebarTab] = useState<SidebarTab>("components");
-  const [showTemplateModal, setShowTemplateModal] = useState(false);
   const [previewDevice, setPreviewDevice] = useState<PreviewDevice>("desktop");
   const [expandedComponent, setExpandedComponent] = useState<string | null>(null);
   const [showAddComponent, setShowAddComponent] = useState(false);
@@ -3216,7 +3215,7 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
                   })}
                 </div>
                 <button
-                  onClick={() => setShowTemplateModal(true)}
+                  onClick={() => setView("templates")}
                   style={{
                     width: '100%', marginTop: 6, padding: '6px 0',
                     background: 'none', border: '1px solid #E5E7EB', borderRadius: 8,
@@ -4427,61 +4426,6 @@ html.dark{--pv-bg:#121212;--pv-card-bg:#1e1e1e;--pv-headline:#e0e0e0;--pv-text:#
         );
       })()}
 
-      {/* ─── Template Picker Modal ─── */}
-      {showTemplateModal && (() => {
-        const gp: Record<string, (c1:string,c2:string) => React.ReactNode> = {
-          media: (c1,c2) => (<svg viewBox="0 0 400 500" style={{width:'100%',height:'100%'}}><rect x="0" y="200" width="400" height="100" fill={c1} opacity=".85"/><path d="M0,500 A200,200 0 0,1 400,500" fill={c2} opacity=".75"/><circle cx="200" cy="200" r="140" fill={c1} opacity=".6"/><path d="M0,0 L0,200 A200,200 0 0,0 400,200 L400,0 Z" fill={c2} opacity=".35"/><circle cx="320" cy="120" r="60" fill={c1} opacity=".9"/></svg>),
-          newsletter: (c1,c2) => (<svg viewBox="0 0 400 500" style={{width:'100%',height:'100%'}}><path d="M0,0 L0,250 A250,250 0 0,0 250,0 Z" fill={c1} opacity=".7"/><circle cx="280" cy="350" r="160" fill="none" stroke={c2} strokeWidth="28" opacity=".6"/><circle cx="280" cy="350" r="110" fill="none" stroke={c1} strokeWidth="22" opacity=".5"/><circle cx="280" cy="350" r="60" fill={c2} opacity=".7"/><rect x="0" y="420" width="200" height="80" fill={c1} opacity=".5"/></svg>),
-          blog: (c1,c2) => (<svg viewBox="0 0 400 500" style={{width:'100%',height:'100%'}}><circle cx="120" cy="150" r="150" fill={c1} opacity=".65"/><circle cx="300" cy="200" r="120" fill={c2} opacity=".55"/><rect x="0" y="350" width="400" height="150" fill={c1} opacity=".3"/><path d="M400,500 A200,200 0 0,1 200,500 L400,500 Z" fill={c2} opacity=".7"/><circle cx="340" cy="80" r="40" fill={c2} opacity=".8"/></svg>),
-          podcast: (c1,c2) => (<svg viewBox="0 0 400 500" style={{width:'100%',height:'100%'}}><path d="M200,250 m-180,0 a180,180 0 1,1 360,0" fill="none" stroke={c1} strokeWidth="24" opacity=".5"/><path d="M200,250 m-130,0 a130,130 0 1,1 260,0" fill="none" stroke={c2} strokeWidth="20" opacity=".45"/><circle cx="200" cy="250" r="35" fill={c2} opacity=".85"/><rect x="0" y="380" width="180" height="120" fill={c1} opacity=".5"/><path d="M0,0 L120,0 L0,120 Z" fill={c2} opacity=".5"/></svg>),
-          cinema: (c1,c2) => (<svg viewBox="0 0 400 500" style={{width:'100%',height:'100%'}}><path d="M0,0 L400,0 L400,500 Z" fill={c1} opacity=".6"/><path d="M0,0 L0,500 L400,500 Z" fill={c2} opacity=".4"/><circle cx="200" cy="220" r="130" fill={c1} opacity=".7"/><circle cx="200" cy="220" r="80" fill={c2} opacity=".6"/><circle cx="200" cy="220" r="35" fill={c1} opacity=".9"/></svg>),
-          education: (c1,c2) => (<svg viewBox="0 0 400 500" style={{width:'100%',height:'100%'}}><rect x="0" y="0" width="200" height="250" fill={c1} opacity=".6"/><rect x="200" y="0" width="200" height="250" fill={c2} opacity=".45"/><rect x="0" y="250" width="200" height="250" fill={c2} opacity=".5"/><rect x="200" y="250" width="200" height="250" fill={c1} opacity=".35"/><circle cx="200" cy="250" r="120" fill={c1} opacity=".55"/><circle cx="200" cy="250" r="70" fill={c2} opacity=".65"/></svg>),
-          store: (c1,c2) => (<svg viewBox="0 0 400 500" style={{width:'100%',height:'100%'}}><rect x="0" y="200" width="400" height="300" fill={c1} opacity=".5"/><path d="M60,500 L60,250 A140,140 0 0,1 340,250 L340,500 Z" fill={c2} opacity=".6"/><path d="M110,500 L110,270 A90,90 0 0,1 290,270 L290,500 Z" fill={c1} opacity=".4"/><circle cx="200" cy="100" r="70" fill={c2} opacity=".7"/></svg>),
-        };
-        return (
-          <div className="kwb-overlay" onClick={() => setShowTemplateModal(false)}>
-            <div className="kwb-modal" style={{ maxWidth: 560, width: '90vw' }} onClick={e => e.stopPropagation()}>
-              <div className="kwb-modal-header">
-                <h2 style={{ fontFamily: "'IBM Plex Sans Arabic', sans-serif" }}>قوالب جاهزة</h2>
-                <button className="kwb-btn-icon" onClick={() => setShowTemplateModal(false)}>{Icons.x}</button>
-              </div>
-              <div style={{ padding: 20, display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 12, maxHeight: '70vh', overflowY: 'auto' }}>
-                {TEMPLATES.map(tpl => {
-                  const b = { ...SKELETON.defaultBranding, ...(tpl.defaultBranding || {}) };
-                  const btn = b.buttonColor || "#E82222";
-                  const accent = b.accentColor || btn;
-                  const bgColor = b.bgColor || "#fff";
-                  const isActive = activeSite?.templateId === tpl.id;
-                  const patternFn = gp[tpl.id] || gp.media;
-                  return (
-                    <button
-                      key={tpl.id}
-                      onClick={() => { createFromTemplate(tpl.id); setShowTemplateModal(false); }}
-                      style={{
-                        border: isActive ? '2.5px solid #111' : '1px solid #E5E7EB',
-                        borderRadius: 12, overflow: 'hidden', cursor: 'pointer',
-                        background: '#fff', padding: 0, textAlign: 'right',
-                        transition: 'border-color 0.15s',
-                      }}
-                    >
-                      <div style={{ height: 160, background: bgColor, position: 'relative', overflow: 'hidden' }}>
-                        {patternFn(accent, btn)}
-                      </div>
-                      <div style={{ padding: '10px 12px' }}>
-                        <div style={{ fontSize: 13, fontWeight: 600, color: '#111', fontFamily: "'IBM Plex Sans Arabic', sans-serif", display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                          {tpl.name}
-                          {isActive && <span style={{ fontSize: 10, fontWeight: 700, color: '#059669', background: '#ECFDF5', padding: '2px 8px', borderRadius: 6 }}>الحالي</span>}
-                        </div>
-                        <div style={{ fontSize: 11, color: '#6B7280', fontFamily: "'IBM Plex Sans Arabic', sans-serif", marginTop: 2 }}>{tpl.description}</div>
-                      </div>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
-        );
-      })()}
 
       {/* ─── Subscribe Popup (portal-style, fixed overlay) ─── */}
       {showSubscribePopup && activeSite && (
