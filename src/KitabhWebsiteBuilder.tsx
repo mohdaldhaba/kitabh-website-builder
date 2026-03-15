@@ -5555,12 +5555,17 @@ const CSS_STYLES = `
   .kwb-builder-top{padding:8px 12px;}
   .kwb-device-toggle{display:none!important;}
 
-  /* Force mobile preview — apply all kwb-preview-mobile styles */
-  .kwb-preview-area{padding:0!important;overflow-x:hidden!important;}
+  /* Force mobile preview — constrain everything to viewport */
+  .kwb-builder-body{overflow:hidden!important;}
+  .kwb-preview-area{padding:0!important;overflow-x:hidden!important;overflow-y:auto!important;display:block!important;}
   .kwb-preview-frame{max-width:100%!important;width:100%!important;border:none!important;overflow:hidden!important;}
-  .kwb-preview-content{overflow-x:hidden!important;max-width:100vw!important;}
-  .kwb-preview-content *{max-width:100%!important;box-sizing:border-box!important;}
-  .kwb-preview-content img{height:auto!important;}
+  .kwb-preview-content{overflow:hidden!important;width:100%!important;}
+  .kwb-preview-content img{max-width:100%!important;height:auto!important;}
+  /* Hide component toolbars and insert buttons on mobile */
+  .kwb-p-comp-toolbar{display:none!important;}
+  .kwb-p-insert-line{display:none!important;}
+  .kwb-p-comp-wrap{outline:none!important;}
+  .kwb-p-comp-wrap:hover{outline:none!important;}
   .kwb-preview-frame .kwb-p-hero-news{grid-template-columns:1fr;}
   .kwb-preview-frame .kwb-p-hero-main{order:-1;}
   .kwb-preview-frame .kwb-p-hero-side-r{flex-direction:row;order:1;}
@@ -5582,6 +5587,19 @@ const CSS_STYLES = `
   .kwb-preview-frame .kwb-p-gallery-cards{grid-template-columns:1fr!important;}
   .kwb-preview-frame .kwb-p-catfeed-body{grid-template-columns:1fr!important;}
   .kwb-preview-frame .kwb-p-testimonials-grid{grid-template-columns:1fr!important;}
+  /* Subscribe forms stack vertically */
+  .kwb-preview-frame .kwb-p-hero-sub-form{flex-direction:column!important;}
+  .kwb-preview-frame .kwb-p-hero-sub-form .kwb-p-email-input{width:100%!important;border-right:1px solid rgba(128,128,128,0.3)!important;}
+  .kwb-preview-frame .kwb-p-hero-sub-form .kwb-p-subscribe-btn{width:100%!important;}
+  .kwb-preview-frame .kwb-p-cta-form{flex-direction:column!important;min-width:unset!important;}
+  .kwb-preview-frame .kwb-p-cta-form .kwb-p-email-input{width:100%!important;border-right:1px solid #ddd!important;}
+  .kwb-preview-frame .kwb-p-cta-form .kwb-p-subscribe-btn{width:100%!important;}
+  .kwb-preview-frame .kwb-p-footer-form{flex-direction:column!important;}
+  .kwb-preview-frame .kwb-p-footer-form .kwb-p-subscribe-btn{width:100%!important;}
+  .kwb-preview-frame .kwb-p-hero-main-img{height:200px!important;}
+  .kwb-preview-frame .kwb-p-hero-sub{padding:32px 12px!important;}
+  .kwb-preview-frame .kwb-p-subscribe-form{padding:24px 12px!important;}
+  .kwb-preview-frame .kwb-p-header-inner{padding:10px 12px!important;}
 }
 @media(max-width:600px){
   .kwb{padding:16px 12px 40px;}
