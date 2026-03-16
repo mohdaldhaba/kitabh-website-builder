@@ -18,6 +18,7 @@ export type FeatureKey =
   | 'subscriber-limit'
   | 'website' | 'domain-settings' | 'email-template' | 'branding'
   | 'ai-seo' | 'audio-publish' | 'verified-account'
+  | 'subscriber-segments' | 'custom-fonts' | 'support'
   | 'analyze' | 'notifications' | 'writers' | 'dashboard' | 'settings';
 
 // ─── Feature definitions ─────────────────────────────────
@@ -66,8 +67,11 @@ export const FEATURES: Record<FeatureKey, FeatureDef> = {
   'domain-settings': { plan: 'business', upgradeTitle: 'النطاق المخصص',              displayLabel: 'النطاق المخصص' },
   'email-template':  { plan: 'business', upgradeTitle: 'مصمم قوالب البريد',          displayLabel: 'قوالب البريد' },
   'email-journeys':  { plan: 'business', upgradeTitle: 'رحلات البريد والأتمتة',      displayLabel: 'رحلات البريد والأتمتة' },
+  'subscriber-segments':{ plan: 'business', upgradeTitle: 'أقسام المشتركين',           displayLabel: 'أقسام المشتركين' },
+  'custom-fonts':      { plan: 'business', upgradeTitle: 'خطوط مخصصة',               displayLabel: 'خطوط مخصصة' },
   branding:            { plan: 'business', upgradeTitle: 'الهوية والعلامة التجارية',   displayLabel: 'الهوية والعلامة' },
   'verified-account':  { plan: 'writers',  upgradeTitle: 'حساب موثّق',               displayLabel: 'حساب موثّق' },
+  support:             { plan: 'free',     upgradeTitle: '',                          displayLabel: 'دعم فني' },
   writers:             { plan: 'business', upgradeTitle: 'فريق الكتّاب',               displayLabel: 'فريق الكتّاب' },
 };
 
@@ -156,16 +160,19 @@ export const COMPARISON_SECTIONS: { title: string; features: { key: FeatureKey; 
       { key: 'newsletter-scheduling', label: 'جدولة النشرة' },
       { key: 'subscribers', label: 'إدارة المشتركين' },
       { key: 'linktree', label: 'صفحة الروابط' },
-      { key: 'landing-pages', label: 'صفحات الاشتراك' },
       { key: 'audio-publish', label: 'نشر صوتي ذكي' },
       { key: 'ai-seo', label: 'الظهور في نتائج الذكاء الاصطناعي ومحركات البحث' },
       { key: 'analyze', label: 'الإحصائيات' },
+      { key: 'landing-pages', label: 'صفحات الاشتراك', writersNote: '1', businessNote: 'دون حد' },
+      { key: 'subscriber-segments', label: 'أقسام المشتركين' },
+      { key: 'support', label: 'دعم فني', freeNote: '—', writersNote: 'محدود', businessNote: 'متقدم' },
     ],
   },
   {
     title: 'التصميم والإعدادات',
     features: [
       { key: 'website', label: 'الموقع الإلكتروني', writersNote: 'محدود', businessNote: 'وصول كامل' },
+      { key: 'custom-fonts', label: 'خطوط مخصصة' },
       { key: 'branding', label: 'الهوية والعلامة' },
       { key: 'domain-settings', label: 'النطاق المخصص' },
       { key: 'email-template', label: 'قوالب البريد' },
