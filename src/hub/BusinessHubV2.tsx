@@ -327,8 +327,8 @@ function buildSidebarSections(plan: Plan): SidebarSection[] {
       locked: sectionLocks.has('publish'),
       planTier: 'writers',
       items: applyMeta([
-        { page: 'newsletters', label: 'النشرات البريدية', icon: icons.emailJourney },
-        { page: 'subscribers', label: 'المشتركون', icon: icons.audience },
+        { page: 'newsletters', label: 'النشرات البريدية', icon: icons.emailJourney, ...(plan === 'writers' && { tag: 'محدود' }) },
+        { page: 'subscribers', label: 'المشتركون', icon: icons.audience, ...(plan === 'writers' && { tag: 'محدود' }) },
         { page: 'grow', subPage: 'linktree', label: 'صفحة الروابط', icon: icons.magicLink },
         { page: 'analyze', label: 'الإحصائيات', icon: icons.analyze },
       ]),
@@ -340,8 +340,8 @@ function buildSidebarSections(plan: Plan): SidebarSection[] {
       locked: sectionLocks.has('design'),
       planTier: 'writers',
       items: applyMeta([
-        { page: 'website', label: 'الموقع الإلكتروني', icon: icons.website },
-        { page: 'landing-pages' as Page, label: 'صفحات الاشتراك', icon: icons.landingPage },
+        { page: 'website', label: 'الموقع الإلكتروني', icon: icons.website, ...(plan === 'writers' && { tag: 'محدود' }) },
+        { page: 'landing-pages' as Page, label: 'صفحات الاشتراك', icon: icons.landingPage, ...(plan === 'writers' && { tag: 'محدود' }) },
         { page: 'branding' as Page, label: 'الهوية والخطوط', icon: icons.branding },
         { page: 'email-template', label: 'قوالب البريد ورحلات الرسائل', icon: icons.emailTemplate },
       ]),
@@ -353,7 +353,7 @@ function buildUtilityItems(plan: Plan): SidebarItem[] {
   const locks = getLockSet(plan);
   return [
     { page: 'writers' as Page, label: 'إدارة الفريق', icon: icons.members, locked: locks.has('writers'), planTier: getPlanTier('writers') },
-    { page: 'support' as Page, label: 'الدعم الفني', icon: icons.support, locked: locks.has('support'), planTier: getPlanTier('support') },
+    { page: 'support' as Page, label: 'الدعم الفني', icon: icons.support, locked: locks.has('support'), planTier: getPlanTier('support'), ...(plan === 'writers' && { tag: 'محدود' }) },
     { page: 'notifications', label: 'الإشعارات', icon: icons.notification },
   ];
 }

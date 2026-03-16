@@ -202,6 +202,7 @@ type SidebarItem = {
   locked?: boolean;
   planTier?: 'writers' | 'business';
   trialUsage?: { used: number; total: number };
+  tag?: string;
 };
 
 type SidebarSection = {
@@ -777,6 +778,21 @@ const HubLayout: React.FC<HubLayoutProps> = ({
                             </span>
                           );
                         })()}
+                        {item.tag && !isLocked && !isComingSoon && (
+                          <span style={{
+                            fontSize: 10,
+                            fontWeight: 600,
+                            fontFamily: 'IBM Plex Sans Arabic, sans-serif',
+                            color: '#9CA3AF',
+                            background: '#F3F4F6',
+                            padding: '2px 6px',
+                            borderRadius: 4,
+                            flexShrink: 0,
+                            lineHeight: 1.4,
+                          }}>
+                            {item.tag}
+                          </span>
+                        )}
                         {isComingSoon && comingSoonBadge}
                         {isLocked && (
                           <span style={{
@@ -835,6 +851,21 @@ const HubLayout: React.FC<HubLayoutProps> = ({
                 {item.icon}
               </span>
               <span style={{ flex: 1, textAlign: 'right' }}>{item.label}</span>
+              {item.tag && !isItemLocked && (
+                <span style={{
+                  fontSize: 10,
+                  fontWeight: 600,
+                  fontFamily: 'IBM Plex Sans Arabic, sans-serif',
+                  color: '#9CA3AF',
+                  background: '#F3F4F6',
+                  padding: '2px 6px',
+                  borderRadius: 4,
+                  flexShrink: 0,
+                  lineHeight: 1.4,
+                }}>
+                  {item.tag}
+                </span>
+              )}
               {isItemLocked && (
                 <span style={{
                   color: '#9CA3AF',
