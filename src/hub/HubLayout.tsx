@@ -185,6 +185,7 @@ type SidebarItem = {
   comingSoon?: boolean;
   locked?: boolean;
   planTier?: 'writers' | 'business';
+  trialBadge?: string;
 };
 
 type SidebarSection = {
@@ -734,7 +735,17 @@ const HubLayout: React.FC<HubLayoutProps> = ({
                           </span>
                         )}
                         <span style={{ flex: 1, textAlign: 'right' }}>{item.label}</span>
-                        {item.planTier && !isLocked && (
+                        {item.trialBadge && (
+                          <span style={{
+                            fontSize: 10, fontWeight: 700, fontFamily: 'IBM Plex Sans Arabic, sans-serif',
+                            color: '#F59E0B', background: 'rgba(245,158,11,0.1)',
+                            padding: '2px 6px', borderRadius: 4, flexShrink: 0,
+                            direction: 'ltr',
+                          }}>
+                            {item.trialBadge}
+                          </span>
+                        )}
+                        {item.planTier && !isLocked && !item.trialBadge && (
                           <span style={{
                             width: 6, height: 6, borderRadius: '50%', flexShrink: 0,
                             background: item.planTier === 'business' ? '#B8860B' : '#1E3A8A',

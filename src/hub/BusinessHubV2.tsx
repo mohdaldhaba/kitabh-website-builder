@@ -293,6 +293,8 @@ function buildSidebarSections(plan: Plan): SidebarSection[] {
   const locks = lockMap[plan];
   const sectionLocks = sectionLockMap[plan];
 
+  const trialTools: Set<FeatureKey> = new Set(['outline', 'checker', 'carousel', 'social']);
+
   const applyMeta = (items: SidebarItem[]): SidebarItem[] =>
     items.map((item) => {
       const key = getFeatureKey(item);
@@ -300,6 +302,7 @@ function buildSidebarSections(plan: Plan): SidebarSection[] {
         ...item,
         locked: locks.has(key),
         planTier: plan !== 'free' ? featureTier[key] : undefined,
+        trialBadge: plan === 'free' && trialTools.has(key) ? '5/5' : undefined,
       };
     });
 
