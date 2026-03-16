@@ -338,8 +338,9 @@ const PlanComparisonOverlay: React.FC<{ currentPlan: Plan; onClose: () => void }
   const mob = typeof window !== 'undefined' && window.innerWidth < 500;
 
   const check = (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#111827" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-      <polyline points="20 6 9 17 4 12" />
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+      <circle cx="12" cy="12" r="12" fill="#111827" />
+      <path d="M7.5 12.5L10.5 15.5L16.5 9.5" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
   const dash = <span style={{ color: '#ccc', fontSize: 18, fontWeight: 400 }}>—</span>;
@@ -354,14 +355,16 @@ const PlanComparisonOverlay: React.FC<{ currentPlan: Plan; onClose: () => void }
     return check;
   };
 
+  const rowBg = (i: number) => i % 2 === 1 ? '#F6F6F6' : '#fff';
+
   /* ── Desktop row ── */
-  const DesktopRow = ({ feat }: { feat: typeof COMPARISON_SECTIONS[0]['features'][0] }) => (
+  const DesktopRow = ({ feat, idx }: { feat: typeof COMPARISON_SECTIONS[0]['features'][0]; idx: number }) => (
     <div style={{
       display: 'grid', gridTemplateColumns: '1.8fr repeat(3, 1fr)',
       padding: '16px 32px', alignItems: 'center',
-      borderBottom: '1px solid #E5E7EB',
+      background: rowBg(idx),
     }}>
-      <div style={{ fontSize: 15, fontFamily: font, color: '#111827', fontWeight: 500 }}>
+      <div style={{ fontSize: 15, fontFamily: font, color: '#374151', fontWeight: 500 }}>
         {feat.label}
       </div>
       {plans.map((p) => (
@@ -373,11 +376,11 @@ const PlanComparisonOverlay: React.FC<{ currentPlan: Plan; onClose: () => void }
   );
 
   /* ── Mobile row: label on top, 3 values below ── */
-  const MobileRow = ({ feat }: { feat: typeof COMPARISON_SECTIONS[0]['features'][0] }) => (
-    <div style={{ borderBottom: '1px solid #E5E7EB' }}>
+  const MobileRow = ({ feat, idx }: { feat: typeof COMPARISON_SECTIONS[0]['features'][0]; idx: number }) => (
+    <div style={{ background: rowBg(idx) }}>
       <div style={{
         padding: '14px 20px 6px', fontSize: 15, fontFamily: font,
-        color: '#111827', fontWeight: 600,
+        color: '#374151', fontWeight: 600,
       }}>
         {feat.label}
       </div>
@@ -479,18 +482,17 @@ const PlanComparisonOverlay: React.FC<{ currentPlan: Plan; onClose: () => void }
         {COMPARISON_SECTIONS.map((section) => (
           <div key={section.title}>
             <div style={{
-              padding: mob ? '18px 20px 8px' : '22px 32px 10px',
-              fontSize: mob ? 14 : 15, fontWeight: 800,
+              padding: mob ? '18px 20px 10px' : '24px 32px 12px',
+              fontSize: mob ? 16 : 17, fontWeight: 800,
               color: '#111827', fontFamily: font,
-              borderBottom: '1px solid #E5E7EB',
             }}>
               {section.title}
             </div>
 
-            {section.features.map((feat) => (
+            {section.features.map((feat, i) => (
               mob
-                ? <MobileRow key={feat.key} feat={feat} />
-                : <DesktopRow key={feat.key} feat={feat} />
+                ? <MobileRow key={feat.key} feat={feat} idx={i} />
+                : <DesktopRow key={feat.key} feat={feat} idx={i} />
             ))}
           </div>
         ))}
