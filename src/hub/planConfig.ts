@@ -36,10 +36,10 @@ interface FeatureDef {
 export const FEATURES: Record<FeatureKey, FeatureDef> = {
   // ── FREE: available to all plans ──────────────────────
   posts:         { plan: 'free',     upgradeTitle: '',  displayLabel: 'كتابة المنشورات' },
-  outline:       { plan: 'free',     upgradeTitle: '',  displayLabel: 'مساعد كتابة (AI)', freeTrial: 5 },
-  checker:       { plan: 'free',     upgradeTitle: '',  displayLabel: 'محرر كتابة (AI)', freeTrial: 5 },
-  carousel:      { plan: 'free',     upgradeTitle: '',  displayLabel: 'ستوديو كتابة (AI)', freeTrial: 5 },
-  social:        { plan: 'free',     upgradeTitle: '',  displayLabel: 'محتوى كتابة (AI)', freeTrial: 5 },
+  outline:       { plan: 'free',     upgradeTitle: '',  displayLabel: 'مساعد كتابة', freeTrial: 5 },
+  checker:       { plan: 'free',     upgradeTitle: '',  displayLabel: 'محرر كتابة', freeTrial: 5 },
+  carousel:      { plan: 'free',     upgradeTitle: '',  displayLabel: 'ستوديو كتابة', freeTrial: 5 },
+  social:        { plan: 'free',     upgradeTitle: '',  displayLabel: 'محتوى كتابة', freeTrial: 5 },
   notifications: { plan: 'free',     upgradeTitle: '',  displayLabel: 'الإشعارات' },
   settings:      { plan: 'free',     upgradeTitle: '',  displayLabel: 'الإعدادات' },
 
@@ -123,15 +123,15 @@ export function getTrialUsage(feature: FeatureKey, plan: Plan): { used: number; 
 }
 
 /** Comparison rows for the plan overlay — ordered by section */
-export const COMPARISON_SECTIONS: { title: string; features: { key: FeatureKey; label: string; freeNote?: string }[] }[] = [
+export const COMPARISON_SECTIONS: { title: string; features: { key: FeatureKey; label: string; freeNote?: string; writersNote?: string }[] }[] = [
   {
     title: 'الكتابة والأدوات',
     features: [
       { key: 'posts', label: 'كتابة المنشورات' },
-      { key: 'outline', label: 'مساعد كتابة (AI)', freeNote: '5 استخدامات' },
-      { key: 'checker', label: 'محرر كتابة (AI)', freeNote: '5 استخدامات' },
-      { key: 'carousel', label: 'ستوديو كتابة (AI)', freeNote: '5 استخدامات' },
-      { key: 'social', label: 'محتوى كتابة (AI)', freeNote: '5 استخدامات' },
+      { key: 'outline', label: 'مساعد كتابة', freeNote: '5 استخدامات' },
+      { key: 'checker', label: 'محرر كتابة', freeNote: '5 استخدامات' },
+      { key: 'carousel', label: 'ستوديو كتابة', freeNote: '5 استخدامات' },
+      { key: 'social', label: 'محتوى كتابة', freeNote: '5 استخدامات' },
     ],
   },
   {
@@ -148,7 +148,7 @@ export const COMPARISON_SECTIONS: { title: string; features: { key: FeatureKey; 
   {
     title: 'التصميم والإعدادات',
     features: [
-      { key: 'website', label: 'الموقع الإلكتروني' },
+      { key: 'website', label: 'الموقع الإلكتروني', writersNote: 'محدود' },
       { key: 'branding', label: 'الهوية والعلامة' },
       { key: 'domain-settings', label: 'النطاق المخصص' },
       { key: 'email-template', label: 'قوالب البريد' },

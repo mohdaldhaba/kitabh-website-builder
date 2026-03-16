@@ -339,10 +339,19 @@ const PlanComparisonOverlay: React.FC<{ currentPlan: Plan; onClose: () => void }
       <polyline points="20 6 9 17 4 12" />
     </svg>
   );
-  const lockIcon = (
-    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D1D5DB" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" />
-    </svg>
+  const writersBadge = (
+    <span style={{
+      fontSize: 8, fontWeight: 700, fontFamily: 'IBM Plex Sans Arabic, sans-serif',
+      color: '#2563EB', background: '#EFF6FF', borderRadius: 6,
+      padding: '2px 6px', lineHeight: 1.4, whiteSpace: 'nowrap' as const,
+    }}>الكاتب</span>
+  );
+  const businessBadge = (
+    <span style={{
+      fontSize: 8, fontWeight: 700, fontFamily: 'IBM Plex Sans Arabic, sans-serif',
+      color: '#92400E', background: '#FEF3C7', borderRadius: 6,
+      padding: '2px 6px', lineHeight: 1.4, whiteSpace: 'nowrap' as const,
+    }}>أعمال</span>
   );
 
   return (
@@ -433,6 +442,8 @@ const PlanComparisonOverlay: React.FC<{ currentPlan: Plan; onClose: () => void }
                   {plans.map((p) => {
                     const available = !isLocked(feat.key, p);
                     const isTrial = p === 'free' && feat.freeNote;
+                    const isWritersNote = p === 'writers' && feat.writersNote;
+                    const requiredPlan = FEATURES[feat.key].plan;
                     return (
                       <div key={p} style={{ textAlign: 'center', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                         {available ? (
@@ -440,8 +451,14 @@ const PlanComparisonOverlay: React.FC<{ currentPlan: Plan; onClose: () => void }
                             <span style={{ fontSize: 9, color: '#9CA3AF', fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>
                               {feat.freeNote}
                             </span>
+                          ) : isWritersNote ? (
+                            <span style={{ fontSize: 9, color: '#D97706', fontFamily: 'IBM Plex Sans Arabic, sans-serif', fontWeight: 600 }}>
+                              {feat.writersNote}
+                            </span>
                           ) : checkIcon
-                        ) : lockIcon}
+                        ) : (
+                          requiredPlan === 'business' ? businessBadge : writersBadge
+                        )}
                       </div>
                     );
                   })}
