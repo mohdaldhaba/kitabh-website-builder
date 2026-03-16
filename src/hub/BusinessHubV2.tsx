@@ -361,11 +361,12 @@ const PlanComparisonOverlay: React.FC<{ currentPlan: Plan; onClose: () => void }
   /* ── Desktop row ── */
   const DesktopRow = ({ feat, idx }: { feat: typeof COMPARISON_SECTIONS[0]['features'][0]; idx: number }) => (
     <div style={{
-      display: 'grid', gridTemplateColumns: '1.8fr repeat(3, 1fr)',
+      display: 'grid', gridTemplateColumns: '1.4fr repeat(3, 1fr)',
       alignItems: 'center',
       background: rowBg(idx),
+      padding: '0 24px',
     }}>
-      <div style={{ fontSize: 15, fontFamily: font, color: '#374151', fontWeight: 500, padding: '16px 0 16px 32px' }}>
+      <div style={{ fontSize: 15, fontFamily: font, color: '#374151', fontWeight: 500, padding: '16px 8px 16px 0' }}>
         {feat.label}
       </div>
       {plans.map((p) => (
@@ -421,7 +422,7 @@ const PlanComparisonOverlay: React.FC<{ currentPlan: Plan; onClose: () => void }
           borderRadius: mob ? '16px 16px 0 0' : 16,
           padding: 0, maxWidth: 720, width: '100%',
           maxHeight: mob ? '92vh' : '88vh',
-          overflowY: 'auto', direction: 'rtl',
+          overflowY: 'auto', overflowX: 'hidden', direction: 'rtl',
           boxShadow: '0 20px 60px rgba(0,0,0,0.2)',
           position: 'relative',
           WebkitOverflowScrolling: 'touch' as any,
@@ -436,7 +437,7 @@ const PlanComparisonOverlay: React.FC<{ currentPlan: Plan; onClose: () => void }
         )}
 
         {/* Header */}
-        <div style={{ padding: mob ? '16px 20px 14px' : '28px 32px 22px', borderBottom: '1px solid #E5E7EB' }}>
+        <div style={{ padding: mob ? '16px 20px 14px' : '28px 24px 22px', borderBottom: '1px solid #E5E7EB' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
             <div>
               <h2 style={{ fontSize: mob ? 20 : 24, fontWeight: 800, fontFamily: font, margin: '0 0 4px', color: '#111827' }}>
@@ -464,8 +465,8 @@ const PlanComparisonOverlay: React.FC<{ currentPlan: Plan; onClose: () => void }
         {/* Plan column headers — sticky */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: mob ? 'repeat(3, 1fr)' : '1.8fr repeat(3, 1fr)',
-          padding: mob ? '12px 20px' : '16px 32px',
+          gridTemplateColumns: mob ? 'repeat(3, 1fr)' : '1.4fr repeat(3, 1fr)',
+          padding: mob ? '12px 20px' : '16px 24px',
           borderBottom: '2px solid #111827',
           position: 'sticky', top: 0, background: '#fff', zIndex: 1,
         }}>
@@ -480,7 +481,7 @@ const PlanComparisonOverlay: React.FC<{ currentPlan: Plan; onClose: () => void }
                 marginBottom: -2,
               }}>
                 <div style={{ fontSize: mob ? 13 : 15, fontWeight: 800, color: isCurrent ? '#111827' : '#9CA3AF' }}>
-                  {mob ? (p === 'free' ? 'مجانية' : p === 'writers' ? 'الكاتب' : 'الأعمال') : PLAN_META[p].labelAr}
+                  {PLAN_META[p].labelAr}
                 </div>
                 {isCurrent && (
                   <div style={{ fontSize: mob ? 10 : 11, color: '#6B7280', marginTop: 2 }}>باقتك</div>
@@ -494,7 +495,7 @@ const PlanComparisonOverlay: React.FC<{ currentPlan: Plan; onClose: () => void }
         {COMPARISON_SECTIONS.map((section) => (
           <div key={section.title}>
             <div style={{
-              padding: mob ? '18px 20px 10px' : '24px 32px 12px',
+              padding: mob ? '18px 20px 10px' : '24px 24px 12px',
               fontSize: mob ? 16 : 17, fontWeight: 800,
               color: '#111827', fontFamily: font,
             }}>
@@ -510,7 +511,7 @@ const PlanComparisonOverlay: React.FC<{ currentPlan: Plan; onClose: () => void }
         ))}
 
         {/* CTA */}
-        <div style={{ padding: mob ? '20px 20px 28px' : '28px 32px 36px', borderTop: '1px solid #E5E7EB', textAlign: 'center' }}>
+        <div style={{ padding: mob ? '20px 20px 28px' : '28px 24px 36px', borderTop: '1px solid #E5E7EB', textAlign: 'center' }}>
           <button
             onClick={() => { window.location.href = '/pricing'; }}
             style={{
