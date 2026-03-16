@@ -80,7 +80,7 @@ export const PLAN_META: Record<Plan, {
   showSubscribers: boolean;
   canCreateNewsletter: boolean;
 }> = {
-  free:     { label: 'Free',     labelAr: 'الخطة المجانية', color: '#6B7280',  subscriberLimit: '0',       showSubscribers: false, canCreateNewsletter: false },
+  free:     { label: 'Free',     labelAr: 'الباقة المجانية', color: '#6B7280',  subscriberLimit: '0',       showSubscribers: false, canCreateNewsletter: false },
   writers:  { label: 'Writers',  labelAr: 'باقة الكاتب',    color: '#2563EB',  subscriberLimit: '10,000',  showSubscribers: true,  canCreateNewsletter: false },
   business: { label: 'Business', labelAr: 'باقة الأعمال',   color: '#111827',  subscriberLimit: '100,000', showSubscribers: true,  canCreateNewsletter: true },
 };

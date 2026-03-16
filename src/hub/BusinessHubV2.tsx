@@ -418,10 +418,10 @@ const PlanComparisonOverlay: React.FC<{ currentPlan: Plan; onClose: () => void }
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
             <div>
               <h2 style={{ fontSize: isMobile ? 18 : 22, fontWeight: 800, fontFamily: font, margin: '0 0 2px', color: '#111827' }}>
-                ما الذي تتضمنه باقتك
+                ما الذي تتضمنه باقتك؟
               </h2>
               <p style={{ fontSize: isMobile ? 12 : 14, color: '#9CA3AF', fontFamily: font, margin: 0 }}>
-                مقارنة بين الباقات الثلاث
+                مقارنة بين باقات الكتابة
               </p>
             </div>
             <button
