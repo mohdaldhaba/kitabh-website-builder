@@ -336,45 +336,39 @@ const PlanComparisonOverlay: React.FC<{ currentPlan: Plan; onClose: () => void }
   const plans: Plan[] = ['free', 'writers', 'business'];
   const font = 'IBM Plex Sans Arabic, sans-serif';
 
-  const checkMark = (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22C55E" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+  // Verified seal badge path (star/seal shape like social media verified badges)
+  const sealPath = 'M12 0c.7 0 1.1.5 1.6 1l.8.9c.3.3.5.4.9.5l1.1.2c.7.1 1.2.4 1.3 1.1l.2 1.1c.1.4.2.6.5.9l.8.8c.5.5.6 1 .3 1.7l-.4 1.1c-.2.4-.2.6 0 1l.4 1.1c.3.7.2 1.2-.3 1.7l-.8.8c-.3.3-.4.5-.5.9l-.2 1.1c-.1.7-.6 1-1.3 1.1l-1.1.2c-.4.1-.6.2-.9.5l-.8.9c-.5.5-1 .7-1.6.7s-1.1-.2-1.6-.7l-.8-.9c-.3-.3-.5-.4-.9-.5l-1.1-.2c-.7-.1-1.2-.4-1.3-1.1l-.2-1.1c-.1-.4-.2-.6-.5-.9l-.8-.8c-.5-.5-.6-1-.3-1.7l.4-1.1c.2-.4.2-.6 0-1l-.4-1.1c-.3-.7-.2-1.2.3-1.7l.8-.8c.3-.3.4-.5.5-.9l.2-1.1C5.7 2.4 6.2 2.1 6.9 2l1.1-.2c.4-.1.6-.2.9-.5l.8-.9C10.2.5 10.6 0 11.3 0h.7z';
+
+  const VerifiedBadge = ({ color }: { color: string }) => (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+      <path d={sealPath} fill={color} />
+      <path d="M8 12.4L10.5 15L16 9" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+
+  const freeCheck = (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
       <polyline points="20 6 9 17 4 12" />
-    </svg>
-  );
-  const writersBadge = (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-      <circle cx="12" cy="12" r="12" fill="#2563EB" />
-      <path d="M7.5 12.5L10.5 15.5L16.5 9.5" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-  const businessBadge = (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-      <circle cx="12" cy="12" r="12" fill="#F59E0B" />
-      <path d="M7.5 12.5L10.5 15.5L16.5 9.5" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
   const dash = <span style={{ color: '#D1D5DB', fontSize: 16, fontWeight: 500 }}>—</span>;
 
   const renderCell = (feat: { key: FeatureKey; freeNote?: string; writersNote?: string }, p: Plan) => {
     const available = !isLocked(feat.key, p);
-    const requiredPlan = FEATURES[feat.key].plan;
 
-    if (!available) {
-      // Locked: free column shows dash, others show the badge of the required plan
-      if (p === 'free') return dash;
-      return requiredPlan === 'business' ? businessBadge : writersBadge;
+    if (!available) return dash;
+
+    // Available — each column uses its own badge color
+    if (p === 'free') {
+      if (feat.freeNote) return <span style={{ fontSize: 10, color: '#9CA3AF', fontFamily: font }}>{feat.freeNote}</span>;
+      return freeCheck;
     }
-    // Available
-    if (p === 'free' && feat.freeNote) {
-      return <span style={{ fontSize: 10, color: '#9CA3AF', fontFamily: font }}>{feat.freeNote}</span>;
+    if (p === 'writers') {
+      if (feat.writersNote) return <span style={{ fontSize: 10, color: '#D97706', fontFamily: font, fontWeight: 600 }}>{feat.writersNote}</span>;
+      return <VerifiedBadge color="#2563EB" />;
     }
-    if (p === 'writers' && feat.writersNote) {
-      return <span style={{ fontSize: 10, color: '#D97706', fontFamily: font, fontWeight: 600 }}>{feat.writersNote}</span>;
-    }
-    // Checkmark: show badge color for the plan that owns this feature, green check for free features
-    if (requiredPlan === 'writers') return writersBadge;
-    if (requiredPlan === 'business') return businessBadge;
-    return checkMark;
+    // business
+    return <VerifiedBadge color="#F59E0B" />;
   };
 
   const planHeaderColors: Record<Plan, { bg: string; border: string; text: string }> = {
@@ -524,7 +518,7 @@ const PlanComparisonOverlay: React.FC<{ currentPlan: Plan; onClose: () => void }
               </div>
               {plans.map((p) => (
                 <div key={p} style={{ textAlign: 'center', display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 24 }}>
-                  {PLAN_META[p].canCreateNewsletter ? businessBadge : dash}
+                  {PLAN_META[p].canCreateNewsletter ? <VerifiedBadge color="#F59E0B" /> : dash}
                 </div>
               ))}
             </div>
