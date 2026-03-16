@@ -206,7 +206,7 @@ function buildSidebarSections(plan: Plan): SidebarSection[] {
       locked: sectionLocks.has('publish'),
       planTier: 'writers',
       items: applyMeta([
-        { page: 'newsletters', label: 'النشرة', icon: icons.emailJourney },
+        { page: 'newsletters', label: 'النشرات البريدية', icon: icons.emailJourney },
         { page: 'subscribers', label: 'المشتركون', icon: icons.audience },
         { page: 'grow', subPage: 'linktree', label: 'صفحة الروابط', icon: icons.magicLink },
         { page: 'analyze', label: 'الإحصائيات', icon: icons.analyze },
@@ -219,10 +219,10 @@ function buildSidebarSections(plan: Plan): SidebarSection[] {
       locked: sectionLocks.has('design'),
       planTier: 'writers',
       items: applyMeta([
-        { page: 'website', label: 'الموقع', icon: icons.website },
+        { page: 'website', label: 'الموقع الإلكتروني', icon: icons.website },
         { page: 'landing-pages' as Page, label: 'صفحات الاشتراك', icon: icons.landingPage },
         { page: 'subscriber-segments' as Page, label: 'أقسام المشتركين', icon: icons.segments },
-        { page: 'custom-fonts' as Page, label: 'خطوط مخصصة', icon: icons.customFonts },
+        { page: 'custom-fonts' as Page, label: 'الخطوط الخاصة', icon: icons.customFonts },
         { page: 'branding' as Page, label: 'الهوية والعلامة', icon: icons.branding },
         { page: 'domain-settings' as Page, label: 'النطاق المخصص', icon: icons.domainSettings },
         { page: 'email-template', label: 'قوالب البريد', icon: icons.emailTemplate },
