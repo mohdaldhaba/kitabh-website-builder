@@ -4,6 +4,8 @@ import { colors, icons } from './HubLayout';
 
 interface SettingsPageProps {
   subPage?: string;
+  subdomainLocked?: boolean;
+  onSubdomainLockedClick?: () => void;
 }
 
 // ─── Account Settings ────────────────────────────────────
@@ -291,7 +293,49 @@ const SubdomainSection: React.FC = () => {
 };
 
 // ─── Settings Page ───────────────────────────────────────
-const SettingsPage: React.FC<SettingsPageProps> = ({ subPage = 'account' }) => {
+const SubdomainLockedOverlay: React.FC<{ onClick?: () => void }> = ({ onClick }) => (
+  <div style={{ maxWidth: 600, margin: '40px auto', textAlign: 'center' }}>
+    <div style={{
+      width: 48, height: 48, borderRadius: 12,
+      background: 'rgba(0,0,0,0.04)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      margin: '0 auto 16px', color: '#6B7280',
+    }}>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" />
+      </svg>
+    </div>
+    <h3 style={{
+      fontSize: 17, fontWeight: 700,
+      fontFamily: 'IBM Plex Sans Arabic, sans-serif',
+      margin: '0 0 8px', color: '#111827',
+    }}>
+      إعدادات النطاق الفرعي
+    </h3>
+    <p style={{
+      fontSize: 14, color: '#6B7280',
+      fontFamily: 'IBM Plex Sans Arabic, sans-serif',
+      margin: '0 0 24px', lineHeight: 1.6,
+    }}>
+      هذه الميزة متاحة في <strong style={{ color: '#111827' }}>باقة الكاتب</strong>
+    </p>
+    <button
+      onClick={onClick}
+      style={{
+        padding: '12px 28px',
+        background: '#111827', color: '#fff',
+        border: 'none', borderRadius: 10,
+        fontSize: 15, fontWeight: 600,
+        fontFamily: 'IBM Plex Sans Arabic, sans-serif',
+        cursor: 'pointer',
+      }}
+    >
+      باقات كتابة
+    </button>
+  </div>
+);
+
+const SettingsPage: React.FC<SettingsPageProps> = ({ subPage = 'account', subdomainLocked, onSubdomainLockedClick }) => {
   const [activeTab, setActiveTab] = useState(subPage);
 
   const tabs = [
@@ -320,16 +364,28 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ subPage = 'account' }) => {
               cursor: 'pointer',
               boxShadow: activeTab === tab.id ? '0 1px 2px rgba(0,0,0,0.06)' : 'none',
               transition: 'all 0.15s',
+              display: 'flex',
+              alignItems: 'center',
+              gap: 6,
             }}
           >
             {tab.label}
+            {tab.id === 'subdomain' && subdomainLocked && (
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" />
+              </svg>
+            )}
           </button>
         ))}
       </div>
 
       {activeTab === 'account' && <AccountSection />}
       {activeTab === 'billing' && <BillingSection />}
-      {activeTab === 'subdomain' && <SubdomainSection />}
+      {activeTab === 'subdomain' && (
+        subdomainLocked
+          ? <SubdomainLockedOverlay onClick={onSubdomainLockedClick || (() => { window.location.href = '/pricing'; })} />
+          : <SubdomainSection />
+      )}
     </div>
   );
 };

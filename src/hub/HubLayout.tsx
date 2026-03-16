@@ -163,6 +163,9 @@ interface HubLayoutProps {
   onWriteClick?: () => void;
   planName?: string;
   onLockedClick?: (item: SidebarItem) => void;
+  subscriberLimit?: string;
+  showSubscribers?: boolean;
+  dashboardLocked?: boolean;
 }
 
 // ─── Section-based sidebar structure ─────────────────────
@@ -180,6 +183,7 @@ type SidebarSection = {
   label: string;
   icon: React.ReactNode;
   items: SidebarItem[];
+  locked?: boolean;
 };
 
 const sidebarSections: SidebarSection[] = [
@@ -441,6 +445,9 @@ const HubLayout: React.FC<HubLayoutProps> = ({
   onWriteClick,
   planName,
   onLockedClick,
+  subscriberLimit,
+  showSubscribers,
+  dashboardLocked,
 }) => {
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(['create']));
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -470,23 +477,15 @@ const HubLayout: React.FC<HubLayoutProps> = ({
   const lockedBadge = (
     <span
       style={{
-        fontSize: 10,
-        fontWeight: 600,
-        fontFamily: 'IBM Plex Sans Arabic, sans-serif',
-        color: '#E11D48',
-        background: 'rgba(225,29,72,0.08)',
-        padding: '2px 6px',
-        borderRadius: 4,
-        whiteSpace: 'nowrap',
+        color: '#9CA3AF',
         display: 'flex',
         alignItems: 'center',
-        gap: 3,
+        flexShrink: 0,
       }}
     >
-      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" />
       </svg>
-      ترقية
     </span>
   );
 
@@ -542,15 +541,22 @@ const HubLayout: React.FC<HubLayoutProps> = ({
       <nav style={{ padding: '8px 8px', flex: 1, overflowY: 'auto' }}>
         {/* Dashboard - standalone at top */}
         {(() => {
-          const isDashActive = activePage === 'dashboard';
+          const isDashActive = activePage === 'dashboard' && !dashboardLocked;
+          const isDashLocked = !!dashboardLocked;
           return (
             <button
-              onClick={() => { onNavigate('dashboard'); setMobileMenuOpen(false); }}
+              onClick={() => {
+                if (isDashLocked && onLockedClick) {
+                  onLockedClick({ page: 'dashboard', label: 'لوحة التحكم', icon: icons.dashboard });
+                } else {
+                  onNavigate('dashboard'); setMobileMenuOpen(false);
+                }
+              }}
               style={{
                 width: '100%',
                 padding: '8px 12px',
                 background: isDashActive ? c.activeItem : 'transparent',
-                color: isDashActive ? c.activeText : c.text,
+                color: isDashLocked ? c.textMuted : (isDashActive ? c.activeText : c.text),
                 border: 'none',
                 borderRadius: 6,
                 fontSize: 14,
@@ -567,10 +573,11 @@ const HubLayout: React.FC<HubLayoutProps> = ({
               onMouseEnter={(e) => { if (!isDashActive) e.currentTarget.style.background = c.hoverBg; }}
               onMouseLeave={(e) => { if (!isDashActive) e.currentTarget.style.background = 'transparent'; }}
             >
-              <span style={{ display: 'flex', alignItems: 'center', color: isDashActive ? c.activeText : c.textMuted }}>
+              <span style={{ display: 'flex', alignItems: 'center', color: isDashLocked ? c.textMuted : (isDashActive ? c.activeText : c.textMuted) }}>
                 {icons.dashboard}
               </span>
               <span style={{ flex: 1, textAlign: 'right' }}>لوحة التحكم</span>
+              {isDashLocked && lockedBadge}
             </button>
           );
         })()}
@@ -578,7 +585,8 @@ const HubLayout: React.FC<HubLayoutProps> = ({
         {/* Collapsible Sections */}
         {activeSidebarSections.map((section) => {
           const isExpanded = expandedSections.has(section.id);
-          const hasSectionActive = section.items.some(
+          const isSectionLocked = section.locked;
+          const hasSectionActive = !isSectionLocked && section.items.some(
             (item) => activePage === item.page && (!item.subPage || activeSubPage === item.subPage)
           );
 
@@ -587,6 +595,12 @@ const HubLayout: React.FC<HubLayoutProps> = ({
               {/* Section header — clickable to expand/collapse */}
               <button
                 onClick={() => {
+                  if (isSectionLocked) {
+                    // If locked, trigger first locked item's upgrade modal
+                    const firstLocked = section.items.find(i => i.locked);
+                    if (firstLocked && onLockedClick) onLockedClick(firstLocked);
+                    return;
+                  }
                   setExpandedSections((prev) => {
                     const next = new Set(prev);
                     if (next.has(section.id)) next.delete(section.id);
@@ -598,7 +612,7 @@ const HubLayout: React.FC<HubLayoutProps> = ({
                   width: '100%',
                   padding: '8px 12px',
                   background: 'transparent',
-                  color: hasSectionActive ? c.activeText : c.text,
+                  color: isSectionLocked ? '#C0C0C0' : hasSectionActive ? c.activeText : c.text,
                   border: 'none',
                   borderRadius: 6,
                   fontSize: 14,
@@ -610,29 +624,38 @@ const HubLayout: React.FC<HubLayoutProps> = ({
                   gap: 10,
                   transition: 'background 0.1s',
                   textAlign: 'right',
+                  opacity: isSectionLocked ? 0.6 : 1,
                 }}
                 onMouseEnter={(e) => (e.currentTarget.style.background = c.hoverBg)}
                 onMouseLeave={(e) => (e.currentTarget.style.background = 'transparent')}
               >
-                <span style={{ display: 'flex', alignItems: 'center', color: hasSectionActive ? c.activeText : c.textMuted }}>
+                <span style={{ display: 'flex', alignItems: 'center', color: isSectionLocked ? '#C0C0C0' : hasSectionActive ? c.activeText : c.textMuted }}>
                   {section.icon}
                 </span>
                 <span style={{ flex: 1, textAlign: 'right' }}>{section.label}</span>
-                <span
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    color: c.textMuted,
-                    transform: isExpanded ? 'rotate(180deg)' : 'rotate(0)',
-                    transition: 'transform 0.2s',
-                  }}
-                >
-                  {icons.chevron}
-                </span>
+                {isSectionLocked ? (
+                  <span style={{ display: 'flex', alignItems: 'center', color: '#9CA3AF' }}>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                    </svg>
+                  </span>
+                ) : (
+                  <span
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      color: c.textMuted,
+                      transform: isExpanded ? 'rotate(180deg)' : 'rotate(0)',
+                      transition: 'transform 0.2s',
+                    }}
+                  >
+                    {icons.chevron}
+                  </span>
+                )}
               </button>
 
-              {/* Expanded child items */}
-              {isExpanded && (
+              {/* Expanded child items (hidden if section is locked) */}
+              {isExpanded && !isSectionLocked && (
                 <div style={{ paddingRight: 20, paddingTop: 2 }}>
                   {section.items.map((item) => {
                     const isActive = activePage === item.page && (item.subPage ? activeSubPage === item.subPage : !activeSubPage || (activePage !== 'posts' && activePage !== 'grow'));
@@ -689,16 +712,21 @@ const HubLayout: React.FC<HubLayoutProps> = ({
 
         {/* Utility items — flat, below sections */}
         {activeUtilityItems.map((item) => {
-          const isActive = activePage === item.page;
+          const isActive = activePage === item.page && !item.locked;
+          const isItemLocked = item.locked;
           return (
             <button
-              key={item.page}
-              onClick={() => { onNavigate(item.page); setMobileMenuOpen(false); }}
+              key={`${item.page}-${item.label}`}
+              onClick={() => {
+                if (isItemLocked && onLockedClick) { onLockedClick(item); return; }
+                onNavigate(item.page);
+                setMobileMenuOpen(false);
+              }}
               style={{
                 width: '100%',
                 padding: '8px 12px',
                 background: isActive ? c.activeItem : 'transparent',
-                color: isActive ? c.activeText : c.text,
+                color: isItemLocked ? '#C0C0C0' : isActive ? c.activeText : c.text,
                 border: 'none',
                 borderRadius: 6,
                 fontSize: 14,
@@ -711,14 +739,16 @@ const HubLayout: React.FC<HubLayoutProps> = ({
                 transition: 'background 0.1s',
                 textAlign: 'right',
                 marginBottom: 2,
+                opacity: isItemLocked ? 0.6 : 1,
               }}
               onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.background = c.hoverBg; }}
               onMouseLeave={(e) => { if (!isActive) e.currentTarget.style.background = 'transparent'; }}
             >
-              <span style={{ display: 'flex', alignItems: 'center', color: isActive ? c.activeText : c.textMuted }}>
+              <span style={{ display: 'flex', alignItems: 'center', color: isItemLocked ? '#C0C0C0' : isActive ? c.activeText : c.textMuted }}>
                 {item.icon}
               </span>
               <span style={{ flex: 1, textAlign: 'right' }}>{item.label}</span>
+              {isItemLocked && lockedBadge}
             </button>
           );
         })}
@@ -733,6 +763,7 @@ const HubLayout: React.FC<HubLayoutProps> = ({
               {planName || 'خطة الأعمال'}
             </span>
             <button
+              onClick={() => { window.location.href = '/pricing'; }}
               style={{
                 padding: '2px 8px',
                 background: c.accent,
@@ -751,15 +782,19 @@ const HubLayout: React.FC<HubLayoutProps> = ({
               ترقية
             </button>
           </div>
-          <div style={{ fontSize: 12, color: c.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif', marginBottom: 6 }}>
-            المشتركون
-          </div>
-          <div style={{ height: 4, background: '#E5E7EB', borderRadius: 2, overflow: 'hidden' }}>
-            <div style={{ height: '100%', width: '38%', background: c.primary, borderRadius: 2 }} />
-          </div>
-          <div style={{ fontSize: 11, color: c.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif', marginTop: 4 }}>
-            0 of 2,500 مشترك
-          </div>
+          {(showSubscribers !== false) && (
+            <>
+              <div style={{ fontSize: 12, color: c.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif', marginBottom: 6 }}>
+                المشتركون
+              </div>
+              <div style={{ height: 4, background: '#E5E7EB', borderRadius: 2, overflow: 'hidden' }}>
+                <div style={{ height: '100%', width: '38%', background: c.primary, borderRadius: 2 }} />
+              </div>
+              <div style={{ fontSize: 11, color: c.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif', marginTop: 4 }}>
+                0 of {subscriberLimit || '2,500'} مشترك
+              </div>
+            </>
+          )}
         </div>
 
         {/* Settings */}

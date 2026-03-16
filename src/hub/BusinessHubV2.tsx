@@ -71,9 +71,9 @@ type FeatureKey =
   | 'analyze' | 'notifications' | 'writers' | 'dashboard' | 'settings';
 
 // ─── Feature lock map ───────────────────────────────────
-// true = locked for that plan
 const lockMap: Record<Plan, Set<FeatureKey>> = {
   free: new Set([
+    'dashboard',
     'newsletters',
     'subscribers',
     'linktree',
@@ -84,6 +84,7 @@ const lockMap: Record<Plan, Set<FeatureKey>> = {
     'domain-settings',
     'email-template',
     'writers',
+    'analyze',
   ]),
   writers: new Set([
     'domain-settings',
@@ -94,75 +95,78 @@ const lockMap: Record<Plan, Set<FeatureKey>> = {
   business: new Set([]),
 };
 
+// ─── Section-level locks (lock the entire section header) ─
+const sectionLockMap: Record<Plan, Set<string>> = {
+  free: new Set(['publish', 'design']),
+  writers: new Set([]),
+  business: new Set([]),
+};
+
 // ─── Plan metadata ──────────────────────────────────────
-const planMeta: Record<Plan, { label: string; labelAr: string; color: string; subscriberLimit: string }> = {
-  free: { label: 'Free', labelAr: 'الخطة المجانية', color: '#6B7280', subscriberLimit: '100' },
-  writers: { label: 'Writers', labelAr: 'خطة الكتّاب', color: '#2563EB', subscriberLimit: '2,500' },
-  business: { label: 'Business', labelAr: 'خطة الأعمال', color: '#111827', subscriberLimit: '25,000' },
+const planMeta: Record<Plan, { label: string; labelAr: string; color: string; subscriberLimit: string; showSubscribers: boolean }> = {
+  free: { label: 'Free', labelAr: 'الخطة المجانية', color: '#6B7280', subscriberLimit: '0', showSubscribers: false },
+  writers: { label: 'Writers', labelAr: 'باقة الكاتب', color: '#2563EB', subscriberLimit: '10,000', showSubscribers: true },
+  business: { label: 'Business', labelAr: 'باقة الأعمال', color: '#111827', subscriberLimit: '100,000', showSubscribers: true },
 };
 
 // ─── Upgrade reasons per feature ────────────────────────
-const upgradeReasons: Record<FeatureKey, { title: string; features: string[]; targetPlan: string }> = {
+const upgradeReasons: Record<FeatureKey, { title: string; targetPlan: string }> = {
+  dashboard: {
+    title: 'لوحة التحكم متاحة مع النشرات البريدية',
+    targetPlan: 'باقة الكاتب',
+  },
   newsletters: {
     title: 'النشرات البريدية',
-    features: ['إرسال نشرات بريدية', 'جدولة الإرسال', 'إحصائيات البريد'],
-    targetPlan: 'خطة الكتّاب',
+    targetPlan: 'باقة الكاتب',
   },
   subscribers: {
     title: 'إدارة المشتركين',
-    features: ['استيراد المشتركين', 'قوائم المشتركين', 'تصدير البيانات'],
-    targetPlan: 'خطة الكتّاب',
+    targetPlan: 'باقة الكاتب',
   },
   linktree: {
     title: 'صفحة الروابط',
-    features: ['صفحة روابط مخصصة', 'ربط وسائل التواصل', 'تتبع النقرات'],
-    targetPlan: 'خطة الكتّاب',
+    targetPlan: 'باقة الكاتب',
   },
   'landing-pages': {
     title: 'صفحات الاشتراك',
-    features: ['صفحات هبوط مخصصة', 'نماذج اشتراك', 'تصاميم متعددة'],
-    targetPlan: 'خطة الكتّاب',
+    targetPlan: 'باقة الكاتب',
   },
   'email-journeys': {
-    title: 'رحلات البريد',
-    features: ['أتمتة البريد', 'تسلسلات ترحيبية', 'شرائح مخصصة'],
-    targetPlan: 'خطة الأعمال',
+    title: 'رحلات البريد والأتمتة',
+    targetPlan: 'باقة الأعمال',
   },
   'magic-link': {
     title: 'الرابط السحري',
-    features: ['روابط اشتراك سريعة', 'مشاركة فورية', 'تتبع التحويلات'],
-    targetPlan: 'خطة الكتّاب',
+    targetPlan: 'باقة الكاتب',
   },
   website: {
-    title: 'الموقع',
-    features: ['قوالب مواقع', 'نطاق فرعي', 'صفحات مخصصة'],
-    targetPlan: 'خطة الكتّاب',
+    title: 'الموقع الإلكتروني',
+    targetPlan: 'باقة الكاتب',
   },
   'domain-settings': {
     title: 'النطاق المخصص',
-    features: ['نطاق مخصص', 'إزالة علامة كتابة', 'شهادة SSL'],
-    targetPlan: 'خطة الأعمال',
+    targetPlan: 'باقة الأعمال',
   },
   'email-template': {
-    title: 'قالب البريد',
-    features: ['تصميم قوالب مخصصة', 'خطوط مخصصة', 'ألوان العلامة التجارية'],
-    targetPlan: 'خطة الأعمال',
+    title: 'مصمم قوالب البريد',
+    targetPlan: 'باقة الأعمال',
   },
   writers: {
     title: 'فريق الكتّاب',
-    features: ['إضافة كتّاب', 'أدوار وصلاحيات', 'مراجعة المحتوى'],
-    targetPlan: 'خطة الأعمال',
+    targetPlan: 'باقة الأعمال',
   },
-  // These are never locked but included for type completeness
-  posts: { title: '', features: [], targetPlan: '' },
-  outline: { title: '', features: [], targetPlan: '' },
-  checker: { title: '', features: [], targetPlan: '' },
-  carousel: { title: '', features: [], targetPlan: '' },
-  social: { title: '', features: [], targetPlan: '' },
-  analyze: { title: '', features: [], targetPlan: '' },
-  notifications: { title: '', features: [], targetPlan: '' },
-  dashboard: { title: '', features: [], targetPlan: '' },
-  settings: { title: '', features: [], targetPlan: '' },
+  analyze: {
+    title: 'الإحصائيات المتقدمة',
+    targetPlan: 'باقة الكاتب',
+  },
+  // Never locked
+  posts: { title: '', targetPlan: '' },
+  outline: { title: '', targetPlan: '' },
+  checker: { title: '', targetPlan: '' },
+  carousel: { title: '', targetPlan: '' },
+  social: { title: '', targetPlan: '' },
+  notifications: { title: '', targetPlan: '' },
+  settings: { title: '', targetPlan: '' },
 };
 
 // ─── Base path ──────────────────────────────────────────
@@ -176,7 +180,7 @@ function parseUrl(): { page: Page; subPage?: string; plan?: Plan } {
   const params = new URLSearchParams(window.location.search);
   const plan = (params.get('plan') as Plan) || undefined;
 
-  if (segments.length === 0) return { page: 'dashboard', plan };
+  if (segments.length === 0) return { page: 'posts', subPage: 'all-posts', plan };
 
   const first = segments[0];
   const second = segments[1];
@@ -205,7 +209,7 @@ function parseUrl(): { page: Page; subPage?: string; plan?: Plan } {
     case 'notifications': return { page: 'notifications', plan };
     case 'settings':
       return { page: 'settings', subPage: second || 'account', plan };
-    default: return { page: 'dashboard', plan };
+    default: return { page: 'posts', subPage: 'all-posts', plan };
   }
 }
 
@@ -242,7 +246,7 @@ function buildUrl(page: Page, subPage?: string): string {
     case 'settings':
       path = subPage && subPage !== 'account' ? `${BASE}/settings/${subPage}` : `${BASE}/settings`;
       break;
-    default: path = `${BASE}/dashboard`;
+    default: path = `${BASE}/posts`;
   }
 
   return `${path}${qs}`;
@@ -262,6 +266,7 @@ function getFeatureKey(item: { page: Page; subPage?: string }): FeatureKey {
 // ─── Build sidebar sections with lock state ─────────────
 function buildSidebarSections(plan: Plan): SidebarSection[] {
   const locks = lockMap[plan];
+  const sectionLocks = sectionLockMap[plan];
 
   const applyLock = (items: SidebarItem[]): SidebarItem[] =>
     items.map((item) => ({
@@ -281,11 +286,13 @@ function buildSidebarSections(plan: Plan): SidebarSection[] {
         { page: 'grow', subPage: 'carousel', label: 'ستوديو كتابة', icon: icons.carousel },
         { page: 'grow', subPage: 'social', label: 'محتوى كتابة', icon: icons.social },
       ]),
+      locked: sectionLocks.has('publish') ? false : false, // create is never locked
     },
     {
       id: 'publish',
       label: 'انشر',
       icon: icons.emailJourney,
+      locked: sectionLocks.has('publish'),
       items: applyLock([
         { page: 'newsletters', label: 'النشرة', icon: icons.emailJourney },
         { page: 'subscribers', label: 'المشتركون', icon: icons.audience },
@@ -299,6 +306,7 @@ function buildSidebarSections(plan: Plan): SidebarSection[] {
       id: 'design',
       label: 'صمّم',
       icon: icons.website,
+      locked: sectionLocks.has('design'),
       items: applyLock([
         { page: 'website', label: 'الموقع', icon: icons.website },
         { page: 'domain-settings' as Page, label: 'إعدادات النطاق', icon: icons.domainSettings },
@@ -311,13 +319,13 @@ function buildSidebarSections(plan: Plan): SidebarSection[] {
 function buildUtilityItems(plan: Plan): SidebarItem[] {
   const locks = lockMap[plan];
   return [
-    { page: 'analyze', label: 'الإحصائيات', icon: icons.analyze },
+    { page: 'analyze', label: 'الإحصائيات', icon: icons.analyze, locked: locks.has('analyze') },
     { page: 'notifications', label: 'الإشعارات', icon: icons.notification },
-    { page: 'writers' as Page, label: 'الكتّاب', icon: icons.members, locked: locks.has('writers') },
+    { page: 'writers' as Page, label: 'فريق الكتّاب', icon: icons.members, locked: locks.has('writers') },
   ];
 }
 
-// ─── Upgrade Modal ──────────────────────────────────────
+// ─── Upgrade Modal (simplified) ─────────────────────────
 const UpgradeModal: React.FC<{
   featureKey: FeatureKey;
   currentPlan: Plan;
@@ -325,10 +333,6 @@ const UpgradeModal: React.FC<{
 }> = ({ featureKey, currentPlan, onClose }) => {
   const reason = upgradeReasons[featureKey];
   if (!reason || !reason.title) return null;
-
-  const nextPlan = currentPlan === 'free' ? 'writers' : 'business';
-  const nextPlanLabel = currentPlan === 'free' ? 'خطة الكتّاب' : 'خطة الأعمال';
-  const nextPlanPrice = currentPlan === 'free' ? '$9' : '$29';
 
   return (
     <>
@@ -343,9 +347,10 @@ const UpgradeModal: React.FC<{
         <div
           style={{
             background: '#fff', borderRadius: 16, padding: '32px 28px',
-            maxWidth: 400, width: '90%', direction: 'rtl',
+            maxWidth: 360, width: '90%', direction: 'rtl',
             boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
             position: 'relative',
+            textAlign: 'center',
           }}
           onClick={(e) => e.stopPropagation()}
         >
@@ -364,20 +369,20 @@ const UpgradeModal: React.FC<{
 
           {/* Lock icon */}
           <div style={{
-            width: 56, height: 56, borderRadius: 14,
-            background: 'rgba(225,29,72,0.08)',
+            width: 48, height: 48, borderRadius: 12,
+            background: 'rgba(0,0,0,0.04)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            margin: '0 auto 20px', color: '#E11D48',
+            margin: '0 auto 16px', color: '#6B7280',
           }}>
-            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" />
             </svg>
           </div>
 
           <h3 style={{
-            fontSize: 18, fontWeight: 700,
+            fontSize: 17, fontWeight: 700,
             fontFamily: 'IBM Plex Sans Arabic, sans-serif',
-            textAlign: 'center', margin: '0 0 8px', color: '#111827',
+            margin: '0 0 8px', color: '#111827',
           }}>
             {reason.title}
           </h3>
@@ -385,40 +390,10 @@ const UpgradeModal: React.FC<{
           <p style={{
             fontSize: 14, color: '#6B7280',
             fontFamily: 'IBM Plex Sans Arabic, sans-serif',
-            textAlign: 'center', margin: '0 0 20px', lineHeight: 1.6,
+            margin: '0 0 24px', lineHeight: 1.6,
           }}>
-            هذه الميزة متاحة في {reason.targetPlan}.
+            هذه الميزة متاحة في <strong style={{ color: '#111827' }}>{reason.targetPlan}</strong>
           </p>
-
-          {/* Feature list */}
-          <div style={{
-            background: '#F9FAFB', borderRadius: 10, padding: '14px 16px',
-            marginBottom: 20,
-          }}>
-            <div style={{
-              fontSize: 12, fontWeight: 600, color: '#9CA3AF',
-              fontFamily: 'IBM Plex Sans Arabic, sans-serif',
-              marginBottom: 10,
-            }}>
-              قم بالترقية لفتح:
-            </div>
-            {reason.features.map((f, i) => (
-              <div key={i} style={{
-                display: 'flex', alignItems: 'center', gap: 8,
-                marginBottom: i < reason.features.length - 1 ? 8 : 0,
-              }}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="20 6 9 17 4 12" />
-                </svg>
-                <span style={{
-                  fontSize: 13, color: '#374151',
-                  fontFamily: 'IBM Plex Sans Arabic, sans-serif',
-                }}>
-                  {f}
-                </span>
-              </div>
-            ))}
-          </div>
 
           {/* CTA */}
           <button
@@ -432,22 +407,13 @@ const UpgradeModal: React.FC<{
               fontSize: 15, fontWeight: 600,
               fontFamily: 'IBM Plex Sans Arabic, sans-serif',
               cursor: 'pointer',
-              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
               transition: 'background 0.15s',
             }}
             onMouseEnter={(e) => (e.currentTarget.style.background = '#000')}
             onMouseLeave={(e) => (e.currentTarget.style.background = '#111827')}
           >
-            ترقية الآن — {nextPlanPrice}/شهريًا
+            باقات كتابة
           </button>
-
-          <p style={{
-            fontSize: 11, color: '#9CA3AF', textAlign: 'center',
-            fontFamily: 'IBM Plex Sans Arabic, sans-serif',
-            margin: '10px 0 0',
-          }}>
-            يمكنك الإلغاء في أي وقت
-          </p>
         </div>
       </div>
     </>
@@ -458,7 +424,7 @@ const UpgradeModal: React.FC<{
 const TierSwitcher: React.FC<{ plan: Plan; onChange: (plan: Plan) => void }> = ({ plan, onChange }) => {
   const plans: { key: Plan; label: string; labelEn: string; color: string }[] = [
     { key: 'free', label: 'مجانية', labelEn: 'Free', color: '#6B7280' },
-    { key: 'writers', label: 'الكتّاب', labelEn: 'Writers', color: '#2563EB' },
+    { key: 'writers', label: 'الكاتب', labelEn: 'Writers', color: '#2563EB' },
     { key: 'business', label: 'الأعمال', labelEn: 'Business', color: '#111827' },
   ];
 
@@ -471,7 +437,7 @@ const TierSwitcher: React.FC<{ plan: Plan; onChange: (plan: Plan) => void }> = (
       fontFamily: 'IBM Plex Sans Arabic, sans-serif',
     }}>
       <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', marginLeft: 12 }}>
-        عرض الخطة:
+        عرض الباقة:
       </span>
       {plans.map((p) => {
         const isActive = plan === p.key;
@@ -509,37 +475,12 @@ const TierSwitcher: React.FC<{ plan: Plan; onChange: (plan: Plan) => void }> = (
   );
 };
 
-// ─── AI Usage Banner (for free plan) ────────────────────
-const AIUsageBanner: React.FC = () => (
-  <div style={{
-    background: 'linear-gradient(135deg, #FEF3C7, #FDE68A)',
-    border: '1px solid #F59E0B',
-    borderRadius: 10,
-    padding: '12px 16px',
-    marginBottom: 20,
-    display: 'flex',
-    alignItems: 'center',
-    gap: 10,
-    direction: 'rtl',
-    fontFamily: 'IBM Plex Sans Arabic, sans-serif',
-  }}>
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#92400E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
-      <line x1="12" y1="9" x2="12" y2="13" /><line x1="12" y1="17" x2="12.01" y2="17" />
-    </svg>
-    <div>
-      <div style={{ fontSize: 13, fontWeight: 600, color: '#92400E' }}>
-        الخطة المجانية — 5 استخدامات يوميًا لأدوات الذكاء الاصطناعي
-      </div>
-      <div style={{ fontSize: 12, color: '#92400E', opacity: 0.8 }}>
-        مساعد كتابة، محرر كتابة، ستوديو كتابة، محتوى كتابة
-      </div>
-    </div>
-  </div>
-);
+// ─── Mock publications per plan ─────────────────────────
+const freePublication: Publication[] = [
+  { id: 'blog_1', name: 'مدونتي', slug: 'my-blog', subscriberCount: 0 },
+];
 
-// ─── Mock publications ──────────────────────────────────
-const mockPublications: Publication[] = [
+const paidPublications: Publication[] = [
   { id: 'pub_1', name: 'رسالة السبت', slug: 'saturday-letter', subscriberCount: 1920 },
   { id: 'pub_2', name: 'نشرة التقنية', slug: 'tech-weekly', subscriberCount: 480 },
 ];
@@ -547,11 +488,17 @@ const mockPublications: Publication[] = [
 // ─── Main Component ─────────────────────────────────────
 const BusinessHubV2: React.FC = () => {
   const initial = parseUrl();
-  const [activePage, setActivePage] = useState<Page>(initial.page);
-  const [activeSubPage, setActiveSubPage] = useState<string | undefined>(initial.subPage);
-  const [activePublicationId, setActivePublicationId] = useState(mockPublications[0].id);
+  // Free plan defaults to posts, not dashboard
+  const defaultPage = (initial.plan || 'free') === 'free' ? 'posts' : initial.page;
+  const defaultSubPage = (initial.plan || 'free') === 'free' && initial.page === 'dashboard' ? 'all-posts' : initial.subPage;
+
+  const [activePage, setActivePage] = useState<Page>(defaultPage);
+  const [activeSubPage, setActiveSubPage] = useState<string | undefined>(defaultSubPage || (defaultPage === 'posts' ? 'all-posts' : undefined));
+  const [activePublicationId, setActivePublicationId] = useState('pub_1');
   const [plan, setPlan] = useState<Plan>(initial.plan || 'free');
   const [upgradeModal, setUpgradeModal] = useState<FeatureKey | null>(null);
+
+  const publications = plan === 'free' ? freePublication : paidPublications;
 
   useEffect(() => {
     const handlePopState = () => {
@@ -569,7 +516,8 @@ const BusinessHubV2: React.FC = () => {
     if (path === BASE || path === `${BASE}/`) {
       const params = new URLSearchParams(window.location.search);
       if (!params.has('plan')) params.set('plan', plan);
-      window.history.replaceState(null, '', `${BASE}/dashboard?${params.toString()}`);
+      const defaultPath = plan === 'free' ? 'posts' : 'dashboard';
+      window.history.replaceState(null, '', `${BASE}/${defaultPath}?${params.toString()}`);
     }
   }, []);
 
@@ -577,19 +525,26 @@ const BusinessHubV2: React.FC = () => {
     setPlan(newPlan);
     const params = new URLSearchParams(window.location.search);
     params.set('plan', newPlan);
-    const path = window.location.pathname;
-    window.history.replaceState(null, '', `${path}?${params.toString()}`);
 
-    // If current page is locked in the new plan, redirect to dashboard
+    // Free plan goes to posts, paid plans go to dashboard
     const currentKey = getFeatureKey({ page: activePage, subPage: activeSubPage });
     if (lockMap[newPlan].has(currentKey)) {
-      setActivePage('dashboard');
-      setActiveSubPage(undefined);
-      window.history.pushState(null, '', `${BASE}/dashboard?${params.toString()}`);
+      const fallback = newPlan === 'free' ? 'posts' : 'dashboard';
+      setActivePage(fallback as Page);
+      setActiveSubPage(fallback === 'posts' ? 'all-posts' : undefined);
+      window.history.pushState(null, '', `${BASE}/${fallback}?${params.toString()}`);
+    } else {
+      window.history.replaceState(null, '', `${window.location.pathname}?${params.toString()}`);
     }
   };
 
   const handleNavigate = (page: Page, subPage?: string) => {
+    // Check if locked
+    const key = getFeatureKey({ page, subPage });
+    if (lockMap[plan].has(key)) {
+      setUpgradeModal(key);
+      return;
+    }
     setActivePage(page);
     setActiveSubPage(subPage);
     const url = buildUrl(page, subPage);
@@ -613,17 +568,12 @@ const BusinessHubV2: React.FC = () => {
     // Check if current page is locked
     const currentKey = getFeatureKey({ page: activePage, subPage: activeSubPage });
     if (lockMap[plan].has(currentKey)) {
-      return <DashboardPage />;
+      return <PostsPage subPage="all-posts" />;
     }
 
     switch (activePage) {
       case 'dashboard':
-        return (
-          <>
-            {plan === 'free' && <AIUsageBanner />}
-            <DashboardPage />
-          </>
-        );
+        return <DashboardPage />;
       case 'posts':
         if (activeSubPage === 'outline') {
           return <HubToolWrapper><Suspense fallback={<ToolLoader />}><KitabhOutline embedded premium={plan !== 'free'} /></Suspense></HubToolWrapper>;
@@ -633,7 +583,7 @@ const BusinessHubV2: React.FC = () => {
         }
         return <PostsPage subPage={activeSubPage} />;
       case 'newsletters': {
-        const pubIndex = mockPublications.findIndex(p => p.id === activePublicationId);
+        const pubIndex = paidPublications.findIndex(p => p.id === activePublicationId);
         return <NewslettersPage activePublicationIndex={pubIndex >= 0 ? pubIndex : 0} />;
       }
       case 'email-template':
@@ -662,7 +612,7 @@ const BusinessHubV2: React.FC = () => {
         }
         return <GrowPage subPage={activeSubPage} />;
       case 'website': {
-        const activePub = mockPublications.find(p => p.id === activePublicationId) || mockPublications[0];
+        const activePub = paidPublications.find(p => p.id === activePublicationId) || paidPublications[0];
         return <WebsitePage publicationName={activePub.name} publicationSlug={activePub.slug} />;
       }
       case 'writers':
@@ -678,9 +628,9 @@ const BusinessHubV2: React.FC = () => {
       case 'domain-settings':
         return <KitabhDomainSettings />;
       case 'settings':
-        return <SettingsPage subPage={activeSubPage} />;
+        return <SettingsPage subPage={activeSubPage} subdomainLocked={plan === 'free'} onSubdomainLockedClick={() => { window.location.href = '/pricing'; }} />;
       default:
-        return <DashboardPage />;
+        return <PostsPage subPage="all-posts" />;
     }
   };
 
@@ -692,14 +642,17 @@ const BusinessHubV2: React.FC = () => {
           activePage={activePage}
           activeSubPage={activeSubPage}
           onNavigate={handleNavigate}
-          publications={mockPublications}
-          activePublicationId={activePublicationId}
+          publications={publications}
+          activePublicationId={plan === 'free' ? 'blog_1' : activePublicationId}
           onSwitchPublication={setActivePublicationId}
           customSidebarSections={sidebarSections}
           customUtilityItems={utilityItems}
           onWriteClick={handleWriteClick}
           planName={meta.labelAr}
           onLockedClick={handleLockedClick}
+          subscriberLimit={meta.subscriberLimit}
+          showSubscribers={meta.showSubscribers}
+          dashboardLocked={lockMap[plan].has('dashboard')}
         >
           {renderPage()}
         </HubLayout>
