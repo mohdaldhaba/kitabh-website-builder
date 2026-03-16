@@ -271,37 +271,58 @@ function getFeatureKey(item: { page: Page; subPage?: string }): FeatureKey {
   return item.page as FeatureKey;
 }
 
+// ─── Plan tier per feature (which plan unlocks it) ──────
+const featureTier: Partial<Record<FeatureKey, 'writers' | 'business'>> = {
+  dashboard: 'writers',
+  newsletters: 'writers',
+  subscribers: 'writers',
+  linktree: 'writers',
+  'landing-pages': 'writers',
+  'magic-link': 'writers',
+  website: 'writers',
+  analyze: 'writers',
+  'domain-settings': 'business',
+  'email-template': 'business',
+  'email-journeys': 'business',
+  branding: 'business',
+  writers: 'business',
+};
+
 // ─── Build sidebar sections with lock state ─────────────
 function buildSidebarSections(plan: Plan): SidebarSection[] {
   const locks = lockMap[plan];
   const sectionLocks = sectionLockMap[plan];
 
-  const applyLock = (items: SidebarItem[]): SidebarItem[] =>
-    items.map((item) => ({
-      ...item,
-      locked: locks.has(getFeatureKey(item)),
-    }));
+  const applyMeta = (items: SidebarItem[]): SidebarItem[] =>
+    items.map((item) => {
+      const key = getFeatureKey(item);
+      return {
+        ...item,
+        locked: locks.has(key),
+        planTier: plan !== 'free' ? featureTier[key] : undefined,
+      };
+    });
 
   return [
     {
       id: 'create',
       label: 'اكتب',
       icon: icons.write,
-      items: applyLock([
+      items: applyMeta([
         { page: 'posts', subPage: 'all-posts', label: 'المنشورات', icon: icons.posts },
         { page: 'posts', subPage: 'outline', label: 'مساعد كتابة', icon: icons.outline },
         { page: 'posts', subPage: 'checker', label: 'محرر كتابة', icon: icons.checker },
         { page: 'grow', subPage: 'carousel', label: 'ستوديو كتابة', icon: icons.carousel },
         { page: 'grow', subPage: 'social', label: 'محتوى كتابة', icon: icons.social },
       ]),
-      locked: sectionLocks.has('publish') ? false : false, // create is never locked
     },
     {
       id: 'publish',
       label: 'انشر',
       icon: icons.emailJourney,
       locked: sectionLocks.has('publish'),
-      items: applyLock([
+      planTier: 'writers',
+      items: applyMeta([
         { page: 'newsletters', label: 'النشرة', icon: icons.emailJourney },
         { page: 'subscribers', label: 'المشتركون', icon: icons.audience },
         { page: 'grow', subPage: 'linktree', label: 'صفحة الروابط', icon: icons.magicLink },
@@ -315,7 +336,8 @@ function buildSidebarSections(plan: Plan): SidebarSection[] {
       label: 'صمّم',
       icon: icons.website,
       locked: sectionLocks.has('design'),
-      items: applyLock([
+      planTier: 'writers',
+      items: applyMeta([
         { page: 'website', label: 'الموقع', icon: icons.website },
         { page: 'branding' as Page, label: 'الهوية والعلامة', icon: icons.branding },
         { page: 'domain-settings' as Page, label: 'إعدادات النطاق', icon: icons.domainSettings },
@@ -328,9 +350,9 @@ function buildSidebarSections(plan: Plan): SidebarSection[] {
 function buildUtilityItems(plan: Plan): SidebarItem[] {
   const locks = lockMap[plan];
   return [
-    { page: 'analyze', label: 'الإحصائيات', icon: icons.analyze, locked: locks.has('analyze') },
+    { page: 'analyze', label: 'الإحصائيات', icon: icons.analyze, locked: locks.has('analyze'), planTier: plan !== 'free' ? featureTier['analyze'] : undefined },
     { page: 'notifications', label: 'الإشعارات', icon: icons.notification },
-    { page: 'writers' as Page, label: 'فريق الكتّاب', icon: icons.members, locked: locks.has('writers') },
+    { page: 'writers' as Page, label: 'فريق الكتّاب', icon: icons.members, locked: locks.has('writers'), planTier: plan !== 'free' ? featureTier['writers'] : undefined },
   ];
 }
 
@@ -673,6 +695,7 @@ const BusinessHubV2: React.FC = () => {
           subscriberLimit={meta.subscriberLimit}
           showSubscribers={meta.showSubscribers}
           dashboardLocked={lockMap[plan].has('dashboard')}
+          dashboardPlanTier={plan !== 'free' ? featureTier['dashboard'] : undefined}
           createNewsletterLocked={plan === 'free'}
           onCreateNewsletterLockedClick={() => setUpgradeModal('newsletters')}
         >
