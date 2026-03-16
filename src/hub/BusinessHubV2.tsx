@@ -65,13 +65,31 @@ const ComingSoonPage: React.FC<{ title: string; description: string }> = ({ titl
   </div>
 );
 
+// ─── Locked Feature Page ─────────────────────────────────
+const LockedFeaturePage: React.FC<{ title: string; planLabel: string }> = ({ title, planLabel }) => (
+  <div style={{ maxWidth: 600, margin: '40px auto', textAlign: 'center' }}>
+    <div style={{ width: 48, height: 48, borderRadius: 12, background: 'rgba(0,0,0,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', color: '#6B7280' }}>
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" />
+      </svg>
+    </div>
+    <h3 style={{ fontSize: 17, fontWeight: 700, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 8px', color: '#111827' }}>{title}</h3>
+    <p style={{ fontSize: 14, color: '#6B7280', fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 24px', lineHeight: 1.6 }}>
+      هذه الميزة متاحة في <strong style={{ color: '#111827' }}>{planLabel}</strong>
+    </p>
+    <button onClick={() => { window.location.href = '/pricing'; }} style={{ padding: '12px 28px', background: '#111827', color: '#fff', border: 'none', borderRadius: 10, fontSize: 15, fontWeight: 600, fontFamily: 'IBM Plex Sans Arabic, sans-serif', cursor: 'pointer' }}>
+      باقات كتابة
+    </button>
+  </div>
+);
+
 // ─── Reusable Tab Bar ────────────────────────────────────
 const TabBar: React.FC<{ tabs: { id: string; label: string; locked?: boolean }[]; active: string; onChange: (id: string) => void }> = ({ tabs, active, onChange }) => (
   <div style={{ display: 'flex', gap: 4, background: '#F3F4F6', borderRadius: 8, padding: 3, marginBottom: 24, width: 'fit-content', maxWidth: '100%', overflowX: 'auto' }}>
     {tabs.map((tab) => (
       <button
         key={tab.id}
-        onClick={() => !tab.locked && onChange(tab.id)}
+        onClick={() => onChange(tab.id)}
         style={{
           padding: '8px 18px',
           background: active === tab.id ? '#fff' : 'transparent',
@@ -81,7 +99,7 @@ const TabBar: React.FC<{ tabs: { id: string; label: string; locked?: boolean }[]
           fontWeight: active === tab.id ? 600 : 400,
           fontFamily: 'IBM Plex Sans Arabic, sans-serif',
           color: tab.locked ? '#9CA3AF' : active === tab.id ? '#111827' : '#6B7280',
-          cursor: tab.locked ? 'default' : 'pointer',
+          cursor: 'pointer',
           boxShadow: active === tab.id ? '0 1px 2px rgba(0,0,0,0.06)' : 'none',
           transition: 'all 0.15s',
           display: 'flex',
@@ -123,10 +141,14 @@ const BrandingPage: React.FC<{ subPage?: string; plan: Plan }> = ({ subPage, pla
         />
       )}
       {activeTab === 'fonts' && (
-        <ComingSoonPage
-          title="الخطوط الخاصة"
-          description="ارفع خطوطك الخاصة واستخدمها في موقعك ونشراتك البريدية لتعكس هوية علامتك."
-        />
+        fontsLocked ? (
+          <LockedFeaturePage title="الخطوط الخاصة" planLabel="باقة الأعمال" />
+        ) : (
+          <ComingSoonPage
+            title="الخطوط الخاصة"
+            description="ارفع خطوطك الخاصة واستخدمها في موقعك ونشراتك البريدية لتعكس هوية علامتك."
+          />
+        )
       )}
     </div>
   );
@@ -142,7 +164,7 @@ const EmailPage: React.FC<{ subPage?: string; plan: Plan }> = ({ subPage, plan }
       <TabBar
         tabs={[
           { id: 'templates', label: 'قوالب البريد' },
-          { id: 'journeys', label: 'سلاسل البريد والأتمتة', locked: journeysLocked },
+          { id: 'journeys', label: 'رحلات الرسائل', locked: journeysLocked },
         ]}
         active={activeTab}
         onChange={setActiveTab}
@@ -154,7 +176,11 @@ const EmailPage: React.FC<{ subPage?: string; plan: Plan }> = ({ subPage, plan }
         />
       )}
       {activeTab === 'journeys' && (
-        <KitabhAutomations />
+        journeysLocked ? (
+          <LockedFeaturePage title="رحلات الرسائل والأتمتة" planLabel="باقة الأعمال" />
+        ) : (
+          <KitabhAutomations />
+        )
       )}
     </div>
   );
@@ -316,8 +342,8 @@ function buildSidebarSections(plan: Plan): SidebarSection[] {
       items: applyMeta([
         { page: 'website', label: 'الموقع الإلكتروني', icon: icons.website },
         { page: 'landing-pages' as Page, label: 'صفحات الاشتراك', icon: icons.landingPage },
-        { page: 'branding' as Page, label: 'الهوية والتخصيص', icon: icons.branding },
-        { page: 'email-template', label: 'البريد وسلاسله', icon: icons.emailTemplate },
+        { page: 'branding' as Page, label: 'الهوية والخطوط', icon: icons.branding },
+        { page: 'email-template', label: 'قوالب البريد ورحلات الرسائل', icon: icons.emailTemplate },
       ]),
     },
   ];

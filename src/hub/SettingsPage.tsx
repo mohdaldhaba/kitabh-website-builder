@@ -228,7 +228,7 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ subPage = 'account', plan =
         {tabs.map((tab) => (
           <button
             key={tab.id}
-            onClick={() => !tab.locked && setActiveTab(tab.id)}
+            onClick={() => setActiveTab(tab.id)}
             style={{
               padding: '8px 18px',
               background: activeTab === tab.id ? '#fff' : 'transparent',
@@ -268,7 +268,7 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ subPage = 'account', plan =
           </div>
           <h3 style={{ fontSize: 17, fontWeight: 700, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 8px', color: '#111827' }}>إعدادات النطاق</h3>
           <p style={{ fontSize: 14, color: '#6B7280', fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 24px', lineHeight: 1.6 }}>
-            هذه الميزة متاحة في <strong style={{ color: '#111827' }}>باقة الكاتب</strong>
+            هذه الميزة متاحة في <strong style={{ color: '#111827' }}>باقة الكاتب</strong> و<strong style={{ color: '#111827' }}>باقة الأعمال</strong>
           </p>
           <button onClick={() => { window.location.href = '/pricing'; }} style={{ padding: '12px 28px', background: '#111827', color: '#fff', border: 'none', borderRadius: 10, fontSize: 15, fontWeight: 600, fontFamily: 'IBM Plex Sans Arabic, sans-serif', cursor: 'pointer' }}>
             باقات كتابة

@@ -65,11 +65,11 @@ export const FEATURES: Record<FeatureKey, FeatureDef> = {
 
   // ── BUSINESS: requires باقة الأعمال ───────────────────
   'domain-settings': { plan: 'writers',  upgradeTitle: 'النطاق المخصص',              displayLabel: 'النطاق المخصص' },
-  'email-template':  { plan: 'business', upgradeTitle: 'قوالب البريد',          displayLabel: 'البريد وسلاسله' },
+  'email-template':  { plan: 'business', upgradeTitle: 'قوالب البريد',          displayLabel: 'قوالب البريد ورحلات الرسائل' },
   'email-journeys':  { plan: 'business', upgradeTitle: 'رحلات البريد والأتمتة',      displayLabel: 'رحلات البريد والأتمتة' },
   'subscriber-segments':{ plan: 'business', upgradeTitle: 'أقسام المشتركين',           displayLabel: 'أقسام المشتركين' },
   'custom-fonts':      { plan: 'business', upgradeTitle: 'الخطوط الخاصة',               displayLabel: 'الخطوط الخاصة' },
-  branding:            { plan: 'business', upgradeTitle: 'الهوية والعلامة التجارية',   displayLabel: 'الهوية والتخصيص' },
+  branding:            { plan: 'business', upgradeTitle: 'الهوية والعلامة التجارية',   displayLabel: 'الهوية والخطوط' },
   'verified-account':  { plan: 'writers',  upgradeTitle: 'حساب موثّق',               displayLabel: 'حساب موثّق' },
   support:             { plan: 'writers',  upgradeTitle: 'الدعم الفني',               displayLabel: 'الدعم الفني' },
   writers:             { plan: 'business', upgradeTitle: 'إدارة الفريق',               displayLabel: 'إدارة الفريق' },
