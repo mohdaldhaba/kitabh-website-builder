@@ -558,6 +558,7 @@ interface NewslettersPageProps {
 
 const NewslettersPage: React.FC<NewslettersPageProps> = ({ activePublicationIndex, plan = 'business' }) => {
   const createLocked = plan !== 'business';
+  const [showLockedModal, setShowLockedModal] = useState(false);
   const [editingNl, setEditingNl] = useState<typeof mockNewsletters[0] | null>(null);
   const [editTab, setEditTab] = useState<'settings' | 'welcome-email'>('settings');
 
@@ -584,7 +585,7 @@ const NewslettersPage: React.FC<NewslettersPageProps> = ({ activePublicationInde
         </div>
         <div style={{ display: 'flex', gap: 8 }}>
           <button
-            onClick={createLocked ? undefined : () => {}}
+            onClick={createLocked ? () => setShowLockedModal(true) : () => {}}
             style={{
               padding: '10px 20px',
               background: createLocked ? '#E5E7EB' : '#111',
@@ -594,7 +595,7 @@ const NewslettersPage: React.FC<NewslettersPageProps> = ({ activePublicationInde
               fontSize: 14,
               fontWeight: 600,
               fontFamily: 'IBM Plex Sans Arabic, sans-serif',
-              cursor: createLocked ? 'default' : 'pointer',
+              cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
               gap: 8,
@@ -632,6 +633,36 @@ const NewslettersPage: React.FC<NewslettersPageProps> = ({ activePublicationInde
           onClose={() => setEditingNl(null)}
           activeTab={editTab}
         />
+      )}
+
+      {showLockedModal && (
+        <>
+          <div onClick={() => setShowLockedModal(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)', zIndex: 9998 }} />
+          <div style={{
+            position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
+            background: '#fff', borderRadius: 16, padding: 32, maxWidth: 400, width: '90%',
+            textAlign: 'center', zIndex: 9999, boxShadow: '0 20px 60px rgba(0,0,0,0.15)',
+            fontFamily: 'IBM Plex Sans Arabic, sans-serif', direction: 'rtl',
+          }}>
+            <div style={{ width: 48, height: 48, borderRadius: 12, background: 'rgba(0,0,0,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', color: '#6B7280' }}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" />
+              </svg>
+            </div>
+            <h3 style={{ fontSize: 17, fontWeight: 700, margin: '0 0 8px', color: '#111827' }}>إنشاء نشرة جديدة</h3>
+            <p style={{ fontSize: 14, color: '#6B7280', margin: '0 0 24px', lineHeight: 1.6 }}>
+              هذه الميزة متوفرة في <strong style={{ color: '#111827' }}>باقة الأعمال</strong>
+            </p>
+            <div style={{ display: 'flex', gap: 8, justifyContent: 'center' }}>
+              <button onClick={() => setShowLockedModal(false)} style={{ padding: '10px 20px', background: '#F3F4F6', color: '#374151', border: 'none', borderRadius: 10, fontSize: 14, fontWeight: 600, cursor: 'pointer', fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>
+                إغلاق
+              </button>
+              <button onClick={() => { window.location.href = '/pricing'; }} style={{ padding: '10px 20px', background: '#111827', color: '#fff', border: 'none', borderRadius: 10, fontSize: 14, fontWeight: 600, cursor: 'pointer', fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>
+                باقات كتابة
+              </button>
+            </div>
+          </div>
+        </>
       )}
     </div>
   );
