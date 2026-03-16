@@ -337,31 +337,24 @@ const PlanComparisonOverlay: React.FC<{ currentPlan: Plan; onClose: () => void }
   const font = 'IBM Plex Sans Arabic, sans-serif';
   const blue = '#0000FF';
   const gold = '#D97706';
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 500;
-
-  const px = isMobile ? 14 : 28;
-  const grid = isMobile ? '1.2fr repeat(3, 1fr)' : '1.5fr repeat(3, 1fr)';
-  const badgeSize = isMobile ? 18 : 22;
-  const checkSize = isMobile ? 16 : 20;
+  const mob = typeof window !== 'undefined' && window.innerWidth < 500;
 
   const VerifiedBadge = ({ color }: { color: string }) => (
-    <svg width={badgeSize} height={badgeSize} viewBox="0 0 24 24" fill="none">
+    <svg width={mob ? 20 : 22} height={mob ? 20 : 22} viewBox="0 0 24 24" fill="none">
       <circle cx="12" cy="12" r="12" fill={color} />
       <path d="M7.5 12.5L10.5 15.5L16.5 9.5" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 
   const freeCheck = (
-    <svg width={checkSize} height={checkSize} viewBox="0 0 24 24" fill="none" stroke="#B0B0B0" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <svg width={mob ? 18 : 20} height={mob ? 18 : 20} viewBox="0 0 24 24" fill="none" stroke="#B0B0B0" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
       <polyline points="20 6 9 17 4 12" />
     </svg>
   );
-  const dash = <span style={{ color: '#D1D5DB', fontSize: isMobile ? 14 : 18 }}>—</span>;
+  const dash = <span style={{ color: '#D1D5DB', fontSize: 16 }}>—</span>;
 
   const noteStyle = (color: string): React.CSSProperties => ({
-    fontSize: isMobile ? 10 : 12, color, fontFamily: font, fontWeight: 700,
-    background: color === blue ? '#EEF0FF' : color === gold ? '#FFF8EB' : '#F3F4F6',
-    padding: isMobile ? '1px 5px' : '2px 8px', borderRadius: 6, lineHeight: 1.5,
+    fontSize: mob ? 11 : 13, color, fontFamily: font, fontWeight: 700,
     whiteSpace: 'nowrap' as const,
   });
 
@@ -381,46 +374,85 @@ const PlanComparisonOverlay: React.FC<{ currentPlan: Plan; onClose: () => void }
     return <VerifiedBadge color={gold} />;
   };
 
+  /* ── Desktop row: 4-column grid ── */
+  const DesktopRow = ({ feat, even }: { feat: typeof COMPARISON_SECTIONS[0]['features'][0]; even: boolean }) => (
+    <div style={{
+      display: 'grid', gridTemplateColumns: '1.6fr repeat(3, 1fr)',
+      padding: '14px 32px', alignItems: 'center',
+      borderBottom: '1px solid #F3F4F6',
+      background: even ? '#FAFAFA' : '#fff',
+    }}>
+      <div style={{ fontSize: 14, fontFamily: font, color: '#1F2937', fontWeight: 500 }}>
+        {feat.label}
+      </div>
+      {plans.map((p) => (
+        <div key={p} style={{ textAlign: 'center', display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 30 }}>
+          {renderCell(feat, p)}
+        </div>
+      ))}
+    </div>
+  );
+
+  /* ── Mobile row: label on top, 3 values below ── */
+  const MobileRow = ({ feat }: { feat: typeof COMPARISON_SECTIONS[0]['features'][0] }) => (
+    <div style={{ borderBottom: '1px solid #F3F4F6' }}>
+      <div style={{
+        padding: '12px 20px 4px', fontSize: 13, fontFamily: font,
+        color: '#1F2937', fontWeight: 600,
+      }}>
+        {feat.label}
+      </div>
+      <div style={{
+        display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)',
+        padding: '6px 20px 12px',
+      }}>
+        {plans.map((p) => (
+          <div key={p} style={{ textAlign: 'center', display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 28 }}>
+            {renderCell(feat, p)}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
   return (
     <div
       style={{
         position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.45)',
-        zIndex: 9999, display: 'flex', alignItems: isMobile ? 'flex-end' : 'center', justifyContent: 'center',
+        zIndex: 9999, display: 'flex', alignItems: mob ? 'flex-end' : 'center', justifyContent: 'center',
         backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)',
-        padding: isMobile ? 0 : 20,
+        padding: mob ? 0 : 20,
       }}
       onClick={onClose}
     >
       <div
         style={{
           background: '#fff',
-          borderRadius: isMobile ? '20px 20px 0 0' : 24,
-          padding: 0,
-          maxWidth: 660, width: '100%',
-          maxHeight: isMobile ? '92vh' : '88vh',
-          overflowY: 'auto',
-          direction: 'rtl',
-          boxShadow: '0 24px 80px rgba(0,0,0,0.18), 0 2px 6px rgba(0,0,0,0.06)',
+          borderRadius: mob ? '20px 20px 0 0' : 20,
+          padding: 0, maxWidth: 700, width: '100%',
+          maxHeight: mob ? '92vh' : '88vh',
+          overflowY: 'auto', direction: 'rtl',
+          boxShadow: '0 24px 80px rgba(0,0,0,0.18)',
           position: 'relative',
           WebkitOverflowScrolling: 'touch' as any,
         }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Drag handle on mobile */}
-        {isMobile && (
-          <div style={{ display: 'flex', justifyContent: 'center', paddingTop: 10, paddingBottom: 4 }}>
+        {mob && (
+          <div style={{ display: 'flex', justifyContent: 'center', paddingTop: 10, paddingBottom: 2 }}>
             <div style={{ width: 36, height: 4, borderRadius: 2, background: '#D1D5DB' }} />
           </div>
         )}
 
         {/* Header */}
-        <div style={{ padding: `${isMobile ? 16 : 28}px ${px}px ${isMobile ? 12 : 20}px`, borderBottom: '1px solid #F0F0F0' }}>
+        <div style={{ padding: mob ? '16px 20px 14px' : '28px 32px 22px', borderBottom: '1px solid #E5E7EB' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
             <div>
-              <h2 style={{ fontSize: isMobile ? 18 : 22, fontWeight: 800, fontFamily: font, margin: '0 0 2px', color: '#111827' }}>
+              <h2 style={{ fontSize: mob ? 18 : 22, fontWeight: 800, fontFamily: font, margin: '0 0 4px', color: '#111827' }}>
                 ما الذي تتضمنه باقتك؟
               </h2>
-              <p style={{ fontSize: isMobile ? 12 : 14, color: '#9CA3AF', fontFamily: font, margin: 0 }}>
+              <p style={{ fontSize: mob ? 12 : 14, color: '#9CA3AF', fontFamily: font, margin: 0 }}>
                 مقارنة بين باقات الكتابة
               </p>
             </div>
@@ -441,28 +473,29 @@ const PlanComparisonOverlay: React.FC<{ currentPlan: Plan; onClose: () => void }
 
         {/* Plan column headers — sticky */}
         <div style={{
-          display: 'grid', gridTemplateColumns: grid,
-          padding: `${isMobile ? 8 : 14}px ${px}px`, borderBottom: '1px solid #F0F0F0',
+          display: 'grid',
+          gridTemplateColumns: mob ? 'repeat(3, 1fr)' : '1.6fr repeat(3, 1fr)',
+          padding: mob ? '10px 20px' : '14px 32px',
+          borderBottom: '1px solid #E5E7EB',
           position: 'sticky', top: 0, background: '#fff', zIndex: 1,
-          gap: isMobile ? 4 : 0,
         }}>
-          <div />
+          {!mob && <div />}
           {plans.map((p) => {
             const isCurrent = currentPlan === p;
-            const headerColor = p === 'writers' ? blue : p === 'business' ? gold : '#6B7280';
+            const hColor = p === 'writers' ? blue : p === 'business' ? gold : '#6B7280';
             return (
               <div key={p} style={{
                 textAlign: 'center', fontFamily: font,
-                padding: isMobile ? '5px 2px' : '8px 6px',
+                padding: mob ? '6px 4px' : '8px 6px',
                 background: isCurrent ? (p === 'writers' ? '#EEF0FF' : p === 'business' ? '#FFF8EB' : '#F9FAFB') : 'transparent',
-                borderRadius: isMobile ? 8 : 10,
+                borderRadius: 10,
                 border: isCurrent ? `1.5px solid ${p === 'writers' ? '#C7D2FE' : p === 'business' ? '#FDE68A' : '#E5E7EB'}` : '1.5px solid transparent',
               }}>
-                <div style={{ fontSize: isMobile ? 10 : 13, fontWeight: 800, color: headerColor }}>
-                  {isMobile ? (p === 'free' ? 'مجانية' : p === 'writers' ? 'الكاتب' : 'الأعمال') : PLAN_META[p].labelAr}
+                <div style={{ fontSize: mob ? 11 : 13, fontWeight: 800, color: hColor }}>
+                  {mob ? (p === 'free' ? 'مجانية' : p === 'writers' ? 'الكاتب' : 'الأعمال') : PLAN_META[p].labelAr}
                 </div>
                 {isCurrent && (
-                  <div style={{ fontSize: isMobile ? 8 : 10, color: headerColor, opacity: 0.65, marginTop: 1 }}>باقتك</div>
+                  <div style={{ fontSize: mob ? 9 : 10, color: hColor, opacity: 0.65, marginTop: 1 }}>باقتك</div>
                 )}
               </div>
             );
@@ -470,57 +503,33 @@ const PlanComparisonOverlay: React.FC<{ currentPlan: Plan; onClose: () => void }
         </div>
 
         {/* Feature sections */}
-        <div style={{ padding: `${isMobile ? 2 : 8}px 0 ${isMobile ? 8 : 12}px` }}>
-          {COMPARISON_SECTIONS.map((section) => (
-            <div key={section.title}>
-              <div style={{
-                padding: `${isMobile ? 12 : 18}px ${px}px ${isMobile ? 4 : 8}px`,
-                fontSize: isMobile ? 11 : 13, fontWeight: 800,
-                color: '#9CA3AF', fontFamily: font,
-              }}>
-                {section.title}
-              </div>
-
-              {section.features.map((feat, i) => (
-                <div
-                  key={feat.key}
-                  style={{
-                    display: 'grid', gridTemplateColumns: grid,
-                    padding: `${isMobile ? 8 : 11}px ${px}px`,
-                    alignItems: 'center',
-                    background: i % 2 === 1 ? '#FAFAFA' : 'transparent',
-                    gap: isMobile ? 2 : 0,
-                  }}
-                >
-                  <div style={{
-                    fontSize: isMobile ? 12 : 14, fontFamily: font, color: '#1F2937', fontWeight: 500,
-                    lineHeight: 1.4,
-                    overflow: 'hidden',
-                    display: '-webkit-box',
-                    WebkitLineClamp: 2,
-                    WebkitBoxOrient: 'vertical' as any,
-                  }}>
-                    {feat.label}
-                  </div>
-                  {plans.map((p) => (
-                    <div key={p} style={{ textAlign: 'center', display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: isMobile ? 22 : 28 }}>
-                      {renderCell(feat, p)}
-                    </div>
-                  ))}
-                </div>
-              ))}
+        {COMPARISON_SECTIONS.map((section) => (
+          <div key={section.title}>
+            <div style={{
+              padding: mob ? '16px 20px 6px' : '20px 32px 8px',
+              fontSize: mob ? 12 : 13, fontWeight: 800,
+              color: '#9CA3AF', fontFamily: font,
+              borderBottom: '1px solid #F3F4F6',
+            }}>
+              {section.title}
             </div>
-          ))}
-        </div>
+
+            {section.features.map((feat, i) => (
+              mob
+                ? <MobileRow key={feat.key} feat={feat} />
+                : <DesktopRow key={feat.key} feat={feat} even={i % 2 === 0} />
+            ))}
+          </div>
+        ))}
 
         {/* CTA */}
-        <div style={{ padding: `${isMobile ? 14 : 20}px ${px}px ${isMobile ? 20 : 28}px`, borderTop: '1px solid #F0F0F0', textAlign: 'center' }}>
+        <div style={{ padding: mob ? '16px 20px 24px' : '24px 32px 32px', borderTop: '1px solid #E5E7EB', textAlign: 'center' }}>
           <button
             onClick={() => { window.location.href = '/pricing'; }}
             style={{
-              padding: isMobile ? '12px 24px' : '14px 36px',
-              background: '#111827', color: '#fff', width: isMobile ? '100%' : 'auto',
-              border: 'none', borderRadius: 12, fontSize: isMobile ? 15 : 16, fontWeight: 700,
+              padding: mob ? '12px 24px' : '14px 40px',
+              background: '#111827', color: '#fff', width: mob ? '100%' : 'auto',
+              border: 'none', borderRadius: 12, fontSize: mob ? 15 : 16, fontWeight: 700,
               fontFamily: font, cursor: 'pointer',
               boxShadow: '0 4px 14px rgba(0,0,0,0.15)',
             }}
