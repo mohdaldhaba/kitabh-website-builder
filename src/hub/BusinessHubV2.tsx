@@ -653,6 +653,8 @@ const BusinessHubV2: React.FC = () => {
           subscriberLimit={meta.subscriberLimit}
           showSubscribers={meta.showSubscribers}
           dashboardLocked={lockMap[plan].has('dashboard')}
+          createNewsletterLocked={plan === 'free'}
+          onCreateNewsletterLockedClick={() => setUpgradeModal('newsletters')}
         >
           {renderPage()}
         </HubLayout>
