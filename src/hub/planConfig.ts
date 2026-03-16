@@ -150,9 +150,9 @@ export const COMPARISON_SECTIONS: { title: string; features: { key: FeatureKey; 
     title: 'النشر والتوزيع',
     features: [
       { key: 'subscriber-limit', label: 'عدد المشتركين', writersNote: '10,000', businessNote: '100,000' },
+      { key: 'newsletters', label: 'النشرات البريدية', writersNote: '1', businessNote: 'دون حد' },
       { key: 'verified-account', label: 'حساب موثّق' },
       { key: 'dashboard', label: 'لوحة التحكم' },
-      { key: 'newsletters', label: 'النشرات البريدية', writersNote: '1', businessNote: 'دون حد' },
       { key: 'newsletter-scheduling', label: 'جدولة النشرة' },
       { key: 'subscribers', label: 'إدارة المشتركين' },
       { key: 'linktree', label: 'صفحة الروابط' },

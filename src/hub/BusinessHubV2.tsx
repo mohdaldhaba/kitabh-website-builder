@@ -335,86 +335,83 @@ const UpgradeModal: React.FC<{
 const PlanComparisonOverlay: React.FC<{ currentPlan: Plan; onClose: () => void }> = ({ currentPlan, onClose }) => {
   const plans: Plan[] = ['free', 'writers', 'business'];
   const font = 'IBM Plex Sans Arabic, sans-serif';
+  const blue = '#0000FF';
+  const gold = '#D97706';
 
   const VerifiedBadge = ({ color }: { color: string }) => (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
       <circle cx="12" cy="12" r="12" fill={color} />
       <path d="M7.5 12.5L10.5 15.5L16.5 9.5" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 
   const freeCheck = (
-    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B0B0B0" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
       <polyline points="20 6 9 17 4 12" />
     </svg>
   );
-  const dash = <span style={{ color: '#D1D5DB', fontSize: 16, fontWeight: 500 }}>—</span>;
+  const dash = <span style={{ color: '#D1D5DB', fontSize: 18 }}>—</span>;
+
+  const noteStyle = (color: string): React.CSSProperties => ({
+    fontSize: 12, color, fontFamily: font, fontWeight: 700,
+    background: color === blue ? '#EEF0FF' : color === gold ? '#FFF8EB' : '#F3F4F6',
+    padding: '2px 8px', borderRadius: 6, lineHeight: 1.5,
+  });
 
   const renderCell = (feat: { key: FeatureKey; freeNote?: string; writersNote?: string; businessNote?: string }, p: Plan) => {
     const available = !isLocked(feat.key, p);
-
     if (!available) return dash;
 
-    // Available — each column uses its own badge color
     if (p === 'free') {
-      if (feat.freeNote) return <span style={{ fontSize: 10, color: '#9CA3AF', fontFamily: font }}>{feat.freeNote}</span>;
+      if (feat.freeNote) return <span style={noteStyle('#6B7280')}>{feat.freeNote}</span>;
       return freeCheck;
     }
     if (p === 'writers') {
-      if (feat.writersNote) return <span style={{ fontSize: 10, color: '#0000FF', fontFamily: font, fontWeight: 600 }}>{feat.writersNote}</span>;
-      return <VerifiedBadge color="#0000FF" />;
+      if (feat.writersNote) return <span style={noteStyle(blue)}>{feat.writersNote}</span>;
+      return <VerifiedBadge color={blue} />;
     }
-    // business
-    if (feat.businessNote) return <span style={{ fontSize: 10, color: '#F59E0B', fontFamily: font, fontWeight: 600 }}>{feat.businessNote}</span>;
-    return <VerifiedBadge color="#F59E0B" />;
-  };
-
-  const planHeaderColors: Record<Plan, { bg: string; border: string; text: string }> = {
-    free: { bg: '#F9FAFB', border: '#E5E7EB', text: '#6B7280' },
-    writers: { bg: '#EFF6FF', border: '#BFDBFE', text: '#0000FF' },
-    business: { bg: '#FFFBEB', border: '#FDE68A', text: '#B45309' },
+    if (feat.businessNote) return <span style={noteStyle(gold)}>{feat.businessNote}</span>;
+    return <VerifiedBadge color={gold} />;
   };
 
   return (
     <div
       style={{
-        position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)',
+        position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.45)',
         zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center',
-        backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', padding: 16,
+        backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', padding: 20,
       }}
       onClick={onClose}
     >
       <div
         style={{
-          background: 'rgba(255,255,255,0.92)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)',
-          borderRadius: 20, padding: 0,
-          maxWidth: 600, width: '100%', maxHeight: '85vh', overflowY: 'auto',
-          direction: 'rtl', boxShadow: '0 8px 32px rgba(0,0,0,0.12), 0 1px 3px rgba(0,0,0,0.08)',
-          border: '1px solid rgba(255,255,255,0.6)',
+          background: '#fff', borderRadius: 24, padding: 0,
+          maxWidth: 660, width: '100%', maxHeight: '88vh', overflowY: 'auto',
+          direction: 'rtl', boxShadow: '0 24px 80px rgba(0,0,0,0.18), 0 2px 6px rgba(0,0,0,0.06)',
           position: 'relative',
         }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div style={{ padding: '20px 24px 16px', borderBottom: '1px solid rgba(0,0,0,0.06)' }}>
+        <div style={{ padding: '28px 28px 20px', borderBottom: '1px solid #F0F0F0' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
             <div>
-              <h2 style={{ fontSize: 17, fontWeight: 700, fontFamily: font, margin: '0 0 2px', color: '#111827' }}>
+              <h2 style={{ fontSize: 22, fontWeight: 800, fontFamily: font, margin: '0 0 4px', color: '#111827' }}>
                 ما الذي تتضمنه باقتك
               </h2>
-              <p style={{ fontSize: 12, color: '#9CA3AF', fontFamily: font, margin: 0 }}>
+              <p style={{ fontSize: 14, color: '#9CA3AF', fontFamily: font, margin: 0 }}>
                 مقارنة بين الباقات الثلاث
               </p>
             </div>
             <button
               onClick={onClose}
               style={{
-                background: 'rgba(0,0,0,0.05)', border: 'none', cursor: 'pointer',
-                borderRadius: 8, width: 28, height: 28, display: 'flex', alignItems: 'center',
-                justifyContent: 'center', color: '#9CA3AF', flexShrink: 0,
+                background: '#F3F4F6', border: 'none', cursor: 'pointer',
+                borderRadius: 10, width: 34, height: 34, display: 'flex', alignItems: 'center',
+                justifyContent: 'center', color: '#6B7280', flexShrink: 0,
               }}
             >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
               </svg>
             </button>
@@ -423,26 +420,26 @@ const PlanComparisonOverlay: React.FC<{ currentPlan: Plan; onClose: () => void }
 
         {/* Plan column headers — sticky */}
         <div style={{
-          display: 'grid', gridTemplateColumns: '1.4fr repeat(3, 1fr)',
-          padding: '10px 20px', borderBottom: '1px solid rgba(0,0,0,0.06)',
-          position: 'sticky', top: 0, background: 'rgba(255,255,255,0.95)',
-          backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)', zIndex: 1,
+          display: 'grid', gridTemplateColumns: '1.5fr repeat(3, 1fr)',
+          padding: '14px 28px', borderBottom: '1px solid #F0F0F0',
+          position: 'sticky', top: 0, background: '#fff', zIndex: 1,
         }}>
           <div />
           {plans.map((p) => {
-            const hc = planHeaderColors[p];
+            const isCurrent = currentPlan === p;
+            const headerColor = p === 'writers' ? blue : p === 'business' ? gold : '#6B7280';
             return (
               <div key={p} style={{
-                textAlign: 'center', fontFamily: font, padding: '6px 4px',
-                background: currentPlan === p ? hc.bg : 'transparent',
-                borderRadius: 8,
-                border: currentPlan === p ? `1px solid ${hc.border}` : '1px solid transparent',
+                textAlign: 'center', fontFamily: font, padding: '8px 6px',
+                background: isCurrent ? (p === 'writers' ? '#EEF0FF' : p === 'business' ? '#FFF8EB' : '#F9FAFB') : 'transparent',
+                borderRadius: 10,
+                border: isCurrent ? `1.5px solid ${p === 'writers' ? '#C7D2FE' : p === 'business' ? '#FDE68A' : '#E5E7EB'}` : '1.5px solid transparent',
               }}>
-                <div style={{ fontSize: 11, fontWeight: 700, color: hc.text }}>
+                <div style={{ fontSize: 13, fontWeight: 800, color: headerColor }}>
                   {PLAN_META[p].labelAr}
                 </div>
-                {currentPlan === p && (
-                  <div style={{ fontSize: 9, color: hc.text, opacity: 0.7, marginTop: 1 }}>باقتك الحالية</div>
+                {isCurrent && (
+                  <div style={{ fontSize: 10, color: headerColor, opacity: 0.65, marginTop: 2 }}>باقتك الحالية</div>
                 )}
               </div>
             );
@@ -450,12 +447,12 @@ const PlanComparisonOverlay: React.FC<{ currentPlan: Plan; onClose: () => void }
         </div>
 
         {/* Feature sections */}
-        <div style={{ padding: '4px 0 8px' }}>
+        <div style={{ padding: '8px 0 12px' }}>
           {COMPARISON_SECTIONS.map((section) => (
             <div key={section.title}>
               <div style={{
-                padding: '14px 20px 6px', fontSize: 11, fontWeight: 700,
-                color: '#9CA3AF', fontFamily: font, letterSpacing: 0.3,
+                padding: '18px 28px 8px', fontSize: 13, fontWeight: 800,
+                color: '#9CA3AF', fontFamily: font,
               }}>
                 {section.title}
               </div>
@@ -464,17 +461,16 @@ const PlanComparisonOverlay: React.FC<{ currentPlan: Plan; onClose: () => void }
                 <div
                   key={feat.key}
                   style={{
-                    display: 'grid', gridTemplateColumns: '1.4fr repeat(3, 1fr)',
-                    padding: '9px 20px', alignItems: 'center',
-                    background: i % 2 === 0 ? 'transparent' : 'rgba(0,0,0,0.015)',
-                    borderRadius: 6, margin: '0 8px',
+                    display: 'grid', gridTemplateColumns: '1.5fr repeat(3, 1fr)',
+                    padding: '11px 28px', alignItems: 'center',
+                    background: i % 2 === 1 ? '#FAFAFA' : 'transparent',
                   }}
                 >
-                  <div style={{ fontSize: 13, fontFamily: font, color: '#374151', fontWeight: 500 }}>
+                  <div style={{ fontSize: 14, fontFamily: font, color: '#1F2937', fontWeight: 500 }}>
                     {feat.label}
                   </div>
                   {plans.map((p) => (
-                    <div key={p} style={{ textAlign: 'center', display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 24 }}>
+                    <div key={p} style={{ textAlign: 'center', display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 28 }}>
                       {renderCell(feat, p)}
                     </div>
                   ))}
@@ -482,18 +478,17 @@ const PlanComparisonOverlay: React.FC<{ currentPlan: Plan; onClose: () => void }
               ))}
             </div>
           ))}
-
         </div>
 
         {/* CTA */}
-        <div style={{ padding: '16px 20px 20px', borderTop: '1px solid rgba(0,0,0,0.06)', textAlign: 'center' }}>
+        <div style={{ padding: '20px 28px 28px', borderTop: '1px solid #F0F0F0', textAlign: 'center' }}>
           <button
             onClick={() => { window.location.href = '/pricing'; }}
             style={{
-              padding: '10px 28px', background: '#111827', color: '#fff',
-              border: 'none', borderRadius: 10, fontSize: 14, fontWeight: 600,
+              padding: '14px 36px', background: '#111827', color: '#fff',
+              border: 'none', borderRadius: 12, fontSize: 16, fontWeight: 700,
               fontFamily: font, cursor: 'pointer',
-              boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+              boxShadow: '0 4px 14px rgba(0,0,0,0.15)',
               transition: 'transform 0.15s ease',
             }}
             onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.02)')}
