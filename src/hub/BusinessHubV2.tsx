@@ -15,6 +15,11 @@ import NewslettersPage from './NewslettersPage';
 import AnalyzePage from './AnalyzePage';
 import { icons, utilityItems as defaultUtility } from './HubLayout';
 import type { Page, Publication, SidebarSection, SidebarItem } from './HubLayout';
+import {
+  FEATURES, PLAN_META, SECTION_LOCKS,
+  getLockSet, getPlanTier, getUpgradeInfo, getTrialBadge, isLocked,
+  type Plan, type FeatureKey,
+} from './planConfig';
 
 import HubToolWrapper from './components/HubToolWrapper';
 
@@ -60,120 +65,7 @@ const ComingSoonPage: React.FC<{ title: string; description: string }> = ({ titl
   </div>
 );
 
-// ─── Types ──────────────────────────────────────────────
-type Plan = 'free' | 'writers' | 'business';
-
-type FeatureKey =
-  | 'posts' | 'outline' | 'checker' | 'carousel' | 'social'
-  | 'newsletters' | 'subscribers' | 'linktree' | 'landing-pages'
-  | 'email-journeys' | 'magic-link'
-  | 'website' | 'domain-settings' | 'email-template' | 'branding'
-  | 'analyze' | 'notifications' | 'writers' | 'dashboard' | 'settings';
-
-// ─── Feature lock map ───────────────────────────────────
-const lockMap: Record<Plan, Set<FeatureKey>> = {
-  free: new Set([
-    'dashboard',
-    'newsletters',
-    'subscribers',
-    'linktree',
-    'landing-pages',
-    'email-journeys',
-    'magic-link',
-    'website',
-    'domain-settings',
-    'email-template',
-    'writers',
-    'analyze',
-    'branding',
-  ]),
-  writers: new Set([
-    'domain-settings',
-    'email-template',
-    'email-journeys',
-    'writers',
-    'branding',
-  ]),
-  business: new Set([]),
-};
-
-// ─── Section-level locks (lock the entire section header) ─
-const sectionLockMap: Record<Plan, Set<string>> = {
-  free: new Set(['publish', 'design']),
-  writers: new Set([]),
-  business: new Set([]),
-};
-
-// ─── Plan metadata ──────────────────────────────────────
-const planMeta: Record<Plan, { label: string; labelAr: string; color: string; subscriberLimit: string; showSubscribers: boolean }> = {
-  free: { label: 'Free', labelAr: 'الخطة المجانية', color: '#6B7280', subscriberLimit: '0', showSubscribers: false },
-  writers: { label: 'Writers', labelAr: 'باقة الكاتب', color: '#2563EB', subscriberLimit: '10,000', showSubscribers: true },
-  business: { label: 'Business', labelAr: 'باقة الأعمال', color: '#111827', subscriberLimit: '100,000', showSubscribers: true },
-};
-
-// ─── Upgrade reasons per feature ────────────────────────
-const upgradeReasons: Record<FeatureKey, { title: string; targetPlan: string }> = {
-  dashboard: {
-    title: 'لوحة التحكم متاحة مع النشرات البريدية',
-    targetPlan: 'باقة الكاتب',
-  },
-  newsletters: {
-    title: 'النشرات البريدية',
-    targetPlan: 'باقة الكاتب',
-  },
-  subscribers: {
-    title: 'إدارة المشتركين',
-    targetPlan: 'باقة الكاتب',
-  },
-  linktree: {
-    title: 'صفحة الروابط',
-    targetPlan: 'باقة الكاتب',
-  },
-  'landing-pages': {
-    title: 'صفحات الاشتراك',
-    targetPlan: 'باقة الكاتب',
-  },
-  'email-journeys': {
-    title: 'رحلات البريد والأتمتة',
-    targetPlan: 'باقة الأعمال',
-  },
-  'magic-link': {
-    title: 'الرابط السحري',
-    targetPlan: 'باقة الكاتب',
-  },
-  website: {
-    title: 'الموقع الإلكتروني',
-    targetPlan: 'باقة الكاتب',
-  },
-  'domain-settings': {
-    title: 'النطاق المخصص',
-    targetPlan: 'باقة الأعمال',
-  },
-  'email-template': {
-    title: 'مصمم قوالب البريد',
-    targetPlan: 'باقة الأعمال',
-  },
-  writers: {
-    title: 'فريق الكتّاب',
-    targetPlan: 'باقة الأعمال',
-  },
-  analyze: {
-    title: 'الإحصائيات المتقدمة',
-    targetPlan: 'باقة الكاتب',
-  },
-  branding: {
-    title: 'الهوية والعلامة التجارية',
-    targetPlan: 'باقة الأعمال',
-  },
-  // Never locked
-  posts: { title: '', targetPlan: '' },
-  outline: { title: '', targetPlan: '' },
-  checker: { title: '', targetPlan: '' },
-  carousel: { title: '', targetPlan: '' },
-  social: { title: '', targetPlan: '' },
-  notifications: { title: '', targetPlan: '' },
-  settings: { title: '', targetPlan: '' },
-};
+// All plan/feature config lives in planConfig.ts — single source of truth
 
 // ─── Base path ──────────────────────────────────────────
 const BASE = '/hub_v2';
@@ -271,29 +163,11 @@ function getFeatureKey(item: { page: Page; subPage?: string }): FeatureKey {
   return item.page as FeatureKey;
 }
 
-// ─── Plan tier per feature (which plan unlocks it) ──────
-const featureTier: Partial<Record<FeatureKey, 'writers' | 'business'>> = {
-  dashboard: 'writers',
-  newsletters: 'writers',
-  subscribers: 'writers',
-  linktree: 'writers',
-  'landing-pages': 'writers',
-  'magic-link': 'writers',
-  website: 'writers',
-  analyze: 'writers',
-  'domain-settings': 'business',
-  'email-template': 'business',
-  'email-journeys': 'business',
-  branding: 'business',
-  writers: 'business',
-};
 
 // ─── Build sidebar sections with lock state ─────────────
 function buildSidebarSections(plan: Plan): SidebarSection[] {
-  const locks = lockMap[plan];
-  const sectionLocks = sectionLockMap[plan];
-
-  const trialTools: Set<FeatureKey> = new Set(['outline', 'checker', 'carousel', 'social']);
+  const locks = getLockSet(plan);
+  const sectionLocks = SECTION_LOCKS[plan];
 
   const applyMeta = (items: SidebarItem[]): SidebarItem[] =>
     items.map((item) => {
@@ -301,8 +175,8 @@ function buildSidebarSections(plan: Plan): SidebarSection[] {
       return {
         ...item,
         locked: locks.has(key),
-        planTier: featureTier[key],
-        trialBadge: plan === 'free' && trialTools.has(key) ? '5/5' : undefined,
+        planTier: getPlanTier(key),
+        trialBadge: getTrialBadge(key, plan),
       };
     });
 
@@ -351,10 +225,10 @@ function buildSidebarSections(plan: Plan): SidebarSection[] {
 }
 
 function buildUtilityItems(plan: Plan): SidebarItem[] {
-  const locks = lockMap[plan];
+  const locks = getLockSet(plan);
   return [
-    { page: 'analyze', label: 'الإحصائيات', icon: icons.analyze, locked: locks.has('analyze'), planTier: featureTier['analyze'] },
-    { page: 'writers' as Page, label: 'فريق الكتّاب', icon: icons.members, locked: locks.has('writers'), planTier: featureTier['writers'] },
+    { page: 'analyze', label: 'الإحصائيات', icon: icons.analyze, locked: locks.has('analyze'), planTier: getPlanTier('analyze') },
+    { page: 'writers' as Page, label: 'فريق الكتّاب', icon: icons.members, locked: locks.has('writers'), planTier: getPlanTier('writers') },
     { page: 'notifications', label: 'الإشعارات', icon: icons.notification },
   ];
 }
@@ -365,7 +239,7 @@ const UpgradeModal: React.FC<{
   currentPlan: Plan;
   onClose: () => void;
 }> = ({ featureKey, currentPlan, onClose }) => {
-  const reason = upgradeReasons[featureKey];
+  const reason = getUpgradeInfo(featureKey);
   if (!reason || !reason.title) return null;
 
   const planColor = '#111827';
@@ -565,7 +439,7 @@ const BusinessHubV2: React.FC = () => {
 
     // Free plan goes to posts, paid plans go to dashboard
     const currentKey = getFeatureKey({ page: activePage, subPage: activeSubPage });
-    if (lockMap[newPlan].has(currentKey)) {
+    if (isLocked(currentKey, newPlan)) {
       const fallback = newPlan === 'free' ? 'posts' : 'dashboard';
       setActivePage(fallback as Page);
       setActiveSubPage(fallback === 'posts' ? 'all-posts' : undefined);
@@ -578,7 +452,7 @@ const BusinessHubV2: React.FC = () => {
   const handleNavigate = (page: Page, subPage?: string) => {
     // Check if locked
     const key = getFeatureKey({ page, subPage });
-    if (lockMap[plan].has(key)) {
+    if (isLocked(key, plan)) {
       setUpgradeModal(key);
       return;
     }
@@ -599,12 +473,12 @@ const BusinessHubV2: React.FC = () => {
 
   const sidebarSections = buildSidebarSections(plan);
   const utilityItems = buildUtilityItems(plan);
-  const meta = planMeta[plan];
+  const meta = PLAN_META[plan];
 
   const renderPage = () => {
     // Check if current page is locked
     const currentKey = getFeatureKey({ page: activePage, subPage: activeSubPage });
-    if (lockMap[plan].has(currentKey)) {
+    if (isLocked(currentKey, plan)) {
       return <PostsPage subPage="all-posts" />;
     }
 
@@ -696,9 +570,9 @@ const BusinessHubV2: React.FC = () => {
           onLockedClick={handleLockedClick}
           subscriberLimit={meta.subscriberLimit}
           showSubscribers={meta.showSubscribers}
-          dashboardLocked={lockMap[plan].has('dashboard')}
+          dashboardLocked={isLocked('dashboard', plan)}
           dashboardPlanTier="writers"
-          createNewsletterLocked={plan !== 'business'}
+          createNewsletterLocked={!PLAN_META[plan].canCreateNewsletter}
           onCreateNewsletterLockedClick={() => setUpgradeModal('newsletters')}
         >
           {renderPage()}

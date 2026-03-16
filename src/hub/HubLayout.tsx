@@ -609,15 +609,6 @@ const HubLayout: React.FC<HubLayoutProps> = ({
                 {icons.dashboard}
               </span>
               <span style={{ flex: 1, textAlign: 'right' }}>لوحة التحكم</span>
-              {!isDashLocked && dashboardPlanTier && (
-                <span style={{
-                  fontSize: 9, fontWeight: 600, fontFamily: 'IBM Plex Sans Arabic, sans-serif',
-                  color: '#9CA3AF', background: '#F3F4F6',
-                  padding: '1px 5px', borderRadius: 3, flexShrink: 0,
-                }}>
-                  {dashboardPlanTier === 'business' ? 'أعمال' : 'الكاتب'}
-                </span>
-              )}
               {isDashLocked && (
                 <span style={{
                   color: '#9CA3AF',
@@ -678,6 +669,15 @@ const HubLayout: React.FC<HubLayoutProps> = ({
                 </span>
                 <span style={{ flex: 1, textAlign: 'right', display: 'flex', alignItems: 'center', gap: 6 }}>
                   {section.label}
+                  {section.planTier && (
+                    <span style={{
+                      fontSize: 9, fontWeight: 600, fontFamily: 'IBM Plex Sans Arabic, sans-serif',
+                      color: '#9CA3AF', background: '#F3F4F6',
+                      padding: '1px 5px', borderRadius: 3,
+                    }}>
+                      {section.planTier === 'business' ? 'أعمال' : 'الكاتب'}
+                    </span>
+                  )}
                   {isSectionLocked && (
                     <span style={{ display: 'flex', alignItems: 'center', color: '#9CA3AF' }}>
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -754,25 +754,7 @@ const HubLayout: React.FC<HubLayoutProps> = ({
                             {item.trialBadge}
                           </span>
                         )}
-                        {item.planTier && !isLocked && !item.trialBadge && (
-                          <span style={{
-                            fontSize: 9, fontWeight: 600, fontFamily: 'IBM Plex Sans Arabic, sans-serif',
-                            color: '#9CA3AF', background: '#F3F4F6',
-                            padding: '1px 5px', borderRadius: 3, flexShrink: 0,
-                          }}>
-                            {item.planTier === 'business' ? 'أعمال' : 'الكاتب'}
-                          </span>
-                        )}
                         {isComingSoon && comingSoonBadge}
-                        {isLocked && item.planTier && (
-                          <span style={{
-                            fontSize: 9, fontWeight: 600, fontFamily: 'IBM Plex Sans Arabic, sans-serif',
-                            color: '#9CA3AF', background: '#F3F4F6',
-                            padding: '1px 5px', borderRadius: 3, flexShrink: 0,
-                          }}>
-                            {item.planTier === 'business' ? 'أعمال' : 'الكاتب'}
-                          </span>
-                        )}
                         {isLocked && (
                           <span style={{
                             color: '#9CA3AF',
@@ -830,24 +812,6 @@ const HubLayout: React.FC<HubLayoutProps> = ({
                 {item.icon}
               </span>
               <span style={{ flex: 1, textAlign: 'right' }}>{item.label}</span>
-              {item.planTier && !isItemLocked && (
-                <span style={{
-                  fontSize: 9, fontWeight: 600, fontFamily: 'IBM Plex Sans Arabic, sans-serif',
-                  color: '#9CA3AF', background: '#F3F4F6',
-                  padding: '1px 5px', borderRadius: 3, flexShrink: 0,
-                }}>
-                  {item.planTier === 'business' ? 'أعمال' : 'الكاتب'}
-                </span>
-              )}
-              {isItemLocked && item.planTier && (
-                <span style={{
-                  fontSize: 9, fontWeight: 600, fontFamily: 'IBM Plex Sans Arabic, sans-serif',
-                  color: '#9CA3AF', background: '#F3F4F6',
-                  padding: '1px 5px', borderRadius: 3, flexShrink: 0,
-                }}>
-                  {item.planTier === 'business' ? 'أعمال' : 'الكاتب'}
-                </span>
-              )}
               {isItemLocked && (
                 <span style={{
                   color: '#9CA3AF',
