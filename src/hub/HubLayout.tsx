@@ -142,10 +142,25 @@ const icons = {
       <circle cx="12" cy="12" r="10" /><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20" /><path d="M2 12h20" />
     </svg>
   ),
+  support: (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+    </svg>
+  ),
+  segments: (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="12" r="10" /><path d="M12 2v10l7 4" />
+    </svg>
+  ),
+  customFonts: (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="4 7 4 4 20 4 20 7" /><line x1="9" y1="20" x2="15" y2="20" /><line x1="12" y1="4" x2="12" y2="20" />
+    </svg>
+  ),
 };
 
 // ─── Types ───────────────────────────────────────────────
-type Page = 'dashboard' | 'posts' | 'newsletters' | 'email-template' | 'notifications' | 'grow' | 'website' | 'writers' | 'subscribers' | 'email-journeys' | 'analyze' | 'settings' | 'landing-pages' | 'domain-settings' | 'branding';
+type Page = 'dashboard' | 'posts' | 'newsletters' | 'email-template' | 'notifications' | 'grow' | 'website' | 'writers' | 'subscribers' | 'email-journeys' | 'analyze' | 'settings' | 'landing-pages' | 'domain-settings' | 'branding' | 'subscriber-segments' | 'custom-fonts' | 'support';
 
 interface Publication {
   id: string;

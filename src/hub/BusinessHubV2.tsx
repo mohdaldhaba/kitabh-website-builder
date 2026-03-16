@@ -103,6 +103,9 @@ function parseUrl(): { page: Page; subPage?: string; plan?: Plan } {
     case 'landing-pages': return { page: 'landing-pages', plan };
     case 'domain-settings': return { page: 'domain-settings', plan };
     case 'branding': return { page: 'branding', plan };
+    case 'subscriber-segments': return { page: 'subscriber-segments', plan };
+    case 'custom-fonts': return { page: 'custom-fonts', plan };
+    case 'support': return { page: 'support', plan };
     case 'members': return { page: 'writers', plan };
     case 'analyze': return { page: 'analyze', subPage: second, plan };
     case 'notifications': return { page: 'notifications', plan };
@@ -138,6 +141,9 @@ function buildUrl(page: Page, subPage?: string): string {
     case 'landing-pages': path = `${BASE}/landing-pages`; break;
     case 'domain-settings': path = `${BASE}/domain-settings`; break;
     case 'branding': path = `${BASE}/branding`; break;
+    case 'subscriber-segments': path = `${BASE}/subscriber-segments`; break;
+    case 'custom-fonts': path = `${BASE}/custom-fonts`; break;
+    case 'support': path = `${BASE}/support`; break;
     case 'writers': path = `${BASE}/members`; break;
     case 'analyze':
       path = subPage ? `${BASE}/analyze/${subPage}` : `${BASE}/analyze`;
@@ -203,22 +209,25 @@ function buildSidebarSections(plan: Plan): SidebarSection[] {
         { page: 'newsletters', label: 'النشرة', icon: icons.emailJourney },
         { page: 'subscribers', label: 'المشتركون', icon: icons.audience },
         { page: 'grow', subPage: 'linktree', label: 'صفحة الروابط', icon: icons.magicLink },
-        { page: 'landing-pages' as Page, label: 'صفحات الاشتراك', icon: icons.landingPage },
-        { page: 'email-journeys', label: 'رحلات البريد', icon: icons.emailJourney },
+        { page: 'analyze', label: 'الإحصائيات', icon: icons.analyze },
         { page: 'grow', subPage: 'magic-link', label: 'رابط سحري', icon: icons.magicLink, comingSoon: true },
       ]),
     },
     {
-      id: 'design',
-      label: 'صمّم',
-      icon: icons.website,
+      id: 'growth',
+      label: 'انمو وتوسّع',
+      icon: icons.grow,
       locked: sectionLocks.has('design'),
       planTier: 'writers',
       items: applyMeta([
         { page: 'website', label: 'الموقع', icon: icons.website },
+        { page: 'landing-pages' as Page, label: 'صفحات الاشتراك', icon: icons.landingPage },
+        { page: 'subscriber-segments' as Page, label: 'أقسام المشتركين', icon: icons.segments },
+        { page: 'custom-fonts' as Page, label: 'خطوط مخصصة', icon: icons.customFonts },
         { page: 'branding' as Page, label: 'الهوية والعلامة', icon: icons.branding },
-        { page: 'domain-settings' as Page, label: 'إعدادات النطاق', icon: icons.domainSettings },
-        { page: 'email-template', label: 'قالب البريد', icon: icons.emailTemplate },
+        { page: 'domain-settings' as Page, label: 'النطاق المخصص', icon: icons.domainSettings },
+        { page: 'email-template', label: 'قوالب البريد', icon: icons.emailTemplate },
+        { page: 'email-journeys', label: 'رحلات البريد والأتمتة', icon: icons.emailJourney },
       ]),
     },
   ];
@@ -227,8 +236,8 @@ function buildSidebarSections(plan: Plan): SidebarSection[] {
 function buildUtilityItems(plan: Plan): SidebarItem[] {
   const locks = getLockSet(plan);
   return [
-    { page: 'analyze', label: 'الإحصائيات', icon: icons.analyze, locked: locks.has('analyze'), planTier: getPlanTier('analyze') },
     { page: 'writers' as Page, label: 'فريق الكتّاب', icon: icons.members, locked: locks.has('writers'), planTier: getPlanTier('writers') },
+    { page: 'support' as Page, label: 'الدعم الفني', icon: icons.support, locked: false, planTier: undefined },
     { page: 'notifications', label: 'الإشعارات', icon: icons.notification },
   ];
 }
@@ -743,6 +752,27 @@ const BusinessHubV2: React.FC = () => {
           <ComingSoonPage
             title="الهوية والعلامة التجارية"
             description="تحكم في هوية علامتك التجارية — الشعار، الألوان، الخطوط، وأسلوب موقعك ونشراتك البريدية."
+          />
+        );
+      case 'subscriber-segments':
+        return (
+          <ComingSoonPage
+            title="أقسام المشتركين"
+            description="قسّم مشتركيك إلى شرائح ذكية لإرسال محتوى مخصص يناسب كل فئة."
+          />
+        );
+      case 'custom-fonts':
+        return (
+          <ComingSoonPage
+            title="خطوط مخصصة"
+            description="ارفع خطوطك الخاصة واستخدمها في موقعك ونشراتك البريدية لتعكس هوية علامتك."
+          />
+        );
+      case 'support':
+        return (
+          <ComingSoonPage
+            title="الدعم الفني"
+            description="تواصل مع فريق الدعم للحصول على مساعدة فورية وحلول لاستفساراتك."
           />
         );
       case 'settings':
