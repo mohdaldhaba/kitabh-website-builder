@@ -430,6 +430,8 @@ const UpgradeModal: React.FC<{
           }}>
             {featureKey === 'newsletters' && currentPlan === 'writers'
               ? <>إنشاء أكثر من نشرة بريدية ميزة متاحة على <strong style={{ color: '#111827' }}>باقة الأعمال</strong></>
+              : featureKey === 'newsletters' && currentPlan === 'free'
+              ? <>هذه الميزة متاحة في <strong style={{ color: '#111827' }}>باقة الكاتب</strong> و<strong style={{ color: '#111827' }}>باقة الأعمال</strong></>
               : <>هذه الميزة متاحة في <strong style={{ color: '#111827' }}>{reason.targetPlan}</strong></>
             }
           </p>
