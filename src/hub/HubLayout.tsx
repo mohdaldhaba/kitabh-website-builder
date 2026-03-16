@@ -860,19 +860,23 @@ const HubLayout: React.FC<HubLayoutProps> = ({
                 gap: 4,
               }}
             >
-              ترقية
+              الباقات
             </button>
           </div>
           {onCompareClick && (
             <button
               onClick={onCompareClick}
               style={{
-                background: 'none', border: 'none', padding: 0, marginBottom: 6,
-                fontSize: 11, color: c.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif',
-                cursor: 'pointer', textDecoration: 'underline', textUnderlineOffset: 2,
+                background: 'rgba(17,24,39,0.9)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
+                border: '1px solid rgba(255,255,255,0.1)',
+                padding: '8px 0', marginBottom: 8, width: '100%',
+                fontSize: 12, fontWeight: 600, color: '#fff', fontFamily: 'IBM Plex Sans Arabic, sans-serif',
+                cursor: 'pointer', borderRadius: 8,
+                boxShadow: '0 2px 8px rgba(0,0,0,0.12)',
+                transition: 'opacity 0.15s ease',
               }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = c.text)}
-              onMouseLeave={(e) => (e.currentTarget.style.color = c.textMuted)}
+              onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.85')}
+              onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
             >
               ما الذي تتضمنه باقتك؟
             </button>

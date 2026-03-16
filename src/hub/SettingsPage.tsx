@@ -158,7 +158,7 @@ const BillingSection: React.FC = () => (
             cursor: 'pointer',
           }}
         >
-          ترقية الخطة
+          عرض الباقات
         </button>
         <button
           style={{
