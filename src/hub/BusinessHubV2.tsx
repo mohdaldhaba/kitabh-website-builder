@@ -335,58 +335,37 @@ const UpgradeModal: React.FC<{
 const PlanComparisonOverlay: React.FC<{ currentPlan: Plan; onClose: () => void }> = ({ currentPlan, onClose }) => {
   const plans: Plan[] = ['free', 'writers', 'business'];
   const font = 'IBM Plex Sans Arabic, sans-serif';
-  const blue = '#0000FF';
-  const gold = '#D97706';
   const mob = typeof window !== 'undefined' && window.innerWidth < 500;
 
-  const VerifiedBadge = ({ color }: { color: string }) => (
-    <svg width={mob ? 20 : 22} height={mob ? 20 : 22} viewBox="0 0 24 24" fill="none">
-      <circle cx="12" cy="12" r="12" fill={color} />
-      <path d="M7.5 12.5L10.5 15.5L16.5 9.5" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-    </svg>
-  );
-
-  const freeCheck = (
-    <svg width={mob ? 18 : 20} height={mob ? 18 : 20} viewBox="0 0 24 24" fill="none" stroke="#B0B0B0" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+  const check = (
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#111827" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
       <polyline points="20 6 9 17 4 12" />
     </svg>
   );
-  const dash = <span style={{ color: '#D1D5DB', fontSize: 16 }}>—</span>;
-
-  const noteStyle = (color: string): React.CSSProperties => ({
-    fontSize: mob ? 11 : 13, color, fontFamily: font, fontWeight: 700,
-    whiteSpace: 'nowrap' as const,
-  });
+  const dash = <span style={{ color: '#ccc', fontSize: 18, fontWeight: 400 }}>—</span>;
 
   const renderCell = (feat: { key: FeatureKey; freeNote?: string; writersNote?: string; businessNote?: string }, p: Plan) => {
     const available = !isLocked(feat.key, p);
     if (!available) return dash;
 
-    if (p === 'free') {
-      if (feat.freeNote) return <span style={noteStyle('#6B7280')}>{feat.freeNote}</span>;
-      return freeCheck;
-    }
-    if (p === 'writers') {
-      if (feat.writersNote) return <span style={noteStyle(blue)}>{feat.writersNote}</span>;
-      return <VerifiedBadge color={blue} />;
-    }
-    if (feat.businessNote) return <span style={noteStyle(gold)}>{feat.businessNote}</span>;
-    return <VerifiedBadge color={gold} />;
+    if (p === 'free' && feat.freeNote) return <span style={{ fontSize: mob ? 13 : 14, color: '#6B7280', fontFamily: font }}>{feat.freeNote}</span>;
+    if (p === 'writers' && feat.writersNote) return <span style={{ fontSize: mob ? 13 : 14, color: '#111827', fontFamily: font, fontWeight: 600 }}>{feat.writersNote}</span>;
+    if (p === 'business' && feat.businessNote) return <span style={{ fontSize: mob ? 13 : 14, color: '#111827', fontFamily: font, fontWeight: 600 }}>{feat.businessNote}</span>;
+    return check;
   };
 
-  /* ── Desktop row: 4-column grid ── */
-  const DesktopRow = ({ feat, even }: { feat: typeof COMPARISON_SECTIONS[0]['features'][0]; even: boolean }) => (
+  /* ── Desktop row ── */
+  const DesktopRow = ({ feat }: { feat: typeof COMPARISON_SECTIONS[0]['features'][0] }) => (
     <div style={{
-      display: 'grid', gridTemplateColumns: '1.6fr repeat(3, 1fr)',
-      padding: '14px 32px', alignItems: 'center',
-      borderBottom: '1px solid #F3F4F6',
-      background: even ? '#FAFAFA' : '#fff',
+      display: 'grid', gridTemplateColumns: '1.8fr repeat(3, 1fr)',
+      padding: '16px 32px', alignItems: 'center',
+      borderBottom: '1px solid #E5E7EB',
     }}>
-      <div style={{ fontSize: 14, fontFamily: font, color: '#1F2937', fontWeight: 500 }}>
+      <div style={{ fontSize: 15, fontFamily: font, color: '#111827', fontWeight: 500 }}>
         {feat.label}
       </div>
       {plans.map((p) => (
-        <div key={p} style={{ textAlign: 'center', display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 30 }}>
+        <div key={p} style={{ textAlign: 'center', display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 32 }}>
           {renderCell(feat, p)}
         </div>
       ))}
@@ -395,19 +374,19 @@ const PlanComparisonOverlay: React.FC<{ currentPlan: Plan; onClose: () => void }
 
   /* ── Mobile row: label on top, 3 values below ── */
   const MobileRow = ({ feat }: { feat: typeof COMPARISON_SECTIONS[0]['features'][0] }) => (
-    <div style={{ borderBottom: '1px solid #F3F4F6' }}>
+    <div style={{ borderBottom: '1px solid #E5E7EB' }}>
       <div style={{
-        padding: '12px 20px 4px', fontSize: 13, fontFamily: font,
-        color: '#1F2937', fontWeight: 600,
+        padding: '14px 20px 6px', fontSize: 15, fontFamily: font,
+        color: '#111827', fontWeight: 600,
       }}>
         {feat.label}
       </div>
       <div style={{
         display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)',
-        padding: '6px 20px 12px',
+        padding: '4px 20px 14px',
       }}>
         {plans.map((p) => (
-          <div key={p} style={{ textAlign: 'center', display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 28 }}>
+          <div key={p} style={{ textAlign: 'center', display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 30 }}>
             {renderCell(feat, p)}
           </div>
         ))}
@@ -418,9 +397,8 @@ const PlanComparisonOverlay: React.FC<{ currentPlan: Plan; onClose: () => void }
   return (
     <div
       style={{
-        position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.45)',
+        position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)',
         zIndex: 9999, display: 'flex', alignItems: mob ? 'flex-end' : 'center', justifyContent: 'center',
-        backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)',
         padding: mob ? 0 : 20,
       }}
       onClick={onClose}
@@ -428,11 +406,11 @@ const PlanComparisonOverlay: React.FC<{ currentPlan: Plan; onClose: () => void }
       <div
         style={{
           background: '#fff',
-          borderRadius: mob ? '20px 20px 0 0' : 20,
-          padding: 0, maxWidth: 700, width: '100%',
+          borderRadius: mob ? '16px 16px 0 0' : 16,
+          padding: 0, maxWidth: 720, width: '100%',
           maxHeight: mob ? '92vh' : '88vh',
           overflowY: 'auto', direction: 'rtl',
-          boxShadow: '0 24px 80px rgba(0,0,0,0.18)',
+          boxShadow: '0 20px 60px rgba(0,0,0,0.2)',
           position: 'relative',
           WebkitOverflowScrolling: 'touch' as any,
         }}
@@ -449,10 +427,10 @@ const PlanComparisonOverlay: React.FC<{ currentPlan: Plan; onClose: () => void }
         <div style={{ padding: mob ? '16px 20px 14px' : '28px 32px 22px', borderBottom: '1px solid #E5E7EB' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
             <div>
-              <h2 style={{ fontSize: mob ? 18 : 22, fontWeight: 800, fontFamily: font, margin: '0 0 4px', color: '#111827' }}>
+              <h2 style={{ fontSize: mob ? 20 : 24, fontWeight: 800, fontFamily: font, margin: '0 0 4px', color: '#111827' }}>
                 ما الذي تتضمنه باقتك؟
               </h2>
-              <p style={{ fontSize: mob ? 12 : 14, color: '#9CA3AF', fontFamily: font, margin: 0 }}>
+              <p style={{ fontSize: mob ? 14 : 15, color: '#9CA3AF', fontFamily: font, margin: 0 }}>
                 مقارنة بين باقات الكتابة
               </p>
             </div>
@@ -460,7 +438,7 @@ const PlanComparisonOverlay: React.FC<{ currentPlan: Plan; onClose: () => void }
               onClick={onClose}
               style={{
                 background: '#F3F4F6', border: 'none', cursor: 'pointer',
-                borderRadius: 10, width: 34, height: 34, display: 'flex', alignItems: 'center',
+                borderRadius: 8, width: 36, height: 36, display: 'flex', alignItems: 'center',
                 justifyContent: 'center', color: '#6B7280', flexShrink: 0,
               }}
             >
@@ -474,28 +452,23 @@ const PlanComparisonOverlay: React.FC<{ currentPlan: Plan; onClose: () => void }
         {/* Plan column headers — sticky */}
         <div style={{
           display: 'grid',
-          gridTemplateColumns: mob ? 'repeat(3, 1fr)' : '1.6fr repeat(3, 1fr)',
-          padding: mob ? '10px 20px' : '14px 32px',
-          borderBottom: '1px solid #E5E7EB',
+          gridTemplateColumns: mob ? 'repeat(3, 1fr)' : '1.8fr repeat(3, 1fr)',
+          padding: mob ? '12px 20px' : '16px 32px',
+          borderBottom: '2px solid #111827',
           position: 'sticky', top: 0, background: '#fff', zIndex: 1,
         }}>
           {!mob && <div />}
           {plans.map((p) => {
             const isCurrent = currentPlan === p;
-            const hColor = p === 'writers' ? blue : p === 'business' ? gold : '#6B7280';
             return (
               <div key={p} style={{
-                textAlign: 'center', fontFamily: font,
-                padding: mob ? '6px 4px' : '8px 6px',
-                background: isCurrent ? (p === 'writers' ? '#EEF0FF' : p === 'business' ? '#FFF8EB' : '#F9FAFB') : 'transparent',
-                borderRadius: 10,
-                border: isCurrent ? `1.5px solid ${p === 'writers' ? '#C7D2FE' : p === 'business' ? '#FDE68A' : '#E5E7EB'}` : '1.5px solid transparent',
+                textAlign: 'center', fontFamily: font, padding: '4px 0',
               }}>
-                <div style={{ fontSize: mob ? 11 : 13, fontWeight: 800, color: hColor }}>
+                <div style={{ fontSize: mob ? 13 : 15, fontWeight: 800, color: '#111827' }}>
                   {mob ? (p === 'free' ? 'مجانية' : p === 'writers' ? 'الكاتب' : 'الأعمال') : PLAN_META[p].labelAr}
                 </div>
                 {isCurrent && (
-                  <div style={{ fontSize: mob ? 9 : 10, color: hColor, opacity: 0.65, marginTop: 1 }}>باقتك</div>
+                  <div style={{ fontSize: mob ? 10 : 11, color: '#9CA3AF', marginTop: 2 }}>باقتك</div>
                 )}
               </div>
             );
@@ -506,32 +479,31 @@ const PlanComparisonOverlay: React.FC<{ currentPlan: Plan; onClose: () => void }
         {COMPARISON_SECTIONS.map((section) => (
           <div key={section.title}>
             <div style={{
-              padding: mob ? '16px 20px 6px' : '20px 32px 8px',
-              fontSize: mob ? 12 : 13, fontWeight: 800,
-              color: '#9CA3AF', fontFamily: font,
-              borderBottom: '1px solid #F3F4F6',
+              padding: mob ? '18px 20px 8px' : '22px 32px 10px',
+              fontSize: mob ? 14 : 15, fontWeight: 800,
+              color: '#111827', fontFamily: font,
+              borderBottom: '1px solid #E5E7EB',
             }}>
               {section.title}
             </div>
 
-            {section.features.map((feat, i) => (
+            {section.features.map((feat) => (
               mob
                 ? <MobileRow key={feat.key} feat={feat} />
-                : <DesktopRow key={feat.key} feat={feat} even={i % 2 === 0} />
+                : <DesktopRow key={feat.key} feat={feat} />
             ))}
           </div>
         ))}
 
         {/* CTA */}
-        <div style={{ padding: mob ? '16px 20px 24px' : '24px 32px 32px', borderTop: '1px solid #E5E7EB', textAlign: 'center' }}>
+        <div style={{ padding: mob ? '20px 20px 28px' : '28px 32px 36px', borderTop: '1px solid #E5E7EB', textAlign: 'center' }}>
           <button
             onClick={() => { window.location.href = '/pricing'; }}
             style={{
-              padding: mob ? '12px 24px' : '14px 40px',
+              padding: mob ? '14px 24px' : '16px 48px',
               background: '#111827', color: '#fff', width: mob ? '100%' : 'auto',
-              border: 'none', borderRadius: 12, fontSize: mob ? 15 : 16, fontWeight: 700,
+              border: 'none', borderRadius: 12, fontSize: mob ? 16 : 17, fontWeight: 700,
               fontFamily: font, cursor: 'pointer',
-              boxShadow: '0 4px 14px rgba(0,0,0,0.15)',
             }}
           >
             عرض الباقات والأسعار
