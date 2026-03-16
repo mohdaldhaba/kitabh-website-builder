@@ -42,8 +42,8 @@ export const FEATURES: Record<FeatureKey, FeatureDef> = {
   checker:       { plan: 'free',     upgradeTitle: '',  displayLabel: 'محرر كتابة', freeTrial: 5 },
   carousel:      { plan: 'free',     upgradeTitle: '',  displayLabel: 'ستوديو كتابة', freeTrial: 5 },
   social:        { plan: 'free',     upgradeTitle: '',  displayLabel: 'محتوى كتابة', freeTrial: 5 },
-  'arabic-editor':  { plan: 'free',     upgradeTitle: '',  displayLabel: 'محرر نصوص عربي متطوّر' },
-  'grammar-checker':{ plan: 'free',     upgradeTitle: '',  displayLabel: 'مدقق لغوي وسياقي' },
+  'arabic-editor':  { plan: 'writers',  upgradeTitle: 'محرر نصوص عربي متطوّر',  displayLabel: 'محرر نصوص عربي متطوّر' },
+  'grammar-checker':{ plan: 'writers',  upgradeTitle: 'مدقق لغوي وسياقي',     displayLabel: 'مدقق لغوي وسياقي' },
   notifications: { plan: 'free',     upgradeTitle: '',  displayLabel: 'الإشعارات' },
   settings:      { plan: 'free',     upgradeTitle: '',  displayLabel: 'الإعدادات' },
 
@@ -136,12 +136,12 @@ export const COMPARISON_SECTIONS: { title: string; features: { key: FeatureKey; 
     title: 'الكتابة والأدوات',
     features: [
       { key: 'posts', label: 'كتابة المنشورات' },
-      { key: 'arabic-editor', label: 'محرر نصوص عربي متطوّر' },
-      { key: 'grammar-checker', label: 'مدقق لغوي وسياقي' },
       { key: 'outline', label: 'مساعد كتابة', freeNote: '5 استخدامات' },
       { key: 'checker', label: 'محرر كتابة', freeNote: '5 استخدامات' },
       { key: 'carousel', label: 'ستوديو كتابة', freeNote: '5 استخدامات' },
       { key: 'social', label: 'محتوى كتابة', freeNote: '5 استخدامات' },
+      { key: 'arabic-editor', label: 'محرر نصوص عربي متطوّر' },
+      { key: 'grammar-checker', label: 'مدقق لغوي وسياقي' },
     ],
   },
   {
