@@ -495,9 +495,10 @@ const PlanComparisonOverlay: React.FC<{ currentPlan: Plan; onClose: () => void }
         {COMPARISON_SECTIONS.map((section) => (
           <div key={section.title}>
             <div style={{
-              padding: mob ? '18px 20px 10px' : '24px 24px 12px',
+              padding: mob ? '16px 20px' : '24px 24px 12px',
               fontSize: mob ? 16 : 17, fontWeight: 800,
               color: '#111827', fontFamily: font,
+              ...(mob ? { background: '#EAEAEA', marginTop: 8 } : {}),
             }}>
               {section.title}
             </div>
