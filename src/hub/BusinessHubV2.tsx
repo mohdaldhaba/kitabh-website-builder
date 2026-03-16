@@ -350,7 +350,7 @@ const PlanComparisonOverlay: React.FC<{ currentPlan: Plan; onClose: () => void }
   );
   const dash = <span style={{ color: '#D1D5DB', fontSize: 16, fontWeight: 500 }}>—</span>;
 
-  const renderCell = (feat: { key: FeatureKey; freeNote?: string; writersNote?: string }, p: Plan) => {
+  const renderCell = (feat: { key: FeatureKey; freeNote?: string; writersNote?: string; businessNote?: string }, p: Plan) => {
     const available = !isLocked(feat.key, p);
 
     if (!available) return dash;
@@ -361,16 +361,17 @@ const PlanComparisonOverlay: React.FC<{ currentPlan: Plan; onClose: () => void }
       return freeCheck;
     }
     if (p === 'writers') {
-      if (feat.writersNote) return <span style={{ fontSize: 10, color: '#D97706', fontFamily: font, fontWeight: 600 }}>{feat.writersNote}</span>;
-      return <VerifiedBadge color="#2563EB" />;
+      if (feat.writersNote) return <span style={{ fontSize: 10, color: '#0000FF', fontFamily: font, fontWeight: 600 }}>{feat.writersNote}</span>;
+      return <VerifiedBadge color="#0000FF" />;
     }
     // business
+    if (feat.businessNote) return <span style={{ fontSize: 10, color: '#F59E0B', fontFamily: font, fontWeight: 600 }}>{feat.businessNote}</span>;
     return <VerifiedBadge color="#F59E0B" />;
   };
 
   const planHeaderColors: Record<Plan, { bg: string; border: string; text: string }> = {
     free: { bg: '#F9FAFB', border: '#E5E7EB', text: '#6B7280' },
-    writers: { bg: '#EFF6FF', border: '#BFDBFE', text: '#2563EB' },
+    writers: { bg: '#EFF6FF', border: '#BFDBFE', text: '#0000FF' },
     business: { bg: '#FFFBEB', border: '#FDE68A', text: '#B45309' },
   };
 
@@ -505,20 +506,6 @@ const PlanComparisonOverlay: React.FC<{ currentPlan: Plan; onClose: () => void }
               ))}
             </div>
 
-            <div style={{
-              display: 'grid', gridTemplateColumns: '1.4fr repeat(3, 1fr)',
-              padding: '9px 20px', alignItems: 'center',
-              background: 'rgba(0,0,0,0.015)', borderRadius: 6, margin: '0 8px',
-            }}>
-              <div style={{ fontSize: 13, fontFamily: font, color: '#374151', fontWeight: 500 }}>
-                إنشاء نشرات متعددة
-              </div>
-              {plans.map((p) => (
-                <div key={p} style={{ textAlign: 'center', display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 24 }}>
-                  {PLAN_META[p].canCreateNewsletter ? <VerifiedBadge color="#F59E0B" /> : dash}
-                </div>
-              ))}
-            </div>
           </div>
         </div>
 
