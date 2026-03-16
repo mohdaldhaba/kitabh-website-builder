@@ -71,7 +71,7 @@ export const FEATURES: Record<FeatureKey, FeatureDef> = {
   'custom-fonts':      { plan: 'business', upgradeTitle: 'خطوط مخصصة',               displayLabel: 'خطوط مخصصة' },
   branding:            { plan: 'business', upgradeTitle: 'الهوية والعلامة التجارية',   displayLabel: 'الهوية والعلامة' },
   'verified-account':  { plan: 'writers',  upgradeTitle: 'حساب موثّق',               displayLabel: 'حساب موثّق' },
-  support:             { plan: 'free',     upgradeTitle: '',                          displayLabel: 'دعم فني' },
+  support:             { plan: 'writers',  upgradeTitle: 'الدعم الفني',               displayLabel: 'دعم فني' },
   writers:             { plan: 'business', upgradeTitle: 'فريق الكتّاب',               displayLabel: 'فريق الكتّاب' },
 };
 
