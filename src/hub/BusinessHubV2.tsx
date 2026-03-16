@@ -210,7 +210,6 @@ function buildSidebarSections(plan: Plan): SidebarSection[] {
         { page: 'subscribers', label: 'المشتركون', icon: icons.audience },
         { page: 'grow', subPage: 'linktree', label: 'صفحة الروابط', icon: icons.magicLink },
         { page: 'analyze', label: 'الإحصائيات', icon: icons.analyze },
-        { page: 'grow', subPage: 'magic-link', label: 'رابط سحري', icon: icons.magicLink, comingSoon: true },
       ]),
     },
     {
