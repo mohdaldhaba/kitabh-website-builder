@@ -71,7 +71,7 @@ const Icons = {
 // ═══════════════════════════════════════════════════════
 //  MAIN COMPONENT
 // ═══════════════════════════════════════════════════════
-export default function KitabhSubscribers() {
+export default function KitabhSubscribers({ subPage, plan }: { subPage?: string; plan?: 'free' | 'writers' | 'business' } = {}) {
   const [subscribers, setSubscribers] = useState<Subscriber[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchOpen, setSearchOpen] = useState(false);
@@ -248,10 +248,58 @@ export default function KitabhSubscribers() {
     URL.revokeObjectURL(url);
   }, [filtered, selectedIds]);
 
+  const [activeTab, setActiveTab] = useState(subPage === 'segments' ? 'segments' : 'subscribers');
+  const segmentsLocked = plan ? !['business'].includes(plan) : false;
+
   return (
     <>
       <style>{CSS_STYLES}</style>
       <div className="ksm">
+        {/* Tabs */}
+        <div style={{ display: 'flex', gap: 4, background: '#F3F4F6', borderRadius: 8, padding: 3, marginBottom: 24, width: 'fit-content', maxWidth: '100%', overflowX: 'auto' }}>
+          {[
+            { id: 'subscribers', label: 'المشتركون' },
+            { id: 'segments', label: 'أقسام المشتركين', locked: segmentsLocked },
+          ].map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => !tab.locked && setActiveTab(tab.id)}
+              style={{
+                padding: '8px 18px', background: activeTab === tab.id ? '#fff' : 'transparent',
+                border: 'none', borderRadius: 6, fontSize: 14,
+                fontWeight: activeTab === tab.id ? 600 : 400,
+                fontFamily: 'IBM Plex Sans Arabic, sans-serif',
+                color: tab.locked ? '#9CA3AF' : activeTab === tab.id ? '#111827' : '#6B7280',
+                cursor: tab.locked ? 'default' : 'pointer',
+                boxShadow: activeTab === tab.id ? '0 1px 2px rgba(0,0,0,0.06)' : 'none',
+                transition: 'all 0.15s', display: 'flex', alignItems: 'center', gap: 6,
+                opacity: tab.locked ? 0.6 : 1,
+              }}
+            >
+              {tab.label}
+              {tab.locked && (
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                </svg>
+              )}
+            </button>
+          ))}
+        </div>
+
+        {activeTab === 'segments' && (
+          <div style={{ maxWidth: 600, margin: '80px auto', textAlign: 'center' }}>
+            <div style={{ width: 64, height: 64, borderRadius: 16, background: '#F3F4F6', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px' }}>
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
+            </div>
+            <h2 style={{ fontSize: 20, fontWeight: 700, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 8px' }}>أقسام المشتركين</h2>
+            <p style={{ fontSize: 14, color: '#6B7280', fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 24px', lineHeight: 1.7 }}>
+              قسّم مشتركيك إلى شرائح ذكية لإرسال محتوى مخصص يناسب كل فئة.
+            </p>
+            <span style={{ display: 'inline-block', padding: '6px 16px', background: '#F3F4F6', borderRadius: 8, fontSize: 13, fontWeight: 600, fontFamily: 'IBM Plex Sans Arabic, sans-serif', color: '#9CA3AF' }}>قريبًا</span>
+          </div>
+        )}
+
+        {activeTab === 'subscribers' && <>
         {/* Header */}
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 24, flexWrap: 'wrap', gap: 12 }}>
           <div>
@@ -558,6 +606,7 @@ export default function KitabhSubscribers() {
             allTags={allTags}
           />
         )}
+        </>}
       </div>
     </>
   );

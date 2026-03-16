@@ -65,6 +65,101 @@ const ComingSoonPage: React.FC<{ title: string; description: string }> = ({ titl
   </div>
 );
 
+// ─── Reusable Tab Bar ────────────────────────────────────
+const TabBar: React.FC<{ tabs: { id: string; label: string; locked?: boolean }[]; active: string; onChange: (id: string) => void }> = ({ tabs, active, onChange }) => (
+  <div style={{ display: 'flex', gap: 4, background: '#F3F4F6', borderRadius: 8, padding: 3, marginBottom: 24, width: 'fit-content', maxWidth: '100%', overflowX: 'auto' }}>
+    {tabs.map((tab) => (
+      <button
+        key={tab.id}
+        onClick={() => !tab.locked && onChange(tab.id)}
+        style={{
+          padding: '8px 18px',
+          background: active === tab.id ? '#fff' : 'transparent',
+          border: 'none',
+          borderRadius: 6,
+          fontSize: 14,
+          fontWeight: active === tab.id ? 600 : 400,
+          fontFamily: 'IBM Plex Sans Arabic, sans-serif',
+          color: tab.locked ? '#9CA3AF' : active === tab.id ? '#111827' : '#6B7280',
+          cursor: tab.locked ? 'default' : 'pointer',
+          boxShadow: active === tab.id ? '0 1px 2px rgba(0,0,0,0.06)' : 'none',
+          transition: 'all 0.15s',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 6,
+          opacity: tab.locked ? 0.6 : 1,
+        }}
+      >
+        {tab.label}
+        {tab.locked && (
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" />
+          </svg>
+        )}
+      </button>
+    ))}
+  </div>
+);
+
+// ─── Branding + Fonts tabbed page ────────────────────────
+const BrandingPage: React.FC<{ subPage?: string; plan: Plan }> = ({ subPage, plan }) => {
+  const [activeTab, setActiveTab] = React.useState(subPage === 'fonts' ? 'fonts' : 'branding');
+  const fontsLocked = isLocked('custom-fonts', plan);
+
+  return (
+    <div style={{ maxWidth: 900, margin: '0 auto' }}>
+      <TabBar
+        tabs={[
+          { id: 'branding', label: 'الهوية والعلامة' },
+          { id: 'fonts', label: 'الخطوط الخاصة', locked: fontsLocked },
+        ]}
+        active={activeTab}
+        onChange={setActiveTab}
+      />
+      {activeTab === 'branding' && (
+        <ComingSoonPage
+          title="الهوية والعلامة التجارية"
+          description="تحكم في هوية علامتك التجارية — الشعار، الألوان، الخطوط، وأسلوب موقعك ونشراتك البريدية."
+        />
+      )}
+      {activeTab === 'fonts' && (
+        <ComingSoonPage
+          title="الخطوط الخاصة"
+          description="ارفع خطوطك الخاصة واستخدمها في موقعك ونشراتك البريدية لتعكس هوية علامتك."
+        />
+      )}
+    </div>
+  );
+};
+
+// ─── Email Templates + Automations tabbed page ───────────
+const EmailPage: React.FC<{ subPage?: string; plan: Plan }> = ({ subPage, plan }) => {
+  const [activeTab, setActiveTab] = React.useState(subPage === 'journeys' ? 'journeys' : 'templates');
+  const journeysLocked = isLocked('email-journeys', plan);
+
+  return (
+    <div style={{ maxWidth: 900, margin: '0 auto' }}>
+      <TabBar
+        tabs={[
+          { id: 'templates', label: 'قوالب البريد' },
+          { id: 'journeys', label: 'سلاسل البريد والأتمتة', locked: journeysLocked },
+        ]}
+        active={activeTab}
+        onChange={setActiveTab}
+      />
+      {activeTab === 'templates' && (
+        <ComingSoonPage
+          title="قوالب البريد"
+          description="صمّم قوالب بريد احترافية لنشراتك — خصّص الألوان والتخطيط والمحتوى بسهولة."
+        />
+      )}
+      {activeTab === 'journeys' && (
+        <KitabhAutomations />
+      )}
+    </div>
+  );
+};
+
 // All plan/feature config lives in planConfig.ts — single source of truth
 
 // ─── Base path ──────────────────────────────────────────
@@ -221,12 +316,8 @@ function buildSidebarSections(plan: Plan): SidebarSection[] {
       items: applyMeta([
         { page: 'website', label: 'الموقع الإلكتروني', icon: icons.website },
         { page: 'landing-pages' as Page, label: 'صفحات الاشتراك', icon: icons.landingPage },
-        { page: 'domain-settings' as Page, label: 'النطاق المخصص', icon: icons.domainSettings },
-        { page: 'subscriber-segments' as Page, label: 'أقسام المشتركين', icon: icons.segments },
-        { page: 'custom-fonts' as Page, label: 'الخطوط الخاصة', icon: icons.customFonts },
-        { page: 'branding' as Page, label: 'الهوية والعلامة', icon: icons.branding },
-        { page: 'email-template', label: 'قوالب البريد', icon: icons.emailTemplate },
-        { page: 'email-journeys', label: 'رحلات البريد والأتمتة', icon: icons.emailJourney },
+        { page: 'branding' as Page, label: 'الهوية والتخصيص', icon: icons.branding },
+        { page: 'email-template', label: 'البريد وسلاسله', icon: icons.emailTemplate },
       ]),
     },
   ];
@@ -706,12 +797,7 @@ const BusinessHubV2: React.FC = () => {
         return <NewslettersPage activePublicationIndex={pubIndex >= 0 ? pubIndex : 0} />;
       }
       case 'email-template':
-        return (
-          <ComingSoonPage
-            title="قالب البريد الإلكتروني"
-            description="محرر قوالب البريد الإلكتروني سيكون متاحًا قريبًا."
-          />
-        );
+        return <EmailPage subPage={activeSubPage} plan={plan} />;
       case 'notifications':
         return <NotificationsPage />;
       case 'grow':
@@ -737,36 +823,21 @@ const BusinessHubV2: React.FC = () => {
       case 'writers':
         return <MembersPage />;
       case 'subscribers':
-        return <KitabhSubscribers />;
+        return <KitabhSubscribers subPage={activeSubPage} plan={plan} />;
       case 'analyze':
         return <AnalyzePage subPage={activeSubPage} />;
       case 'email-journeys':
-        return <KitabhAutomations />;
+        return <EmailPage subPage="journeys" plan={plan} />;
       case 'landing-pages':
         return <KitabhLandingPages />;
-      case 'domain-settings':
-        return <KitabhDomainSettings plan={plan} />;
       case 'branding':
-        return (
-          <ComingSoonPage
-            title="الهوية والعلامة التجارية"
-            description="تحكم في هوية علامتك التجارية — الشعار، الألوان، الخطوط، وأسلوب موقعك ونشراتك البريدية."
-          />
-        );
-      case 'subscriber-segments':
-        return (
-          <ComingSoonPage
-            title="أقسام المشتركين"
-            description="قسّم مشتركيك إلى شرائح ذكية لإرسال محتوى مخصص يناسب كل فئة."
-          />
-        );
+        return <BrandingPage subPage={activeSubPage} plan={plan} />;
       case 'custom-fonts':
-        return (
-          <ComingSoonPage
-            title="خطوط مخصصة"
-            description="ارفع خطوطك الخاصة واستخدمها في موقعك ونشراتك البريدية لتعكس هوية علامتك."
-          />
-        );
+        return <BrandingPage subPage="fonts" plan={plan} />;
+      case 'subscriber-segments':
+        return <KitabhSubscribers subPage="segments" plan={plan} />;
+      case 'domain-settings':
+        return <SettingsPage subPage="domain" plan={plan} />;
       case 'support':
         return (
           <ComingSoonPage
@@ -775,7 +846,7 @@ const BusinessHubV2: React.FC = () => {
           />
         );
       case 'settings':
-        return <SettingsPage subPage={activeSubPage} />;
+        return <SettingsPage subPage={activeSubPage} plan={plan} />;
       default:
         return <PostsPage subPage="all-posts" />;
     }
