@@ -820,7 +820,7 @@ const BusinessHubV2: React.FC = () => {
         return <PostsPage subPage={activeSubPage} />;
       case 'newsletters': {
         const pubIndex = paidPublications.findIndex(p => p.id === activePublicationId);
-        return <NewslettersPage activePublicationIndex={pubIndex >= 0 ? pubIndex : 0} />;
+        return <NewslettersPage activePublicationIndex={pubIndex >= 0 ? pubIndex : 0} plan={plan} />;
       }
       case 'email-template':
         return <EmailPage subPage={activeSubPage} plan={plan} />;
