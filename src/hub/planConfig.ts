@@ -72,7 +72,7 @@ export const FEATURES: Record<FeatureKey, FeatureDef> = {
   branding:            { plan: 'business', upgradeTitle: 'الهوية والعلامة التجارية',   displayLabel: 'الهوية والعلامة' },
   'verified-account':  { plan: 'writers',  upgradeTitle: 'حساب موثّق',               displayLabel: 'حساب موثّق' },
   support:             { plan: 'writers',  upgradeTitle: 'الدعم الفني',               displayLabel: 'دعم فني' },
-  writers:             { plan: 'business', upgradeTitle: 'فريق الكتّاب',               displayLabel: 'فريق الكتّاب' },
+  writers:             { plan: 'business', upgradeTitle: 'إدارة الفريق',               displayLabel: 'إدارة الفريق' },
 };
 
 // ─── Plan metadata ──────────────────────────────────────
@@ -176,7 +176,7 @@ export const COMPARISON_SECTIONS: { title: string; features: { key: FeatureKey; 
       { key: 'domain-settings', label: 'النطاق المخصص' },
       { key: 'email-template', label: 'قوالب البريد' },
       { key: 'email-journeys', label: 'رحلات البريد والأتمتة' },
-      { key: 'writers', label: 'فريق الكتّاب' },
+      { key: 'writers', label: 'إدارة الفريق' },
       { key: 'support', label: 'دعم فني', freeNote: '—', writersNote: 'محدود', businessNote: 'متقدم' },
     ],
   },

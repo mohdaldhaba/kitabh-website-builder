@@ -235,7 +235,7 @@ function buildSidebarSections(plan: Plan): SidebarSection[] {
 function buildUtilityItems(plan: Plan): SidebarItem[] {
   const locks = getLockSet(plan);
   return [
-    { page: 'writers' as Page, label: 'فريق الكتّاب', icon: icons.members, locked: locks.has('writers'), planTier: getPlanTier('writers') },
+    { page: 'writers' as Page, label: 'إدارة الفريق', icon: icons.members, locked: locks.has('writers'), planTier: getPlanTier('writers') },
     { page: 'support' as Page, label: 'الدعم الفني', icon: icons.support, locked: locks.has('support'), planTier: getPlanTier('support') },
     { page: 'notifications', label: 'الإشعارات', icon: icons.notification },
   ];
