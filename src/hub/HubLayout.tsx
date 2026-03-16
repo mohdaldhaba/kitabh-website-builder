@@ -161,6 +161,8 @@ interface HubLayoutProps {
   customSidebarSections?: SidebarSection[];
   customUtilityItems?: SidebarItem[];
   onWriteClick?: () => void;
+  planName?: string;
+  onLockedClick?: (item: SidebarItem) => void;
 }
 
 // ─── Section-based sidebar structure ─────────────────────
@@ -170,6 +172,7 @@ type SidebarItem = {
   label: string;
   icon: React.ReactNode;
   comingSoon?: boolean;
+  locked?: boolean;
 };
 
 type SidebarSection = {
@@ -436,6 +439,8 @@ const HubLayout: React.FC<HubLayoutProps> = ({
   customSidebarSections,
   customUtilityItems,
   onWriteClick,
+  planName,
+  onLockedClick,
 }) => {
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(['create']));
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -459,6 +464,29 @@ const HubLayout: React.FC<HubLayoutProps> = ({
       }}
     >
       قريبا
+    </span>
+  );
+
+  const lockedBadge = (
+    <span
+      style={{
+        fontSize: 10,
+        fontWeight: 600,
+        fontFamily: 'IBM Plex Sans Arabic, sans-serif',
+        color: '#E11D48',
+        background: 'rgba(225,29,72,0.08)',
+        padding: '2px 6px',
+        borderRadius: 4,
+        whiteSpace: 'nowrap',
+        display: 'flex',
+        alignItems: 'center',
+        gap: 3,
+      }}
+    >
+      <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" />
+      </svg>
+      ترقية
     </span>
   );
 
@@ -609,23 +637,26 @@ const HubLayout: React.FC<HubLayoutProps> = ({
                   {section.items.map((item) => {
                     const isActive = activePage === item.page && (item.subPage ? activeSubPage === item.subPage : !activeSubPage || (activePage !== 'posts' && activePage !== 'grow'));
                     const isComingSoon = item.comingSoon;
+                    const isLocked = item.locked;
+                    const isDisabled = isComingSoon || isLocked;
                     return (
                       <button
                         key={`${item.page}-${item.subPage || ''}`}
                         onClick={() => {
                           if (isComingSoon) return;
+                          if (isLocked && onLockedClick) { onLockedClick(item); return; }
                           onNavigate(item.page, item.subPage);
                           setMobileMenuOpen(false);
                         }}
                         style={{
                           width: '100%',
                           padding: '7px 12px',
-                          background: isActive && !isComingSoon ? c.activeItem : 'transparent',
-                          color: isComingSoon ? '#C0C0C0' : isActive ? c.activeText : c.text,
+                          background: isActive && !isDisabled ? c.activeItem : 'transparent',
+                          color: isDisabled ? '#C0C0C0' : isActive ? c.activeText : c.text,
                           border: 'none',
                           borderRadius: 6,
                           fontSize: 13,
-                          fontWeight: isActive && !isComingSoon ? 600 : 400,
+                          fontWeight: isActive && !isDisabled ? 600 : 400,
                           fontFamily: 'IBM Plex Sans Arabic, sans-serif',
                           cursor: isComingSoon ? 'default' : 'pointer',
                           display: 'flex',
@@ -633,19 +664,20 @@ const HubLayout: React.FC<HubLayoutProps> = ({
                           gap: 10,
                           transition: 'background 0.1s',
                           textAlign: 'right',
-                          opacity: isComingSoon ? 0.5 : 1,
+                          opacity: isComingSoon ? 0.5 : isLocked ? 0.7 : 1,
                           marginBottom: 1,
                         }}
                         onMouseEnter={(e) => { if (!isActive && !isComingSoon) e.currentTarget.style.background = c.hoverBg; }}
                         onMouseLeave={(e) => { if (!isActive && !isComingSoon) e.currentTarget.style.background = 'transparent'; }}
                       >
                         {item.icon && (
-                          <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: isActive ? c.activeText : c.textMuted, opacity: 0.6, width: 18, height: 18, flexShrink: 0 }}>
+                          <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', color: isLocked ? '#C0C0C0' : isActive ? c.activeText : c.textMuted, opacity: 0.6, width: 18, height: 18, flexShrink: 0 }}>
                             <span style={{ display: 'flex', transform: 'scale(0.8)', transformOrigin: 'center' }}>{item.icon}</span>
                           </span>
                         )}
                         <span style={{ flex: 1, textAlign: 'right' }}>{item.label}</span>
                         {isComingSoon && comingSoonBadge}
+                        {isLocked && lockedBadge}
                       </button>
                     );
                   })}
@@ -698,7 +730,7 @@ const HubLayout: React.FC<HubLayoutProps> = ({
         <div style={{ marginBottom: 8 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
             <span style={{ fontSize: 13, fontWeight: 600, color: c.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>
-              خطة الأعمال
+              {planName || 'خطة الأعمال'}
             </span>
             <button
               style={{

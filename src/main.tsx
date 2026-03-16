@@ -5,7 +5,11 @@ const path = window.location.pathname
 
 const root = ReactDOM.createRoot(document.getElementById('root')!)
 
-if (path === '/hub_v1' || path.startsWith('/hub_v1/')) {
+if (path === '/hub_v2' || path.startsWith('/hub_v2/')) {
+  import('./hub/BusinessHubV2').then(({ default: BusinessHubV2 }) => {
+    root.render(<React.StrictMode><BusinessHubV2 /></React.StrictMode>)
+  })
+} else if (path === '/hub_v1' || path.startsWith('/hub_v1/')) {
   import('./hub/BusinessHubV1').then(({ default: BusinessHubV1 }) => {
     root.render(<React.StrictMode><BusinessHubV1 /></React.StrictMode>)
   })
