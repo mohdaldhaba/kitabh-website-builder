@@ -148,6 +148,7 @@ export default function KitabhLandingPages({ plan = 'business' }: { plan?: 'free
   const [editingId, setEditingId] = useState<string | null>(null);
   const [previewMode, setPreviewMode] = useState(false);
   const [copiedSlug, setCopiedSlug] = useState<string | null>(null);
+  const [showLockedModal, setShowLockedModal] = useState(false);
 
   // ─── Load/Save from localStorage (replace with API in production) ──
   useEffect(() => {
@@ -227,6 +228,7 @@ export default function KitabhLandingPages({ plan = 'business' }: { plan?: 'free
             copiedSlug={copiedSlug}
             onTogglePublish={(id, published) => updatePage(id, { isPublished: published })}
             createLocked={plan !== 'business'}
+            onLockedClick={() => setShowLockedModal(true)}
           />
         ) : editingPage ? (
           <PageEditor
@@ -243,6 +245,37 @@ export default function KitabhLandingPages({ plan = 'business' }: { plan?: 'free
           />
         ) : null}
       </div>
+
+      {/* Locked feature modal */}
+      {showLockedModal && (
+        <>
+          <div onClick={() => setShowLockedModal(false)} style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)', zIndex: 9998 }} />
+          <div style={{
+            position: 'fixed', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
+            background: '#fff', borderRadius: 16, padding: 32, maxWidth: 400, width: '90%',
+            textAlign: 'center', zIndex: 9999, boxShadow: '0 20px 60px rgba(0,0,0,0.15)',
+            fontFamily: 'IBM Plex Sans Arabic, sans-serif', direction: 'rtl',
+          }}>
+            <div style={{ width: 48, height: 48, borderRadius: 12, background: 'rgba(0,0,0,0.04)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px', color: '#6B7280' }}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" />
+              </svg>
+            </div>
+            <h3 style={{ fontSize: 17, fontWeight: 700, margin: '0 0 8px', color: '#111827' }}>إنشاء صفحات إضافية</h3>
+            <p style={{ fontSize: 14, color: '#6B7280', margin: '0 0 24px', lineHeight: 1.6 }}>
+              هذه الميزة متوفرة على <strong style={{ color: '#111827' }}>باقة الأعمال</strong>
+            </p>
+            <div style={{ display: 'flex', gap: 8, justifyContent: 'center' }}>
+              <button onClick={() => setShowLockedModal(false)} style={{ padding: '10px 20px', background: '#F3F4F6', color: '#374151', border: 'none', borderRadius: 10, fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>
+                إغلاق
+              </button>
+              <button onClick={() => { window.location.href = '/pricing'; }} style={{ padding: '10px 20px', background: '#111827', color: '#fff', border: 'none', borderRadius: 10, fontSize: 14, fontWeight: 600, cursor: 'pointer' }}>
+                باقات كتابة
+              </button>
+            </div>
+          </div>
+        </>
+      )}
     </>
   );
 }
@@ -260,9 +293,10 @@ interface PagesListProps {
   copiedSlug: string | null;
   onTogglePublish: (id: string, published: boolean) => void;
   createLocked?: boolean;
+  onLockedClick?: () => void;
 }
 
-function PagesList({ pages, onEdit, onCreate, onDelete, onDuplicate, onCopyLink, copiedSlug, onTogglePublish, createLocked }: PagesListProps) {
+function PagesList({ pages, onEdit, onCreate, onDelete, onDuplicate, onCopyLink, copiedSlug, onTogglePublish, createLocked, onLockedClick }: PagesListProps) {
   return (
     <div className="klp-list">
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 24, flexWrap: 'wrap', gap: 12 }}>
@@ -273,12 +307,12 @@ function PagesList({ pages, onEdit, onCreate, onDelete, onDuplicate, onCopyLink,
         <div style={{ display: 'flex', gap: 8 }}>
           <button
             className={createLocked ? undefined : "klp-btn-primary"}
-            onClick={createLocked ? undefined : onCreate}
+            onClick={createLocked ? onLockedClick : onCreate}
             style={createLocked ? {
               display: 'inline-flex', alignItems: 'center', gap: 8,
               padding: '10px 20px', background: '#E5E7EB', color: '#9CA3AF',
               border: 'none', borderRadius: 10, fontSize: 14, fontWeight: 600,
-              fontFamily: 'IBM Plex Sans Arabic, sans-serif', cursor: 'default',
+              fontFamily: 'IBM Plex Sans Arabic, sans-serif', cursor: 'pointer',
               opacity: 0.8, whiteSpace: 'nowrap',
             } : undefined}
           >
