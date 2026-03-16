@@ -71,7 +71,7 @@ export const FEATURES: Record<FeatureKey, FeatureDef> = {
   'email-journeys':  { plan: 'business', upgradeTitle: 'رحلات البريد والأتمتة',      displayLabel: 'رحلات البريد والأتمتة' },
   'subscriber-segments':{ plan: 'business', upgradeTitle: 'أقسام المشتركين',           displayLabel: 'أقسام المشتركين' },
   'custom-fonts':      { plan: 'business', upgradeTitle: 'الخطوط الخاصة',               displayLabel: 'الخطوط الخاصة' },
-  branding:            { plan: 'business', upgradeTitle: 'الهوية والعلامة التجارية',   displayLabel: 'الهوية والخطوط' },
+  branding:            { plan: 'business', upgradeTitle: 'الهوية والخطوط',   displayLabel: 'الهوية والخطوط' },
   'verified-account':  { plan: 'writers',  upgradeTitle: 'حساب موثّق',               displayLabel: 'حساب موثّق' },
   support:             { plan: 'writers',  upgradeTitle: 'الدعم الفني',               displayLabel: 'الدعم الفني' },
   writers:             { plan: 'business', upgradeTitle: 'إدارة الفريق',               displayLabel: 'إدارة الفريق' },

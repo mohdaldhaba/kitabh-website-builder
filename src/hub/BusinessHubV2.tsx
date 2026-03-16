@@ -136,7 +136,7 @@ const BrandingPage: React.FC<{ subPage?: string; plan: Plan }> = ({ subPage, pla
       />
       {activeTab === 'branding' && (
         <ComingSoonPage
-          title="الهوية والعلامة التجارية"
+          title="الهوية والخطوط"
           description="تحكم في هوية علامتك التجارية — الشعار، الألوان، الخطوط، وأسلوب موقعك ونشراتك البريدية."
         />
       )}
