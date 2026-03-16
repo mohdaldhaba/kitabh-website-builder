@@ -4,10 +4,6 @@ import { colors, icons } from './HubLayout';
 
 interface SettingsPageProps {
   subPage?: string;
-  subdomainLocked?: boolean;
-  onSubdomainLockedClick?: () => void;
-  customDomainLocked?: boolean;
-  onCustomDomainLockedClick?: () => void;
 }
 
 // ─── Account Settings ────────────────────────────────────
@@ -212,170 +208,13 @@ const BillingSection: React.FC = () => (
   </div>
 );
 
-// ─── Subdomain Settings ──────────────────────────────────
-const SubdomainSection: React.FC<{ customDomainLocked?: boolean; onCustomDomainLockedClick?: () => void }> = ({ customDomainLocked, onCustomDomainLockedClick }) => {
-  const currentSubdomain = MOCK_AUTHOR.username;
-
-  return (
-    <div>
-      <h2 style={{ fontSize: 24, fontWeight: 700, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 8px' }}>
-        النطاق الفرعي
-      </h2>
-      <p style={{ fontSize: 14, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 24px' }}>
-        أدر رابط موقعك ونطاقك الفرعي على كتابة
-      </p>
-
-      {/* Current subdomain */}
-      <div style={{ background: '#fff', borderRadius: 12, border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)', padding: 24, marginBottom: 20 }}>
-        <h3 style={{ fontSize: 15, fontWeight: 600, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 16px' }}>
-          النطاق الفرعي الحالي
-        </h3>
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 8,
-            padding: '12px 16px',
-            background: '#F9FAFB',
-            borderRadius: 8,
-            border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)',
-            marginBottom: 16,
-          }}
-        >
-          <span style={{ fontSize: 14, fontFamily: 'monospace', color: colors.text, direction: 'ltr', flex: 1 }}>
-            {currentSubdomain}.kitabh.com
-          </span>
-          <button
-            style={{
-              padding: '6px 14px',
-              background: '#111',
-              color: '#fff',
-              border: 'none',
-              borderRadius: 6,
-              fontSize: 13,
-              fontWeight: 600,
-              fontFamily: 'IBM Plex Sans Arabic, sans-serif',
-              cursor: 'pointer',
-            }}
-          >
-            تعديل
-          </button>
-        </div>
-        <div style={{ fontSize: 13, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>
-          هذا هو الرابط الذي يستخدمه زوارك ومشتركوك للوصول إلى موقعك
-        </div>
-      </div>
-
-      {/* Custom domain */}
-      <div
-        style={{
-          background: '#fff', borderRadius: 12,
-          border: '1px solid rgba(0,0,0,0.06)',
-          boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)',
-          padding: 24,
-          opacity: customDomainLocked ? 0.7 : 0.6,
-          cursor: customDomainLocked ? 'pointer' : 'default',
-        }}
-        onClick={customDomainLocked && onCustomDomainLockedClick ? onCustomDomainLockedClick : undefined}
-      >
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
-          <h3 style={{ fontSize: 15, fontWeight: 600, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: 0 }}>
-            نطاق مخصص
-          </h3>
-          {customDomainLocked ? (
-            <span
-              style={{
-                fontSize: 11,
-                fontWeight: 600,
-                fontFamily: 'IBM Plex Sans Arabic, sans-serif',
-                color: '#9CA3AF',
-                background: '#F3F4F6',
-                padding: '3px 8px',
-                borderRadius: 4,
-                display: 'flex',
-                alignItems: 'center',
-                gap: 4,
-              }}
-            >
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" />
-              </svg>
-              أعمال
-            </span>
-          ) : (
-            <span
-              style={{
-                fontSize: 11,
-                fontWeight: 600,
-                fontFamily: 'IBM Plex Sans Arabic, sans-serif',
-                color: '#9CA3AF',
-                background: '#F3F4F6',
-                padding: '3px 8px',
-                borderRadius: 4,
-              }}
-            >
-              قريبا
-            </span>
-          )}
-        </div>
-        <p style={{ fontSize: 13, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: 0 }}>
-          اربط نطاقك الخاص (مثل newsletter.yourdomain.com) بموقعك على كتابة
-        </p>
-      </div>
-    </div>
-  );
-};
-
 // ─── Settings Page ───────────────────────────────────────
-const SubdomainLockedOverlay: React.FC<{ onClick?: () => void }> = ({ onClick }) => (
-  <div style={{ maxWidth: 600, margin: '40px auto', textAlign: 'center' }}>
-    <div style={{
-      width: 48, height: 48, borderRadius: 12,
-      background: 'rgba(0,0,0,0.04)',
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      margin: '0 auto 16px', color: '#6B7280',
-    }}>
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-        <rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" />
-      </svg>
-    </div>
-    <h3 style={{
-      fontSize: 17, fontWeight: 700,
-      fontFamily: 'IBM Plex Sans Arabic, sans-serif',
-      margin: '0 0 8px', color: '#111827',
-    }}>
-      إعدادات النطاق الفرعي
-    </h3>
-    <p style={{
-      fontSize: 14, color: '#6B7280',
-      fontFamily: 'IBM Plex Sans Arabic, sans-serif',
-      margin: '0 0 24px', lineHeight: 1.6,
-    }}>
-      هذه الميزة متاحة في <strong style={{ color: '#111827' }}>باقة الكاتب</strong>
-    </p>
-    <button
-      onClick={onClick}
-      style={{
-        padding: '12px 28px',
-        background: '#111827', color: '#fff',
-        border: 'none', borderRadius: 10,
-        fontSize: 15, fontWeight: 600,
-        fontFamily: 'IBM Plex Sans Arabic, sans-serif',
-        cursor: 'pointer',
-      }}
-    >
-      باقات كتابة
-    </button>
-  </div>
-);
-
-const SettingsPage: React.FC<SettingsPageProps> = ({ subPage = 'account', subdomainLocked, onSubdomainLockedClick, customDomainLocked, onCustomDomainLockedClick }) => {
+const SettingsPage: React.FC<SettingsPageProps> = ({ subPage = 'account' }) => {
   const [activeTab, setActiveTab] = useState(subPage);
 
   const tabs = [
     { id: 'account', label: 'الحساب' },
     { id: 'billing', label: 'الفوترة' },
-    { id: 'subdomain', label: 'النطاق' },
   ];
 
   return (
@@ -404,22 +243,12 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ subPage = 'account', subdom
             }}
           >
             {tab.label}
-            {tab.id === 'subdomain' && subdomainLocked && (
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" />
-              </svg>
-            )}
           </button>
         ))}
       </div>
 
       {activeTab === 'account' && <AccountSection />}
       {activeTab === 'billing' && <BillingSection />}
-      {activeTab === 'subdomain' && (
-        subdomainLocked
-          ? <SubdomainLockedOverlay onClick={onSubdomainLockedClick || (() => { window.location.href = '/pricing'; })} />
-          : <SubdomainSection customDomainLocked={customDomainLocked} onCustomDomainLockedClick={onCustomDomainLockedClick} />
-      )}
     </div>
   );
 };

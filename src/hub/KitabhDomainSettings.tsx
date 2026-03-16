@@ -55,7 +55,8 @@ const Icons = {
 // ═══════════════════════════════════════════════════════
 //  MAIN COMPONENT
 // ═══════════════════════════════════════════════════════
-export default function KitabhDomainSettings() {
+export default function KitabhDomainSettings({ plan = 'writers' }: { plan?: 'free' | 'writers' | 'business' }) {
+  const customDomainLocked = plan !== 'business';
   // TODO: Replace MOCK_NEWSLETTERS with real data from GET /api/user/newsletters
   const [newsletters] = useState<Newsletter[]>(MOCK_NEWSLETTERS);
   const [domain, setDomain] = useState<DomainState>({
@@ -309,31 +310,31 @@ export default function KitabhDomainSettings() {
 
         <div className="kds-divider" />
 
-        {/* Section 2: Custom Domain — LOCKED / Coming Soon */}
-        <div className="kds-section kds-section-locked">
+        {/* Section 2: Custom Domain — locked for non-business */}
+        <div className={`kds-section${customDomainLocked ? ' kds-section-locked' : ''}`}>
           <div className="kds-section-header">
-            <h2 className="kds-section-title kds-locked-title">نطاق خاص بك</h2>
-            <span className="kds-soon-badge">قريبا</span>
+            <h2 className={`kds-section-title${customDomainLocked ? ' kds-locked-title' : ''}`}>نطاق خاص بك</h2>
+            {customDomainLocked && <span className="kds-soon-badge">باقة الأعمال</span>}
           </div>
-          <p className="kds-section-desc kds-locked-text">اربط نطاقك الخاص بنشرتك — مثال: yourcompany.com</p>
+          <p className={`kds-section-desc${customDomainLocked ? ' kds-locked-text' : ''}`}>اربط نطاقك الخاص بنشرتك — مثال: yourcompany.com</p>
 
           <div className="kds-locked-card">
             <div className="kds-locked-field">
-              <label className="kds-label kds-locked-text">النطاق</label>
+              <label className={`kds-label${customDomainLocked ? ' kds-locked-text' : ''}`}>النطاق</label>
               <div className="kds-locked-input-row">
                 <input
                   type="text"
                   placeholder="yourdomain.com"
-                  className="kds-input kds-input-locked"
-                  disabled
+                  className={`kds-input${customDomainLocked ? ' kds-input-locked' : ''}`}
+                  disabled={customDomainLocked}
                   dir="ltr"
                 />
-                <button className="kds-btn-locked" disabled>
-                  {Icons.lock}
+                <button className={customDomainLocked ? 'kds-btn-locked' : 'kds-btn-primary'} disabled={customDomainLocked}>
+                  {customDomainLocked ? Icons.lock : Icons.link}
                   <span>ربط</span>
                 </button>
               </div>
-              <p className="kds-locked-hint">يتطلب إعداد DNS — متاح في الباقة المدفوعة</p>
+              {customDomainLocked && <p className="kds-locked-hint">يتطلب إعداد DNS — متاح في باقة الأعمال</p>}
             </div>
           </div>
         </div>

@@ -64,7 +64,7 @@ export const FEATURES: Record<FeatureKey, FeatureDef> = {
   'subscriber-limit':     { plan: 'writers',  upgradeTitle: 'عدد المشتركين',        displayLabel: 'عدد المشتركين' },
 
   // ── BUSINESS: requires باقة الأعمال ───────────────────
-  'domain-settings': { plan: 'business', upgradeTitle: 'النطاق المخصص',              displayLabel: 'النطاق المخصص' },
+  'domain-settings': { plan: 'writers',  upgradeTitle: 'النطاق المخصص',              displayLabel: 'النطاق المخصص' },
   'email-template':  { plan: 'business', upgradeTitle: 'قوالب البريد',          displayLabel: 'قوالب البريد' },
   'email-journeys':  { plan: 'business', upgradeTitle: 'رحلات البريد والأتمتة',      displayLabel: 'رحلات البريد والأتمتة' },
   'subscriber-segments':{ plan: 'business', upgradeTitle: 'أقسام المشتركين',           displayLabel: 'أقسام المشتركين' },

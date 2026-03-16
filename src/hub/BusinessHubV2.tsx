@@ -221,10 +221,10 @@ function buildSidebarSections(plan: Plan): SidebarSection[] {
       items: applyMeta([
         { page: 'website', label: 'الموقع الإلكتروني', icon: icons.website },
         { page: 'landing-pages' as Page, label: 'صفحات الاشتراك', icon: icons.landingPage },
+        { page: 'domain-settings' as Page, label: 'النطاق المخصص', icon: icons.domainSettings },
         { page: 'subscriber-segments' as Page, label: 'أقسام المشتركين', icon: icons.segments },
         { page: 'custom-fonts' as Page, label: 'الخطوط الخاصة', icon: icons.customFonts },
         { page: 'branding' as Page, label: 'الهوية والعلامة', icon: icons.branding },
-        { page: 'domain-settings' as Page, label: 'النطاق المخصص', icon: icons.domainSettings },
         { page: 'email-template', label: 'قوالب البريد', icon: icons.emailTemplate },
         { page: 'email-journeys', label: 'رحلات البريد والأتمتة', icon: icons.emailJourney },
       ]),
@@ -745,7 +745,7 @@ const BusinessHubV2: React.FC = () => {
       case 'landing-pages':
         return <KitabhLandingPages />;
       case 'domain-settings':
-        return <KitabhDomainSettings />;
+        return <KitabhDomainSettings plan={plan} />;
       case 'branding':
         return (
           <ComingSoonPage
@@ -775,7 +775,7 @@ const BusinessHubV2: React.FC = () => {
           />
         );
       case 'settings':
-        return <SettingsPage subPage={activeSubPage} subdomainLocked={plan === 'free'} onSubdomainLockedClick={() => { window.location.href = '/pricing'; }} customDomainLocked={plan !== 'business'} onCustomDomainLockedClick={() => setUpgradeModal('domain-settings')} />;
+        return <SettingsPage subPage={activeSubPage} />;
       default:
         return <PostsPage subPage="all-posts" />;
     }
