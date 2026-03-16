@@ -483,30 +483,6 @@ const PlanComparisonOverlay: React.FC<{ currentPlan: Plan; onClose: () => void }
             </div>
           ))}
 
-          {/* Limits section */}
-          <div>
-            <div style={{
-              padding: '14px 20px 6px', fontSize: 11, fontWeight: 700,
-              color: '#9CA3AF', fontFamily: font, letterSpacing: 0.3,
-            }}>
-              الحدود
-            </div>
-
-            <div style={{
-              display: 'grid', gridTemplateColumns: '1.4fr repeat(3, 1fr)',
-              padding: '9px 20px', alignItems: 'center', margin: '0 8px',
-            }}>
-              <div style={{ fontSize: 13, fontFamily: font, color: '#374151', fontWeight: 500 }}>
-                عدد المشتركين
-              </div>
-              {plans.map((p) => (
-                <div key={p} style={{ textAlign: 'center', fontSize: 12, fontWeight: 600, color: '#374151', fontFamily: font }}>
-                  {p === 'free' ? dash : PLAN_META[p].subscriberLimit}
-                </div>
-              ))}
-            </div>
-
-          </div>
         </div>
 
         {/* CTA */}

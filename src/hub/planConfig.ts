@@ -15,6 +15,7 @@ export type FeatureKey =
   | 'arabic-editor' | 'grammar-checker'
   | 'newsletters' | 'subscribers' | 'linktree' | 'landing-pages'
   | 'email-journeys' | 'magic-link' | 'newsletter-scheduling'
+  | 'subscriber-limit'
   | 'website' | 'domain-settings' | 'email-template' | 'branding'
   | 'ai-seo' | 'audio-publish' | 'verified-account'
   | 'analyze' | 'notifications' | 'writers' | 'dashboard' | 'settings';
@@ -59,6 +60,7 @@ export const FEATURES: Record<FeatureKey, FeatureDef> = {
   'ai-seo':               { plan: 'writers',  upgradeTitle: 'الظهور في نتائج البحث', displayLabel: 'الظهور في نتائج الذكاء الاصطناعي ومحركات البحث' },
   'audio-publish':        { plan: 'writers',  upgradeTitle: 'النشر الصوتي',         displayLabel: 'نشر صوتي ذكي' },
   'newsletter-scheduling':{ plan: 'writers',  upgradeTitle: 'جدولة النشرة',         displayLabel: 'جدولة النشرة' },
+  'subscriber-limit':     { plan: 'writers',  upgradeTitle: 'عدد المشتركين',        displayLabel: 'عدد المشتركين' },
 
   // ── BUSINESS: requires باقة الأعمال ───────────────────
   'domain-settings': { plan: 'business', upgradeTitle: 'النطاق المخصص',              displayLabel: 'النطاق المخصص' },
@@ -147,6 +149,7 @@ export const COMPARISON_SECTIONS: { title: string; features: { key: FeatureKey; 
   {
     title: 'النشر والتوزيع',
     features: [
+      { key: 'subscriber-limit', label: 'عدد المشتركين', writersNote: '10,000', businessNote: '100,000' },
       { key: 'verified-account', label: 'حساب موثّق' },
       { key: 'dashboard', label: 'لوحة التحكم' },
       { key: 'newsletters', label: 'النشرات البريدية', writersNote: '1', businessNote: 'دون حد' },
