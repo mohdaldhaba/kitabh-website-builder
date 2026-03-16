@@ -163,14 +163,13 @@ export const COMPARISON_SECTIONS: { title: string; features: { key: FeatureKey; 
       { key: 'audio-publish', label: 'نشر صوتي ذكي' },
       { key: 'ai-seo', label: 'الظهور في نتائج الذكاء الاصطناعي ومحركات البحث' },
       { key: 'analyze', label: 'الإحصائيات' },
-      { key: 'landing-pages', label: 'صفحات الاشتراك', writersNote: '1', businessNote: 'دون حد' },
-      { key: 'subscriber-segments', label: 'أقسام المشتركين' },
-      { key: 'support', label: 'دعم فني', freeNote: '—', writersNote: 'محدود', businessNote: 'متقدم' },
     ],
   },
   {
-    title: 'التصميم والإعدادات',
+    title: 'النمو والتوسّع',
     features: [
+      { key: 'landing-pages', label: 'صفحات الاشتراك', writersNote: '1', businessNote: 'دون حد' },
+      { key: 'subscriber-segments', label: 'أقسام المشتركين' },
       { key: 'website', label: 'الموقع الإلكتروني', writersNote: 'محدود', businessNote: 'وصول كامل' },
       { key: 'custom-fonts', label: 'خطوط مخصصة' },
       { key: 'branding', label: 'الهوية والعلامة' },
@@ -178,6 +177,7 @@ export const COMPARISON_SECTIONS: { title: string; features: { key: FeatureKey; 
       { key: 'email-template', label: 'قوالب البريد' },
       { key: 'email-journeys', label: 'رحلات البريد والأتمتة' },
       { key: 'writers', label: 'فريق الكتّاب' },
+      { key: 'support', label: 'دعم فني', freeNote: '—', writersNote: 'محدود', businessNote: 'متقدم' },
     ],
   },
 ];
