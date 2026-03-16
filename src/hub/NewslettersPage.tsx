@@ -557,7 +557,8 @@ interface NewslettersPageProps {
 }
 
 const NewslettersPage: React.FC<NewslettersPageProps> = ({ activePublicationIndex, plan = 'business' }) => {
-  const createLocked = plan !== 'business';
+  const hasExistingNewsletter = mockNewsletters.length >= 1;
+  const createLocked = plan === 'free' || (plan === 'writers' && hasExistingNewsletter);
   const [showLockedModal, setShowLockedModal] = useState(false);
   const [editingNl, setEditingNl] = useState<typeof mockNewsletters[0] | null>(null);
   const [editTab, setEditTab] = useState<'settings' | 'welcome-email'>('settings');
@@ -649,9 +650,14 @@ const NewslettersPage: React.FC<NewslettersPageProps> = ({ activePublicationInde
                 <rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" />
               </svg>
             </div>
-            <h3 style={{ fontSize: 17, fontWeight: 700, margin: '0 0 8px', color: '#111827' }}>إنشاء نشرة جديدة</h3>
+            <h3 style={{ fontSize: 17, fontWeight: 700, margin: '0 0 8px', color: '#111827' }}>
+              {plan === 'free' ? 'إنشاء نشرة بريدية' : 'إنشاء نشرة جديدة'}
+            </h3>
             <p style={{ fontSize: 14, color: '#6B7280', margin: '0 0 24px', lineHeight: 1.6 }}>
-              هذه الميزة متوفرة في <strong style={{ color: '#111827' }}>باقة الأعمال</strong>
+              {plan === 'free'
+                ? <>هذه ميزة متاحة على <strong style={{ color: '#111827' }}>باقة الكاتب</strong> و<strong style={{ color: '#111827' }}>باقة الأعمال</strong></>
+                : <>إنشاء أكثر من نشرة بريدية ميزة متاحة على <strong style={{ color: '#111827' }}>باقة الأعمال</strong></>
+              }
             </p>
             <div style={{ display: 'flex', gap: 8, justifyContent: 'center' }}>
               <button onClick={() => setShowLockedModal(false)} style={{ padding: '10px 20px', background: '#F3F4F6', color: '#374151', border: 'none', borderRadius: 10, fontSize: 14, fontWeight: 600, cursor: 'pointer', fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>

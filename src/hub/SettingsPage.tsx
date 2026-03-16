@@ -118,7 +118,7 @@ const AccountSection: React.FC = () => (
 const BillingSection: React.FC = () => (
   <div>
     <h2 style={{ fontSize: 24, fontWeight: 700, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 8px' }}>
-      الفوترة والاشتراك
+      الاشتراك
     </h2>
     <p style={{ fontSize: 14, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 24px' }}>
       أدر اشتراكك ومعلومات الدفع
@@ -217,7 +217,7 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ subPage = 'account', plan =
   const domainLocked = plan === 'free';
   const tabs = [
     { id: 'account', label: 'الحساب' },
-    { id: 'billing', label: 'الفوترة' },
+    { id: 'billing', label: 'الاشتراك' },
     { id: 'domain', label: 'النطاق', locked: domainLocked },
   ];
 
