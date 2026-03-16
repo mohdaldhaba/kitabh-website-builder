@@ -420,7 +420,7 @@ const UpgradeModal: React.FC<{
             fontFamily: 'IBM Plex Sans Arabic, sans-serif',
             margin: '0 0 8px', color: '#111827',
           }}>
-            {reason.title}
+            {featureKey === 'newsletters' && currentPlan === 'writers' ? 'إنشاء نشرة جديدة' : reason.title}
           </h3>
 
           <p style={{
@@ -428,7 +428,10 @@ const UpgradeModal: React.FC<{
             fontFamily: 'IBM Plex Sans Arabic, sans-serif',
             margin: '0 0 24px', lineHeight: 1.6,
           }}>
-            هذه الميزة متاحة في <strong style={{ color: '#111827' }}>{reason.targetPlan}</strong>
+            {featureKey === 'newsletters' && currentPlan === 'writers'
+              ? <>إنشاء أكثر من نشرة بريدية ميزة متاحة على <strong style={{ color: '#111827' }}>باقة الأعمال</strong></>
+              : <>هذه الميزة متاحة في <strong style={{ color: '#111827' }}>{reason.targetPlan}</strong></>
+            }
           </p>
 
           {/* CTA */}
