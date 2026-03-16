@@ -301,7 +301,7 @@ function buildSidebarSections(plan: Plan): SidebarSection[] {
       return {
         ...item,
         locked: locks.has(key),
-        planTier: plan !== 'free' ? featureTier[key] : undefined,
+        planTier: featureTier[key],
         trialBadge: plan === 'free' && trialTools.has(key) ? '5/5' : undefined,
       };
     });
@@ -353,9 +353,9 @@ function buildSidebarSections(plan: Plan): SidebarSection[] {
 function buildUtilityItems(plan: Plan): SidebarItem[] {
   const locks = lockMap[plan];
   return [
-    { page: 'analyze', label: 'الإحصائيات', icon: icons.analyze, locked: locks.has('analyze'), planTier: plan !== 'free' ? featureTier['analyze'] : undefined },
+    { page: 'analyze', label: 'الإحصائيات', icon: icons.analyze, locked: locks.has('analyze'), planTier: featureTier['analyze'] },
+    { page: 'writers' as Page, label: 'فريق الكتّاب', icon: icons.members, locked: locks.has('writers'), planTier: featureTier['writers'] },
     { page: 'notifications', label: 'الإشعارات', icon: icons.notification },
-    { page: 'writers' as Page, label: 'فريق الكتّاب', icon: icons.members, locked: locks.has('writers'), planTier: plan !== 'free' ? featureTier['writers'] : undefined },
   ];
 }
 
@@ -697,7 +697,7 @@ const BusinessHubV2: React.FC = () => {
           subscriberLimit={meta.subscriberLimit}
           showSubscribers={meta.showSubscribers}
           dashboardLocked={lockMap[plan].has('dashboard')}
-          dashboardPlanTier={plan !== 'free' ? 'writers' : undefined}
+          dashboardPlanTier="writers"
           createNewsletterLocked={plan !== 'business'}
           onCreateNewsletterLockedClick={() => setUpgradeModal('newsletters')}
         >
