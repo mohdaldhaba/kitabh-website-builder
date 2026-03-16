@@ -426,7 +426,6 @@ const PlanComparisonOverlay: React.FC<{ currentPlan: Plan; onClose: () => void }
 
             {/* Rows */}
             {section.features.map((feat) => {
-              const def = FEATURES[feat.key];
               return (
                 <div
                   key={feat.key}
@@ -497,7 +496,7 @@ const PlanComparisonOverlay: React.FC<{ currentPlan: Plan; onClose: () => void }
           </div>
           {plans.map((p) => (
             <div key={p} style={{ textAlign: 'center', display: 'flex', justifyContent: 'center' }}>
-              {PLAN_META[p].canCreateNewsletter ? checkIcon : lockIcon}
+              {PLAN_META[p].canCreateNewsletter ? checkIcon : businessBadge}
             </div>
           ))}
         </div>
