@@ -6,6 +6,8 @@ interface SettingsPageProps {
   subPage?: string;
   subdomainLocked?: boolean;
   onSubdomainLockedClick?: () => void;
+  customDomainLocked?: boolean;
+  onCustomDomainLockedClick?: () => void;
 }
 
 // ─── Account Settings ────────────────────────────────────
@@ -211,7 +213,7 @@ const BillingSection: React.FC = () => (
 );
 
 // ─── Subdomain Settings ──────────────────────────────────
-const SubdomainSection: React.FC = () => {
+const SubdomainSection: React.FC<{ customDomainLocked?: boolean; onCustomDomainLockedClick?: () => void }> = ({ customDomainLocked, onCustomDomainLockedClick }) => {
   const currentSubdomain = MOCK_AUTHOR.username;
 
   return (
@@ -264,25 +266,57 @@ const SubdomainSection: React.FC = () => {
         </div>
       </div>
 
-      {/* Custom domain — coming soon */}
-      <div style={{ background: '#fff', borderRadius: 12, border: '1px solid rgba(0,0,0,0.06)', boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)', padding: 24, opacity: 0.6 }}>
+      {/* Custom domain */}
+      <div
+        style={{
+          background: '#fff', borderRadius: 12,
+          border: '1px solid rgba(0,0,0,0.06)',
+          boxShadow: '0 1px 3px rgba(0,0,0,0.04), 0 4px 16px rgba(0,0,0,0.03)',
+          padding: 24,
+          opacity: customDomainLocked ? 0.7 : 0.6,
+          cursor: customDomainLocked ? 'pointer' : 'default',
+        }}
+        onClick={customDomainLocked && onCustomDomainLockedClick ? onCustomDomainLockedClick : undefined}
+      >
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 12 }}>
           <h3 style={{ fontSize: 15, fontWeight: 600, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: 0 }}>
             نطاق مخصص
           </h3>
-          <span
-            style={{
-              fontSize: 11,
-              fontWeight: 600,
-              fontFamily: 'IBM Plex Sans Arabic, sans-serif',
-              color: '#9CA3AF',
-              background: '#F3F4F6',
-              padding: '3px 8px',
-              borderRadius: 4,
-            }}
-          >
-            قريبا
-          </span>
+          {customDomainLocked ? (
+            <span
+              style={{
+                fontSize: 11,
+                fontWeight: 600,
+                fontFamily: 'IBM Plex Sans Arabic, sans-serif',
+                color: '#9CA3AF',
+                background: '#F3F4F6',
+                padding: '3px 8px',
+                borderRadius: 4,
+                display: 'flex',
+                alignItems: 'center',
+                gap: 4,
+              }}
+            >
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" />
+              </svg>
+              باقة الأعمال
+            </span>
+          ) : (
+            <span
+              style={{
+                fontSize: 11,
+                fontWeight: 600,
+                fontFamily: 'IBM Plex Sans Arabic, sans-serif',
+                color: '#9CA3AF',
+                background: '#F3F4F6',
+                padding: '3px 8px',
+                borderRadius: 4,
+              }}
+            >
+              قريبا
+            </span>
+          )}
         </div>
         <p style={{ fontSize: 13, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: 0 }}>
           اربط نطاقك الخاص (مثل newsletter.yourdomain.com) بموقعك على كتابة
@@ -317,13 +351,13 @@ const SubdomainLockedOverlay: React.FC<{ onClick?: () => void }> = ({ onClick })
       fontFamily: 'IBM Plex Sans Arabic, sans-serif',
       margin: '0 0 24px', lineHeight: 1.6,
     }}>
-      هذه الميزة متاحة في <strong style={{ color: '#1E3A8A' }}>باقة الكاتب</strong>
+      هذه الميزة متاحة في <strong style={{ color: '#111827' }}>باقة الكاتب</strong>
     </p>
     <button
       onClick={onClick}
       style={{
         padding: '12px 28px',
-        background: '#1E3A8A', color: '#fff',
+        background: '#111827', color: '#fff',
         border: 'none', borderRadius: 10,
         fontSize: 15, fontWeight: 600,
         fontFamily: 'IBM Plex Sans Arabic, sans-serif',
@@ -335,7 +369,7 @@ const SubdomainLockedOverlay: React.FC<{ onClick?: () => void }> = ({ onClick })
   </div>
 );
 
-const SettingsPage: React.FC<SettingsPageProps> = ({ subPage = 'account', subdomainLocked, onSubdomainLockedClick }) => {
+const SettingsPage: React.FC<SettingsPageProps> = ({ subPage = 'account', subdomainLocked, onSubdomainLockedClick, customDomainLocked, onCustomDomainLockedClick }) => {
   const [activeTab, setActiveTab] = useState(subPage);
 
   const tabs = [
@@ -384,7 +418,7 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ subPage = 'account', subdom
       {activeTab === 'subdomain' && (
         subdomainLocked
           ? <SubdomainLockedOverlay onClick={onSubdomainLockedClick || (() => { window.location.href = '/pricing'; })} />
-          : <SubdomainSection />
+          : <SubdomainSection customDomainLocked={customDomainLocked} onCustomDomainLockedClick={onCustomDomainLockedClick} />
       )}
     </div>
   );

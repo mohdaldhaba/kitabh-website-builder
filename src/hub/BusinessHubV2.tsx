@@ -368,9 +368,8 @@ const UpgradeModal: React.FC<{
   const reason = upgradeReasons[featureKey];
   if (!reason || !reason.title) return null;
 
-  // Color coding: باقة الكاتب = dark blue, باقة الأعمال = golden
-  const planColor = reason.targetPlan === 'باقة الأعمال' ? '#B8860B' : '#1E3A8A';
-  const planColorHover = reason.targetPlan === 'باقة الأعمال' ? '#9A7209' : '#152E6B';
+  const planColor = '#111827';
+  const planColorHover = '#000';
 
   return (
     <>
@@ -408,9 +407,9 @@ const UpgradeModal: React.FC<{
           {/* Lock icon */}
           <div style={{
             width: 48, height: 48, borderRadius: 12,
-            background: `${planColor}10`,
+            background: 'rgba(0,0,0,0.04)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            margin: '0 auto 16px', color: planColor,
+            margin: '0 auto 16px', color: '#6B7280',
           }}>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" />
@@ -430,7 +429,7 @@ const UpgradeModal: React.FC<{
             fontFamily: 'IBM Plex Sans Arabic, sans-serif',
             margin: '0 0 24px', lineHeight: 1.6,
           }}>
-            هذه الميزة متاحة في <strong style={{ color: planColor }}>{reason.targetPlan}</strong>
+            هذه الميزة متاحة في <strong style={{ color: '#111827' }}>{reason.targetPlan}</strong>
           </p>
 
           {/* CTA */}
@@ -673,7 +672,7 @@ const BusinessHubV2: React.FC = () => {
           />
         );
       case 'settings':
-        return <SettingsPage subPage={activeSubPage} subdomainLocked={plan === 'free'} onSubdomainLockedClick={() => { window.location.href = '/pricing'; }} />;
+        return <SettingsPage subPage={activeSubPage} subdomainLocked={plan === 'free'} onSubdomainLockedClick={() => { window.location.href = '/pricing'; }} customDomainLocked={plan !== 'business'} onCustomDomainLockedClick={() => setUpgradeModal('domain-settings')} />;
       default:
         return <PostsPage subPage="all-posts" />;
     }
@@ -698,8 +697,8 @@ const BusinessHubV2: React.FC = () => {
           subscriberLimit={meta.subscriberLimit}
           showSubscribers={meta.showSubscribers}
           dashboardLocked={lockMap[plan].has('dashboard')}
-          dashboardPlanTier={plan !== 'free' ? featureTier['dashboard'] : undefined}
-          createNewsletterLocked={plan === 'free'}
+          dashboardPlanTier={plan !== 'free' ? 'writers' : undefined}
+          createNewsletterLocked={plan !== 'business'}
           onCreateNewsletterLockedClick={() => setUpgradeModal('newsletters')}
         >
           {renderPage()}

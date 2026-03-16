@@ -609,9 +609,12 @@ const HubLayout: React.FC<HubLayoutProps> = ({
                 {icons.dashboard}
               </span>
               <span style={{ flex: 1, textAlign: 'right' }}>لوحة التحكم</span>
+              {!isDashLocked && dashboardPlanTier && (
+                <span style={{ width: 6, height: 6, borderRadius: '50%', flexShrink: 0, background: '#111827' }} />
+              )}
               {isDashLocked && (
                 <span style={{
-                  color: dashboardPlanTier === 'business' ? '#B8860B' : dashboardPlanTier === 'writers' ? '#1E3A8A' : '#9CA3AF',
+                  color: '#9CA3AF',
                   display: 'flex', alignItems: 'center', flexShrink: 0,
                 }}>
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -670,7 +673,7 @@ const HubLayout: React.FC<HubLayoutProps> = ({
                 <span style={{ flex: 1, textAlign: 'right', display: 'flex', alignItems: 'center', gap: 6 }}>
                   {section.label}
                   {isSectionLocked && (
-                    <span style={{ display: 'flex', alignItems: 'center', color: section.planTier === 'business' ? '#B8860B' : section.planTier === 'writers' ? '#1E3A8A' : '#9CA3AF' }}>
+                    <span style={{ display: 'flex', alignItems: 'center', color: '#9CA3AF' }}>
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                         <rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" />
                       </svg>
@@ -748,13 +751,13 @@ const HubLayout: React.FC<HubLayoutProps> = ({
                         {item.planTier && !isLocked && !item.trialBadge && (
                           <span style={{
                             width: 6, height: 6, borderRadius: '50%', flexShrink: 0,
-                            background: item.planTier === 'business' ? '#B8860B' : '#1E3A8A',
+                            background: '#111827',
                           }} />
                         )}
                         {isComingSoon && comingSoonBadge}
                         {isLocked && (
                           <span style={{
-                            color: item.planTier === 'business' ? '#B8860B' : item.planTier === 'writers' ? '#1E3A8A' : '#9CA3AF',
+                            color: '#9CA3AF',
                             display: 'flex', alignItems: 'center', flexShrink: 0,
                           }}>
                             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -812,12 +815,12 @@ const HubLayout: React.FC<HubLayoutProps> = ({
               {item.planTier && !isItemLocked && (
                 <span style={{
                   width: 6, height: 6, borderRadius: '50%', flexShrink: 0,
-                  background: item.planTier === 'business' ? '#B8860B' : '#1E3A8A',
+                  background: '#111827',
                 }} />
               )}
               {isItemLocked && (
                 <span style={{
-                  color: item.planTier === 'business' ? '#B8860B' : item.planTier === 'writers' ? '#1E3A8A' : '#9CA3AF',
+                  color: '#9CA3AF',
                   display: 'flex', alignItems: 'center', flexShrink: 0,
                 }}>
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
