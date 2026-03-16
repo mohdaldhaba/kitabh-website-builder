@@ -12,9 +12,11 @@ export type Plan = 'free' | 'writers' | 'business';
 
 export type FeatureKey =
   | 'posts' | 'outline' | 'checker' | 'carousel' | 'social'
+  | 'arabic-editor' | 'grammar-checker'
   | 'newsletters' | 'subscribers' | 'linktree' | 'landing-pages'
-  | 'email-journeys' | 'magic-link'
+  | 'email-journeys' | 'magic-link' | 'newsletter-scheduling'
   | 'website' | 'domain-settings' | 'email-template' | 'branding'
+  | 'ai-seo' | 'audio-publish' | 'verified-account'
   | 'analyze' | 'notifications' | 'writers' | 'dashboard' | 'settings';
 
 // ─── Feature definitions ─────────────────────────────────
@@ -40,6 +42,8 @@ export const FEATURES: Record<FeatureKey, FeatureDef> = {
   checker:       { plan: 'free',     upgradeTitle: '',  displayLabel: 'محرر كتابة', freeTrial: 5 },
   carousel:      { plan: 'free',     upgradeTitle: '',  displayLabel: 'ستوديو كتابة', freeTrial: 5 },
   social:        { plan: 'free',     upgradeTitle: '',  displayLabel: 'محتوى كتابة', freeTrial: 5 },
+  'arabic-editor':  { plan: 'free',     upgradeTitle: '',  displayLabel: 'محرر نصوص عربي متطوّر' },
+  'grammar-checker':{ plan: 'free',     upgradeTitle: '',  displayLabel: 'مدقق لغوي وسياقي' },
   notifications: { plan: 'free',     upgradeTitle: '',  displayLabel: 'الإشعارات' },
   settings:      { plan: 'free',     upgradeTitle: '',  displayLabel: 'الإعدادات' },
 
@@ -51,14 +55,18 @@ export const FEATURES: Record<FeatureKey, FeatureDef> = {
   'landing-pages':{ plan: 'writers',  upgradeTitle: 'صفحات الاشتراك',    displayLabel: 'صفحات الاشتراك' },
   'magic-link':   { plan: 'writers',  upgradeTitle: 'الرابط السحري',     displayLabel: 'الرابط السحري' },
   website:        { plan: 'writers',  upgradeTitle: 'الموقع الإلكتروني', displayLabel: 'الموقع الإلكتروني' },
-  analyze:        { plan: 'writers',  upgradeTitle: 'الإحصائيات المتقدمة', displayLabel: 'الإحصائيات' },
+  analyze:                { plan: 'writers',  upgradeTitle: 'الإحصائيات المتقدمة', displayLabel: 'الإحصائيات' },
+  'ai-seo':               { plan: 'writers',  upgradeTitle: 'الظهور في نتائج البحث', displayLabel: 'الظهور في نتائج الذكاء الاصطناعي ومحركات البحث' },
+  'audio-publish':        { plan: 'writers',  upgradeTitle: 'النشر الصوتي',         displayLabel: 'نشر صوتي ذكي' },
+  'newsletter-scheduling':{ plan: 'writers',  upgradeTitle: 'جدولة النشرة',         displayLabel: 'جدولة النشرة' },
 
   // ── BUSINESS: requires باقة الأعمال ───────────────────
   'domain-settings': { plan: 'business', upgradeTitle: 'النطاق المخصص',              displayLabel: 'النطاق المخصص' },
   'email-template':  { plan: 'business', upgradeTitle: 'مصمم قوالب البريد',          displayLabel: 'قوالب البريد' },
   'email-journeys':  { plan: 'business', upgradeTitle: 'رحلات البريد والأتمتة',      displayLabel: 'رحلات البريد والأتمتة' },
-  branding:          { plan: 'business', upgradeTitle: 'الهوية والعلامة التجارية',   displayLabel: 'الهوية والعلامة' },
-  writers:           { plan: 'business', upgradeTitle: 'فريق الكتّاب',               displayLabel: 'فريق الكتّاب' },
+  branding:            { plan: 'business', upgradeTitle: 'الهوية والعلامة التجارية',   displayLabel: 'الهوية والعلامة' },
+  'verified-account':  { plan: 'business', upgradeTitle: 'حساب موثّق',               displayLabel: 'حساب موثّق' },
+  writers:             { plan: 'business', upgradeTitle: 'فريق الكتّاب',               displayLabel: 'فريق الكتّاب' },
 };
 
 // ─── Plan metadata ──────────────────────────────────────
@@ -128,6 +136,8 @@ export const COMPARISON_SECTIONS: { title: string; features: { key: FeatureKey; 
     title: 'الكتابة والأدوات',
     features: [
       { key: 'posts', label: 'كتابة المنشورات' },
+      { key: 'arabic-editor', label: 'محرر نصوص عربي متطوّر' },
+      { key: 'grammar-checker', label: 'مدقق لغوي وسياقي' },
       { key: 'outline', label: 'مساعد كتابة', freeNote: '5 استخدامات' },
       { key: 'checker', label: 'محرر كتابة', freeNote: '5 استخدامات' },
       { key: 'carousel', label: 'ستوديو كتابة', freeNote: '5 استخدامات' },
@@ -139,9 +149,12 @@ export const COMPARISON_SECTIONS: { title: string; features: { key: FeatureKey; 
     features: [
       { key: 'dashboard', label: 'لوحة التحكم' },
       { key: 'newsletters', label: 'النشرات البريدية' },
+      { key: 'newsletter-scheduling', label: 'جدولة النشرة' },
       { key: 'subscribers', label: 'إدارة المشتركين' },
       { key: 'linktree', label: 'صفحة الروابط' },
       { key: 'landing-pages', label: 'صفحات الاشتراك' },
+      { key: 'audio-publish', label: 'نشر صوتي ذكي' },
+      { key: 'ai-seo', label: 'الظهور في نتائج الذكاء الاصطناعي ومحركات البحث' },
       { key: 'analyze', label: 'الإحصائيات' },
     ],
   },
@@ -153,6 +166,7 @@ export const COMPARISON_SECTIONS: { title: string; features: { key: FeatureKey; 
       { key: 'domain-settings', label: 'النطاق المخصص' },
       { key: 'email-template', label: 'قوالب البريد' },
       { key: 'email-journeys', label: 'رحلات البريد والأتمتة' },
+      { key: 'verified-account', label: 'حساب موثّق' },
       { key: 'writers', label: 'فريق الكتّاب' },
     ],
   },
