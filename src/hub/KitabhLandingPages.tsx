@@ -143,7 +143,7 @@ const KitabhLogo = () => (
 // ═══════════════════════════════════════════════════════
 //  MAIN COMPONENT
 // ═══════════════════════════════════════════════════════
-export default function KitabhLandingPages() {
+export default function KitabhLandingPages({ plan = 'business' }: { plan?: 'free' | 'writers' | 'business' } = {}) {
   const [pages, setPages] = useState<LandingPage[]>([]);
   const [editingId, setEditingId] = useState<string | null>(null);
   const [previewMode, setPreviewMode] = useState(false);
@@ -226,6 +226,7 @@ export default function KitabhLandingPages() {
             onCopyLink={copyLink}
             copiedSlug={copiedSlug}
             onTogglePublish={(id, published) => updatePage(id, { isPublished: published })}
+            createLocked={plan !== 'business'}
           />
         ) : editingPage ? (
           <PageEditor
@@ -258,9 +259,10 @@ interface PagesListProps {
   onCopyLink: (slug: string) => void;
   copiedSlug: string | null;
   onTogglePublish: (id: string, published: boolean) => void;
+  createLocked?: boolean;
 }
 
-function PagesList({ pages, onEdit, onCreate, onDelete, onDuplicate, onCopyLink, copiedSlug, onTogglePublish }: PagesListProps) {
+function PagesList({ pages, onEdit, onCreate, onDelete, onDuplicate, onCopyLink, copiedSlug, onTogglePublish, createLocked }: PagesListProps) {
   return (
     <div className="klp-list">
       <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 24, flexWrap: 'wrap', gap: 12 }}>
@@ -269,8 +271,22 @@ function PagesList({ pages, onEdit, onCreate, onDelete, onDuplicate, onCopyLink,
           <p style={{ fontSize: 14, color: '#6B7280', fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: 0 }}>أنشئ صفحات اشتراك مخصصة لنشراتك البريدية</p>
         </div>
         <div style={{ display: 'flex', gap: 8 }}>
-          <button className="klp-btn-primary" onClick={onCreate}>
-            {Icons.plus}
+          <button
+            className={createLocked ? undefined : "klp-btn-primary"}
+            onClick={createLocked ? undefined : onCreate}
+            style={createLocked ? {
+              display: 'inline-flex', alignItems: 'center', gap: 8,
+              padding: '10px 20px', background: '#E5E7EB', color: '#9CA3AF',
+              border: 'none', borderRadius: 10, fontSize: 14, fontWeight: 600,
+              fontFamily: 'IBM Plex Sans Arabic, sans-serif', cursor: 'default',
+              opacity: 0.8, whiteSpace: 'nowrap',
+            } : undefined}
+          >
+            {createLocked ? (
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" />
+              </svg>
+            ) : Icons.plus}
             <span>صفحة جديدة</span>
           </button>
         </div>

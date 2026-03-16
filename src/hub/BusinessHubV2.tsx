@@ -855,7 +855,7 @@ const BusinessHubV2: React.FC = () => {
       case 'email-journeys':
         return <EmailPage subPage="journeys" plan={plan} />;
       case 'landing-pages':
-        return <KitabhLandingPages />;
+        return <KitabhLandingPages plan={plan} />;
       case 'branding':
         return <BrandingPage subPage={activeSubPage} plan={plan} />;
       case 'custom-fonts':
