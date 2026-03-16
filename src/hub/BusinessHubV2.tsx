@@ -16,7 +16,7 @@ import AnalyzePage from './AnalyzePage';
 import { icons, utilityItems as defaultUtility } from './HubLayout';
 import type { Page, Publication, SidebarSection, SidebarItem } from './HubLayout';
 import {
-  FEATURES, PLAN_META, SECTION_LOCKS,
+  FEATURES, PLAN_META, SECTION_LOCKS, COMPARISON_SECTIONS,
   getLockSet, getPlanTier, getUpgradeInfo, getTrialUsage, isLocked,
   type Plan, type FeatureKey,
 } from './planConfig';
@@ -331,6 +331,178 @@ const UpgradeModal: React.FC<{
   );
 };
 
+// ─── Plan Comparison Overlay ─────────────────────────────
+const PlanComparisonOverlay: React.FC<{ currentPlan: Plan; onClose: () => void }> = ({ currentPlan, onClose }) => {
+  const plans: Plan[] = ['free', 'writers', 'business'];
+  const checkIcon = (
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#111827" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <polyline points="20 6 9 17 4 12" />
+    </svg>
+  );
+  const lockIcon = (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#D1D5DB" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" />
+    </svg>
+  );
+
+  return (
+    <div
+      style={{
+        position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)',
+        zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center',
+        backdropFilter: 'blur(4px)', padding: 16,
+      }}
+      onClick={onClose}
+    >
+      <div
+        style={{
+          background: '#fff', borderRadius: 16, padding: '24px 0',
+          maxWidth: 640, width: '100%', maxHeight: '85vh', overflowY: 'auto',
+          direction: 'rtl', boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
+          position: 'relative',
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Close */}
+        <button
+          onClick={onClose}
+          style={{
+            position: 'absolute', top: 12, left: 12, background: 'none',
+            border: 'none', cursor: 'pointer', padding: 4, color: '#9CA3AF',
+          }}
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
+
+        {/* Title */}
+        <div style={{ padding: '0 24px 16px', borderBottom: '1px solid #F3F4F6' }}>
+          <h2 style={{ fontSize: 18, fontWeight: 700, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 4px', color: '#111827' }}>
+            ما الذي تتضمنه باقتك
+          </h2>
+          <p style={{ fontSize: 13, color: '#6B7280', fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: 0 }}>
+            مقارنة بين الباقات الثلاث
+          </p>
+        </div>
+
+        {/* Plan headers */}
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr repeat(3, 80px)', padding: '12px 24px', borderBottom: '1px solid #F3F4F6', position: 'sticky', top: 0, background: '#fff', zIndex: 1 }}>
+          <div />
+          {plans.map((p) => (
+            <div key={p} style={{
+              textAlign: 'center', fontFamily: 'IBM Plex Sans Arabic, sans-serif',
+            }}>
+              <div style={{ fontSize: 12, fontWeight: 700, color: currentPlan === p ? '#111827' : '#6B7280' }}>
+                {PLAN_META[p].labelAr}
+              </div>
+              {currentPlan === p && (
+                <div style={{ fontSize: 9, color: '#9CA3AF', marginTop: 2 }}>باقتك</div>
+              )}
+            </div>
+          ))}
+        </div>
+
+        {/* Sections */}
+        {COMPARISON_SECTIONS.map((section) => (
+          <div key={section.title}>
+            {/* Section title */}
+            <div style={{
+              padding: '12px 24px 6px', fontSize: 12, fontWeight: 700,
+              color: '#9CA3AF', fontFamily: 'IBM Plex Sans Arabic, sans-serif',
+              textTransform: 'uppercase', letterSpacing: 0.5,
+            }}>
+              {section.title}
+            </div>
+
+            {/* Rows */}
+            {section.features.map((feat) => {
+              const def = FEATURES[feat.key];
+              return (
+                <div
+                  key={feat.key}
+                  style={{
+                    display: 'grid', gridTemplateColumns: '1fr repeat(3, 80px)',
+                    padding: '8px 24px', borderBottom: '1px solid #FAFAFA',
+                    alignItems: 'center',
+                  }}
+                >
+                  <div style={{ fontSize: 13, fontFamily: 'IBM Plex Sans Arabic, sans-serif', color: '#374151' }}>
+                    {feat.label}
+                  </div>
+                  {plans.map((p) => {
+                    const available = !isLocked(feat.key, p);
+                    const isTrial = p === 'free' && feat.freeNote;
+                    return (
+                      <div key={p} style={{ textAlign: 'center', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        {available ? (
+                          isTrial ? (
+                            <span style={{ fontSize: 9, color: '#9CA3AF', fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>
+                              {feat.freeNote}
+                            </span>
+                          ) : checkIcon
+                        ) : lockIcon}
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            })}
+          </div>
+        ))}
+
+        {/* Subscriber limits row */}
+        <div style={{
+          padding: '12px 24px 6px', fontSize: 12, fontWeight: 700,
+          color: '#9CA3AF', fontFamily: 'IBM Plex Sans Arabic, sans-serif',
+        }}>
+          الحدود
+        </div>
+        <div style={{
+          display: 'grid', gridTemplateColumns: '1fr repeat(3, 80px)',
+          padding: '8px 24px', alignItems: 'center',
+        }}>
+          <div style={{ fontSize: 13, fontFamily: 'IBM Plex Sans Arabic, sans-serif', color: '#374151' }}>
+            عدد المشتركين
+          </div>
+          {plans.map((p) => (
+            <div key={p} style={{ textAlign: 'center', fontSize: 11, fontWeight: 600, color: '#374151', fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>
+              {p === 'free' ? '—' : PLAN_META[p].subscriberLimit}
+            </div>
+          ))}
+        </div>
+        <div style={{
+          display: 'grid', gridTemplateColumns: '1fr repeat(3, 80px)',
+          padding: '8px 24px', alignItems: 'center',
+        }}>
+          <div style={{ fontSize: 13, fontFamily: 'IBM Plex Sans Arabic, sans-serif', color: '#374151' }}>
+            إنشاء نشرات متعددة
+          </div>
+          {plans.map((p) => (
+            <div key={p} style={{ textAlign: 'center', display: 'flex', justifyContent: 'center' }}>
+              {PLAN_META[p].canCreateNewsletter ? checkIcon : lockIcon}
+            </div>
+          ))}
+        </div>
+
+        {/* CTA */}
+        <div style={{ padding: '20px 24px 8px', textAlign: 'center' }}>
+          <button
+            onClick={() => { window.location.href = '/pricing'; }}
+            style={{
+              padding: '12px 32px', background: '#111827', color: '#fff',
+              border: 'none', borderRadius: 10, fontSize: 15, fontWeight: 600,
+              fontFamily: 'IBM Plex Sans Arabic, sans-serif', cursor: 'pointer',
+            }}
+          >
+            عرض الباقات والأسعار
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
 // ─── Tier Switcher Bar ──────────────────────────────────
 const TierSwitcher: React.FC<{ plan: Plan; onChange: (plan: Plan) => void }> = ({ plan, onChange }) => {
   const plans: { key: Plan; label: string; labelEn: string; color: string }[] = [
@@ -408,6 +580,7 @@ const BusinessHubV2: React.FC = () => {
   const [activePublicationId, setActivePublicationId] = useState('pub_1');
   const [plan, setPlan] = useState<Plan>(initial.plan || 'free');
   const [upgradeModal, setUpgradeModal] = useState<FeatureKey | null>(null);
+  const [showComparison, setShowComparison] = useState(false);
 
   const publications = plan === 'free' ? freePublication : paidPublications;
 
@@ -574,6 +747,7 @@ const BusinessHubV2: React.FC = () => {
           dashboardPlanTier="writers"
           createNewsletterLocked={!PLAN_META[plan].canCreateNewsletter}
           onCreateNewsletterLockedClick={() => setUpgradeModal('newsletters')}
+          onCompareClick={() => setShowComparison(true)}
         >
           {renderPage()}
         </HubLayout>
@@ -583,6 +757,12 @@ const BusinessHubV2: React.FC = () => {
           featureKey={upgradeModal}
           currentPlan={plan}
           onClose={() => setUpgradeModal(null)}
+        />
+      )}
+      {showComparison && (
+        <PlanComparisonOverlay
+          currentPlan={plan}
+          onClose={() => setShowComparison(false)}
         />
       )}
     </>

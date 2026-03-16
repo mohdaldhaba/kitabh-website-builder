@@ -29,35 +29,36 @@ export type FeatureKey =
 interface FeatureDef {
   plan: Plan;
   upgradeTitle: string;
+  displayLabel: string;
   freeTrial?: number;
 }
 
 export const FEATURES: Record<FeatureKey, FeatureDef> = {
   // ── FREE: available to all plans ──────────────────────
-  posts:         { plan: 'free',     upgradeTitle: '' },
-  outline:       { plan: 'free',     upgradeTitle: '', freeTrial: 5 },
-  checker:       { plan: 'free',     upgradeTitle: '', freeTrial: 5 },
-  carousel:      { plan: 'free',     upgradeTitle: '', freeTrial: 5 },
-  social:        { plan: 'free',     upgradeTitle: '', freeTrial: 5 },
-  notifications: { plan: 'free',     upgradeTitle: '' },
-  settings:      { plan: 'free',     upgradeTitle: '' },
+  posts:         { plan: 'free',     upgradeTitle: '',  displayLabel: 'كتابة المنشورات' },
+  outline:       { plan: 'free',     upgradeTitle: '',  displayLabel: 'مساعد كتابة (AI)', freeTrial: 5 },
+  checker:       { plan: 'free',     upgradeTitle: '',  displayLabel: 'محرر كتابة (AI)', freeTrial: 5 },
+  carousel:      { plan: 'free',     upgradeTitle: '',  displayLabel: 'ستوديو كتابة (AI)', freeTrial: 5 },
+  social:        { plan: 'free',     upgradeTitle: '',  displayLabel: 'محتوى كتابة (AI)', freeTrial: 5 },
+  notifications: { plan: 'free',     upgradeTitle: '',  displayLabel: 'الإشعارات' },
+  settings:      { plan: 'free',     upgradeTitle: '',  displayLabel: 'الإعدادات' },
 
   // ── WRITERS: requires باقة الكاتب ─────────────────────
-  dashboard:      { plan: 'writers',  upgradeTitle: 'لوحة التحكم متاحة مع النشرات البريدية' },
-  newsletters:    { plan: 'writers',  upgradeTitle: 'النشرات البريدية' },
-  subscribers:    { plan: 'writers',  upgradeTitle: 'إدارة المشتركين' },
-  linktree:       { plan: 'writers',  upgradeTitle: 'صفحة الروابط' },
-  'landing-pages':{ plan: 'writers',  upgradeTitle: 'صفحات الاشتراك' },
-  'magic-link':   { plan: 'writers',  upgradeTitle: 'الرابط السحري' },
-  website:        { plan: 'writers',  upgradeTitle: 'الموقع الإلكتروني' },
-  analyze:        { plan: 'writers',  upgradeTitle: 'الإحصائيات المتقدمة' },
+  dashboard:      { plan: 'writers',  upgradeTitle: 'لوحة التحكم متاحة مع النشرات البريدية', displayLabel: 'لوحة التحكم' },
+  newsletters:    { plan: 'writers',  upgradeTitle: 'النشرات البريدية',  displayLabel: 'النشرات البريدية' },
+  subscribers:    { plan: 'writers',  upgradeTitle: 'إدارة المشتركين',   displayLabel: 'إدارة المشتركين' },
+  linktree:       { plan: 'writers',  upgradeTitle: 'صفحة الروابط',      displayLabel: 'صفحة الروابط' },
+  'landing-pages':{ plan: 'writers',  upgradeTitle: 'صفحات الاشتراك',    displayLabel: 'صفحات الاشتراك' },
+  'magic-link':   { plan: 'writers',  upgradeTitle: 'الرابط السحري',     displayLabel: 'الرابط السحري' },
+  website:        { plan: 'writers',  upgradeTitle: 'الموقع الإلكتروني', displayLabel: 'الموقع الإلكتروني' },
+  analyze:        { plan: 'writers',  upgradeTitle: 'الإحصائيات المتقدمة', displayLabel: 'الإحصائيات' },
 
   // ── BUSINESS: requires باقة الأعمال ───────────────────
-  'domain-settings': { plan: 'business', upgradeTitle: 'النطاق المخصص' },
-  'email-template':  { plan: 'business', upgradeTitle: 'مصمم قوالب البريد' },
-  'email-journeys':  { plan: 'business', upgradeTitle: 'رحلات البريد والأتمتة' },
-  branding:          { plan: 'business', upgradeTitle: 'الهوية والعلامة التجارية' },
-  writers:           { plan: 'business', upgradeTitle: 'فريق الكتّاب' },
+  'domain-settings': { plan: 'business', upgradeTitle: 'النطاق المخصص',              displayLabel: 'النطاق المخصص' },
+  'email-template':  { plan: 'business', upgradeTitle: 'مصمم قوالب البريد',          displayLabel: 'قوالب البريد' },
+  'email-journeys':  { plan: 'business', upgradeTitle: 'رحلات البريد والأتمتة',      displayLabel: 'رحلات البريد والأتمتة' },
+  branding:          { plan: 'business', upgradeTitle: 'الهوية والعلامة التجارية',   displayLabel: 'الهوية والعلامة' },
+  writers:           { plan: 'business', upgradeTitle: 'فريق الكتّاب',               displayLabel: 'فريق الكتّاب' },
 };
 
 // ─── Plan metadata ──────────────────────────────────────
@@ -120,3 +121,39 @@ export function getTrialUsage(feature: FeatureKey, plan: Plan): { used: number; 
   const t = FEATURES[feature].freeTrial;
   return t ? { used: t, total: t } : undefined;
 }
+
+/** Comparison rows for the plan overlay — ordered by section */
+export const COMPARISON_SECTIONS: { title: string; features: { key: FeatureKey; label: string; freeNote?: string }[] }[] = [
+  {
+    title: 'الكتابة والأدوات',
+    features: [
+      { key: 'posts', label: 'كتابة المنشورات' },
+      { key: 'outline', label: 'مساعد كتابة (AI)', freeNote: '5 استخدامات' },
+      { key: 'checker', label: 'محرر كتابة (AI)', freeNote: '5 استخدامات' },
+      { key: 'carousel', label: 'ستوديو كتابة (AI)', freeNote: '5 استخدامات' },
+      { key: 'social', label: 'محتوى كتابة (AI)', freeNote: '5 استخدامات' },
+    ],
+  },
+  {
+    title: 'النشر والتوزيع',
+    features: [
+      { key: 'dashboard', label: 'لوحة التحكم' },
+      { key: 'newsletters', label: 'النشرات البريدية' },
+      { key: 'subscribers', label: 'إدارة المشتركين' },
+      { key: 'linktree', label: 'صفحة الروابط' },
+      { key: 'landing-pages', label: 'صفحات الاشتراك' },
+      { key: 'analyze', label: 'الإحصائيات' },
+    ],
+  },
+  {
+    title: 'التصميم والإعدادات',
+    features: [
+      { key: 'website', label: 'الموقع الإلكتروني' },
+      { key: 'branding', label: 'الهوية والعلامة' },
+      { key: 'domain-settings', label: 'النطاق المخصص' },
+      { key: 'email-template', label: 'قوالب البريد' },
+      { key: 'email-journeys', label: 'رحلات البريد والأتمتة' },
+      { key: 'writers', label: 'فريق الكتّاب' },
+    ],
+  },
+];

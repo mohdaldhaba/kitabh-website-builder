@@ -174,6 +174,7 @@ interface HubLayoutProps {
   dashboardPlanTier?: 'writers' | 'business';
   createNewsletterLocked?: boolean;
   onCreateNewsletterLockedClick?: () => void;
+  onCompareClick?: () => void;
 }
 
 // ─── Section-based sidebar structure ─────────────────────
@@ -478,6 +479,7 @@ const HubLayout: React.FC<HubLayoutProps> = ({
   dashboardPlanTier,
   createNewsletterLocked,
   onCreateNewsletterLockedClick,
+  onCompareClick,
 }) => {
   const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(['create']));
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -861,6 +863,20 @@ const HubLayout: React.FC<HubLayoutProps> = ({
               ترقية
             </button>
           </div>
+          {onCompareClick && (
+            <button
+              onClick={onCompareClick}
+              style={{
+                background: 'none', border: 'none', padding: 0, marginBottom: 6,
+                fontSize: 11, color: c.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif',
+                cursor: 'pointer', textDecoration: 'underline', textUnderlineOffset: 2,
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = c.text)}
+              onMouseLeave={(e) => (e.currentTarget.style.color = c.textMuted)}
+            >
+              ما الذي تتضمنه باقتك؟
+            </button>
+          )}
           {(showSubscribers !== false) && (
             <>
               <div style={{ fontSize: 12, color: c.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif', marginBottom: 6 }}>
