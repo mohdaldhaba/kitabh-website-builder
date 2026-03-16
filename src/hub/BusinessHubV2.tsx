@@ -337,25 +337,32 @@ const PlanComparisonOverlay: React.FC<{ currentPlan: Plan; onClose: () => void }
   const font = 'IBM Plex Sans Arabic, sans-serif';
   const blue = '#0000FF';
   const gold = '#D97706';
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 500;
+
+  const px = isMobile ? 14 : 28;
+  const grid = isMobile ? '1.2fr repeat(3, 1fr)' : '1.5fr repeat(3, 1fr)';
+  const badgeSize = isMobile ? 18 : 22;
+  const checkSize = isMobile ? 16 : 20;
 
   const VerifiedBadge = ({ color }: { color: string }) => (
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+    <svg width={badgeSize} height={badgeSize} viewBox="0 0 24 24" fill="none">
       <circle cx="12" cy="12" r="12" fill={color} />
       <path d="M7.5 12.5L10.5 15.5L16.5 9.5" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 
   const freeCheck = (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#B0B0B0" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+    <svg width={checkSize} height={checkSize} viewBox="0 0 24 24" fill="none" stroke="#B0B0B0" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
       <polyline points="20 6 9 17 4 12" />
     </svg>
   );
-  const dash = <span style={{ color: '#D1D5DB', fontSize: 18 }}>—</span>;
+  const dash = <span style={{ color: '#D1D5DB', fontSize: isMobile ? 14 : 18 }}>—</span>;
 
   const noteStyle = (color: string): React.CSSProperties => ({
-    fontSize: 12, color, fontFamily: font, fontWeight: 700,
+    fontSize: isMobile ? 10 : 12, color, fontFamily: font, fontWeight: 700,
     background: color === blue ? '#EEF0FF' : color === gold ? '#FFF8EB' : '#F3F4F6',
-    padding: '2px 8px', borderRadius: 6, lineHeight: 1.5,
+    padding: isMobile ? '1px 5px' : '2px 8px', borderRadius: 6, lineHeight: 1.5,
+    whiteSpace: 'nowrap' as const,
   });
 
   const renderCell = (feat: { key: FeatureKey; freeNote?: string; writersNote?: string; businessNote?: string }, p: Plan) => {
@@ -378,28 +385,42 @@ const PlanComparisonOverlay: React.FC<{ currentPlan: Plan; onClose: () => void }
     <div
       style={{
         position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.45)',
-        zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center',
-        backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', padding: 20,
+        zIndex: 9999, display: 'flex', alignItems: isMobile ? 'flex-end' : 'center', justifyContent: 'center',
+        backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)',
+        padding: isMobile ? 0 : 20,
       }}
       onClick={onClose}
     >
       <div
         style={{
-          background: '#fff', borderRadius: 24, padding: 0,
-          maxWidth: 660, width: '100%', maxHeight: '88vh', overflowY: 'auto',
-          direction: 'rtl', boxShadow: '0 24px 80px rgba(0,0,0,0.18), 0 2px 6px rgba(0,0,0,0.06)',
+          background: '#fff',
+          borderRadius: isMobile ? '20px 20px 0 0' : 24,
+          padding: 0,
+          maxWidth: 660, width: '100%',
+          maxHeight: isMobile ? '92vh' : '88vh',
+          overflowY: 'auto',
+          direction: 'rtl',
+          boxShadow: '0 24px 80px rgba(0,0,0,0.18), 0 2px 6px rgba(0,0,0,0.06)',
           position: 'relative',
+          WebkitOverflowScrolling: 'touch' as any,
         }}
         onClick={(e) => e.stopPropagation()}
       >
+        {/* Drag handle on mobile */}
+        {isMobile && (
+          <div style={{ display: 'flex', justifyContent: 'center', paddingTop: 10, paddingBottom: 4 }}>
+            <div style={{ width: 36, height: 4, borderRadius: 2, background: '#D1D5DB' }} />
+          </div>
+        )}
+
         {/* Header */}
-        <div style={{ padding: '28px 28px 20px', borderBottom: '1px solid #F0F0F0' }}>
+        <div style={{ padding: `${isMobile ? 16 : 28}px ${px}px ${isMobile ? 12 : 20}px`, borderBottom: '1px solid #F0F0F0' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
             <div>
-              <h2 style={{ fontSize: 22, fontWeight: 800, fontFamily: font, margin: '0 0 4px', color: '#111827' }}>
+              <h2 style={{ fontSize: isMobile ? 18 : 22, fontWeight: 800, fontFamily: font, margin: '0 0 2px', color: '#111827' }}>
                 ما الذي تتضمنه باقتك
               </h2>
-              <p style={{ fontSize: 14, color: '#9CA3AF', fontFamily: font, margin: 0 }}>
+              <p style={{ fontSize: isMobile ? 12 : 14, color: '#9CA3AF', fontFamily: font, margin: 0 }}>
                 مقارنة بين الباقات الثلاث
               </p>
             </div>
@@ -420,9 +441,10 @@ const PlanComparisonOverlay: React.FC<{ currentPlan: Plan; onClose: () => void }
 
         {/* Plan column headers — sticky */}
         <div style={{
-          display: 'grid', gridTemplateColumns: '1.5fr repeat(3, 1fr)',
-          padding: '14px 28px', borderBottom: '1px solid #F0F0F0',
+          display: 'grid', gridTemplateColumns: grid,
+          padding: `${isMobile ? 8 : 14}px ${px}px`, borderBottom: '1px solid #F0F0F0',
           position: 'sticky', top: 0, background: '#fff', zIndex: 1,
+          gap: isMobile ? 4 : 0,
         }}>
           <div />
           {plans.map((p) => {
@@ -430,16 +452,17 @@ const PlanComparisonOverlay: React.FC<{ currentPlan: Plan; onClose: () => void }
             const headerColor = p === 'writers' ? blue : p === 'business' ? gold : '#6B7280';
             return (
               <div key={p} style={{
-                textAlign: 'center', fontFamily: font, padding: '8px 6px',
+                textAlign: 'center', fontFamily: font,
+                padding: isMobile ? '5px 2px' : '8px 6px',
                 background: isCurrent ? (p === 'writers' ? '#EEF0FF' : p === 'business' ? '#FFF8EB' : '#F9FAFB') : 'transparent',
-                borderRadius: 10,
+                borderRadius: isMobile ? 8 : 10,
                 border: isCurrent ? `1.5px solid ${p === 'writers' ? '#C7D2FE' : p === 'business' ? '#FDE68A' : '#E5E7EB'}` : '1.5px solid transparent',
               }}>
-                <div style={{ fontSize: 13, fontWeight: 800, color: headerColor }}>
-                  {PLAN_META[p].labelAr}
+                <div style={{ fontSize: isMobile ? 10 : 13, fontWeight: 800, color: headerColor }}>
+                  {isMobile ? (p === 'free' ? 'مجانية' : p === 'writers' ? 'الكاتب' : 'الأعمال') : PLAN_META[p].labelAr}
                 </div>
                 {isCurrent && (
-                  <div style={{ fontSize: 10, color: headerColor, opacity: 0.65, marginTop: 2 }}>باقتك الحالية</div>
+                  <div style={{ fontSize: isMobile ? 8 : 10, color: headerColor, opacity: 0.65, marginTop: 1 }}>باقتك</div>
                 )}
               </div>
             );
@@ -447,11 +470,12 @@ const PlanComparisonOverlay: React.FC<{ currentPlan: Plan; onClose: () => void }
         </div>
 
         {/* Feature sections */}
-        <div style={{ padding: '8px 0 12px' }}>
+        <div style={{ padding: `${isMobile ? 2 : 8}px 0 ${isMobile ? 8 : 12}px` }}>
           {COMPARISON_SECTIONS.map((section) => (
             <div key={section.title}>
               <div style={{
-                padding: '18px 28px 8px', fontSize: 13, fontWeight: 800,
+                padding: `${isMobile ? 12 : 18}px ${px}px ${isMobile ? 4 : 8}px`,
+                fontSize: isMobile ? 11 : 13, fontWeight: 800,
                 color: '#9CA3AF', fontFamily: font,
               }}>
                 {section.title}
@@ -461,16 +485,25 @@ const PlanComparisonOverlay: React.FC<{ currentPlan: Plan; onClose: () => void }
                 <div
                   key={feat.key}
                   style={{
-                    display: 'grid', gridTemplateColumns: '1.5fr repeat(3, 1fr)',
-                    padding: '11px 28px', alignItems: 'center',
+                    display: 'grid', gridTemplateColumns: grid,
+                    padding: `${isMobile ? 8 : 11}px ${px}px`,
+                    alignItems: 'center',
                     background: i % 2 === 1 ? '#FAFAFA' : 'transparent',
+                    gap: isMobile ? 2 : 0,
                   }}
                 >
-                  <div style={{ fontSize: 14, fontFamily: font, color: '#1F2937', fontWeight: 500 }}>
+                  <div style={{
+                    fontSize: isMobile ? 12 : 14, fontFamily: font, color: '#1F2937', fontWeight: 500,
+                    lineHeight: 1.4,
+                    overflow: 'hidden',
+                    display: '-webkit-box',
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: 'vertical' as any,
+                  }}>
                     {feat.label}
                   </div>
                   {plans.map((p) => (
-                    <div key={p} style={{ textAlign: 'center', display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 28 }}>
+                    <div key={p} style={{ textAlign: 'center', display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: isMobile ? 22 : 28 }}>
                       {renderCell(feat, p)}
                     </div>
                   ))}
@@ -481,18 +514,16 @@ const PlanComparisonOverlay: React.FC<{ currentPlan: Plan; onClose: () => void }
         </div>
 
         {/* CTA */}
-        <div style={{ padding: '20px 28px 28px', borderTop: '1px solid #F0F0F0', textAlign: 'center' }}>
+        <div style={{ padding: `${isMobile ? 14 : 20}px ${px}px ${isMobile ? 20 : 28}px`, borderTop: '1px solid #F0F0F0', textAlign: 'center' }}>
           <button
             onClick={() => { window.location.href = '/pricing'; }}
             style={{
-              padding: '14px 36px', background: '#111827', color: '#fff',
-              border: 'none', borderRadius: 12, fontSize: 16, fontWeight: 700,
+              padding: isMobile ? '12px 24px' : '14px 36px',
+              background: '#111827', color: '#fff', width: isMobile ? '100%' : 'auto',
+              border: 'none', borderRadius: 12, fontSize: isMobile ? 15 : 16, fontWeight: 700,
               fontFamily: font, cursor: 'pointer',
               boxShadow: '0 4px 14px rgba(0,0,0,0.15)',
-              transition: 'transform 0.15s ease',
             }}
-            onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.02)')}
-            onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
           >
             عرض الباقات والأسعار
           </button>
