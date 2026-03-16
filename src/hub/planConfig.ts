@@ -114,9 +114,9 @@ export function getUpgradeInfo(feature: FeatureKey): { title: string; targetPlan
   return { title: def.upgradeTitle, targetPlan };
 }
 
-/** Get trial badge text for free plan (e.g. "5/5"), or undefined */
-export function getTrialBadge(feature: FeatureKey, plan: Plan): string | undefined {
+/** Get trial usage for free plan, or undefined */
+export function getTrialUsage(feature: FeatureKey, plan: Plan): { used: number; total: number } | undefined {
   if (plan !== 'free') return undefined;
   const t = FEATURES[feature].freeTrial;
-  return t ? `${t}/${t}` : undefined;
+  return t ? { used: t, total: t } : undefined;
 }

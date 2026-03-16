@@ -17,7 +17,7 @@ import { icons, utilityItems as defaultUtility } from './HubLayout';
 import type { Page, Publication, SidebarSection, SidebarItem } from './HubLayout';
 import {
   FEATURES, PLAN_META, SECTION_LOCKS,
-  getLockSet, getPlanTier, getUpgradeInfo, getTrialBadge, isLocked,
+  getLockSet, getPlanTier, getUpgradeInfo, getTrialUsage, isLocked,
   type Plan, type FeatureKey,
 } from './planConfig';
 
@@ -176,7 +176,7 @@ function buildSidebarSections(plan: Plan): SidebarSection[] {
         ...item,
         locked: locks.has(key),
         planTier: getPlanTier(key),
-        trialBadge: getTrialBadge(key, plan),
+        trialUsage: getTrialUsage(key, plan),
       };
     });
 

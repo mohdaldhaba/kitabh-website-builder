@@ -185,7 +185,7 @@ type SidebarItem = {
   comingSoon?: boolean;
   locked?: boolean;
   planTier?: 'writers' | 'business';
-  trialBadge?: string;
+  trialUsage?: { used: number; total: number };
 };
 
 type SidebarSection = {
@@ -632,7 +632,11 @@ const HubLayout: React.FC<HubLayoutProps> = ({
           );
 
           return (
-            <div key={section.id} style={{ marginBottom: 2 }}>
+            <div key={section.id} style={{
+              marginBottom: 2,
+              borderRight: section.planTier ? `3px solid ${section.planTier === 'business' ? '#111827' : '#D1D5DB'}` : 'none',
+              borderRadius: '0 4px 4px 0',
+            }}>
               {/* Section header — clickable to expand/collapse */}
               <button
                 onClick={() => {
@@ -744,16 +748,27 @@ const HubLayout: React.FC<HubLayoutProps> = ({
                           </span>
                         )}
                         <span style={{ flex: 1, textAlign: 'right' }}>{item.label}</span>
-                        {item.trialBadge && (
-                          <span style={{
-                            fontSize: 10, fontWeight: 700, fontFamily: 'IBM Plex Sans Arabic, sans-serif',
-                            color: '#F59E0B', background: 'rgba(245,158,11,0.1)',
-                            padding: '2px 6px', borderRadius: 4, flexShrink: 0,
-                            direction: 'ltr',
-                          }}>
-                            {item.trialBadge}
-                          </span>
-                        )}
+                        {item.trialUsage && (() => {
+                          const { used, total } = item.trialUsage;
+                          const pct = Math.min(used / total, 1);
+                          const r = 6; const stroke = 2;
+                          const circ = 2 * Math.PI * r;
+                          const filled = circ * pct;
+                          const color = pct >= 1 ? '#EF4444' : pct >= 0.6 ? '#F59E0B' : '#9CA3AF';
+                          return (
+                            <span style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }} title={`${used}/${total}`}>
+                              <svg width="16" height="16" viewBox="0 0 16 16">
+                                <circle cx="8" cy="8" r={r} fill="none" stroke="#E5E7EB" strokeWidth={stroke} />
+                                <circle cx="8" cy="8" r={r} fill="none" stroke={color} strokeWidth={stroke}
+                                  strokeDasharray={`${filled} ${circ - filled}`}
+                                  strokeDashoffset={circ * 0.25}
+                                  strokeLinecap="round"
+                                  style={{ transition: 'stroke-dasharray 0.3s' }}
+                                />
+                              </svg>
+                            </span>
+                          );
+                        })()}
                         {isComingSoon && comingSoonBadge}
                         {isLocked && (
                           <span style={{
