@@ -215,7 +215,7 @@ function buildSidebarSections(plan: Plan): SidebarSection[] {
     },
     {
       id: 'growth',
-      label: 'انمو وتوسّع',
+      label: 'توسّع وانطلق',
       icon: icons.grow,
       locked: sectionLocks.has('design'),
       planTier: 'writers',
