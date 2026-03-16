@@ -673,15 +673,6 @@ const HubLayout: React.FC<HubLayoutProps> = ({
                 </span>
                 <span style={{ flex: 1, textAlign: 'right', display: 'flex', alignItems: 'center', gap: 6 }}>
                   {section.label}
-                  {section.planTier && (
-                    <span style={{
-                      fontSize: 9, fontWeight: 600, fontFamily: 'IBM Plex Sans Arabic, sans-serif',
-                      color: '#9CA3AF', background: '#F3F4F6',
-                      padding: '1px 5px', borderRadius: 3,
-                    }}>
-                      {section.planTier === 'business' ? 'أعمال' : 'الكاتب'}
-                    </span>
-                  )}
                   {isSectionLocked && (
                     <span style={{ display: 'flex', alignItems: 'center', color: '#9CA3AF' }}>
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -754,7 +745,7 @@ const HubLayout: React.FC<HubLayoutProps> = ({
                           const r = 6; const stroke = 2;
                           const circ = 2 * Math.PI * r;
                           const filled = circ * pct;
-                          const color = pct >= 1 ? '#EF4444' : pct >= 0.6 ? '#F59E0B' : '#9CA3AF';
+                          const color = '#D1D5DB';
                           return (
                             <span style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }} title={`${used}/${total}`}>
                               <svg width="16" height="16" viewBox="0 0 16 16">
