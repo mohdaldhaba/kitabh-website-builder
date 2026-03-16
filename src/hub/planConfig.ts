@@ -19,7 +19,8 @@ export type FeatureKey =
   | 'website' | 'domain-settings' | 'email-template' | 'branding'
   | 'ai-seo' | 'audio-publish' | 'verified-account'
   | 'subscriber-segments' | 'custom-fonts' | 'support'
-  | 'analyze' | 'notifications' | 'writers' | 'dashboard' | 'settings';
+  | 'analyze' | 'notifications' | 'writers' | 'dashboard' | 'settings'
+  | 'subdomain';
 
 // ─── Feature definitions ─────────────────────────────────
 // plan: which plan first unlocks this feature
@@ -64,7 +65,8 @@ export const FEATURES: Record<FeatureKey, FeatureDef> = {
   'subscriber-limit':     { plan: 'writers',  upgradeTitle: 'عدد المشتركين',        displayLabel: 'عدد المشتركين' },
 
   // ── BUSINESS: requires باقة الأعمال ───────────────────
-  'domain-settings': { plan: 'writers',  upgradeTitle: 'النطاق المخصص',              displayLabel: 'النطاق المخصص' },
+  subdomain:         { plan: 'writers',  upgradeTitle: 'النطاق الفرعي',              displayLabel: 'النطاق الفرعي' },
+  'domain-settings': { plan: 'business', upgradeTitle: 'النطاق المخصص',              displayLabel: 'النطاق المخصص' },
   'email-template':  { plan: 'business', upgradeTitle: 'قوالب البريد',          displayLabel: 'قوالب البريد ورحلات الرسائل' },
   'email-journeys':  { plan: 'business', upgradeTitle: 'رحلات البريد والأتمتة',      displayLabel: 'رحلات البريد والأتمتة' },
   'subscriber-segments':{ plan: 'business', upgradeTitle: 'أقسام المشتركين',           displayLabel: 'أقسام المشتركين' },
@@ -163,6 +165,7 @@ export const COMPARISON_SECTIONS: { title: string; features: { key: FeatureKey; 
       { key: 'audio-publish', label: 'النشر الصوتي' },
       { key: 'ai-seo', label: 'الظهور في نتائج الذكاء الاصطناعي ومحركات البحث' },
       { key: 'analyze', label: 'الإحصائيات' },
+      { key: 'subdomain', label: 'النطاق الفرعي' },
     ],
   },
   {
@@ -173,7 +176,7 @@ export const COMPARISON_SECTIONS: { title: string; features: { key: FeatureKey; 
       { key: 'website', label: 'الموقع الإلكتروني', writersNote: 'محدود', businessNote: 'وصول كامل' },
       { key: 'custom-fonts', label: 'الخطوط الخاصة' },
       { key: 'branding', label: 'الهوية والعلامة' },
-      { key: 'domain-settings', label: 'النطاق المخصص' },
+      { key: 'domain-settings', label: 'النطاق المخصص', writersNote: '—' },
       { key: 'email-template', label: 'قوالب البريد' },
       { key: 'email-journeys', label: 'رحلات البريد والأتمتة' },
       { key: 'writers', label: 'إدارة الفريق' },
