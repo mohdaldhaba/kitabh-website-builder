@@ -115,7 +115,15 @@ const AccountSection: React.FC = () => (
 );
 
 // ─── Billing Settings ────────────────────────────────────
-const BillingSection: React.FC = () => (
+const BILLING_INFO: Record<string, { label: string; price: string; renewal: string }> = {
+  free:     { label: 'الباقة المجانية', price: '$0', renewal: '' },
+  writers:  { label: 'باقة الكاتب',    price: '$14', renewal: 'تُجدد في 1 أبريل 2026' },
+  business: { label: 'باقة الأعمال',   price: '$29', renewal: 'تُجدد في 1 أبريل 2026' },
+};
+
+const BillingSection: React.FC<{ plan: string }> = ({ plan }) => {
+  const info = BILLING_INFO[plan] || BILLING_INFO.free;
+  return (
   <div>
     <h2 style={{ fontSize: 24, fontWeight: 700, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 8px' }}>
       الاشتراك
@@ -129,17 +137,21 @@ const BillingSection: React.FC = () => (
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
         <div>
           <h3 style={{ fontSize: 16, fontWeight: 700, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 4px' }}>
-            خطة الأعمال
+            {info.label}
           </h3>
+          {info.renewal && (
           <div style={{ fontSize: 13, color: colors.textMuted, fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>
-            تُجدد في 1 أبريل 2026
+            {info.renewal}
           </div>
+          )}
         </div>
+        {plan !== 'free' && (
         <div style={{ textAlign: 'left' }}>
           <div style={{ fontSize: 24, fontWeight: 700, color: colors.text, fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>
-            $29<span style={{ fontSize: 14, fontWeight: 400, color: colors.textMuted }}>/شهر</span>
+            {info.price}<span style={{ fontSize: 14, fontWeight: 400, color: colors.textMuted }}>/شهر</span>
           </div>
         </div>
+        )}
       </div>
 
       <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
@@ -158,6 +170,7 @@ const BillingSection: React.FC = () => (
         >
           عرض الباقات
         </button>
+        {plan !== 'free' && (
         <button
           style={{
             padding: '10px 20px',
@@ -173,6 +186,7 @@ const BillingSection: React.FC = () => (
         >
           إدارة الاشتراك
         </button>
+        )}
       </div>
     </div>
 
@@ -208,7 +222,8 @@ const BillingSection: React.FC = () => (
       ))}
     </div>
   </div>
-);
+  );
+};
 
 // ─── Settings Page ───────────────────────────────────────
 const SettingsPage: React.FC<SettingsPageProps> = ({ subPage = 'account', plan = 'writers' }) => {
@@ -257,7 +272,7 @@ const SettingsPage: React.FC<SettingsPageProps> = ({ subPage = 'account', plan =
       </div>
 
       {activeTab === 'account' && <AccountSection />}
-      {activeTab === 'billing' && <BillingSection />}
+      {activeTab === 'billing' && <BillingSection plan={plan} />}
       {activeTab === 'domain' && !domainLocked && <KitabhDomainSettings plan={plan} />}
       {activeTab === 'domain' && domainLocked && (
         <div style={{ maxWidth: 600, margin: '40px auto', textAlign: 'center' }}>

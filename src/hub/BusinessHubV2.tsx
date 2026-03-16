@@ -670,13 +670,16 @@ const TierSwitcher: React.FC<{ plan: Plan; onChange: (plan: Plan) => void }> = (
 
   return (
     <div style={{
-      position: 'fixed', top: 0, left: 0, right: 0, zIndex: 9998,
-      height: 44, background: '#111827',
-      display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 4,
+      position: 'fixed', bottom: 20, left: '50%', transform: 'translateX(-50%)', zIndex: 9998,
+      background: '#111827',
+      borderRadius: 12,
+      padding: '6px 8px',
+      display: 'flex', alignItems: 'center', gap: 4,
       direction: 'rtl',
       fontFamily: 'IBM Plex Sans Arabic, sans-serif',
+      boxShadow: '0 4px 24px rgba(0,0,0,0.25)',
     }}>
-      <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.5)', marginLeft: 12 }}>
+      <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)', marginLeft: 8, whiteSpace: 'nowrap' }}>
         عرض الباقة:
       </span>
       {plans.map((p) => {
@@ -690,7 +693,7 @@ const TierSwitcher: React.FC<{ plan: Plan; onChange: (plan: Plan) => void }> = (
               background: isActive ? '#fff' : 'rgba(255,255,255,0.1)',
               color: isActive ? p.color : 'rgba(255,255,255,0.7)',
               border: 'none',
-              borderRadius: 6,
+              borderRadius: 8,
               fontSize: 13,
               fontWeight: isActive ? 700 : 500,
               fontFamily: 'IBM Plex Sans Arabic, sans-serif',
@@ -699,6 +702,7 @@ const TierSwitcher: React.FC<{ plan: Plan; onChange: (plan: Plan) => void }> = (
               display: 'flex',
               alignItems: 'center',
               gap: 6,
+              whiteSpace: 'nowrap',
             }}
           >
             {p.label}
@@ -886,7 +890,7 @@ const BusinessHubV2: React.FC = () => {
   return (
     <>
       <TierSwitcher plan={plan} onChange={handlePlanChange} />
-      <div style={{ paddingTop: 44 }}>
+      <div>
         <HubLayout
           activePage={activePage}
           activeSubPage={activeSubPage}
