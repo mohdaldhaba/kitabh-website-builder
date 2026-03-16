@@ -356,19 +356,24 @@ const PlanComparisonOverlay: React.FC<{ currentPlan: Plan; onClose: () => void }
   };
 
   const rowBg = (i: number) => i % 2 === 1 ? '#F6F6F6' : '#fff';
+  const colHighlight = 'rgba(0,0,0,0.035)';
 
   /* ── Desktop row ── */
   const DesktopRow = ({ feat, idx }: { feat: typeof COMPARISON_SECTIONS[0]['features'][0]; idx: number }) => (
     <div style={{
       display: 'grid', gridTemplateColumns: '1.8fr repeat(3, 1fr)',
-      padding: '16px 32px', alignItems: 'center',
+      alignItems: 'center',
       background: rowBg(idx),
     }}>
-      <div style={{ fontSize: 15, fontFamily: font, color: '#374151', fontWeight: 500 }}>
+      <div style={{ fontSize: 15, fontFamily: font, color: '#374151', fontWeight: 500, padding: '16px 0 16px 32px' }}>
         {feat.label}
       </div>
       {plans.map((p) => (
-        <div key={p} style={{ textAlign: 'center', display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 32 }}>
+        <div key={p} style={{
+          textAlign: 'center', display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 32,
+          padding: '16px 0',
+          background: p === currentPlan ? colHighlight : 'transparent',
+        }}>
           {renderCell(feat, p)}
         </div>
       ))}
@@ -389,7 +394,11 @@ const PlanComparisonOverlay: React.FC<{ currentPlan: Plan; onClose: () => void }
         padding: '4px 20px 14px',
       }}>
         {plans.map((p) => (
-          <div key={p} style={{ textAlign: 'center', display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 30 }}>
+          <div key={p} style={{
+            textAlign: 'center', display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 30,
+            background: p === currentPlan ? colHighlight : 'transparent',
+            borderRadius: 6, padding: '4px 0',
+          }}>
             {renderCell(feat, p)}
           </div>
         ))}
@@ -431,7 +440,7 @@ const PlanComparisonOverlay: React.FC<{ currentPlan: Plan; onClose: () => void }
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
             <div>
               <h2 style={{ fontSize: mob ? 20 : 24, fontWeight: 800, fontFamily: font, margin: '0 0 4px', color: '#111827' }}>
-                ما الذي تتضمنه باقتك؟
+                مزايا باقتك
               </h2>
               <p style={{ fontSize: mob ? 14 : 15, color: '#9CA3AF', fontFamily: font, margin: 0 }}>
                 مقارنة بين باقات الكتابة
@@ -465,13 +474,16 @@ const PlanComparisonOverlay: React.FC<{ currentPlan: Plan; onClose: () => void }
             const isCurrent = currentPlan === p;
             return (
               <div key={p} style={{
-                textAlign: 'center', fontFamily: font, padding: '4px 0',
+                textAlign: 'center', fontFamily: font, padding: '8px 0',
+                background: isCurrent ? colHighlight : 'transparent',
+                borderBottom: isCurrent ? '2px solid #111827' : '2px solid transparent',
+                marginBottom: -2,
               }}>
-                <div style={{ fontSize: mob ? 13 : 15, fontWeight: 800, color: '#111827' }}>
+                <div style={{ fontSize: mob ? 13 : 15, fontWeight: 800, color: isCurrent ? '#111827' : '#9CA3AF' }}>
                   {mob ? (p === 'free' ? 'مجانية' : p === 'writers' ? 'الكاتب' : 'الأعمال') : PLAN_META[p].labelAr}
                 </div>
                 {isCurrent && (
-                  <div style={{ fontSize: mob ? 10 : 11, color: '#9CA3AF', marginTop: 2 }}>باقتك</div>
+                  <div style={{ fontSize: mob ? 10 : 11, color: '#6B7280', marginTop: 2 }}>باقتك</div>
                 )}
               </div>
             );

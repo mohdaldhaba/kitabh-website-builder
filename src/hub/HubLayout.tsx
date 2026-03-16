@@ -867,18 +867,17 @@ const HubLayout: React.FC<HubLayoutProps> = ({
             <button
               onClick={onCompareClick}
               style={{
-                background: 'rgba(17,24,39,0.9)', backdropFilter: 'blur(8px)', WebkitBackdropFilter: 'blur(8px)',
-                border: '1px solid rgba(255,255,255,0.1)',
-                padding: '8px 0', marginBottom: 8, width: '100%',
-                fontSize: 12, fontWeight: 600, color: '#fff', fontFamily: 'IBM Plex Sans Arabic, sans-serif',
-                cursor: 'pointer', borderRadius: 8,
-                boxShadow: '0 2px 8px rgba(0,0,0,0.12)',
-                transition: 'opacity 0.15s ease',
+                background: '#F3F4F6',
+                border: 'none',
+                padding: '6px 0', marginBottom: 8, width: '100%',
+                fontSize: 11, fontWeight: 600, color: '#6B7280', fontFamily: 'IBM Plex Sans Arabic, sans-serif',
+                cursor: 'pointer', borderRadius: 6,
+                transition: 'background 0.15s ease',
               }}
-              onMouseEnter={(e) => (e.currentTarget.style.opacity = '0.85')}
-              onMouseLeave={(e) => (e.currentTarget.style.opacity = '1')}
+              onMouseEnter={(e) => (e.currentTarget.style.background = '#E5E7EB')}
+              onMouseLeave={(e) => (e.currentTarget.style.background = '#F3F4F6')}
             >
-              ما الذي تتضمنه باقتك؟
+              مزايا باقتك
             </button>
           )}
           {(showSubscribers !== false) && (
