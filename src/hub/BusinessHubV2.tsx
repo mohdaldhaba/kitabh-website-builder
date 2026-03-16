@@ -340,18 +340,16 @@ const PlanComparisonOverlay: React.FC<{ currentPlan: Plan; onClose: () => void }
     </svg>
   );
   const writersBadge = (
-    <span style={{
-      fontSize: 8, fontWeight: 700, fontFamily: 'IBM Plex Sans Arabic, sans-serif',
-      color: '#2563EB', background: '#EFF6FF', borderRadius: 6,
-      padding: '2px 6px', lineHeight: 1.4, whiteSpace: 'nowrap' as const,
-    }}>الكاتب</span>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+      <circle cx="12" cy="12" r="12" fill="#2563EB" />
+      <path d="M7.5 12.5L10.5 15.5L16.5 9.5" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
   );
   const businessBadge = (
-    <span style={{
-      fontSize: 8, fontWeight: 700, fontFamily: 'IBM Plex Sans Arabic, sans-serif',
-      color: '#92400E', background: '#FEF3C7', borderRadius: 6,
-      padding: '2px 6px', lineHeight: 1.4, whiteSpace: 'nowrap' as const,
-    }}>أعمال</span>
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+      <circle cx="12" cy="12" r="12" fill="#F59E0B" />
+      <path d="M7.5 12.5L10.5 15.5L16.5 9.5" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
   );
 
   return (
