@@ -139,7 +139,7 @@ export function getTrialUsage(feature: FeatureKey, plan: Plan): { used: number; 
 /** Comparison rows for the plan overlay — ordered by section */
 export const COMPARISON_SECTIONS: { title: string; features: { key: FeatureKey; label: string; freeNote?: string; writersNote?: string; businessNote?: string }[] }[] = [
   {
-    title: 'الكتابة والأدوات',
+    title: 'الكتابة والمحتوى',
     features: [
       { key: 'posts', label: 'كتابة المنشورات' },
       { key: 'outline', label: 'مساعد كتابة', freeNote: '5 مرات', writersNote: 'دون حد', businessNote: 'دون حد' },
@@ -151,7 +151,7 @@ export const COMPARISON_SECTIONS: { title: string; features: { key: FeatureKey; 
     ],
   },
   {
-    title: 'النشر والتوزيع',
+    title: 'النشر وبناء الجمهور',
     features: [
       { key: 'subscriber-limit', label: 'عدد المشتركين', writersNote: '10,000', businessNote: '100,000' },
       { key: 'newsletters', label: 'النشرات البريدية', writersNote: '1', businessNote: 'دون حد' },
