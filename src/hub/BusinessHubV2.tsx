@@ -336,13 +336,10 @@ const PlanComparisonOverlay: React.FC<{ currentPlan: Plan; onClose: () => void }
   const plans: Plan[] = ['free', 'writers', 'business'];
   const font = 'IBM Plex Sans Arabic, sans-serif';
 
-  // Verified seal badge path (star/seal shape like social media verified badges)
-  const sealPath = 'M12 0c.7 0 1.1.5 1.6 1l.8.9c.3.3.5.4.9.5l1.1.2c.7.1 1.2.4 1.3 1.1l.2 1.1c.1.4.2.6.5.9l.8.8c.5.5.6 1 .3 1.7l-.4 1.1c-.2.4-.2.6 0 1l.4 1.1c.3.7.2 1.2-.3 1.7l-.8.8c-.3.3-.4.5-.5.9l-.2 1.1c-.1.7-.6 1-1.3 1.1l-1.1.2c-.4.1-.6.2-.9.5l-.8.9c-.5.5-1 .7-1.6.7s-1.1-.2-1.6-.7l-.8-.9c-.3-.3-.5-.4-.9-.5l-1.1-.2c-.7-.1-1.2-.4-1.3-1.1l-.2-1.1c-.1-.4-.2-.6-.5-.9l-.8-.8c-.5-.5-.6-1-.3-1.7l.4-1.1c.2-.4.2-.6 0-1l-.4-1.1c-.3-.7-.2-1.2.3-1.7l.8-.8c.3-.3.4-.5.5-.9l.2-1.1C5.7 2.4 6.2 2.1 6.9 2l1.1-.2c.4-.1.6-.2.9-.5l.8-.9C10.2.5 10.6 0 11.3 0h.7z';
-
   const VerifiedBadge = ({ color }: { color: string }) => (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-      <path d={sealPath} fill={color} />
-      <path d="M8 12.4L10.5 15L16 9" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+      <circle cx="12" cy="12" r="12" fill={color} />
+      <path d="M7.5 12.5L10.5 15.5L16.5 9.5" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
 
