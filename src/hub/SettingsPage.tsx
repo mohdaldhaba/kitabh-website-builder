@@ -317,13 +317,13 @@ const SubdomainLockedOverlay: React.FC<{ onClick?: () => void }> = ({ onClick })
       fontFamily: 'IBM Plex Sans Arabic, sans-serif',
       margin: '0 0 24px', lineHeight: 1.6,
     }}>
-      هذه الميزة متاحة في <strong style={{ color: '#111827' }}>باقة الكاتب</strong>
+      هذه الميزة متاحة في <strong style={{ color: '#1E3A8A' }}>باقة الكاتب</strong>
     </p>
     <button
       onClick={onClick}
       style={{
         padding: '12px 28px',
-        background: '#111827', color: '#fff',
+        background: '#1E3A8A', color: '#fff',
         border: 'none', borderRadius: 10,
         fontSize: 15, fontWeight: 600,
         fontFamily: 'IBM Plex Sans Arabic, sans-serif',

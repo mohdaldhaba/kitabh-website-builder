@@ -67,7 +67,7 @@ type FeatureKey =
   | 'posts' | 'outline' | 'checker' | 'carousel' | 'social'
   | 'newsletters' | 'subscribers' | 'linktree' | 'landing-pages'
   | 'email-journeys' | 'magic-link'
-  | 'website' | 'domain-settings' | 'email-template'
+  | 'website' | 'domain-settings' | 'email-template' | 'branding'
   | 'analyze' | 'notifications' | 'writers' | 'dashboard' | 'settings';
 
 // ─── Feature lock map ───────────────────────────────────
@@ -85,12 +85,14 @@ const lockMap: Record<Plan, Set<FeatureKey>> = {
     'email-template',
     'writers',
     'analyze',
+    'branding',
   ]),
   writers: new Set([
     'domain-settings',
     'email-template',
     'email-journeys',
     'writers',
+    'branding',
   ]),
   business: new Set([]),
 };
@@ -159,6 +161,10 @@ const upgradeReasons: Record<FeatureKey, { title: string; targetPlan: string }> 
     title: 'الإحصائيات المتقدمة',
     targetPlan: 'باقة الكاتب',
   },
+  branding: {
+    title: 'الهوية والعلامة التجارية',
+    targetPlan: 'باقة الأعمال',
+  },
   // Never locked
   posts: { title: '', targetPlan: '' },
   outline: { title: '', targetPlan: '' },
@@ -204,6 +210,7 @@ function parseUrl(): { page: Page; subPage?: string; plan?: Plan } {
     case 'website': return { page: 'website', plan };
     case 'landing-pages': return { page: 'landing-pages', plan };
     case 'domain-settings': return { page: 'domain-settings', plan };
+    case 'branding': return { page: 'branding', plan };
     case 'members': return { page: 'writers', plan };
     case 'analyze': return { page: 'analyze', subPage: second, plan };
     case 'notifications': return { page: 'notifications', plan };
@@ -238,6 +245,7 @@ function buildUrl(page: Page, subPage?: string): string {
     case 'website': path = `${BASE}/website`; break;
     case 'landing-pages': path = `${BASE}/landing-pages`; break;
     case 'domain-settings': path = `${BASE}/domain-settings`; break;
+    case 'branding': path = `${BASE}/branding`; break;
     case 'writers': path = `${BASE}/members`; break;
     case 'analyze':
       path = subPage ? `${BASE}/analyze/${subPage}` : `${BASE}/analyze`;
@@ -309,6 +317,7 @@ function buildSidebarSections(plan: Plan): SidebarSection[] {
       locked: sectionLocks.has('design'),
       items: applyLock([
         { page: 'website', label: 'الموقع', icon: icons.website },
+        { page: 'branding' as Page, label: 'الهوية والعلامة', icon: icons.branding },
         { page: 'domain-settings' as Page, label: 'إعدادات النطاق', icon: icons.domainSettings },
         { page: 'email-template', label: 'قالب البريد', icon: icons.emailTemplate },
       ]),
@@ -333,6 +342,10 @@ const UpgradeModal: React.FC<{
 }> = ({ featureKey, currentPlan, onClose }) => {
   const reason = upgradeReasons[featureKey];
   if (!reason || !reason.title) return null;
+
+  // Color coding: باقة الكاتب = dark blue, باقة الأعمال = golden
+  const planColor = reason.targetPlan === 'باقة الأعمال' ? '#B8860B' : '#1E3A8A';
+  const planColorHover = reason.targetPlan === 'باقة الأعمال' ? '#9A7209' : '#152E6B';
 
   return (
     <>
@@ -370,9 +383,9 @@ const UpgradeModal: React.FC<{
           {/* Lock icon */}
           <div style={{
             width: 48, height: 48, borderRadius: 12,
-            background: 'rgba(0,0,0,0.04)',
+            background: `${planColor}10`,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            margin: '0 auto 16px', color: '#6B7280',
+            margin: '0 auto 16px', color: planColor,
           }}>
             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <rect x="3" y="11" width="18" height="11" rx="2" ry="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" />
@@ -392,7 +405,7 @@ const UpgradeModal: React.FC<{
             fontFamily: 'IBM Plex Sans Arabic, sans-serif',
             margin: '0 0 24px', lineHeight: 1.6,
           }}>
-            هذه الميزة متاحة في <strong style={{ color: '#111827' }}>{reason.targetPlan}</strong>
+            هذه الميزة متاحة في <strong style={{ color: planColor }}>{reason.targetPlan}</strong>
           </p>
 
           {/* CTA */}
@@ -402,15 +415,15 @@ const UpgradeModal: React.FC<{
             }}
             style={{
               width: '100%', padding: '12px 20px',
-              background: '#111827', color: '#fff',
+              background: planColor, color: '#fff',
               border: 'none', borderRadius: 10,
               fontSize: 15, fontWeight: 600,
               fontFamily: 'IBM Plex Sans Arabic, sans-serif',
               cursor: 'pointer',
               transition: 'background 0.15s',
             }}
-            onMouseEnter={(e) => (e.currentTarget.style.background = '#000')}
-            onMouseLeave={(e) => (e.currentTarget.style.background = '#111827')}
+            onMouseEnter={(e) => (e.currentTarget.style.background = planColorHover)}
+            onMouseLeave={(e) => (e.currentTarget.style.background = planColor)}
           >
             باقات كتابة
           </button>
@@ -627,6 +640,13 @@ const BusinessHubV2: React.FC = () => {
         return <KitabhLandingPages />;
       case 'domain-settings':
         return <KitabhDomainSettings />;
+      case 'branding':
+        return (
+          <ComingSoonPage
+            title="الهوية والعلامة التجارية"
+            description="تحكم في هوية علامتك التجارية — الشعار، الألوان، الخطوط، وأسلوب موقعك ونشراتك البريدية."
+          />
+        );
       case 'settings':
         return <SettingsPage subPage={activeSubPage} subdomainLocked={plan === 'free'} onSubdomainLockedClick={() => { window.location.href = '/pricing'; }} />;
       default:
