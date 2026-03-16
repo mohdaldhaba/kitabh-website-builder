@@ -334,180 +334,216 @@ const UpgradeModal: React.FC<{
 // ─── Plan Comparison Overlay ─────────────────────────────
 const PlanComparisonOverlay: React.FC<{ currentPlan: Plan; onClose: () => void }> = ({ currentPlan, onClose }) => {
   const plans: Plan[] = ['free', 'writers', 'business'];
-  const checkIcon = (
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#111827" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+  const font = 'IBM Plex Sans Arabic, sans-serif';
+
+  const checkMark = (
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22C55E" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
       <polyline points="20 6 9 17 4 12" />
     </svg>
   );
   const writersBadge = (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
       <circle cx="12" cy="12" r="12" fill="#2563EB" />
       <path d="M7.5 12.5L10.5 15.5L16.5 9.5" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
   const businessBadge = (
-    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
       <circle cx="12" cy="12" r="12" fill="#F59E0B" />
       <path d="M7.5 12.5L10.5 15.5L16.5 9.5" stroke="#fff" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   );
+  const dash = <span style={{ color: '#D1D5DB', fontSize: 16, fontWeight: 500 }}>—</span>;
+
+  const renderCell = (feat: { key: FeatureKey; freeNote?: string; writersNote?: string }, p: Plan) => {
+    const available = !isLocked(feat.key, p);
+    const requiredPlan = FEATURES[feat.key].plan;
+
+    if (!available) {
+      // Locked: free column shows dash, others show the badge of the required plan
+      if (p === 'free') return dash;
+      return requiredPlan === 'business' ? businessBadge : writersBadge;
+    }
+    // Available
+    if (p === 'free' && feat.freeNote) {
+      return <span style={{ fontSize: 10, color: '#9CA3AF', fontFamily: font }}>{feat.freeNote}</span>;
+    }
+    if (p === 'writers' && feat.writersNote) {
+      return <span style={{ fontSize: 10, color: '#D97706', fontFamily: font, fontWeight: 600 }}>{feat.writersNote}</span>;
+    }
+    // Checkmark: show badge color for the plan that owns this feature, green check for free features
+    if (requiredPlan === 'writers') return writersBadge;
+    if (requiredPlan === 'business') return businessBadge;
+    return checkMark;
+  };
+
+  const planHeaderColors: Record<Plan, { bg: string; border: string; text: string }> = {
+    free: { bg: '#F9FAFB', border: '#E5E7EB', text: '#6B7280' },
+    writers: { bg: '#EFF6FF', border: '#BFDBFE', text: '#2563EB' },
+    business: { bg: '#FFFBEB', border: '#FDE68A', text: '#B45309' },
+  };
 
   return (
     <div
       style={{
-        position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.5)',
+        position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.4)',
         zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center',
-        backdropFilter: 'blur(4px)', padding: 16,
+        backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', padding: 16,
       }}
       onClick={onClose}
     >
       <div
         style={{
-          background: '#fff', borderRadius: 16, padding: '24px 0',
-          maxWidth: 640, width: '100%', maxHeight: '85vh', overflowY: 'auto',
-          direction: 'rtl', boxShadow: '0 20px 60px rgba(0,0,0,0.3)',
+          background: 'rgba(255,255,255,0.92)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)',
+          borderRadius: 20, padding: 0,
+          maxWidth: 600, width: '100%', maxHeight: '85vh', overflowY: 'auto',
+          direction: 'rtl', boxShadow: '0 8px 32px rgba(0,0,0,0.12), 0 1px 3px rgba(0,0,0,0.08)',
+          border: '1px solid rgba(255,255,255,0.6)',
           position: 'relative',
         }}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Close */}
-        <button
-          onClick={onClose}
-          style={{
-            position: 'absolute', top: 12, left: 12, background: 'none',
-            border: 'none', cursor: 'pointer', padding: 4, color: '#9CA3AF',
-          }}
-        >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
-          </svg>
-        </button>
-
-        {/* Title */}
-        <div style={{ padding: '0 24px 16px', borderBottom: '1px solid #F3F4F6' }}>
-          <h2 style={{ fontSize: 18, fontWeight: 700, fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: '0 0 4px', color: '#111827' }}>
-            ما الذي تتضمنه باقتك
-          </h2>
-          <p style={{ fontSize: 13, color: '#6B7280', fontFamily: 'IBM Plex Sans Arabic, sans-serif', margin: 0 }}>
-            مقارنة بين الباقات الثلاث
-          </p>
+        {/* Header */}
+        <div style={{ padding: '20px 24px 16px', borderBottom: '1px solid rgba(0,0,0,0.06)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+            <div>
+              <h2 style={{ fontSize: 17, fontWeight: 700, fontFamily: font, margin: '0 0 2px', color: '#111827' }}>
+                ما الذي تتضمنه باقتك
+              </h2>
+              <p style={{ fontSize: 12, color: '#9CA3AF', fontFamily: font, margin: 0 }}>
+                مقارنة بين الباقات الثلاث
+              </p>
+            </div>
+            <button
+              onClick={onClose}
+              style={{
+                background: 'rgba(0,0,0,0.05)', border: 'none', cursor: 'pointer',
+                borderRadius: 8, width: 28, height: 28, display: 'flex', alignItems: 'center',
+                justifyContent: 'center', color: '#9CA3AF', flexShrink: 0,
+              }}
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" />
+              </svg>
+            </button>
+          </div>
         </div>
 
-        {/* Plan headers */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr repeat(3, 80px)', padding: '12px 24px', borderBottom: '1px solid #F3F4F6', position: 'sticky', top: 0, background: '#fff', zIndex: 1 }}>
+        {/* Plan column headers — sticky */}
+        <div style={{
+          display: 'grid', gridTemplateColumns: '1.4fr repeat(3, 1fr)',
+          padding: '10px 20px', borderBottom: '1px solid rgba(0,0,0,0.06)',
+          position: 'sticky', top: 0, background: 'rgba(255,255,255,0.95)',
+          backdropFilter: 'blur(10px)', WebkitBackdropFilter: 'blur(10px)', zIndex: 1,
+        }}>
           <div />
-          {plans.map((p) => (
-            <div key={p} style={{
-              textAlign: 'center', fontFamily: 'IBM Plex Sans Arabic, sans-serif',
-            }}>
-              <div style={{ fontSize: 12, fontWeight: 700, color: currentPlan === p ? '#111827' : '#6B7280' }}>
-                {PLAN_META[p].labelAr}
+          {plans.map((p) => {
+            const hc = planHeaderColors[p];
+            return (
+              <div key={p} style={{
+                textAlign: 'center', fontFamily: font, padding: '6px 4px',
+                background: currentPlan === p ? hc.bg : 'transparent',
+                borderRadius: 8,
+                border: currentPlan === p ? `1px solid ${hc.border}` : '1px solid transparent',
+              }}>
+                <div style={{ fontSize: 11, fontWeight: 700, color: hc.text }}>
+                  {PLAN_META[p].labelAr}
+                </div>
+                {currentPlan === p && (
+                  <div style={{ fontSize: 9, color: hc.text, opacity: 0.7, marginTop: 1 }}>باقتك الحالية</div>
+                )}
               </div>
-              {currentPlan === p && (
-                <div style={{ fontSize: 9, color: '#9CA3AF', marginTop: 2 }}>باقتك</div>
-              )}
-            </div>
-          ))}
+            );
+          })}
         </div>
 
-        {/* Sections */}
-        {COMPARISON_SECTIONS.map((section) => (
-          <div key={section.title}>
-            {/* Section title */}
-            <div style={{
-              padding: '12px 24px 6px', fontSize: 12, fontWeight: 700,
-              color: '#9CA3AF', fontFamily: 'IBM Plex Sans Arabic, sans-serif',
-              textTransform: 'uppercase', letterSpacing: 0.5,
-            }}>
-              {section.title}
-            </div>
+        {/* Feature sections */}
+        <div style={{ padding: '4px 0 8px' }}>
+          {COMPARISON_SECTIONS.map((section) => (
+            <div key={section.title}>
+              <div style={{
+                padding: '14px 20px 6px', fontSize: 11, fontWeight: 700,
+                color: '#9CA3AF', fontFamily: font, letterSpacing: 0.3,
+              }}>
+                {section.title}
+              </div>
 
-            {/* Rows */}
-            {section.features.map((feat) => {
-              return (
+              {section.features.map((feat, i) => (
                 <div
                   key={feat.key}
                   style={{
-                    display: 'grid', gridTemplateColumns: '1fr repeat(3, 80px)',
-                    padding: '8px 24px', borderBottom: '1px solid #FAFAFA',
-                    alignItems: 'center',
+                    display: 'grid', gridTemplateColumns: '1.4fr repeat(3, 1fr)',
+                    padding: '9px 20px', alignItems: 'center',
+                    background: i % 2 === 0 ? 'transparent' : 'rgba(0,0,0,0.015)',
+                    borderRadius: 6, margin: '0 8px',
                   }}
                 >
-                  <div style={{ fontSize: 13, fontFamily: 'IBM Plex Sans Arabic, sans-serif', color: '#374151' }}>
+                  <div style={{ fontSize: 13, fontFamily: font, color: '#374151', fontWeight: 500 }}>
                     {feat.label}
                   </div>
-                  {plans.map((p) => {
-                    const available = !isLocked(feat.key, p);
-                    const isTrial = p === 'free' && feat.freeNote;
-                    const isWritersNote = p === 'writers' && feat.writersNote;
-                    const requiredPlan = FEATURES[feat.key].plan;
-                    return (
-                      <div key={p} style={{ textAlign: 'center', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                        {available ? (
-                          isTrial ? (
-                            <span style={{ fontSize: 9, color: '#9CA3AF', fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>
-                              {feat.freeNote}
-                            </span>
-                          ) : isWritersNote ? (
-                            <span style={{ fontSize: 9, color: '#D97706', fontFamily: 'IBM Plex Sans Arabic, sans-serif', fontWeight: 600 }}>
-                              {feat.writersNote}
-                            </span>
-                          ) : checkIcon
-                        ) : (
-                          requiredPlan === 'business' ? businessBadge : writersBadge
-                        )}
-                      </div>
-                    );
-                  })}
+                  {plans.map((p) => (
+                    <div key={p} style={{ textAlign: 'center', display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 24 }}>
+                      {renderCell(feat, p)}
+                    </div>
+                  ))}
                 </div>
-              );
-            })}
-          </div>
-        ))}
+              ))}
+            </div>
+          ))}
 
-        {/* Subscriber limits row */}
-        <div style={{
-          padding: '12px 24px 6px', fontSize: 12, fontWeight: 700,
-          color: '#9CA3AF', fontFamily: 'IBM Plex Sans Arabic, sans-serif',
-        }}>
-          الحدود
-        </div>
-        <div style={{
-          display: 'grid', gridTemplateColumns: '1fr repeat(3, 80px)',
-          padding: '8px 24px', alignItems: 'center',
-        }}>
-          <div style={{ fontSize: 13, fontFamily: 'IBM Plex Sans Arabic, sans-serif', color: '#374151' }}>
-            عدد المشتركين
-          </div>
-          {plans.map((p) => (
-            <div key={p} style={{ textAlign: 'center', fontSize: 11, fontWeight: 600, color: '#374151', fontFamily: 'IBM Plex Sans Arabic, sans-serif' }}>
-              {p === 'free' ? '—' : PLAN_META[p].subscriberLimit}
+          {/* Limits section */}
+          <div>
+            <div style={{
+              padding: '14px 20px 6px', fontSize: 11, fontWeight: 700,
+              color: '#9CA3AF', fontFamily: font, letterSpacing: 0.3,
+            }}>
+              الحدود
             </div>
-          ))}
-        </div>
-        <div style={{
-          display: 'grid', gridTemplateColumns: '1fr repeat(3, 80px)',
-          padding: '8px 24px', alignItems: 'center',
-        }}>
-          <div style={{ fontSize: 13, fontFamily: 'IBM Plex Sans Arabic, sans-serif', color: '#374151' }}>
-            إنشاء نشرات متعددة
-          </div>
-          {plans.map((p) => (
-            <div key={p} style={{ textAlign: 'center', display: 'flex', justifyContent: 'center' }}>
-              {PLAN_META[p].canCreateNewsletter ? checkIcon : businessBadge}
+
+            <div style={{
+              display: 'grid', gridTemplateColumns: '1.4fr repeat(3, 1fr)',
+              padding: '9px 20px', alignItems: 'center', margin: '0 8px',
+            }}>
+              <div style={{ fontSize: 13, fontFamily: font, color: '#374151', fontWeight: 500 }}>
+                عدد المشتركين
+              </div>
+              {plans.map((p) => (
+                <div key={p} style={{ textAlign: 'center', fontSize: 12, fontWeight: 600, color: '#374151', fontFamily: font }}>
+                  {p === 'free' ? dash : PLAN_META[p].subscriberLimit}
+                </div>
+              ))}
             </div>
-          ))}
+
+            <div style={{
+              display: 'grid', gridTemplateColumns: '1.4fr repeat(3, 1fr)',
+              padding: '9px 20px', alignItems: 'center',
+              background: 'rgba(0,0,0,0.015)', borderRadius: 6, margin: '0 8px',
+            }}>
+              <div style={{ fontSize: 13, fontFamily: font, color: '#374151', fontWeight: 500 }}>
+                إنشاء نشرات متعددة
+              </div>
+              {plans.map((p) => (
+                <div key={p} style={{ textAlign: 'center', display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: 24 }}>
+                  {PLAN_META[p].canCreateNewsletter ? businessBadge : dash}
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
 
         {/* CTA */}
-        <div style={{ padding: '20px 24px 8px', textAlign: 'center' }}>
+        <div style={{ padding: '16px 20px 20px', borderTop: '1px solid rgba(0,0,0,0.06)', textAlign: 'center' }}>
           <button
             onClick={() => { window.location.href = '/pricing'; }}
             style={{
-              padding: '12px 32px', background: '#111827', color: '#fff',
-              border: 'none', borderRadius: 10, fontSize: 15, fontWeight: 600,
-              fontFamily: 'IBM Plex Sans Arabic, sans-serif', cursor: 'pointer',
+              padding: '10px 28px', background: '#111827', color: '#fff',
+              border: 'none', borderRadius: 10, fontSize: 14, fontWeight: 600,
+              fontFamily: font, cursor: 'pointer',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+              transition: 'transform 0.15s ease',
             }}
+            onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.02)')}
+            onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
           >
             عرض الباقات والأسعار
           </button>
