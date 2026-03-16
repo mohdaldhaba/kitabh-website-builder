@@ -65,7 +65,7 @@ export const FEATURES: Record<FeatureKey, FeatureDef> = {
   'email-template':  { plan: 'business', upgradeTitle: 'مصمم قوالب البريد',          displayLabel: 'قوالب البريد' },
   'email-journeys':  { plan: 'business', upgradeTitle: 'رحلات البريد والأتمتة',      displayLabel: 'رحلات البريد والأتمتة' },
   branding:            { plan: 'business', upgradeTitle: 'الهوية والعلامة التجارية',   displayLabel: 'الهوية والعلامة' },
-  'verified-account':  { plan: 'business', upgradeTitle: 'حساب موثّق',               displayLabel: 'حساب موثّق' },
+  'verified-account':  { plan: 'writers',  upgradeTitle: 'حساب موثّق',               displayLabel: 'حساب موثّق' },
   writers:             { plan: 'business', upgradeTitle: 'فريق الكتّاب',               displayLabel: 'فريق الكتّاب' },
 };
 
@@ -147,6 +147,7 @@ export const COMPARISON_SECTIONS: { title: string; features: { key: FeatureKey; 
   {
     title: 'النشر والتوزيع',
     features: [
+      { key: 'verified-account', label: 'حساب موثّق' },
       { key: 'dashboard', label: 'لوحة التحكم' },
       { key: 'newsletters', label: 'النشرات البريدية', writersNote: '1', businessNote: 'دون حد' },
       { key: 'newsletter-scheduling', label: 'جدولة النشرة' },
@@ -161,12 +162,11 @@ export const COMPARISON_SECTIONS: { title: string; features: { key: FeatureKey; 
   {
     title: 'التصميم والإعدادات',
     features: [
-      { key: 'website', label: 'الموقع الإلكتروني', writersNote: 'محدود' },
+      { key: 'website', label: 'الموقع الإلكتروني', writersNote: 'محدود', businessNote: 'وصول كامل' },
       { key: 'branding', label: 'الهوية والعلامة' },
       { key: 'domain-settings', label: 'النطاق المخصص' },
       { key: 'email-template', label: 'قوالب البريد' },
       { key: 'email-journeys', label: 'رحلات البريد والأتمتة' },
-      { key: 'verified-account', label: 'حساب موثّق' },
       { key: 'writers', label: 'فريق الكتّاب' },
     ],
   },
